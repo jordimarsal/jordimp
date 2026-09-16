@@ -1,0 +1,7 @@
+---
+export function getStaticPaths() {
+  return ['en', 'es', 'ca'].map((lang) => ({ params: { lang }, props: { lang } }));
+}
+const { lang } = Astro.props;
+---
+<html><body><h1>jordimp.net — {lang}</h1></body></html>
