@@ -1,0 +1,10 @@
+---
+import { LOCALES, localeNames, type Locale } from '../lib/i18n';
+const { lang, path = '' } = Astro.props as { lang: Locale; path?: string };
+---
+<nav aria-label="Language" class="locale-switch">
+  {LOCALES.map((l) => (
+    <a href={`/${l}/${path}`} hreflang={l} aria-current={l === lang ? 'true' : undefined}
+       class:list={['locale-link', { active: l === lang }]}>{localeNames[l]}</a>
+  ))}
+</nav>
