@@ -1,0 +1,26 @@
+{
+  "name": "harness-standard",
+  "year": 2026,
+  "featured": true,
+  "summary": {
+    "en": "A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command.",
+    "es": "Un harness multi-agente estandarizado para Claude Code y OpenCode: roles de Spec-Driven Development (Leader, Spec Author, Implementer, Reviewer) instalados en cualquier proyecto con un solo comando.",
+    "ca": "Un harness multi-agent estandarditzat per a Claude Code i OpenCode: rols de Spec-Driven Development (Leader, Spec Author, Implementer, Reviewer) instal·lats a qualsevol projecte amb una sola comanda."
+  },
+  "problem": {
+    "en": "Coding agents work well in the small and drift in the large. Teams need one repeatable process — specs, roles, gates — independent of stack.",
+    "es": "Los agentes de código funcionan bien en lo pequeño y se descarrilan en lo grande. Los equipos necesitan un proceso repetible — specs, roles, gates — independiente del stack.",
+    "ca": "Els agents de codi funcionen bé en el petit i descarrilen en el gran. Els equips necessiten un procés repetible — specs, rols, gates — independent del stack."
+  },
+  "highlights": {
+    "en": ["7 stacks covered (Java/Spring, Python, Node/TS, Rust, and more) with per-stack conventions.", "Single-command install; conventions template includes SonarQube/code-quality rules.", "Born from daily use across personal projects — this portfolio is built with it."],
+    "es": ["7 stacks cubiertos (Java/Spring, Python, Node/TS, Rust y más) con convenciones por stack.", "Instalación con un solo comando; la plantilla de convenciones incluye reglas de SonarQube/calidad de código.", "Nacido del uso diario en proyectos personales — este portfolio está construido con él."],
+    "ca": ["7 stacks coberts (Java/Spring, Python, Node/TS, Rust i més) amb convencions per stack.", "Instal·lació amb una sola comanda; la plantilla de convencions inclou regles de SonarQube/qualitat de codi.", "Nascut de l'ús diari en projectes personals — aquest portfolio està construït amb ell."]
+  },
+  "stack": ["Agents", "SDD", "CLI", "Conventions"],
+  "metrics": [
+    { "value": "7", "label": "stacks" },
+    { "value": "1 cmd", "label": "install" }
+  ],
+  "links": { "github": "https://github.com/jordimarsal/harness-standard" }
+}
