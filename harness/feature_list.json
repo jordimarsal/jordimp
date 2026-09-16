@@ -1,0 +1,9 @@
+{
+  "project": {
+    "name": "jordimp",
+    "parallel": false,
+    "modules": ["iterative-refinement", "security-audit", "wekan-tickets"],
+    "audit_level": "strict"
+  },
+  "features": []
+}
