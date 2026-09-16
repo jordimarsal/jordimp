@@ -1,7 +1,189 @@
 ---
-export function getStaticPaths() {
-  return ['en', 'es', 'ca'].map((lang) => ({ params: { lang }, props: { lang } }));
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { LOCALES, type Locale } from '../../lib/i18n';
+import { ui } from '../../i18n/ui';
+import { SITE } from '../../config';
+
+export async function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
 }
+
+type Props = { lang: Locale };
 const { lang } = Astro.props;
+const t = ui[lang];
+
+const projects = await getCollection('projects');
+const featured = projects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.year - a.data.year || a.data.name.localeCompare(b.data.name))
+  .slice(0, 3);
+
+const pillars = [
+  {
+    title: t['hero.pillar1.title'],
+    desc: t['hero.pillar1.desc'],
+    chips: ['Java 25', 'Spring Boot 4', 'FastAPI'],
+  },
+  {
+    title: t['hero.pillar2.title'],
+    desc: t['hero.pillar2.desc'],
+    chips: ['Kafka', 'RAG', 'llama.cpp'],
+  },
+  {
+    title: t['hero.pillar3.title'],
+    desc: t['hero.pillar3.desc'],
+    chips: ['TDD', 'hexagonal', 'CI/CD'],
+  },
+];
 ---
-<html><body><h1>jordimp.net — {lang}</h1></body></html>
+<BaseLayout lang={lang} title={`${SITE.name} — ${t['hero.role']}`} description={t['hero.tagline']}>
+  <section class="hero">
+    <p class="hero-prompt mono">$ {t['hero.role']} · {SITE.tagline}<span class="prompt-cursor" aria-hidden="true"></span></p>
+    <h1>{SITE.name}</h1>
+    <p class="hero-tagline muted">{t['hero.tagline']}</p>
+    <div class="hero-ctas">
+      <a class="cta cta-primary" href={`/${lang}/projects/`}>{t['hero.cta.projects']}</a>
+      <a class="cta cta-secondary" href={`/${lang}/cv/`}>{t['hero.cta.cv']}</a>
+      <a class="cta cta-ask mono" href="/en/ask/" aria-disabled="true" title="phase 3">{t['hero.cta.ask']}</a>
+    </div>
+  </section>
+
+  <section class="pillars">
+    {pillars.map((pillar) => (
+      <article class:list={['card', 'pillar']}>
+        <h2>{pillar.title}</h2>
+        <p class="muted">{pillar.desc}</p>
+        <ul class="chips">{pillar.chips.map((chip) => <li class="chip mono">{chip}</li>)}</ul>
+      </article>
+    ))}
+  </section>
+
+  <section class="featured">
+    <h2 class="section-h2">{t['projects.featured']}</h2>
+    <div class="featured-grid">
+      {featured.map((project) => <ProjectCard project={project} {lang} />)}
+    </div>
+    <a class="see-all mono" href={`/${lang}/projects/`}>{t['hero.cta.projects']} →</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    margin: var(--space-12) 0 var(--space-16);
+    max-width: 46rem;
+  }
+
+  .hero-prompt {
+    margin: 0 0 var(--space-2);
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  .prompt-cursor {
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    margin-left: 3px;
+    background: var(--accent);
+    vertical-align: text-bottom;
+    animation: cursor-blink 1.2s steps(2, start) infinite;
+  }
+
+  @keyframes cursor-blink {
+    to {
+      visibility: hidden;
+    }
+  }
+
+  .hero h1 {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    line-height: 1.1;
+  }
+
+  .hero-tagline {
+    margin: 0 0 var(--space-6);
+    font-size: 1.125rem;
+  }
+
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .cta {
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .cta-primary {
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    color: var(--accent-contrast);
+    font-weight: 600;
+  }
+
+  .cta-primary:hover {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+  }
+
+  .cta-secondary {
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .cta-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .cta-ask {
+    border: 1px dashed var(--border);
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-16);
+  }
+
+  .pillar {
+    padding: var(--space-4);
+  }
+
+  .pillar h2 {
+    margin: 0 0 var(--space-2);
+    font-size: 1rem;
+  }
+
+  .pillar p {
+    margin: 0 0 var(--space-3);
+    font-size: 0.875rem;
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-4);
+    margin: var(--space-4) 0;
+  }
+
+  .see-all {
+    color: var(--accent);
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .see-all:hover {
+    text-decoration: underline;
+  }
+</style>

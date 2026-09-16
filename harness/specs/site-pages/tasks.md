@@ -17,11 +17,11 @@
       depends_on: T1
       refs: R9, R16
 
-- [ ] T4: Skills content — `src/content/skills/{backend-apis,data,ai-llms,devops-quality,leadership}.json` (fixed `order` 1–5, localized group titles, English technical items) + colocated `src/content/skills.spec.ts` (count, order, trilingual titles, non-empty items, phone canary)
+- [x] T4: Skills content — `src/content/skills/{backend-apis,data,ai-llms,devops-quality,leadership}.json` (fixed `order` 1–5, localized group titles, English technical items) + colocated `src/content/skills.spec.ts` (count, order, trilingual titles, non-empty items, phone canary)
       depends_on: T1
       refs: R12, R16
 
-- [ ] T5: Home page — replace the placeholder `src/pages/[lang]/index.astro`: hero (h1 `SITE.name`, mono `$` prompt line `hero.role · SITE.tagline` with block-cursor blink element, tagline), CTAs (projects → `/{lang}/projects/`, cv → `/{lang}/cv/`, ask → `/en/ask/` with `aria-disabled="true"` + `title="phase 3"`), three pillar cards with fixed mono chip sets, featured strip (3 `ProjectCard`s, sort featured → year desc → name asc, truncated, + see-all link)
+- [x] T5: Home page — replace the placeholder `src/pages/[lang]/index.astro`: hero (h1 `SITE.name`, mono `$` prompt line `hero.role · SITE.tagline` with block-cursor blink element, tagline), CTAs (projects → `/{lang}/projects/`, cv → `/{lang}/cv/`, ask → `/en/ask/` with `aria-disabled="true"` + `title="phase 3"`), three pillar cards with fixed mono chip sets, featured strip (3 `ProjectCard`s, sort featured → year desc → name asc, truncated, + see-all link)
       depends_on: T2
       refs: R1, R2, R3, R4, R5, R28
 
