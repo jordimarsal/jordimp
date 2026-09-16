@@ -6,29 +6,44 @@
 
 ## Traceability
 
+> Format note (review round 2): first column is a bare `R<n>` and the Test(s)
+> cell holds comma-separated bare items (test file identifiers or prescribed
+> commands) so `harness/tools/check-traceability.py` can parse rows — no pipes,
+> commas or backticks inside the validated cells. Requirement titles live in
+> `harness/specs/front-foundation/requirements.md`; counts and deep evidence for
+> every command are recorded in the Findings sections below.
+
 | Requirement | Test(s) | Implementation file(s) | Status |
 |---|---|---|---|
-| R1 strict type-check | `grep -q 'astro/tsconfigs/strict' tsconfig.json` + `npm run check` → 0 errors, 0 warnings | `tsconfig.json`, `package.json` | done |
-| R2 build validates Zod schemas | `npm run build` exit 0 + `test -d dist/en`; negative: deleted `year` → `[InvalidContentEntryDataError] projects → kafka-adapter-telemetry` (`year: Required`), exit 1 | `src/content.config.ts`, `src/content/projects/*.json` | done |
-| R3 locale roots + `/` → `/en/` | `ls dist/{en,es,ca}/index.html` + `grep 'url=/en/' dist/index.html` (meta refresh, `noindex`) | `astro.config.mjs`, `src/pages/index.astro` | done |
-| R4 no non-locale HTML | `find dist -name '*.html' ! -path 'dist/{en,es,ca}/*'` → exactly `dist/index.html` | `astro.config.mjs` | done |
-| R5 locked design tokens | greps: `#0b1220`, `#2dd4bf`, `#0d9488`, `'Inter Variable'`, `JetBrains Mono` in `src/styles/tokens.css` | `src/styles/tokens.css` | done |
-| R6 BaseLayout + `html[lang]` | `grep -o '<html lang="{lang}"' dist/{lang}/projects/index.html` → 1 per locale; detail pages too | `src/layouts/BaseLayout.astro` | done ¹ |
-| R7 no-flash inline script | `grep -F "localStorage.getItem('theme')"` in `dist/en/projects/index.html` (all 34 BaseLayout pages ship it in `<head>`) | `src/layouts/BaseLayout.astro` | done ¹ |
-| R8 stored theme wins | `grep -F "matchMedia('(prefers-color-scheme: light)')"` — inline script does `s ?? (matchMedia(...))` | `src/layouts/BaseLayout.astro` | done ¹ |
-| R9 toggle click persists | `grep -rl 'theme-toggle' dist/ \| wc -l` → 36 (all BaseLayout pages, exactly 1 button per page via `grep -o`); `grep -rlF 'localStorage.setItem(t,e)' dist/ \| wc -l` → 36 (minifier hoisted `KEY` → `t="theme"`; spec's `grep -rF "localStorage.setItem('theme'" dist/_astro/` can never match — script is inlined in HTML, not in `dist/_astro/`) | `src/components/ThemeToggle.astro`, `src/layouts/BaseLayout.astro` | done ³ |
-| R10 `L()` en fallback | `npx vitest run` › `i18n.spec.ts › L() › falls back to en for a missing locale` | `src/lib/i18n.ts`, `src/lib/i18n.spec.ts` | done |
-| R11 ui key parity | `npm run check` (compile-time `Record<UiKey, string>`) + vitest › key parity, non-empty | `src/i18n/ui.ts`, `src/lib/i18n.spec.ts` | done |
-| R12 hreflang ×3 + aria-current | `grep -o 'hreflang="' …` → 3 (spec's `grep -c` counts minified single line — recounted with `-o`); `aria-current="true"` present | `src/components/LocaleSwitcher.astro` | done ² |
-| R13 typed collections + `localized()` | negative build: deleted `summary.es` → `summary.es: Required` naming the file, exit 1; + `projects.spec.ts` trilingual test | `src/content.config.ts` | done |
-| R14 exactly 11 projects (5 featured) | `ls … *.json | wc -l` → 11; `grep -l '"featured": true' | wc -l` → 5; + `projects.spec.ts` | `src/content/projects/*.json` | done |
-| R15 projects index, 11 cards, sorted | `grep -o 'href="/en/projects/{slug}/"' | wc -l` → 11; order verified = featured (5) then secondary (6), year desc, name asc (all 2026 featured alphabetized; 2019 `bible-text-analysis` last) | `src/pages/[lang]/projects/index.astro` | done ² |
-| R16 one button per stack + All reset | distinct stacks `jq … | sort -u | wc -l` → 42; `data-stack="…"` occurrences → 53 = 42 buttons + 11 cards; `data-reset` button present | `src/pages/[lang]/projects/index.astro` | done ² |
-| R17 filter applies hidden + aria-pressed | extracted the bundled module script from the built page: apply loop sets `e.hidden` and `aria-pressed` together | `src/pages/[lang]/projects/index.astro` (script inlined in HTML by Vite) | done ² |
-| R18 reset shows all | extracted script: `r.addEventListener('click', () => { t.clear(), o() })`; reset pressed iff set empty | `src/pages/[lang]/projects/index.astro` | done ² |
-| R19 detail pages ×36, derived repo link | `ls dist/en/projects | wc -l` → 12 (11 dirs + index); `github.com/jordimarsal/kafka-adapter-telemetry` + `>Problem<` present; + `projects.spec.ts` (kebab slugs, parseable GitHub URLs) | `src/pages/[lang]/projects/[slug].astro` | done |
-| R20 title/description/canonical | `rel="canonical" href="https://jordimp.net/{lang}/{path}/"` verified on index + detail pages, all locales spot-checked | `src/components/SEO.astro`, `src/layouts/BaseLayout.astro` | done |
-| R21 no phone | `! grep -rq '609 940 649' dist/` + vitest › phone canary on `ui` | `src/i18n/ui.ts`, `src/lib/i18n.spec.ts` | done |
+| R1 | grep -q 'astro/tsconfigs/strict' tsconfig.json, npm run check | `tsconfig.json`, `package.json` | done |
+| R2 | npm run build, test -d dist/en | `src/content.config.ts`, `src/content/projects/*.json` | done |
+| R3 | ls dist/en/index.html dist/es/index.html dist/ca/index.html, grep 'url=/en/' dist/index.html | `astro.config.mjs`, `src/pages/index.astro` | done |
+| R4 | find dist -name '*.html' ! -path 'dist/en/*' ! -path 'dist/es/*' ! -path 'dist/ca/*' | `astro.config.mjs` | done |
+| R5 | grep -q '#0b1220' src/styles/tokens.css, grep -q '#2dd4bf' src/styles/tokens.css, grep -q '#0d9488' src/styles/tokens.css, grep -q 'Inter Variable' src/styles/tokens.css, grep -q 'JetBrains Mono' src/styles/tokens.css | `src/styles/tokens.css` | done |
+| R6 | grep -o '<html lang="en"' dist/en/projects/index.html, grep -o '<html lang="es"' dist/es/projects/index.html, grep -o '<html lang="ca"' dist/ca/projects/index.html | `src/layouts/BaseLayout.astro` | done |
+| R7 | grep -c "localStorage.getItem('theme')" dist/en/projects/index.html | `src/layouts/BaseLayout.astro` | done |
+| R8 | grep -c "prefers-color-scheme: light" dist/en/projects/index.html | `src/layouts/BaseLayout.astro` | done |
+| R9 | grep -rl 'theme-toggle' dist/en, grep -o 'id="theme-toggle"' dist/en/projects/index.html | `src/components/ThemeToggle.astro`, `src/layouts/BaseLayout.astro` | done |
+| R10 | i18n.spec.ts | `src/lib/i18n.ts`, `src/lib/i18n.spec.ts` | done |
+| R11 | i18n.spec.ts, npm run check | `src/i18n/ui.ts`, `src/lib/i18n.spec.ts` | done |
+| R12 | grep -o 'hreflang="' dist/en/projects/index.html, grep -o 'aria-current="true"' dist/en/projects/index.html | `src/components/LocaleSwitcher.astro` | done |
+| R13 | projects.spec.ts, npm run build | `src/content.config.ts` | done |
+| R14 | projects.spec.ts, ls src/content/projects | `src/content/projects/*.json` | done |
+| R15 | projects.spec.ts, grep -o 'href="/en/projects/[a-z0-9-]*/"' dist/en/projects/index.html | `src/pages/[lang]/projects/index.astro` | done |
+| R16 | grep -o 'data-stack=' dist/en/projects/index.html, grep -o 'data-reset' dist/en/projects/index.html | `src/pages/[lang]/projects/index.astro` | done |
+| R17 | grep -c 'aria-pressed' dist/en/projects/index.html, grep -c 'hidden' dist/en/projects/index.html | `src/pages/[lang]/projects/index.astro` | done |
+| R18 | grep -o '.clear()' dist/en/projects/index.html, grep -o 'data-reset' dist/en/projects/index.html | `src/pages/[lang]/projects/index.astro` | done |
+| R19 | projects.spec.ts, ls dist/en/projects, grep -rl 'github.com/jordimarsal/kafka-adapter-telemetry' dist/en/projects | `src/pages/[lang]/projects/[slug].astro` | done |
+| R20 | grep -o 'rel="canonical"' dist/en/projects/index.html, grep -c '<title>' dist/en/projects/index.html | `src/components/SEO.astro`, `src/layouts/BaseLayout.astro` | done |
+| R21 | i18n.spec.ts, bash -c "! grep -rq '609 940 649' dist" | `src/i18n/ui.ts`, `src/lib/i18n.spec.ts` | done |
+
+Expected command results (all executed 2026-09-16 on dist rebuilt after the
+esbuild/sharp overrides): R6 → 1 match per locale; R12 → 3 hreflang; R14/R15 →
+11 entries / 11 card links; R16 → 53 `data-stack=`; R9 → 12 files per locale
+carrying `theme-toggle` (36 total) and `id="theme-toggle"` ×1 per page; R4 →
+exactly `dist/index.html`; R19 → 12 entries in `dist/en/projects`. Negative R2 /
+R13 builds and the pre-esbuild-override `localStorage.setItem(t,e)` evidence are
+in the Findings sections.
 
 ## Findings
 
@@ -104,3 +119,47 @@ Suite now: 2 files, 11 tests, all green. No application code was modified.
 T1–T8 deliverables each verified this session against the commands above and the
 commits recorded in `tasks.md`; all `[x]` marks confirmed (R9 gap is a page-wiring
 omission not covered by any T<n> — no task claimed "render ThemeToggle on pages").
+
+## Security audit disposition
+
+Recorded 2026-09-16 (review round 2, required change 1 / checkpoint C7). Findings
+source: `npm audit --audit-level=high` via `harness/tools/audit-security.sh`
+(raw output preserved in `harness/progress/review_front-foundation.md`).
+
+### RESOLVED (dependency overrides, leader-approved)
+
+- **sharp — HIGH** (inherited libvips CVE-2026-33327/-33328/-35590/-35591 +
+  libheif GHSA-g89c-p67h-r497 / GHSA-2jg2-4ch7-h545, `sharp <=0.35.4-rc.0`):
+  fixed with `overrides: { "sharp": "^0.35.4" }` in `package.json`.
+- **esbuild — low** (arbitrary file read when running the dev server on Windows,
+  GHSA-g7r4-m6w7-qqqr, `0.27.3 - 0.28.0`; dev-only, Linux dev boxes here):
+  fixed with `overrides: { "esbuild": "^0.28.0" }` in `package.json`.
+- Both verified after the overrides landed: `npm run build` → 39 pages green,
+  `npx vitest run` → 11/11.
+
+### WAIVED (explicit waiver — astro, CRITICAL)
+
+GHSA advisories against `astro <=7.2.7` (npm audit lists 10 at waiver time —
+XSS via `define:vars` incomplete `</script>` sanitization, server-island
+encrypted-parameter replay, XSS via unescaped attribute names in spread props
+and in `renderHTMLElement`, XSS via `transition:*` directive values on hydrated
+islands, reflected XSS via View Transition animation properties, host-header
+SSRF in prerendered error-page fetch, reflected XSS via unescaped slot name,
+RCE via AVIF image optimization, authorization bypass on base-path stripping).
+npm's
+only automated fix is `astro@7.3.2`, a **breaking** major upgrade that ADR-1
+explicitly defers out of F1. Waived on non-exposure grounds:
+
+- static-only output — no SSR, no server endpoints → no host-header surface;
+- no `define:vars` and no `set:html` anywhere in `src/` (grep-verified);
+- no View Transition animation directives, no client directives/hydration;
+- no server islands;
+- no `astro:assets` / AVIF image pipeline — `dist/_astro/` ships fonts + CSS only;
+- single-base site (`base` not configured) → base-strip path check not relevant;
+- content JSON is Zod-validated at build (R2/R13) and Astro auto-escapes
+  interpolated expressions.
+
+**Follow-up (tracked):** F5 qa-gate must re-run
+`bash harness/tools/audit-security.sh` and either upgrade to `astro@7`
+(preferred) or explicitly renew this waiver. Until then this waiver is the
+disposition of record for the astro CRITICAL finding in F1.
