@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageTitle from '../components/PageTitle.astro';
+import { ui } from '../i18n/ui';
+
+const t = ui.en;
+---
+<BaseLayout lang="en" title={`${t['notfound.title']} — Jordi Marçal Poy`} description={t['notfound.body']}>
+  <PageTitle label="404" />
+  <p class="notfound-body">{t['notfound.body']}</p>
+  <a class="back mono" href="/en/">{t['notfound.back']} →</a>
+</BaseLayout>
+
+<style>
+  .notfound-body {
+    color: var(--muted);
+    margin: 0 0 var(--space-6);
+  }
+
+  .back {
+    color: var(--accent);
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .back:hover {
+    text-decoration: underline;
+  }
+</style>

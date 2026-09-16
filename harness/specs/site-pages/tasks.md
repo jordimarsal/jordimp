@@ -33,7 +33,7 @@
       depends_on: T2
       refs: R14, R15, R26
 
-- [ ] T8: 404 page — root `src/pages/404.astro` through `BaseLayout` (EN): `notfound.title`, `notfound.body`, `./404` h1, link to `/en/`; confirm the non-locale HTML set is exactly `dist/index.html` + `dist/404.html`
+- [x] T8: 404 page — root `src/pages/404.astro` through `BaseLayout` (EN): `notfound.title`, `notfound.body`, `./404` h1, link to `/en/`; confirm the non-locale HTML set is exactly `dist/index.html` + `dist/404.html`
       depends_on: T2
       refs: R19, R20, R26
 
