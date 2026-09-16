@@ -38,14 +38,20 @@ def find_requirements(root: Path, feature: str) -> set[str]:
     return {f"R{m}" for m in REQ_RE.findall(req_file.read_text(encoding="utf-8"))}
 
 
-def collect_tables(root: Path) -> tuple[dict[str, list[str]], dict[str, str]]:
-    """Merge every impl_*.md table into {requirement: [test identifiers]} plus status."""
+def collect_tables(root: Path, feature: str) -> tuple[dict[str, list[str]], dict[str, str]]:
+    """Merge the feature's impl_*.md table(s) into {requirement: [test ids]} + status.
+
+    R<n> ids are per-feature (each requirements.md restarts at R1), so tables
+    are scoped to the feature: files named impl_<feature>.md (the repo
+    convention). A file may cite the feature in its first heading if unnamed —
+    not supported; keep one impl_<feature>.md per feature.
+    """
     merged: dict[str, list[str]] = {}
     statuses: dict[str, str] = {}
     progress = root / "harness" / "progress"
     if not progress.is_dir():
         return merged, statuses
-    for impl in sorted(progress.glob("impl_*.md")):
+    for impl in sorted(progress.glob(f"impl_{feature}.md")):
         for line in impl.read_text(encoding="utf-8").splitlines():
             m = ROW_RE.match(line)
             if m is None:
@@ -93,7 +99,7 @@ COMMAND_RE = re.compile(
 
 def check_feature(root: Path, feature: str) -> dict:
     requirements = find_requirements(root, feature)
-    tables, statuses = collect_tables(root)
+    tables, statuses = collect_tables(root, feature)
     gaps: list[dict[str, str]] = []
     covered = 0
     for req in sorted(requirements, key=lambda r: int(r[1:])):
