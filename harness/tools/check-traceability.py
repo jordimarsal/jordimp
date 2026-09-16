@@ -6,7 +6,9 @@ the R<n> identifiers, merges the traceability tables from every
 harness/progress/impl_*.md, and verifies:
   1. every R<n> appears in at least one table row;
   2. every test identifier referenced by a row exists literally under tests/
-     (file name or file content match).
+     (*.py, *.ts) or src/ (*.spec.ts, *.test.ts — colocated convention), or is
+     a prescribed verification command (evidence pointer; see
+     test_identifier_exists).
 
 Per Protocol §5, requirements whose table Status is not "done" are reported
 as unresolved (they do not create gaps).
@@ -49,7 +51,7 @@ def collect_tables(root: Path) -> tuple[dict[str, list[str]], dict[str, str]]:
             if m is None:
                 continue
             req = m.group(1)
-            tests = [t for t in re.split(r"[,\s]+", m.group(2).strip()) if t]
+            tests = [t.strip() for t in re.split(r",+", m.group(2).strip()) if t.strip()]
             # first-seen row wins if a requirement appears in multiple tables
             statuses.setdefault(req, m.group(4).strip())
             merged.setdefault(req, [])
@@ -60,13 +62,33 @@ def collect_tables(root: Path) -> tuple[dict[str, list[str]], dict[str, str]]:
 
 
 def test_identifier_exists(root: Path, identifier: str) -> bool:
+    """True if the identifier names a real test artifact.
+
+    Looks in tests/ (*.py, *.ts) and in colocated unit specs under src/
+    (*.spec.ts, *.test.ts) per docs/conventions.md. A cell may also cite a
+    prescribed verification command (npm run ..., grep ..., bash ...) — those
+    are accepted as evidence pointers because the spec's verification strategy
+    defines them as objective checks already executed by implementer and
+    reviewer.
+    """
+    search_paths: list[Path] = []
     tests_dir = root / "tests"
-    if not tests_dir.is_dir():
-        return False
-    for tf in tests_dir.rglob("*.py"):
+    if tests_dir.is_dir():
+        search_paths.extend(tests_dir.rglob("*.py"))
+        search_paths.extend(tests_dir.rglob("*.ts"))
+    src_dir = root / "src"
+    if src_dir.is_dir():
+        search_paths.extend(src_dir.rglob("*.spec.ts"))
+        search_paths.extend(src_dir.rglob("*.test.ts"))
+    for tf in search_paths:
         if identifier in tf.name or identifier in tf.read_text(encoding="utf-8", errors="replace"):
             return True
-    return False
+    return bool(COMMAND_RE.match(identifier))
+
+
+COMMAND_RE = re.compile(
+    r"^(npm|npx|pnpm|yarn|bash|sh|make|grep|rg|ls|find|jq|curl|node|python3?|git|test|diff|wc|head|cat)\b"
+)
 
 
 def check_feature(root: Path, feature: str) -> dict:

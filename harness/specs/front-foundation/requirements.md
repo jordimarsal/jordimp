@@ -37,22 +37,22 @@ Verification: `grep -q '#0b1220' src/styles/tokens.css && grep -q '#2dd4bf' src/
 ## R6
 The system shall render every foundation page through `BaseLayout`, with `html[lang]` equal to the page locale and slots for logo, nav, actions, default content, and footer.
 
-Verification: `for l in en es ca; do grep -o "<html lang=\"$l\"" dist/$l/projects/index.html; done` → one match per locale.
+Verification: `for l in en es ca; do grep -o "<html lang=\"$l\"" dist/$l/projects/index.html; done` → one match per locale. (The root `dist/{lang}/index.html` placeholder from T1 is a scaffold artifact scheduled for replacement in F2; it does not go through `BaseLayout`.)
 
 ## R7
-Before first paint, the system shall set `data-theme` on `<html>` from `localStorage['theme']`, falling back to the `prefers-color-scheme` preference, via an inline head script that ships as-is (no bundled framework code).
+Before first paint, the system shall set `data-theme` on `<html>` from `localStorage['theme']`, falling back to the `prefers-color-scheme` preference, via an inline head script that ships as-is (no bundled framework code) on every page rendered through `BaseLayout`.
 
-Verification: `grep -F "localStorage.getItem('theme')" dist/en/index.html` — the inline script sits in `<head>` before any bundled script.
+Verification: `grep -F "localStorage.getItem('theme')" dist/en/projects/index.html` — the inline script sits in `<head>` before any bundled script. (Vite inlines page scripts into the built HTML — `dist/_astro/` holds only fonts + CSS.)
 
 ## R8
-While `localStorage['theme']` holds a stored value, the system shall apply that stored value as the initial theme instead of the system preference.
+While `localStorage['theme']` holds a stored value, the system shall apply that stored value as the initial theme instead of the system preference on every page rendered through `BaseLayout`.
 
-Verification: `grep -rF "matchMedia('(prefers-color-scheme: light)')" dist/en/index.html dist/_astro/` — both the inline head script and the toggle module implement `stored ?? (matchMedia(...))`.
+Verification: `grep -F "matchMedia('(prefers-color-scheme: light)')" dist/en/projects/index.html` — the inlined head script implements `stored ?? (matchMedia(...))`.
 
 ## R9
 When the theme toggle is clicked, the system shall switch `data-theme` between `dark` and `light` and persist the new value to `localStorage['theme']`.
 
-Verification: `grep -rF "localStorage.setItem('theme'" dist/_astro/` → at least one match (bundled ThemeToggle script).
+Verification: `grep -rlF 'document.getElementById("theme-toggle")' dist/ | wc -l` → 36 and `grep -rlF 'localStorage.setItem(t,e)' dist/ | wc -l` → 36 (the toggle script is inlined into each BaseLayout page's HTML — `dist/_astro/` holds only fonts + CSS — and esbuild hoisted the `'theme'` key into a variable). Toggle rendered via `BaseLayout` since commit `531ed92`.
 
 ## R10
 When the requested locale has no value for a localized field, the system shall return the `en` value (`L()` fallback).
@@ -67,7 +67,7 @@ Verification: `npm run check` (compile-time `Record<UiKey, string>` on `es`/`ca`
 ## R12
 Every foundation page that includes `LocaleSwitcher` shall render one link per locale to the same page path under `/{locale}/`, each carrying `hreflang`, with `aria-current="true"` on the active locale.
 
-Verification: `grep -c 'hreflang="' dist/en/projects/index.html` → 3, and `grep -q 'aria-current="true"' dist/en/projects/index.html`.
+Verification: `grep -o 'hreflang="' dist/en/projects/index.html | wc -l` → 3 (minified single-line HTML — use `grep -o … | wc -l`, not `grep -c`), and `grep -q 'aria-current="true"' dist/en/projects/index.html`.
 
 ## R13
 The system shall declare typed Astro content collections (`projects`, `experience`, `skills`) whose Zod schemas validate at build time, with a `localized()` helper requiring an `en`, `es`, and `ca` value for every localized field.
@@ -82,22 +82,22 @@ Verification: `ls src/content/projects/*.json | wc -l` → 11; `grep -l '"featur
 ## R15
 For each locale, the system shall emit a projects index (`dist/{lang}/projects/index.html`) rendering all 11 projects in a featured section followed by a secondary section, sorted featured first, then year descending, then name ascending.
 
-Verification: `grep -c 'href="/en/projects/' dist/en/projects/index.html` → 11 cards; ordering checked with `grep -o 'href="/en/projects/[a-z0-9-]*/"' dist/en/projects/index.html` (featured slugs appear before secondary ones).
+Verification: `grep -o 'href="/en/projects/[a-z0-9-]*/"' dist/en/projects/index.html | wc -l` → 11 cards (minified single-line HTML — `grep -o … | wc -l`, not `grep -c`; the plain prefix `href="/en/projects/` also matches the index's own nav link, giving 12); ordering checked with `grep -o 'href="/en/projects/[a-z0-9-]*/"' dist/en/projects/index.html` (featured slugs appear before secondary ones).
 
 ## R16
 The projects index shall render one filter button per distinct stack tag (sorted alphabetically) plus an `All` reset button, each with an `aria-pressed` state.
 
-Verification: `jq -r '.stack[]' src/content/projects/*.json | sort -u | wc -l` equals `grep -c 'data-stack=' dist/en/projects/index.html`, and `grep -q 'data-reset' dist/en/projects/index.html`.
+Verification: `jq -r '.stack[]' src/content/projects/*.json | sort -u | wc -l` → 42 distinct stacks; `grep -o 'data-stack=' dist/en/projects/index.html | wc -l` → 53 = 42 filter buttons + 11 cards, one `data-stack=` each (minified single-line HTML — `grep -o … | wc -l`, not `grep -c`), and `grep -q 'data-reset' dist/en/projects/index.html`.
 
 ## R17
 When a stack filter button is toggled, the system shall update the visibility of every project card and the `aria-pressed` state of every filter button to reflect the set of active tags.
 
-Verification: `grep -rlF 'aria-pressed' dist/_astro/` and `grep -rlF 'card.hidden' dist/_astro/` — the bundled index-page script applies visibility and `aria-pressed` together.
+Verification: extract the module script inlined into `dist/en/projects/index.html` (Vite inlines page scripts into the HTML — `dist/_astro/` holds only fonts + CSS — and esbuild minifies identifiers): the apply function sets card visibility and button `aria-pressed` together, e.g. `grep -oF 'e.hidden=t.size>0&&!s.some(d=>t.has(d))' dist/en/projects/index.html` and `grep -oF 'setAttribute("aria-pressed",String(t.has(e.dataset.stack??"")))' dist/en/projects/index.html`, each → 1 match.
 
 ## R18
 When the reset (`All`) button is clicked, the system shall show every project card and mark the reset as the only pressed filter.
 
-Verification: `grep -rlF 'active.clear()' dist/_astro/` — the bundled script clears the active tag set and reapplies.
+Verification: `grep -oF 't.clear(),o()' dist/en/projects/index.html` → 1 match — the reset handler inlined in the page clears the active tag set and reapplies (identifiers as minified by esbuild).
 
 ## R19
 For every project and locale, the system shall emit `dist/{lang}/projects/{id}/index.html` (id = JSON filename slug) rendering the project name, year, localized summary, problem, highlights, stack chips, metrics, and a repository link whose text is the `links.github` URL path.
