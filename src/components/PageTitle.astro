@@ -1,0 +1,8 @@
+---
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props as Props;
+---
+<h1 class="page-h1"><span aria-hidden="true">./</span>{label}</h1>

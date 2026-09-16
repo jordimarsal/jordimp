@@ -1,0 +1,101 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageTitle from '../../components/PageTitle.astro';
+import { LOCALES, L, type Locale } from '../../lib/i18n';
+import { ui } from '../../i18n/ui';
+
+export async function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+type Props = { lang: Locale };
+const { lang } = Astro.props;
+const t = ui[lang];
+
+const entries = (await getCollection('experience')).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout
+  lang={lang}
+  title={`${t['experience.title']} — Jordi Marçal Poy`}
+  description={t['experience.title']}
+  path="experience/"
+>
+  <PageTitle label={t['experience.title']} />
+  <ol class="timeline">
+    {entries.map((entry) => (
+      <li
+        class:list={['timeline-entry', { current: entry.data.current }]}
+        data-current={entry.data.current ? 'true' : undefined}
+      >
+        <p class="period mono">{entry.data.period}</p>
+        <h2>{entry.data.company}</h2>
+        <p class="role muted">{L(entry.data.role, lang)}</p>
+        <ul class="points">{L(entry.data.points, lang).map((point) => <li>{point}</li>)}</ul>
+        <ul class="chips">{entry.data.stack.map((stack) => <li class="chip mono">{stack}</li>)}</ul>
+      </li>
+    ))}
+  </ol>
+</BaseLayout>
+
+<style>
+  .timeline {
+    border-left: 1px solid var(--border);
+    margin: 0 0 0 var(--space-2);
+    padding: 0 0 0 var(--space-6);
+    list-style: none;
+  }
+
+  .timeline-entry {
+    position: relative;
+    margin-bottom: var(--space-8);
+  }
+
+  .timeline-entry::before {
+    content: '●';
+    position: absolute;
+    left: calc(-1 * var(--space-6) - 7px);
+    top: 0;
+    color: var(--accent);
+    font-size: 0.75rem;
+  }
+
+  .timeline-entry.current .period::before {
+    content: '● ';
+    color: var(--accent);
+  }
+
+  .period {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.8125rem;
+  }
+
+  .timeline-entry.current .period {
+    color: var(--accent);
+  }
+
+  .timeline-entry h2 {
+    margin: var(--space-1) 0;
+    font-size: 1.25rem;
+  }
+
+  .role {
+    margin: 0 0 var(--space-2);
+    font-size: 0.9375rem;
+  }
+
+  .points {
+    margin: 0 0 var(--space-3);
+    padding-left: 1.125rem;
+  }
+
+  .points li {
+    margin-bottom: var(--space-1);
+    font-size: 0.9375rem;
+  }
+
+  .points li::marker {
+    color: var(--accent);
+  }
+</style>

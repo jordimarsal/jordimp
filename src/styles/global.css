@@ -50,6 +50,23 @@ svg {
   font-family: var(--font-mono);
 }
 
+.section-h2::before {
+  content: '## ';
+  color: var(--accent);
+  font-family: var(--font-mono);
+}
+
+.page-h1 {
+  margin: var(--space-8) 0 var(--space-6);
+  font-size: 2rem;
+}
+
+.page-h1 [aria-hidden] {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  margin-right: 2px;
+}
+
 .chips {
   display: flex;
   flex-wrap: wrap;

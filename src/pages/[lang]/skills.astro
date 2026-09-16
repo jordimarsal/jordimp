@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageTitle from '../../components/PageTitle.astro';
+import { LOCALES, L, type Locale } from '../../lib/i18n';
+import { ui } from '../../i18n/ui';
+
+export async function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+type Props = { lang: Locale };
+const { lang } = Astro.props;
+const t = ui[lang];
+
+const groups = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout
+  lang={lang}
+  title={`${t['skills.title']} — Jordi Marçal Poy`}
+  description={t['skills.title']}
+  path="skills/"
+>
+  <PageTitle label={t['skills.title']} />
+  <div class="skills-grid">
+    {groups.map((group) => (
+      <article class:list={['card', 'skill-group']}>
+        <h2>{L(group.data.group, lang)}</h2>
+        <ul class="chips">{group.data.items.map((item) => <li class="chip mono">{item}</li>)}</ul>
+      </article>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+
+  .skill-group {
+    padding: var(--space-4);
+  }
+
+  .skill-group h2 {
+    margin: 0 0 var(--space-3);
+    font-size: 1rem;
+  }
+</style>

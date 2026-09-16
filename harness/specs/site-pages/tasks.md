@@ -25,7 +25,7 @@
       depends_on: T2
       refs: R1, R2, R3, R4, R5, R28
 
-- [ ] T6: Experience + skills pages — `[lang]/experience.astro` (timeline: left border, `●` nodes, mono periods, company h2, points, chips, `data-current="true"` on the single current entry) and `[lang]/skills.astro` (5 `.card.skill-group` cards ordered by `order`); interior h1s with the `aria-hidden` `./` prefix span; add the shared `.section-h2::before { content: '## '; }` rule to `global.css`
+- [x] T6: Experience + skills pages — `[lang]/experience.astro` (timeline: left border, `●` nodes, mono periods, company h2, points, chips, `data-current="true"` on the single current entry) and `[lang]/skills.astro` (5 `.card.skill-group` cards ordered by `order`); interior h1s with the `aria-hidden` `./` prefix span; add the shared `.section-h2::before { content: '## '; }` rule to `global.css`
       depends_on: T2, T3, T4
       refs: R10, R11, R13, R26, R27
 
