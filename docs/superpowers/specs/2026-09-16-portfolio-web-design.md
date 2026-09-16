@@ -30,7 +30,7 @@ Core narrative: *senior backend engineer (Java + Python) with a Data Science fou
 ### Non-goals (YAGNI)
 
 - No CMS, no database for the site content (content = typed content collections in the repo).
-- No user accounts, no analytics beyond privacy-friendly page counts (decide later; can be none).
+- No user accounts. Analytics limited to GoatCounter (privacy-friendly page counts, no cookies).
 - No classic ML demos (the 2019 DS repos stay as links only, not featured).
 - No mobile app.
 
@@ -112,6 +112,7 @@ interview-simulator, seekandemploy, jocut, md-mermaid-pdf, rustcut, spring-boot-
 - Ports/adapters: `AskController (FastAPI)` → `AskUseCase` → `Retriever` + `Generator` + `CitationPolicy` ports; adapters for llama.cpp (generation) and for the vector store — default **sqlite-vec** (zero extra services; a pgvector adapter is a possible v2 swap behind the same port).
 - Corpus ingestion CLI (`ingest`): CV MD files + project READMEs/ADRs → chunked, embedded, stored. Deterministic — re-runnable in CI.
 - `POST /api/ask {question, lang}` → `{answer, citations[], latency_ms}`. Citations are mandatory; if retrieval score < threshold the answer says "I don't have that in my CV" — it never invents.
+- **Model policy**: a **dedicated, permanently-resident `llama-server` instance** with a **small dense model (≤ 4B, Q4 quant, target ≤ ~4 GB VRAM)** so the site's LLM coexists with the owner's interactive models on the RTX 5080. Candidates benchmarked at Phase 3 start over ~20 golden CV questions (Qwen3-4B-Instruct, Llama-3.2-3B, and any ≤ 2B contender); criteria: answer+citations < 5 s, citation faithfulness, VRAM footprint. Embeddings: `nomic-embed-text-v1.5` (already on the homelab).
 - Token-bucket rate limiter (in-process first; Redis optional) → `429 + Retry-After`.
 - `/api/health` for the status-api probe.
 
@@ -151,6 +152,7 @@ interview-simulator, seekandemploy, jocut, md-mermaid-pdf, rustcut, spring-boot-
 - **JSON-LD**: `Person` (home, about), `WebSite` with `SearchAction` omitted (no search), `BreadcrumbList` on nested pages.
 - **`llms.txt`** (root): structured summary — who, skills, featured projects with links, contact. **`llms-full.txt`**: expanded version (full project sheets + experience). This is the "robots.txt for AIs".
 - Canonical URLs per locale; `hreflang` alternates.
+- **Analytics**: GoatCounter (free, non-commercial) — one script, no cookies, no consent banner needed under GDPR legitimate-interest rules it operates under.
 
 ---
 
@@ -159,6 +161,7 @@ interview-simulator, seekandemploy, jocut, md-mermaid-pdf, rustcut, spring-boot-
 Modern, clean, recruiter-legible, with a backend-engineer identity:
 
 - **Dark/light theme**, follows system, manual toggle, no flash (inline script).
+- **Personal identity**: monogram avatar ("JM") styled to the site palette — no photo in hero; optional small photo on about only if wanted later.
 - **Typography-first**: one strong sans for headings/body (e.g., Inter or system stack) + monospace accents for stack tags, metrics, and code snippets — the "engineer" signature.
 - **Single accent color** (electric teal or amber on dark neutral background); everything else grayscale discipline.
 - Generous whitespace, 8-pt grid, max-width ~72ch for prose.
@@ -193,10 +196,10 @@ Each phase is independently shippable; the site is useful from Phase 1 on.
 
 ---
 
-## 11. Open questions (to resolve before/during Phase 0)
+## 11. Resolved decisions
 
-1. ~~Domain name~~ — resolved: **`jordimp.net`** (owned).
-2. Include a photo on home/about, or keep it anonymous/monogram?
-3. Contact: plain `mailto:` + socials, or a tiny form (would need another endpoint — recommend against for v1)?
-4. Mini-LLM choice for the chatbot (e.g., Qwen3-4B-Instruct vs Llama-3.2-3B on the local GPU) — benchmark in Phase 3 start.
-5. Analytics: none (privacy-first, simplest) vs privacy-friendly counter (GoatCounter)?
+1. Domain: **`jordimp.net`** (owned). Site at `jordimp.net`, APIs at `api.jordimp.net`.
+2. Personal identity: **monogram avatar (JM)**, no photo in hero.
+3. Contact: **mailto (pre-filled subject) + LinkedIn + GitHub** in about + footer. No form.
+4. Chatbot model: **benchmark small models at Phase 3 start**, with the constraint that the chosen model is **small and permanently hosted** on the homelab (≤ 4B dense, Q4, ≤ ~4 GB VRAM, dedicated `llama-server`).
+5. Analytics: **GoatCounter** (no cookies, one script).
