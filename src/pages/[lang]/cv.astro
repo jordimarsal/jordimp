@@ -1,0 +1,137 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageTitle from '../../components/PageTitle.astro';
+import { LOCALES, L, type Locale } from '../../lib/i18n';
+import { ui } from '../../i18n/ui';
+
+export async function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+type Props = { lang: Locale };
+const { lang } = Astro.props;
+const t = ui[lang];
+
+const experience = (await getCollection('experience')).sort((a, b) => a.data.order - b.data.order);
+const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout
+  lang={lang}
+  title={`${t['cv.title']} — Jordi Marçal Poy`}
+  description={t['cv.title']}
+  path="cv/"
+>
+  <PageTitle label={t['cv.title']} />
+
+  <div class="actions no-print">
+    <a class="cta cta-primary" href="/cv/Jordi-Marcal-Poy-CV-EN.pdf" download>{t['cv.download.en']}</a>
+    <a class="cta cta-primary" href="/cv/Jordi-Marcal-Poy-CV-ES.pdf" download>{t['cv.download.es']}</a>
+    <button type="button" class="cta cta-secondary" data-print>{t['cv.print']}</button>
+  </div>
+
+  <section class="summary">
+    <h2 class="section-h2">{t['experience.title']}</h2>
+    <ul class="cv-experience">
+      {experience.map((entry) => (
+        <li>
+          <span class="mono period muted">{entry.data.period}</span>
+          <strong>{entry.data.company}</strong>
+          <span class="muted"> — {L(entry.data.role, lang)}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="summary">
+    <h2 class="section-h2">{t['skills.title']}</h2>
+    {skills.map((group) => (
+      <div class="cv-skill-group">
+        <strong>{L(group.data.group, lang)}</strong>
+        <ul class="chips">{group.data.items.map((item) => <li class="chip mono">{item}</li>)}</ul>
+      </div>
+    ))}
+  </section>
+</BaseLayout>
+
+<style>
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin: 0 0 var(--space-8);
+  }
+
+  .cta {
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-4);
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .cta-primary {
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    color: var(--accent-contrast);
+    font-weight: 600;
+  }
+
+  .cta-primary:hover {
+    background: var(--accent-strong);
+    border-color: var(--accent-strong);
+  }
+
+  .cta-secondary {
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: transparent;
+    font: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+
+  .cta-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .summary {
+    margin-bottom: var(--space-8);
+    max-width: var(--prose);
+  }
+
+  .cv-experience {
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cv-experience li {
+    margin-bottom: var(--space-2);
+    font-size: 0.9375rem;
+  }
+
+  .period {
+    display: inline-block;
+    min-width: 9rem;
+    font-size: 0.8125rem;
+  }
+
+  .cv-skill-group {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin: 0 0 var(--space-2);
+    font-size: 0.9375rem;
+  }
+
+  .cv-skill-group .chips {
+    margin: 0;
+  }
+</style>
+
+<script>
+  document.querySelector<HTMLButtonElement>('[data-print]')?.addEventListener('click', () => {
+    window.print();
+  });
+</script>

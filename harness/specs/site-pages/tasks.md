@@ -37,7 +37,7 @@
       depends_on: T2
       refs: R19, R20, R26
 
-- [ ] T9: CV page — copy `~/Documents/CV/CV Jordi Marçal 2026-09 Senior {EN,ES}.pdf` → `public/cv/Jordi-Marcal-Poy-CV-{EN,ES}.pdf`; `[lang]/cv.astro` with download buttons (`download` attr), print button (`window.print()`, `.no-print`), on-page summary (compact experience + skill groups), `./` h1; add the `@media print` block (hide `header`/`footer`/`.no-print`, black-on-white) to `global.css`
+- [x] T9: CV page — copy `~/Documents/CV/CV Jordi Marçal 2026-09 Senior {EN,ES}.pdf` → `public/cv/Jordi-Marcal-Poy-CV-{EN,ES}.pdf`; `[lang]/cv.astro` with download buttons (`download` attr), print button (`window.print()`, `.no-print`), on-page summary (compact experience + skill groups), `./` h1; add the `@media print` block (hide `header`/`footer`/`.no-print`, black-on-white) to `global.css`
       depends_on: T2, T3, T4
       refs: R21, R22, R23, R24, R26, R27
 
