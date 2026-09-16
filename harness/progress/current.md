@@ -25,6 +25,12 @@
   astro check 0/0, build 48 pages, harness/init.sh OK. Traceability R1–R28 →
   `harness/progress/impl_site-pages.md` (5 verification-path caveats documented).
   Ready for reviewer; feature NOT marked done (reviewer gate pending).
+- 2026-09-16: Review round 1 fixes (implementer, docs-only): Tests column of the
+  F2 traceability table rewritten parser-safe (probe-verified style from
+  `/tmp/opencode/trace-probe`; counts/annotations preserved in Notes 6);
+  waiver reference line added (astro CRITICAL → F1 waiver of record, re-gate
+  F5). Gates re-run: traceability 21/21 + 28/28 PASS exit 0, vitest 26/26,
+  init.sh OK. Feature still NOT done (awaiting leader).
 
 ## Next step
 
