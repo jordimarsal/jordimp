@@ -1,0 +1,15 @@
+{
+  "group": {
+    "en": "AI & LLMs",
+    "es": "IA y LLMs",
+    "ca": "IA i LLMs"
+  },
+  "items": [
+    "RAG & vector search",
+    "MCP",
+    "llama.cpp local inference",
+    "agents & evals",
+    "prompt engineering"
+  ],
+  "order": 3
+}

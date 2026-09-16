@@ -1,0 +1,17 @@
+{
+  "group": {
+    "en": "Data",
+    "es": "Datos",
+    "ca": "Dades"
+  },
+  "items": [
+    "SQL (Oracle/MySQL/SQLServer)",
+    "MongoDB",
+    "Redis",
+    "Cassandra",
+    "Snowflake",
+    "Machine Learning",
+    "pandas/scikit-learn"
+  ],
+  "order": 2
+}

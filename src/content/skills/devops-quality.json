@@ -1,0 +1,20 @@
+{
+  "group": {
+    "en": "DevOps & Quality",
+    "es": "DevOps y Calidad",
+    "ca": "DevOps i Qualitat"
+  },
+  "items": [
+    "Docker",
+    "Kubernetes",
+    "AWS Lambda/CDK/CloudFormation",
+    "GitHub Actions",
+    "Jenkins",
+    "SonarQube",
+    "SonarLint",
+    "Testcontainers",
+    "pytest",
+    "JUnit/Mockito"
+  ],
+  "order": 4
+}
