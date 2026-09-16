@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageTitle from '../../components/PageTitle.astro';
+import { LOCALES, type Locale } from '../../lib/i18n';
+import { ui } from '../../i18n/ui';
+import { SITE } from '../../config';
+
+export async function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+type Props = { lang: Locale };
+const { lang } = Astro.props;
+const t = ui[lang];
+
+const mailto = `mailto:${SITE.email}?subject=Portfolio%20contact`;
+const githubHandle = SITE.github.replace('https://github.com/', '');
+const linkedinHandle = SITE.linkedin.replace('https://www.linkedin.com/in/', '');
+const values = [t['about.value.1'], t['about.value.2'], t['about.value.3'], t['about.value.4']];
+---
+<BaseLayout
+  lang={lang}
+  title={`${t['about.title']} — ${SITE.name}`}
+  description={t['about.bio.p1']}
+  path="about/"
+>
+  <PageTitle label={t['about.title']} />
+  <div class="prose">
+    <p>{t['about.bio.p1']}</p>
+    <p>{t['about.bio.p2']}</p>
+    <p>{t['about.bio.p3']}</p>
+  </div>
+
+  <aside class="card values">
+    <h2>{t['about.values.title']}</h2>
+    <ul>{values.map((value) => <li>{value}</li>)}</ul>
+  </aside>
+
+  <section class="contact">
+    <h2 class="section-h2">{t['footer.contact']}</h2>
+    <ul class="contact-commands">
+      <li class="mono"><a href={mailto}>mail -s "Portfolio contact" {SITE.email}</a></li>
+      <li class="mono"><a href={SITE.github}>curl github/{githubHandle}</a></li>
+      <li class="mono"><a href={SITE.linkedin}>curl in/{linkedinHandle}</a></li>
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose {
+    margin-bottom: var(--space-8);
+  }
+
+  .prose p {
+    margin: 0 0 var(--space-4);
+    line-height: 1.65;
+  }
+
+  .values {
+    max-width: var(--prose);
+    padding: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+
+  .values h2 {
+    margin: 0 0 var(--space-3);
+    font-size: 1rem;
+  }
+
+  .values ul {
+    margin: 0;
+    padding-left: 1.125rem;
+  }
+
+  .values li {
+    margin-bottom: var(--space-1);
+    font-size: 0.9375rem;
+  }
+
+  .values li::marker {
+    color: var(--accent);
+  }
+
+  .contact-commands {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .contact-commands li {
+    align-self: flex-start;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
+    background: var(--code-bg);
+    font-size: 0.8125rem;
+  }
+
+  .contact-commands a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .contact-commands a:hover {
+    color: var(--accent);
+  }
+</style>

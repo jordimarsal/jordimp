@@ -29,7 +29,7 @@
       depends_on: T2, T3, T4
       refs: R10, R11, R13, R26, R27
 
-- [ ] T7: About page — `[lang]/about.astro`: `prose` bio from `about.bio.p1–p3`, values card (`about.values.title` + `about.value.1–4`), contact block styled as shell commands with exactly the three links (`mailto:jordi.marsal@gmail.com?subject=Portfolio%20contact`, GitHub, LinkedIn); `./` h1
+- [x] T7: About page — `[lang]/about.astro`: `prose` bio from `about.bio.p1–p3`, values card (`about.values.title` + `about.value.1–4`), contact block styled as shell commands with exactly the three links (`mailto:jordi.marsal@gmail.com?subject=Portfolio%20contact`, GitHub, LinkedIn); `./` h1
       depends_on: T2
       refs: R14, R15, R26
 
