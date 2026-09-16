@@ -4,6 +4,12 @@
 > `feat/front-phase-0-1` (plan Tasks 1–7 + env fix, each reviewed and approved);
 > every task lists the commit that delivered it. Traceability: every R1–R21 is
 > referenced below; commit `8aa20ef` is current HEAD.
+>
+> Implementer re-verification (2026-09-16): all T1–T8 deliverables independently
+> re-verified (vitest 11 tests, `npm run check`, `npm run build`, dist inspection,
+> negative schema builds). One system-level gap found outside any T<n>: R9 —
+> `ThemeToggle` is rendered by no page (see
+> `harness/progress/impl_front-foundation.md`).
 
 - [x] T1: Scaffold Astro 5 site — `package.json` scripts/deps, strict `tsconfig.json`, `astro.config.mjs` (site, i18n `prefixDefaultLocale`, sitemap), `src/env.d.ts`, placeholder `src/pages/[lang]/index.astro` + root `src/pages/index.astro`
       depends_on: (none)
