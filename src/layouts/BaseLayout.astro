@@ -4,6 +4,7 @@ import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/600.css';
 import '../styles/global.css';
 import SEO from '../components/SEO.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 
 export interface Props {
   lang: 'en' | 'es' | 'ca';
@@ -30,6 +31,7 @@ const { lang, title, description, path } = Astro.props;
       <a href={`/${lang}/`} aria-label="Home"><slot name="logo" /></a>
       <nav><slot name="nav" /></nav>
       <slot name="actions" />
+      <ThemeToggle {lang} />
     </header>
     <main class="container"><slot /></main>
     <slot name="footer" />

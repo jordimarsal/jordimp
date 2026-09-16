@@ -1,7 +1,7 @@
 # Implementation — front-foundation (F1)
 
 - **Session:** 2026-09-16 — implementer (verification + traceability of pre-harness commits `cf3f29b..8aa20ef`)
-- **Verdict:** `blocked` — 20/21 requirements verified done; **R9 pending** (theme toggle is dead code: no page renders it). Leader routes the fix.
+- **Verdict:** 21/21 requirements verified done (R9 resolved this session via leader ruling: ThemeToggle wired into `BaseLayout`; fix commit follows).
 - Full battery executed this session: `npx vitest run` (11 tests, 2 files), `npm run check` (0 errors / 0 warnings / 1 hint), `npm run build` (39 pages), dist inspection, negative schema builds, scripted content extraction.
 
 ## Traceability
@@ -16,7 +16,7 @@
 | R6 BaseLayout + `html[lang]` | `grep -o '<html lang="{lang}"' dist/{lang}/projects/index.html` → 1 per locale; detail pages too | `src/layouts/BaseLayout.astro` | done ¹ |
 | R7 no-flash inline script | `grep -F "localStorage.getItem('theme')"` in `dist/en/projects/index.html` (all 34 BaseLayout pages ship it in `<head>`) | `src/layouts/BaseLayout.astro` | done ¹ |
 | R8 stored theme wins | `grep -F "matchMedia('(prefers-color-scheme: light)')"` — inline script does `s ?? (matchMedia(...))` | `src/layouts/BaseLayout.astro` | done ¹ |
-| R9 toggle click persists | prescribed `grep -rF "localStorage.setItem('theme'" dist/_astro/` → **0 matches: `theme-toggle` / `◐` appear NOWHERE in `dist/`** — `src/components/ThemeToggle.astro` is imported by no page/layout | `src/components/ThemeToggle.astro` (unwired) | **pending** |
+| R9 toggle click persists | `grep -rl 'theme-toggle' dist/ \| wc -l` → 36 (all BaseLayout pages, exactly 1 button per page via `grep -o`); `grep -rlF 'localStorage.setItem(t,e)' dist/ \| wc -l` → 36 (minifier hoisted `KEY` → `t="theme"`; spec's `grep -rF "localStorage.setItem('theme'" dist/_astro/` can never match — script is inlined in HTML, not in `dist/_astro/`) | `src/components/ThemeToggle.astro`, `src/layouts/BaseLayout.astro` | done ³ |
 | R10 `L()` en fallback | `npx vitest run` › `i18n.spec.ts › L() › falls back to en for a missing locale` | `src/lib/i18n.ts`, `src/lib/i18n.spec.ts` | done |
 | R11 ui key parity | `npm run check` (compile-time `Record<UiKey, string>`) + vitest › key parity, non-empty | `src/i18n/ui.ts`, `src/lib/i18n.spec.ts` | done |
 | R12 hreflang ×3 + aria-current | `grep -o 'hreflang="' …` → 3 (spec's `grep -c` counts minified single line — recounted with `-o`); `aria-current="true"` present | `src/components/LocaleSwitcher.astro` | done ² |
@@ -32,7 +32,27 @@
 
 ## Findings
 
-### R9 — pending (blocking, routes to leader)
+### ³ R9 — resolved by leader ruling (fix applied this session)
+
+Leader ruled the theme toggle is global chrome: `BaseLayout` renders it itself,
+not the pages. Fix (2 lines in `src/layouts/BaseLayout.astro`): import
+`ThemeToggle` and render `<ThemeToggle {lang} />` as a sibling directly after
+`<slot name="actions" />` — LocaleSwitcher composition stays per-page, every
+BaseLayout page gets exactly one toggle. Post-fix evidence (`npm run build` → 39
+pages): `grep -rl 'theme-toggle' dist/ | wc -l` → 36 = 3 locales × 12 pages
+(projects index + 11 detail pages; placeholder homes excluded — they don't use
+BaseLayout, see ¹ — so the earlier "34 BaseLayout pages" figure undercounted by
+2);
+`grep -o 'id="theme-toggle"' dist/en/projects/index.html | wc -l` → 1. Vite
+**inlined** the toggle script into each page's HTML (`<script type="module">const
+t="theme",…localStorage.setItem(t,e)`), so the spec's prescribed
+`dist/_astro/` grep still can't match and the `'theme'` literal is gone after
+esbuild hoisted `KEY` into `t`. Working greps: `grep -rlF
+'document.getElementById("theme-toggle")' dist/ | wc -l` → 36 and `grep -rlF
+'localStorage.setItem(t,e)' dist/ | wc -l` → 36. Full battery re-run green:
+vitest 11/11, `npm run check` 0/0/1, `harness/init.sh` all OK.
+
+### R9 — pending (blocking, routes to leader) — SUPERSEDED by ³
 
 `src/components/ThemeToggle.astro` exists, type-checks, and its script implements the
 required behavior — but **no page or layout imports it**. Evidence:
