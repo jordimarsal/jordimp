@@ -5,5 +5,36 @@
     "modules": ["iterative-refinement", "security-audit", "wekan-tickets"],
     "audit_level": "strict"
   },
-  "features": []
+  "features": [
+    {
+      "id": "F1",
+      "name": "front-foundation",
+      "description": "Astro 5 scaffold with i18n (en/es/ca), design tokens + BaseLayout/ThemeToggle/Monogram, typed trilingual content collections (11 projects), projects index with stack filter and detail pages.",
+      "status": "spec_ready"
+    },
+    {
+      "id": "F2",
+      "name": "site-pages",
+      "description": "Home (hero, pillars, featured strip, HeaderNav), experience timeline, skills grid, about + contact, footer, 404, CV page with downloads and print styles.",
+      "status": "pending"
+    },
+    {
+      "id": "F3",
+      "name": "seo-analytics",
+      "description": "Full SEO component (OG/Twitter/hreflang/canonical), JSON-LD Person + BreadcrumbList, robots.txt, generated sitemap, llms.txt + llms-full.txt build endpoints, optional GoatCounter.",
+      "status": "pending"
+    },
+    {
+      "id": "F4",
+      "name": "deploy",
+      "description": "GitHub Actions deploy to GitHub Pages with custom domain jordimp.net (CNAME, DNS checklist, verification).",
+      "status": "pending"
+    },
+    {
+      "id": "F5",
+      "name": "qa-gate",
+      "description": "Playwright smoke suite (render, routing, i18n), Lighthouse CI gate >=95 x4, final content QA (trilingual, no phone, live links), v0.1.0 tag.",
+      "status": "pending"
+    }
+  ]
 }
