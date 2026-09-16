@@ -170,7 +170,7 @@ Modern, clean, recruiter-legible, with a backend-engineer identity:
 
 ## 9. Deployment & operations
 
-- **Front**: GitHub Actions → GitHub Pages, custom domain (`jordimp.dev` — to buy if not available in that exact TLD, fallback `jordimarpoy.dev` / `jordimpoy.com`; decide at build time).
+- **Front**: GitHub Actions → GitHub Pages, custom domain **`jordimp.net`** (owned). Site at `jordimp.net`, APIs at `api.jordimp.net` (Caddy TLS). HTTPS enforced via GitHub Pages "Enforce HTTPS" + Caddy auto-redirect.
 - **Backends**: one `docker-compose.yml` on the homelab behind Caddy (TLS, `api.<domain>`), `restart: unless-stopped`, healthchecks wired to compose.
 - Secrets via `.env` (git-ignored); no secrets in repo — verified in review.
 - status-api watches ask-api + llama-server; optional external uptime ping (Uptime-Kuma already in homelab) — v2.
@@ -195,7 +195,7 @@ Each phase is independently shippable; the site is useful from Phase 1 on.
 
 ## 11. Open questions (to resolve before/during Phase 0)
 
-1. Domain name — `jordimp.dev`? Alternatives?
+1. ~~Domain name~~ — resolved: **`jordimp.net`** (owned).
 2. Include a photo on home/about, or keep it anonymous/monogram?
 3. Contact: plain `mailto:` + socials, or a tiny form (would need another endpoint — recommend against for v1)?
 4. Mini-LLM choice for the chatbot (e.g., Qwen3-4B-Instruct vs Llama-3.2-3B on the local GPU) — benchmark in Phase 3 start.
