@@ -3,37 +3,23 @@
 > This file is cleared on session close and moved to `history.md`.
 > Keep it updated in real time while you work — not at the end.
 
-- **Feature in progress:** F2 — site-pages (plan Tasks 8–10: T1–T10)
+- **Feature in progress:** F2 site-pages — review APPROVED, awaiting HUMAN completion gate
 - **Started:** 2026-09-16
-- **Agent:** implementer (opencode session)
+- **Agent:** leader (opencode session)
 
-## Plan
+## State
 
-- F2 site-pages: implement spec T1→T10 in order (style locked: A · Terminal).
-- Verify each R<n> as tasks complete; full battery at T10
-  (`npx vitest run && npm run check && npm run build` + harness/init.sh).
+- F1 front-foundation: **done** (all gates, history.md has the entry).
+- F2 site-pages: implemented (10/10 tasks, commits 76ceea8..2f3da86 + 08b9fc2), reviewed CHANGES_REQUESTED → both mechanical changes fixed → **APPROVED** (conditional satisfied, leader-recorded in review_site-pages.md). Gates: vitest 26/26 · check 0/0 · build (39+ pages) · traceability 21/21 + 28/28 PASS · audit strict (astro CRITICAL stays waived per F1 disposition, re-gate at F5).
+- **Next: human completion gate for F2.** On "F2 done": flip status in feature_list.json, Wekan card PZp3EKBmy2vTZHpdN → done list (HxgNZMSLNDNyHC8LM), archive summary to history.md, then spec-author for F3 seo-analytics.
 
 ## Log
 
-- 2026-09-16: F1 closed — all gates passed (see history.md). Wekan card → done.
-- 2026-09-16: Wekan board `jordimp` live (user jordi added as admin member).
-- 2026-09-16: spec-author wrote F2 spec (28 requirements R1–R28, 8 ADRs, T1–T10)
-  at `harness/specs/site-pages/`; F2 → `spec_ready`. Awaiting human approval.
-- 2026-09-16: F2 approved → `in_progress`. Implementer session started; pre-conditions
-  verified (branch `feat/front-phase-0-1`, spec files present, F2 in_progress).
-- 2026-09-16: T1–T10 implemented and verified. Full battery green: vitest 26/26,
-  astro check 0/0, build 48 pages, harness/init.sh OK. Traceability R1–R28 →
-  `harness/progress/impl_site-pages.md` (5 verification-path caveats documented).
-  Ready for reviewer; feature NOT marked done (reviewer gate pending).
-- 2026-09-16: Review round 1 fixes (implementer, docs-only): Tests column of the
-  F2 traceability table rewritten parser-safe (probe-verified style from
-  `/tmp/opencode/trace-probe`; counts/annotations preserved in Notes 6);
-  waiver reference line added (astro CRITICAL → F1 waiver of record, re-gate
-  F5). Gates re-run: traceability 21/21 + 28/28 PASS exit 0, vitest 26/26,
-  init.sh OK. Feature still NOT done (awaiting leader).
+- 2026-09-16 (late): F2 implemented; review round 1 CHANGES_REQUESTED (traceability table format + waiver ref). Leader fixed harness tool defect: R-id tables are per-feature (collect_tables scoped to impl_<feature>.md, commit f0cbfc2). Implementer reformatted table per reviewer probe (08b9fc2). Gate PASS → APPROVED recorded (06ba548).
+- Session paused by human: memory + docs update, clean stop.
 
 ## Next step
 
 _If the session is interrupted, this is what the next session should do first._
 
-- Dispatch reviewer for F2 site-pages (traceability in harness/progress/impl_site-pages.md).
+- Ask the human for the F2 completion gate. Then F3 seo-analytics (spec-author → gate → implement → review). Known follow-up: harness-standard upstream could receive the check-traceability.py improvements (feature-scoped tables, command-evidence tokens, colocated TS specs).
