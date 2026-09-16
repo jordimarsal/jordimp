@@ -1,0 +1,133 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import LocaleSwitcher from '../../../components/LocaleSwitcher.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import { LOCALES, type Locale } from '../../../lib/i18n';
+import { ui } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+type Props = { lang: Locale };
+const { lang } = Astro.props;
+const t = ui[lang];
+
+const projects = await getCollection('projects');
+const sorted = [...projects].sort(
+  (a, b) =>
+    Number(b.data.featured) - Number(a.data.featured) ||
+    b.data.year - a.data.year ||
+    a.data.name.localeCompare(b.data.name),
+);
+const featured = sorted.filter((p) => p.data.featured);
+const secondary = sorted.filter((p) => !p.data.featured);
+const stacks = [...new Set(sorted.flatMap((p) => p.data.stack))].sort((a, b) => a.localeCompare(b));
+---
+<BaseLayout
+  lang={lang}
+  title={`${t['projects.title']} — Jordi Marçal Poy`}
+  description={t['projects.subtitle']}
+  path="projects/"
+>
+  <LocaleSwitcher slot="actions" {lang} path="projects/" />
+  <h1>{t['projects.title']}</h1>
+  <p class="muted">{t['projects.subtitle']}</p>
+  <div class="stack-filter">
+    <button type="button" data-reset aria-pressed="true">{t['projects.filter.all']}</button>
+    {stacks.map((s) => (
+      <button type="button" data-stack={s} aria-pressed="false">{s}</button>
+    ))}
+  </div>
+  <section class="grid">
+    {featured.map((p) => <ProjectCard project={p} {lang} />)}
+  </section>
+  <section class="grid">
+    {secondary.map((p) => <ProjectCard project={p} {lang} />)}
+  </section>
+</BaseLayout>
+
+<style>
+  h1 {
+    margin: var(--space-8) 0 var(--space-2);
+  }
+
+  .stack-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-4) 0 var(--space-8);
+  }
+
+  .stack-filter button {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 0.8125rem;
+    padding: 4px var(--space-3);
+    cursor: pointer;
+  }
+
+  .stack-filter button[aria-pressed='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+
+  .grid :global(.featured) {
+    grid-column: span 2;
+  }
+
+  @media (max-width: 640px) {
+    .grid :global(.featured) {
+      grid-column: auto;
+    }
+  }
+</style>
+
+<script>
+  const filter = document.querySelector<HTMLElement>('.stack-filter');
+
+  if (filter) {
+    const cards = [...document.querySelectorAll<HTMLElement>('.project-card[data-stack]')];
+    const buttons = [...filter.querySelectorAll<HTMLButtonElement>('button[data-stack]')];
+    const reset = filter.querySelector<HTMLButtonElement>('button[data-reset]');
+    const active = new Set<string>();
+
+    const apply = () => {
+      for (const card of cards) {
+        const stacks = (card.dataset.stack ?? '').split('|');
+        card.hidden = active.size > 0 && !stacks.some((stack) => active.has(stack));
+      }
+      for (const button of buttons) {
+        button.setAttribute('aria-pressed', String(active.has(button.dataset.stack ?? '')));
+      }
+      reset?.setAttribute('aria-pressed', String(active.size === 0));
+    };
+
+    for (const button of buttons) {
+      button.addEventListener('click', () => {
+        const stack = button.dataset.stack;
+        if (!stack) return;
+        if (active.has(stack)) active.delete(stack);
+        else active.add(stack);
+        apply();
+      });
+    }
+
+    reset?.addEventListener('click', () => {
+      active.clear();
+      apply();
+    });
+  }
+</script>

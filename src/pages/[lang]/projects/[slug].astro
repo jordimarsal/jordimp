@@ -1,0 +1,90 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { L, LOCALES, type Locale } from '../../../lib/i18n';
+import { ui } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return LOCALES.flatMap((lang) =>
+    projects.map((project) => ({ params: { lang, slug: project.id }, props: { lang, project } })),
+  );
+}
+
+type Props = { lang: Locale; project: CollectionEntry<'projects'> };
+const { lang, project } = Astro.props;
+const d = project.data;
+const repo = new URL(d.links.github).pathname.replace(/^\//, '');
+---
+<BaseLayout
+  lang={lang}
+  title={`${d.name} — Jordi Marçal Poy`}
+  description={L(d.summary, lang)}
+  path={`projects/${project.id}/`}
+>
+  <article class="prose">
+    <p class="muted mono">{d.year} · <a href={d.links.github}>{repo}</a></p>
+    <h1>{d.name}</h1>
+    <p><strong>{L(d.summary, lang)}</strong></p>
+    <h2>{ui[lang]['projects.problem']}</h2>
+    <p>{L(d.problem, lang)}</p>
+    <h2>{ui[lang]['projects.highlights']}</h2>
+    <ul>{L(d.highlights, lang).map((h) => <li>{h}</li>)}</ul>
+    <h2>{ui[lang]['projects.stack']}</h2>
+    <ul class="chips">{d.stack.map((s) => <li class="chip mono">{s}</li>)}</ul>
+    <h2>{ui[lang]['projects.metrics']}</h2>
+    <dl class="metrics">
+      {d.metrics.map((m) => (
+        <div>
+          <dt class="mono">{m.value}</dt>
+          <dd>{m.label}</dd>
+        </div>
+      ))}
+    </dl>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose h1 {
+    margin: var(--space-2) 0;
+    font-size: 2rem;
+  }
+
+  .prose h2 {
+    margin: var(--space-8) 0 var(--space-2);
+    font-size: 1.25rem;
+  }
+
+  .prose > p:first-child {
+    margin-top: var(--space-8);
+  }
+
+  .prose a {
+    color: var(--accent);
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-3);
+    margin: var(--space-4) 0 0;
+  }
+
+  .metrics > div {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-3);
+  }
+
+  .metrics dt {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .metrics dd {
+    margin: var(--space-1) 0 0;
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+</style>
