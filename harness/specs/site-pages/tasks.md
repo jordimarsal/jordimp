@@ -13,7 +13,7 @@
       depends_on: T1
       refs: R6, R7, R8, R17, R18
 
-- [ ] T3: Experience content — `src/content/experience/{telefonica-open-gateway,axpe-mapfre,zitro,attendre}.json` with the plan facts verbatim (roles/points trilingual, technical terms English, `order` 1–4, one `current: true`) + colocated `src/content/experience.spec.ts` (count, order, current uniqueness, trilingual completeness, phone canary)
+- [x] T3: Experience content — `src/content/experience/{telefonica-open-gateway,axpe-mapfre,zitro,attendre}.json` with the plan facts verbatim (roles/points trilingual, technical terms English, `order` 1–4, one `current: true`) + colocated `src/content/experience.spec.ts` (count, order, current uniqueness, trilingual completeness, phone canary)
       depends_on: T1
       refs: R9, R16
 
