@@ -67,6 +67,28 @@ svg {
   margin-right: 2px;
 }
 
+.hero-prompt {
+  margin: 0 0 var(--space-2);
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.prompt-cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  margin-left: 3px;
+  background: var(--accent);
+  vertical-align: text-bottom;
+  animation: cursor-blink 1.2s steps(2, start) infinite;
+}
+
+@keyframes cursor-blink {
+  to {
+    visibility: hidden;
+  }
+}
+
 .chips {
   display: flex;
   flex-wrap: wrap;

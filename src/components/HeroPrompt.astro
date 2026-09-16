@@ -1,0 +1,8 @@
+---
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props as Props;
+---
+<p class="hero-prompt mono">$ {text}<span class="prompt-cursor" aria-hidden="true"></span></p>

@@ -21,9 +21,13 @@
   at `harness/specs/site-pages/`; F2 → `spec_ready`. Awaiting human approval.
 - 2026-09-16: F2 approved → `in_progress`. Implementer session started; pre-conditions
   verified (branch `feat/front-phase-0-1`, spec files present, F2 in_progress).
+- 2026-09-16: T1–T10 implemented and verified. Full battery green: vitest 26/26,
+  astro check 0/0, build 48 pages, harness/init.sh OK. Traceability R1–R28 →
+  `harness/progress/impl_site-pages.md` (5 verification-path caveats documented).
+  Ready for reviewer; feature NOT marked done (reviewer gate pending).
 
 ## Next step
 
 _If the session is interrupted, this is what the next session should do first._
 
-- Continue F2 implementation at the first un-checked task in harness/specs/site-pages/tasks.md.
+- Dispatch reviewer for F2 site-pages (traceability in harness/progress/impl_site-pages.md).
