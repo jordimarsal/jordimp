@@ -1,0 +1,23 @@
+{
+  "name": "spring-boot-casino",
+  "year": 2026,
+  "featured": false,
+  "summary": {
+    "en": "Technical assessment: a casino betting domain modeled in Spring Boot following a hexagonal architecture.",
+    "es": "Prueba técnica: un dominio de apuestas de casino modelado en Spring Boot siguiendo una arquitectura hexagonal.",
+    "ca": "Prova tècnica: un domini d'apostes de casino modelat en Spring Boot seguint una arquitectura hexagonal."
+  },
+  "problem": {
+    "en": "Technical assessment: a casino betting domain modeled in Spring Boot following a hexagonal architecture.",
+    "es": "Prueba técnica: un dominio de apuestas de casino modelado en Spring Boot siguiendo una arquitectura hexagonal.",
+    "ca": "Prova tècnica: un domini d'apostes de casino modelat en Spring Boot seguint una arquitectura hexagonal."
+  },
+  "highlights": {
+    "en": ["Hexagonal by design: the betting domain stays independent of the framework through ports and adapters."],
+    "es": ["Hexagonal por diseño: el dominio de apuestas se mantiene independiente del framework mediante puertos y adaptadores."],
+    "ca": ["Hexagonal per disseny: el domini d'apostes es manté independent del framework mitjançant ports i adaptadors."]
+  },
+  "stack": ["Java", "Spring Boot", "Hexagonal Architecture"],
+  "metrics": [],
+  "links": { "github": "https://github.com/jordimarsal/spring-boot-casino" }
+}

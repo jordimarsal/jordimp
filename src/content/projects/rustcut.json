@@ -1,0 +1,23 @@
+{
+  "name": "rustcut",
+  "year": 2026,
+  "featured": false,
+  "summary": {
+    "en": "Tiny URL shortener in Rust: a deliberately minimalist REST API on Actix-web with SQLite storage.",
+    "es": "Acortador de URLs minimalista en Rust: una API REST deliberadamente reducida sobre Actix-web con almacenamiento en SQLite.",
+    "ca": "Escurçador d'URLs minimalista en Rust: una API REST deliberadament reduida sobre Actix-web amb emmagatzematge a SQLite."
+  },
+  "problem": {
+    "en": "Tiny URL shortener in Rust: a deliberately minimalist REST API on Actix-web with SQLite storage.",
+    "es": "Acortador de URLs minimalista en Rust: una API REST deliberadamente reducida sobre Actix-web con almacenamiento en SQLite.",
+    "ca": "Escurçador d'URLs minimalista en Rust: una API REST deliberadament reduida sobre Actix-web amb emmagatzematge a SQLite."
+  },
+  "highlights": {
+    "en": ["A complete REST service in Rust, kept intentionally small: Actix-web over SQLite, nothing else."],
+    "es": ["Un servicio REST completo en Rust, mantenido intencionadamente pequeño: Actix-web sobre SQLite, nada más."],
+    "ca": ["Un servei REST complet en Rust, mantingut intencionadament petit: Actix-web sobre SQLite, res més."]
+  },
+  "stack": ["Rust", "Actix-web", "SQLite"],
+  "metrics": [],
+  "links": { "github": "https://github.com/jordimarsal/rustcut" }
+}

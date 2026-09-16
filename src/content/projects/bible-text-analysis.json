@@ -1,0 +1,23 @@
+{
+  "name": "bible_text_analysis",
+  "year": 2019,
+  "featured": false,
+  "summary": {
+    "en": "NLP study on the Bible: web scraping, NLTK processing, LDA topic modeling and sentiment analysis — my Data Science roots.",
+    "es": "Estudio de NLP sobre la Biblia: web scraping, procesamiento con NLTK, modelado de temas con LDA y análisis de sentimiento — mis raíces en Data Science.",
+    "ca": "Estudi de NLP sobre la Bíblia: web scraping, processament amb NLTK, modelatge de temes amb LDA i anàlisi de sentiment — les meves arrels en Data Science."
+  },
+  "problem": {
+    "en": "NLP study on the Bible: web scraping, NLTK processing, LDA topic modeling and sentiment analysis — my Data Science roots.",
+    "es": "Estudio de NLP sobre la Biblia: web scraping, procesamiento con NLTK, modelado de temas con LDA y análisis de sentimiento — mis raíces en Data Science.",
+    "ca": "Estudi de NLP sobre la Bíblia: web scraping, processament amb NLTK, modelatge de temes amb LDA i anàlisi de sentiment — les meves arrels en Data Science."
+  },
+  "highlights": {
+    "en": ["An end-to-end NLP pipeline over raw text: scraping, NLTK, LDA topics and sentiment analysis in notebooks."],
+    "es": ["Un pipeline NLP de punta a punta sobre texto crudo: scraping, NLTK, tópicos LDA y análisis de sentimiento en notebooks."],
+    "ca": ["Un pipeline NLP de punta a punta sobre text cru: scraping, NLTK, temes LDA i anàlisi de sentiment en notebooks."]
+  },
+  "stack": ["Python", "NLTK", "LDA", "Jupyter"],
+  "metrics": [],
+  "links": { "github": "https://github.com/jordimarsal/bible_text_analysis" }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "interview-simulator",
+  "year": 2026,
+  "featured": false,
+  "summary": {
+    "en": "Voice interview simulator: a local LLM plays the interviewer and Whisper handles transcription, so you can rehearse technical interviews fully offline.",
+    "es": "Simulador de entrevistas por voz: un LLM local hace de entrevistador y Whisper se encarga de la transcripción, para ensayar entrevistas técnicas completamente offline.",
+    "ca": "Simulador d'entrevistes per veu: un LLM local fa d'entrevistador i Whisper se n'encarrega de la transcripció, per assajar entrevistes tècniques completament offline."
+  },
+  "problem": {
+    "en": "Voice interview simulator: a local LLM plays the interviewer and Whisper handles transcription, so you can rehearse technical interviews fully offline.",
+    "es": "Simulador de entrevistas por voz: un LLM local hace de entrevistador y Whisper se encarga de la transcripción, para ensayar entrevistas técnicas completamente offline.",
+    "ca": "Simulador d'entrevistes per veu: un LLM local fa d'entrevistador i Whisper se n'encarrega de la transcripció, per assajar entrevistes tècniques completament offline."
+  },
+  "highlights": {
+    "en": ["Runs fully offline: voice questions, spoken answers and transcription with zero cloud dependency."],
+    "es": ["Funciona completamente offline: preguntas por voz, respuestas habladas y transcripción sin ninguna dependencia de la nube."],
+    "ca": ["Funciona completament offline: preguntes per veu, respostes parlades i transcripció sense cap dependència del núvol."]
+  },
+  "stack": ["Whisper", "Local LLM"],
+  "metrics": [],
+  "links": { "github": "https://github.com/jordimarsal/interview-simulator" }
+}
