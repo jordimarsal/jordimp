@@ -14,14 +14,14 @@
       "id": "F1",
       "name": "front-foundation",
       "description": "Astro 5 scaffold with i18n (en/es/ca), design tokens + BaseLayout/ThemeToggle/Monogram, typed trilingual content collections (11 projects), projects index with stack filter and detail pages.",
-      "status": "in_progress",
+      "status": "done",
       "wekan_card": "puk8NhH8s2oiBL4CH"
     },
     {
       "id": "F2",
       "name": "site-pages",
       "description": "Home (hero, pillars, featured strip, HeaderNav), experience timeline, skills grid, about + contact, footer, 404, CV page with downloads and print styles.",
-      "status": "pending",
+      "status": "spec_ready",
       "wekan_card": "PZp3EKBmy2vTZHpdN"
     },
     {

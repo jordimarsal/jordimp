@@ -1,0 +1,131 @@
+<h2>Quina direcció d'estil per al portfoli?</h2>
+<p class="subtitle">Tres variants amb el teu contingut real (hero + 2 targetes de projecte). Clica la que preferueixes i/or comenta al terminal. La paleta base (fosc #0b1220, teal #2dd4bf, Inter + JetBrains Mono) és comuna — el que canvia és el caràcter.</p>
+
+<style>
+  .v { border-radius: 12px; overflow: hidden; border: 1px solid #2a3548; margin: 18px 0; font-family: Inter, sans-serif; }
+  .v * { box-sizing: border-box; }
+  .v .nav { display: flex; align-items: center; gap: 18px; padding: 14px 22px; font-size: 13px; }
+  .v .mono { font-family: 'JetBrains Mono', monospace; }
+  .v .jm { display: inline-flex; width: 30px; height: 30px; border-radius: 8px; border: 1.5px solid #2dd4bf; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .v .spacer { flex: 1; }
+  .v .lang { opacity: .7; }
+  .v .hero { padding: 46px 22px 38px; }
+  .v h1 { margin: 0 0 6px; }
+  .v .role { font-size: 14px; margin-bottom: 14px; }
+  .v .pillars { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+  .v .chip { font-size: 11px; padding: 4px 10px; border-radius: 6px; border: 1px solid #2a3548; }
+  .v .cta { display: inline-block; padding: 9px 18px; border-radius: 8px; font-size: 13px; margin-right: 10px; text-decoration: none; }
+  .v .cards2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 22px 26px; }
+  .v .pcard { border: 1px solid #2a3548; border-radius: 10px; padding: 14px; }
+  .v .pcard h4 { margin: 0 0 4px; font-size: 14px; }
+  .v .pcard p { margin: 0 0 8px; font-size: 12px; line-height: 1.45; opacity: .8; }
+  .v .tag { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 5px; margin-right: 4px; }
+
+  /* A — Terminal */
+  .vA { background: #0b1220; color: #e6edf3; }
+  .vA .nav { border-bottom: 1px solid #1f2b40; }
+  .vA .role { color: #2dd4bf; }
+  .vA .prompt::before { content: '$ '; color: #2dd4bf; }
+  .vA .prompt { color: #8b98ab; }
+  .vA .cursor { display: inline-block; width: 8px; height: 15px; background: #2dd4bf; vertical-align: -2px; }
+  .vA .cta-primary { background: #2dd4bf; color: #04211d; font-family: 'JetBrains Mono', monospace; }
+  .vA .cta-ghost { border: 1px solid #2dd4bf; color: #2dd4bf; font-family: 'JetBrains Mono', monospace; }
+  .vA .tag { background: #0d1524; border: 1px solid #1f2b40; color: #8b98ab; font-family: 'JetBrains Mono', monospace; }
+  .vA .metric { color: #2dd4bf; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+  /* B — Editorial */
+  .vB { background: #fafbfd; color: #0f172a; }
+  .vB .nav { border-bottom: 1px solid #e3e8ef; }
+  .vB .jm { border-color: #0d9488; }
+  .vB .hero { max-width: 640px; }
+  .vB .role { color: #5b6779; letter-spacing: .04em; text-transform: uppercase; font-size: 12px; }
+  .vB h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; color: #0f172a; }
+  .vB .lead { font-size: 16px; line-height: 1.6; color: #5b6779; max-width: 52ch; }
+  .vB .cta-primary { background: #0d9488; color: #fff; }
+  .vB .cta-ghost { border: 1px solid #cbd5e1; color: #0f172a; }
+  .vB .pcard { background: #fff; border-color: #e3e8ef; box-shadow: 0 1px 2px rgba(15,23,42,.04); }
+  .vB .tag { background: #f1f5f9; color: #475569; }
+  .vB .year { color: #94a3b8; font-weight: 400; }
+
+  /* C — Tactical */
+  .vC { background: #0b1220; color: #e6edf3; }
+  .vC .nav { border-bottom: 1px solid #1f2b40; font-family: 'JetBrains Mono', monospace; }
+  .vC .status { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #2dd4bf; border: 1px solid #143d36; background: #07211c; padding: 3px 9px; border-radius: 99px; }
+  .vC .hero { border-bottom: 1px dashed #1f2b40; }
+  .vC .role { color: #8b98ab; }
+  .vC .role b { color: #2dd4bf; font-weight: 600; }
+  .vC .panel-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #8b98ab; padding: 10px 22px 0; }
+  .vC .pcard { background: #121a2b; position: relative; }
+  .vC .pcard::after { content: '● LIVE'; position: absolute; top: 10px; right: 12px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #2dd4bf; }
+  .vC .tag { background: #0d1524; border: 1px solid #1f2b40; color: #8b98ab; font-family: 'JetBrains Mono', monospace; }
+  .vC .cta-primary { background: #14203a; border: 1px solid #2dd4bf; color: #2dd4bf; font-family: 'JetBrains Mono', monospace; }
+  .vC .cta-ghost { border: 1px solid #2a3548; color: #8b98ab; font-family: 'JetBrains Mono', monospace; }
+</style>
+
+<div class="cards">
+  <div class="card" data-choice="A-terminal" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="v vA">
+        <div class="nav"><span class="jm">JM</span><span>projects</span><span>experience</span><span>skills</span><span>about</span><span class="spacer"></span><span class="lang mono">EN/ES/CA</span><span class="mono">◐</span></div>
+        <div class="hero">
+          <h1>Jordi Marçal Poy</h1>
+          <div class="role mono">Senior Backend Engineer · Java · Python · AI/LLM</div>
+          <p class="prompt mono">whoami → backend engineer building the APIs and data plumbing products run on — proven with tests, ADRs, and AI agents.<span class="cursor"></span></p>
+          <div class="pillars">
+            <span class="chip mono">Java 25</span><span class="chip mono">Spring Boot 4</span><span class="chip mono">FastAPI</span><span class="chip mono">Kafka</span><span class="chip mono">RAG</span><span class="chip mono">llama.cpp</span><span class="chip mono">TDD</span>
+          </div>
+          <p></p>
+          <a class="cta cta-primary">view projects</a><a class="cta cta-ghost">ask the AI</a>
+        </div>
+        <div class="cards2">
+          <div class="pcard"><h4>kafka-adapter-telemetry <span class="mono" style="opacity:.5">· 2026</span></h4><p>Event-driven adapter telemetry: Kafka gateway + hub, idempotent Oracle persistence, live SSE mission-control.</p><span class="tag">Java 25</span><span class="tag">Spring Boot 4.1</span><span class="tag">Kafka</span><div class="metric">3×DOWN → 1 alert · 100% idempotent</div></div>
+          <div class="pcard"><h4>codebaserag <span class="mono" style="opacity:.5">· 2026</span></h4><p>Hexagonal RAG over your own codebase, eval-first: recall@5 gated in CI.</p><span class="tag">Python 3.13</span><span class="tag">pgvector</span><span class="tag">Ollama</span><div class="metric">recall@5 0.409 · ≥40 golden pairs</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body"><h3>A · Terminal / engineer-at-work</h3><p>Monoespai per blanc, prompt amb cursor, tooltips tècnics. Identitat backend màxima; molt memoràble per a tech leads, elegant per a RH si els agrada el geek.</p></div>
+  </div>
+
+  <div class="card" data-choice="B-editorial" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="v vB">
+        <div class="nav"><span class="jm">JM</span><span>Projects</span><span>Experience</span><span>Skills</span><span>About</span><span class="spacer"></span><span class="lang">EN · ES · CA</span><span>◐</span></div>
+        <div class="hero">
+          <div class="role">Senior Backend Engineer — Java · Python · AI/LLM</div>
+          <h1>Jordi Marçal Poy</h1>
+          <p class="lead">I build the APIs and data plumbing that products run on — and I prove it with tests, ADRs, and AI agents.</p>
+          <p></p>
+          <a class="cta cta-primary">View projects</a><a class="cta cta-ghost">Download CV</a>
+        </div>
+        <div class="cards2">
+          <div class="pcard"><h4>kafka-adapter-telemetry <span class="year">· 2026</span></h4><p>Event-driven adapter telemetry: Kafka gateway + hub, idempotent Oracle persistence, live SSE mission-control.</p><span class="tag">Java 25</span><span class="tag">Spring Boot 4.1</span><span class="tag">Kafka</span></div>
+          <div class="pcard"><h4>codebaserag <span class="year">· 2026</span></h4><p>Hexagonal RAG over your own codebase, eval-first: recall@5 gated in CI.</p><span class="tag">Python 3.13</span><span class="tag">pgvector</span><span class="tag">Ollama</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body"><h3>B · Editorial / quiet confidence</h3><p>Clar, suís, molt llegible: titular gran, molt blanc, accent contingut. El més segur amb RH/ATS i el més atemporal; menys "engineer flex".</p></div>
+  </div>
+
+  <div class="card" data-choice="C-tactical" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="v vC">
+        <div class="nav"><span class="jm">JM</span><span>projects</span><span>experience</span><span>skills</span><span>about</span><span class="spacer"></span><span class="status">● systems nominal</span><span class="lang mono">EN/ES/CA</span></div>
+        <div class="hero">
+          <h1>Jordi Marçal Poy</h1>
+          <div class="role mono">role: <b>Senior Backend Engineer</b> · stack: Java / Python / AI-LLM · uptime: 8+ yrs</div>
+          <p style="font-size:14px; color:#8b98ab; max-width:60ch">Building the APIs and data plumbing products run on — proven with tests, ADRs, and AI agents.</p>
+          <p></p>
+          <a class="cta cta-primary">▸ view_projects</a><a class="cta cta-ghost">▸ ask_llm</a>
+        </div>
+        <div class="panel-label">// featured deployments</div>
+        <div class="cards2">
+          <div class="pcard"><h4 class="mono">kafka-adapter-telemetry</h4><p>Event-driven adapter telemetry: Kafka gateway + hub, idempotent Oracle persistence, live SSE mission-control.</p><span class="tag">Java 25</span><span class="tag">Kafka</span><span class="tag">Oracle</span></div>
+          <div class="pcard"><h4 class="mono">codebaserag</h4><p>Hexagonal RAG over your own codebase, eval-first: recall@5 gated in CI.</p><span class="tag">Python 3.13</span><span class="tag">pgvector</span><span class="tag">Ollama</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body"><h3>C · Mission-control / tactical</h3><p>Panel·les amb etiquetes mono, badge "live", llenguatge d'operacions. Connecta amb el dashboard SSE de kafka-telemetry i avança la fase /live; el més distintiu, el més arriscat per a RH clàssic.</p></div>
+  </div>
+</div>
+
+<p class="subtitle">Tots tres comparteixen: nav idèntica, monograma JM, selector d'idioma, dark/light (B es mostra en clar; A i C en fosc — ambdós temes existiran sigui quina sigui l'elecció).</p>
