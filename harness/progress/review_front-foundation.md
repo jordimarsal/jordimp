@@ -201,3 +201,106 @@ VERDICT: HIGH severity findings — approval must be rejected (audit_level stand
   traces shipped; no default credentials.
 - HTTP security headers: N/A for the artifact (static hosting); revisit at F4
   (GitHub Pages / custom domain) if headers become configurable.
+
+---
+
+# Re-review (round 2)
+
+**Reviewer:** reviewer (opencode subagent session, 2026-09-16)
+**Scope:** fix range `531ed92..HEAD` (`253057e`, `380b2e5`) only — verifying the
+4 required changes from round 1 plus new breakage. No re-litigation of
+previously approved work.
+
+## Required changes — verdicts
+
+### 1. Audit gate (C7) — ADDRESSED
+
+- `package.json` `overrides` verified present: `"sharp": "^0.35.4"`,
+  `"esbuild": "^0.28.0"` (lines 30–33); `package-lock.json` regenerated in
+  `253057e`.
+- Post-fix `bash harness/tools/audit-security.sh`: exactly **1 critical**
+  finding (astro `<=7.2.7`, 10 GHSA advisories) — the round-1 **sharp HIGH and
+  esbuild low are gone**. Script `exit 1` is its designed behavior with any
+  ≥HIGH finding (it has no waiver mechanism); the disposition of record is the
+  documented waiver, which is what C7 requires.
+- Explicit waiver recorded in `impl_front-foundation.md` §
+  "Security audit disposition": sharp + esbuild RESOLVED via overrides; astro
+  CRITICAL WAIVED on non-exposure grounds (static-only output, no
+  `define:vars`/`set:html`/server islands/View-Transition directives/AVIF
+  pipeline, single-base site, Zod-validated content) with `astro@7` deferred
+  per ADR-1 and a **tracked F5 qa-gate re-gate** mandated — precisely the
+  scope+follow-up wording required change 1 demanded.
+
+### 2. Traceability gate — ADDRESSED
+
+- `python3 harness/tools/check-traceability.py --all` →
+  `## front-foundation: 21/21 requirements covered` / `VERDICT: PASS`,
+  **exit 0**.
+- Leader-ruled harness-tool change (colocated-spec + tests/ lookups, prescribed
+  commands as evidence pointers, comma-split Test(s) cell): functional — it
+  parses the reformatted table and resolves every identifier; not broken, so
+  out of my rejection scope.
+- Impl table reformatted to bare `R<n>` rows with comma-separated bare
+  test/command items (format note at impl file lines 9–14); old descriptive
+  text preserved in Findings.
+
+### 3. Spec amendments committed — ADDRESSED
+
+- `253057e` touches `harness/specs/front-foundation/requirements.md`
+  (BaseLayout-page scope for R6–R8 placeholder exception, corrected
+  `dist/en/projects/index.html` paths + `grep -o | wc -l` guidance, R9 greps
+  citing `531ed92`). Nothing pending in the working tree related to specs.
+
+### 4. `current.md` refreshed — ADDRESSED
+
+- Log lines 36–40 record review round 1 verdict, leader rulings, spec
+  amendments and the round-2 battery; "Next step" = this re-review → leader
+  marks `done` on approval. Accurate and current.
+
+## Command outputs (re-run 2026-09-16, post-`380b2e5`)
+
+| Command | Result |
+|---|---|
+| `python3 harness/tools/check-traceability.py --all` | 21/21 covered, VERDICT: PASS, exit 0 |
+| `bash harness/tools/audit-security.sh` | exactly 1 critical (astro), 0 high — exit 1 by design (waived, see change 1) |
+| `bash harness/init.sh` | all OK — env, feature_list valid, vitest 11/11, exit 0 |
+| `npx vitest run` | 2 files, **11/11** passed |
+| `npm run build` | **39 pages** built, no errors |
+
+## Semantic spot-checks (impl table ↔ reality)
+
+- R5: `#0b1220` + `'JetBrains Mono'` present in `src/styles/tokens.css` ✓
+- R6: `<html lang="es">` found in `dist/es/projects/index.html` ✓
+- R9: `id="theme-toggle"` ×1 per page; `grep -rl 'theme-toggle' dist/` → 36
+  files ✓
+- R19: `dist/en/projects` → 12 entries; kafka-adapter-telemetry GitHub link
+  ships ✓
+- R21: `! grep -rq '609 940 649' dist` passes — no phone leak ✓
+
+## New breakage in fix range
+
+None. `253057e` + `380b2e5` touch only harness docs/tooling,
+`requirements.md`, `package.json`/`package-lock.json` (overrides + regenerated
+lock) and the review record — no `src/` application code. Full battery green
+post-change (table above).
+
+## Checkpoint re-marks
+
+- **C5 — Session closed properly:** [x] no suspicious untracked files
+  (`git status` clean of strays); [ ] `history.md` entry — correctly **still
+  pending**, moved at `done` time by the leader; [x] last worked feature
+  reflects correct state (`F1 = in_progress`, awaiting leader closure).
+- **C7 — Audit (conditional):** [x] latest progress entry contains the audit
+  report (`audit_level` strict — raw output in Appendix + re-run above);
+  [x] findings above threshold **resolved** (sharp HIGH, esbuild low via
+  overrides) or **explicitly waived** (astro CRITICAL, impl §
+  Security audit disposition, F5 re-gate tracked).
+
+## Final verdict
+
+**APPROVED.** All 4 required changes from round 1 are resolved with evidence;
+no new breakage introduced in `531ed92..HEAD`; traceability 21/21, tests
+11/11, build 39 pages, audit dispositioned (2 resolved + 1 explicit waiver
+with tracked follow-up). F1 stays `in_progress` — marking `done`, moving the
+summary to `history.md` and clearing `current.md` are the leader's/human's
+closure steps per the workflow.
