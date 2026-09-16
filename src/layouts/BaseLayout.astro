@@ -1,0 +1,37 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/600.css';
+import '../styles/global.css';
+import SEO from '../components/SEO.astro';
+
+export interface Props {
+  lang: 'en' | 'es' | 'ca';
+  title: string;
+  description: string;
+  path?: string;
+}
+
+const { lang, title, description, path } = Astro.props;
+---
+<!doctype html>
+<html lang={lang} data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (() => { const s = localStorage.getItem('theme');
+        document.documentElement.dataset.theme = s ?? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'); })();
+    </script>
+    <SEO {lang} {title} {description} {path} />
+  </head>
+  <body>
+    <header class="container">
+      <a href={`/${lang}/`} aria-label="Home"><slot name="logo" /></a>
+      <nav><slot name="nav" /></nav>
+      <slot name="actions" />
+    </header>
+    <main class="container"><slot /></main>
+    <slot name="footer" />
+  </body>
+</html>

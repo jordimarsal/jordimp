@@ -1,0 +1,16 @@
+---
+import { ui } from '../i18n/ui';
+const lang = Astro.props.lang as 'en' | 'es' | 'ca';
+---
+<button id="theme-toggle" type="button" aria-label={ui[lang]['theme.toggle']} title={ui[lang]['theme.toggle']}>◐</button>
+<script>
+  const KEY = 'theme';
+  const stored = localStorage.getItem(KEY);
+  const initial = stored ?? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  document.documentElement.dataset.theme = initial;
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem(KEY, next);
+  });
+</script>

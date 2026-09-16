@@ -1,0 +1,14 @@
+---
+interface Props {
+  lang: 'en' | 'es' | 'ca';
+  title: string;
+  description: string;
+  path?: string;
+}
+
+const { lang, title, description, path = '' } = Astro.props;
+const canonical = `https://jordimp.net/${lang}/${path}`;
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
