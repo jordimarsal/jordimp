@@ -1,0 +1,63 @@
+---
+import { SITE } from '../config';
+import type { Locale } from '../lib/i18n';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props as Props;
+const t = ui[lang];
+const year = new Date().getFullYear();
+const mailto = `mailto:${SITE.email}?subject=Portfolio%20contact`;
+const githubHandle = SITE.github.replace('https://github.com/', '');
+const linkedinHandle = SITE.linkedin.replace('https://www.linkedin.com/in/', '');
+---
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p class="footer-contact">
+      <span class="muted">{t['footer.contact']}</span>
+      <a class="mono" href={mailto}>{SITE.email}</a>
+      <a class="mono" href={SITE.github}>github/{githubHandle}</a>
+      <a class="mono" href={SITE.linkedin}>in/{linkedinHandle}</a>
+    </p>
+    <p class="muted footer-meta">© {year} {SITE.name} · {t['footer.builtWith']}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    margin-top: var(--space-16);
+    padding: var(--space-6) 0 var(--space-8);
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .footer-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin: 0;
+    font-size: 0.8125rem;
+  }
+
+  .footer-contact a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .footer-contact a:hover {
+    color: var(--accent);
+  }
+
+  .footer-meta {
+    margin: 0;
+    font-size: 0.8125rem;
+  }
+</style>

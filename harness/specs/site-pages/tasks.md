@@ -5,11 +5,11 @@
 > `npm run check`, `npm run build`). TDD: write the colocated spec before the
 > content/pages it pins.
 
-- [ ] T1: `src/i18n/ui.ts` — fix `hero.role` (es `Ingeniero Backend Senior`, ca `Enginyer de Software Backend Sènior`); add trilingual keys `projects.featured`, `notfound.back`, `about.bio.p1`–`p3`, `about.value.1`–`4`; extend the colocated ui/i18n specs with exact-value assertions for the fixed strings (key-parity and no-empty tests pick up the new keys automatically)
+- [x] T1: `src/i18n/ui.ts` — fix `hero.role` (es `Ingeniero Backend Senior`, ca `Enginyer de Software Backend Sènior`); add trilingual keys `projects.featured`, `notfound.back`, `about.bio.p1`–`p3`, `about.value.1`–`4`; extend the colocated ui/i18n specs with exact-value assertions for the fixed strings (key-parity and no-empty tests pick up the new keys automatically)
       depends_on: (none)
       refs: R25
 
-- [ ] T2: Base chrome — `HeaderNav.astro` (5 localized links, build-time `aria-current="page"` from `path`), `Footer.astro` (3 contact links with `subject=Portfolio%20contact`, `builtWith`, `© {year} {SITE.name}`), and `BaseLayout` slot fallbacks (logo → `Monogram`, nav → `HeaderNav`, actions → `LocaleSwitcher`, footer → `Footer`); verify the F1 projects pages gain the chrome with zero edits
+- [x] T2: Base chrome — `HeaderNav.astro` (5 localized links, build-time `aria-current="page"` from `path`), `Footer.astro` (3 contact links with `subject=Portfolio%20contact`, `builtWith`, `© {year} {SITE.name}`), and `BaseLayout` slot fallbacks (logo → `Monogram`, nav → `HeaderNav`, actions → `LocaleSwitcher`, footer → `Footer`); verify the F1 projects pages gain the chrome with zero edits
       depends_on: T1
       refs: R6, R7, R8, R17, R18
 

@@ -5,6 +5,10 @@ import '@fontsource/jetbrains-mono/600.css';
 import '../styles/global.css';
 import SEO from '../components/SEO.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import Monogram from '../components/Monogram.astro';
+import HeaderNav from '../components/HeaderNav.astro';
+import LocaleSwitcher from '../components/LocaleSwitcher.astro';
+import Footer from '../components/Footer.astro';
 
 export interface Props {
   lang: 'en' | 'es' | 'ca';
@@ -28,12 +32,12 @@ const { lang, title, description, path } = Astro.props;
   </head>
   <body>
     <header class="container">
-      <a href={`/${lang}/`} aria-label="Home"><slot name="logo" /></a>
-      <nav><slot name="nav" /></nav>
-      <slot name="actions" />
+      <a href={`/${lang}/`} aria-label="Home"><slot name="logo"><Monogram /></slot></a>
+      <nav><slot name="nav"><HeaderNav {lang} {path} /></slot></nav>
+      <slot name="actions"><LocaleSwitcher {lang} {path} /></slot>
       <ThemeToggle {lang} />
     </header>
     <main class="container"><slot /></main>
-    <slot name="footer" />
+    <slot name="footer"><Footer {lang} /></slot>
   </body>
 </html>

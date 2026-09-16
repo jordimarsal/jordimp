@@ -1,0 +1,50 @@
+---
+import type { Locale } from '../lib/i18n';
+import { ui } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+  path?: string;
+}
+
+const NAV_ROUTES = [
+  { key: 'nav.projects', route: 'projects' },
+  { key: 'nav.experience', route: 'experience' },
+  { key: 'nav.skills', route: 'skills' },
+  { key: 'nav.about', route: 'about' },
+  { key: 'nav.cv', route: 'cv' },
+] as const;
+
+const { lang, path = '' } = Astro.props as Props;
+const t = ui[lang];
+---
+<nav aria-label="Site" class="site-nav">
+  {NAV_ROUTES.map(({ key, route }) => (
+    <a
+      href={`/${lang}/${route}/`}
+      aria-current={path.startsWith(`${route}/`) ? 'page' : undefined}
+    >{t[key]}</a>
+  ))}
+</nav>
+
+<style>
+  .site-nav {
+    display: flex;
+    gap: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+
+  .site-nav a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .site-nav a:hover {
+    color: var(--text);
+  }
+
+  .site-nav a[aria-current='page'] {
+    color: var(--accent);
+  }
+</style>
