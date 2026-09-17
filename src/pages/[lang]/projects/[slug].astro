@@ -1,7 +1,9 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { SITE } from '../../../config';
 import { L, LOCALES, type Locale } from '../../../lib/i18n';
+import { externalLinkAttrs } from '../../../lib/links';
 import { ui } from '../../../i18n/ui';
 
 export async function getStaticPaths() {
@@ -28,7 +30,7 @@ const breadcrumbs = [
   {breadcrumbs}
 >
   <article class="prose">
-    <p class="muted mono">{d.year} · <a href={d.links.github}>{repo}</a></p>
+    <p class="muted mono">{d.year} · <a href={d.links.github} {...externalLinkAttrs(d.links.github, SITE.url)}>{repo}</a></p>
     <h1>{d.name}</h1>
     <p><strong>{L(d.summary, lang)}</strong></p>
     <h2>{ui[lang]['projects.problem']}</h2>

@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageTitle from '../../components/PageTitle.astro';
 import { LOCALES, type Locale } from '../../lib/i18n';
+import { externalLinkAttrs } from '../../lib/links';
 import { ui } from '../../i18n/ui';
 import { SITE } from '../../config';
 
@@ -42,8 +43,8 @@ const breadcrumbs = [{ name: t['nav.about'], path: 'about/' }];
     <h2 class="section-h2">{t['footer.contact']}</h2>
     <ul class="contact-commands">
       <li class="mono"><a href={mailto}>mail -s "Portfolio contact" {SITE.email}</a></li>
-      <li class="mono"><a href={SITE.github}>curl github/{githubHandle}</a></li>
-      <li class="mono"><a href={SITE.linkedin}>curl in/{linkedinHandle}</a></li>
+      <li class="mono"><a href={SITE.github} {...externalLinkAttrs(SITE.github, SITE.url)}>curl github/{githubHandle}</a></li>
+      <li class="mono"><a href={SITE.linkedin} {...externalLinkAttrs(SITE.linkedin, SITE.url)}>curl in/{linkedinHandle}</a></li>
     </ul>
   </section>
 </BaseLayout>

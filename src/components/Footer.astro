@@ -1,6 +1,7 @@
 ---
 import { SITE } from '../config';
 import type { Locale } from '../lib/i18n';
+import { externalLinkAttrs } from '../lib/links';
 import { ui } from '../i18n/ui';
 
 interface Props {
@@ -19,8 +20,8 @@ const linkedinHandle = SITE.linkedin.replace('https://www.linkedin.com/in/', '')
     <p class="footer-contact">
       <span class="muted">{t['footer.contact']}</span>
       <a class="mono" href={mailto}>{SITE.email}</a>
-      <a class="mono" href={SITE.github}>github/{githubHandle}</a>
-      <a class="mono" href={SITE.linkedin}>in/{linkedinHandle}</a>
+      <a class="mono" href={SITE.github} {...externalLinkAttrs(SITE.github, SITE.url)}>github/{githubHandle}</a>
+      <a class="mono" href={SITE.linkedin} {...externalLinkAttrs(SITE.linkedin, SITE.url)}>in/{linkedinHandle}</a>
     </p>
     <p class="muted footer-meta">© {year} {SITE.name} · {t['footer.builtWith']}</p>
   </div>
