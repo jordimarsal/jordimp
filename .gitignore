@@ -35,3 +35,4 @@ pnpm-debug.log*
 harness/
 opencode.json
 .opencode/
+spike/
