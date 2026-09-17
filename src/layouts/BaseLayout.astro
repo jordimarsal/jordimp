@@ -28,9 +28,16 @@ const { lang, title, description, path, noindex, breadcrumbs } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0b1220" />
     <script is:inline>
       (() => { const s = localStorage.getItem('theme');
-        document.documentElement.dataset.theme = s ?? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'); })();
+        const theme = s ?? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.dataset.theme = theme;
+        const color = document.querySelector('meta[name="theme-color"]');
+        if (color) color.content = theme === 'light' ? '#fafbfd' : '#0b1220'; })();
     </script>
     <SEO {lang} {title} {description} {path} {noindex} {breadcrumbs} />
     <Analytics />
