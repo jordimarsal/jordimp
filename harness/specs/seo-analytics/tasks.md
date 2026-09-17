@@ -17,7 +17,7 @@
       depends_on: (none)
       refs: R16, R17
 
-- [ ] T4: `src/components/SEO.astro` — full head owner: canonical (R2), hreflang alternates + `x-default` → en (R3), OG core + og:locale set + og:image set (R4, R5, R6), Twitter set (R8), Person JSON-LD on every page (R9), BreadcrumbList only when `breadcrumbs` non-empty (R12 via absence), `noindex` mode (robots meta only, everything else suppressed); fixed attribute order (`property=` for OG, `name=` for Twitter); `src/layouts/BaseLayout.astro` — extend `Props` with `noindex`/`breadcrumbs` and forward to `SEO`; `src/pages/404.astro` — pass `noindex`
+- [x] T4: `src/components/SEO.astro` — full head owner: canonical (R2), hreflang alternates + `x-default` → en (R3), OG core + og:locale set + og:image set (R4, R5, R6), Twitter set (R8), Person JSON-LD on every page (R9), BreadcrumbList only when `breadcrumbs` non-empty (R12 via absence), `noindex` mode (robots meta only, everything else suppressed); fixed attribute order (`property=` for OG, `name=` for Twitter); `src/layouts/BaseLayout.astro` — extend `Props` with `noindex`/`breadcrumbs` and forward to `SEO`; `src/pages/404.astro` — pass `noindex`
       depends_on: T1
       refs: R1, R2, R3, R4, R5, R6, R8, R9, R12, R20, R21
 

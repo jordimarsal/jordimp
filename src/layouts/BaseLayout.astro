@@ -9,15 +9,18 @@ import Monogram from '../components/Monogram.astro';
 import HeaderNav from '../components/HeaderNav.astro';
 import LocaleSwitcher from '../components/LocaleSwitcher.astro';
 import Footer from '../components/Footer.astro';
+import type { BreadcrumbItem } from '../lib/seo';
 
 export interface Props {
   lang: 'en' | 'es' | 'ca';
   title: string;
   description: string;
   path?: string;
+  noindex?: boolean;
+  breadcrumbs?: readonly BreadcrumbItem[];
 }
 
-const { lang, title, description, path } = Astro.props;
+const { lang, title, description, path, noindex, breadcrumbs } = Astro.props;
 ---
 <!doctype html>
 <html lang={lang} data-theme="dark">
@@ -28,7 +31,7 @@ const { lang, title, description, path } = Astro.props;
       (() => { const s = localStorage.getItem('theme');
         document.documentElement.dataset.theme = s ?? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'); })();
     </script>
-    <SEO {lang} {title} {description} {path} />
+    <SEO {lang} {title} {description} {path} {noindex} {breadcrumbs} />
   </head>
   <body>
     <header class="container">
