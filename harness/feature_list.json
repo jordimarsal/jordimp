@@ -28,14 +28,14 @@
       "id": "F3",
       "name": "seo-analytics",
       "description": "Full SEO component (OG/Twitter/hreflang/canonical), JSON-LD Person + BreadcrumbList, robots.txt, generated sitemap, llms.txt + llms-full.txt build endpoints, optional GoatCounter.",
-      "status": "in_progress",
+      "status": "done",
       "wekan_card": "RmGwcc5zr3NYcHt9D"
     },
     {
       "id": "F4",
       "name": "deploy",
       "description": "GitHub Actions deploy to GitHub Pages with custom domain jordimp.net (CNAME, DNS checklist, verification).",
-      "status": "pending",
+      "status": "in_progress",
       "wekan_card": "4SWGETasGm75ZjZ2A"
     },
     {
