@@ -23,3 +23,9 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 .harness-wekan.env
+
+# agent/editor local state
+.superpowers/
+.vscode/
+harness/
+opencode.json
