@@ -41,6 +41,6 @@
       depends_on: T2, T4
       refs: R18, R19
 
-- [ ] T10: Verification pass — run `npx vitest run && npm run check && npm run build`; execute every per-R verification command from `requirements.md` (51-page title/description loop, canonical/hreflang/OG/Twitter greps per locale, JSON-LD `node -e` parsers, sitemap/robots/llms counts, 404 noindex/absence greps, the `PUBLIC_GOATCOUNTER=jordimp npm run build` → 52-page grep variant followed by a plain rebuild); write the traceability table in `harness/progress/impl_seo-analytics.md` (R↔test↔implementation)
+- [x] T10: Verification pass — run `npx vitest run && npm run check && npm run build`; execute every per-R verification command from `requirements.md` (51-page title/description loop, canonical/hreflang/OG/Twitter greps per locale, JSON-LD `node -e` parsers, sitemap/robots/llms counts, 404 noindex/absence greps, the `PUBLIC_GOATCOUNTER=jordimp npm run build` → 52-page grep variant followed by a plain rebuild); write the traceability table in `harness/progress/impl_seo-analytics.md` (R↔test↔implementation)
       depends_on: T4, T5, T6, T7, T8, T9
       refs: R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17, R18, R19, R20, R21
