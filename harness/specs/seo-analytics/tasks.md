@@ -33,11 +33,11 @@
       depends_on: (none)
       refs: R6, R7
 
-- [ ] T8: llms endpoints — `src/pages/llms.txt.ts` and `src/pages/llms-full.txt.ts` (`export const prerender = true`, GET assembling `getCollection` data + `ui.en` bio into `LlmsData`, returning `text/plain; charset=utf-8`); verify `dist/llms.txt` (11 project links + Pages links) and `dist/llms-full.txt` (20 `### ` headings, sections, spot strings)
+- [x] T8: llms endpoints — `src/pages/llms.txt.ts` and `src/pages/llms-full.txt.ts` (`export const prerender = true`, GET assembling `getCollection` data + `ui.en` bio into `LlmsData`, returning `text/plain; charset=utf-8`); verify `dist/llms.txt` (11 project links + Pages links) and `dist/llms-full.txt` (20 `### ` headings, sections, spot strings)
       depends_on: T3
       refs: R16, R17
 
-- [ ] T9: Analytics wiring — `src/components/Analytics.astro` (renders the GoatCounter script only when `goatCounterEndpoint(import.meta.env.PUBLIC_GOATCOUNTER)` returns a URL) included at the end of `BaseLayout`'s `<head>`; verify the default build greps clean for `goatcounter` in `dist/`
+- [x] T9: Analytics wiring — `src/components/Analytics.astro` (renders the GoatCounter script only when `goatCounterEndpoint(import.meta.env.PUBLIC_GOATCOUNTER)` returns a URL) included at the end of `BaseLayout`'s `<head>`; verify the default build greps clean for `goatcounter` in `dist/`
       depends_on: T2, T4
       refs: R18, R19
 

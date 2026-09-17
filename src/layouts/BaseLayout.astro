@@ -4,6 +4,7 @@ import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/600.css';
 import '../styles/global.css';
 import SEO from '../components/SEO.astro';
+import Analytics from '../components/Analytics.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import Monogram from '../components/Monogram.astro';
 import HeaderNav from '../components/HeaderNav.astro';
@@ -32,6 +33,7 @@ const { lang, title, description, path, noindex, breadcrumbs } = Astro.props;
         document.documentElement.dataset.theme = s ?? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'); })();
     </script>
     <SEO {lang} {title} {description} {path} {noindex} {breadcrumbs} />
+    <Analytics />
   </head>
   <body>
     <header class="container">
