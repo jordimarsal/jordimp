@@ -3,6 +3,11 @@ dist/
 # generated types
 .astro/
 
+# qa tool output
+test-results/
+playwright-report/
+.lighthouseci/
+
 # dependencies
 node_modules/
 
