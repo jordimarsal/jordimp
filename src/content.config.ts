@@ -1,8 +1,9 @@
 import { defineCollection, z } from 'astro:content';
+import type { ZodType } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 const localeEnum = z.enum(['en', 'es', 'ca']);
-const localized = <T extends z.ZodTypeAny>(inner: T) => z.object({ en: inner, es: inner, ca: inner });
+const localized = <T extends ZodType>(inner: T) => z.object({ en: inner, es: inner, ca: inner });
 
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/projects' }),
