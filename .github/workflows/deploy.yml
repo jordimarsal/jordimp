@@ -15,7 +15,12 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  qa:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/qa.yml
   deploy:
+    needs: qa
     runs-on: ubuntu-latest
     environment:
       name: github-pages
