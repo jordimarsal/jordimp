@@ -14,12 +14,14 @@ const { lang } = Astro.props;
 const t = ui[lang];
 
 const entries = (await getCollection('experience')).sort((a, b) => a.data.order - b.data.order);
+const breadcrumbs = [{ name: t['nav.experience'], path: 'experience/' }];
 ---
 <BaseLayout
   lang={lang}
   title={`${t['experience.title']} — Jordi Marçal Poy`}
   description={t['experience.title']}
   path="experience/"
+  {breadcrumbs}
 >
   <PageTitle label={t['experience.title']} />
   <ol class="timeline">

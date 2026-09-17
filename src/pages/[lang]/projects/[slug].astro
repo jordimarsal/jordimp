@@ -15,12 +15,17 @@ type Props = { lang: Locale; project: CollectionEntry<'projects'> };
 const { lang, project } = Astro.props;
 const d = project.data;
 const repo = new URL(d.links.github).pathname.replace(/^\//, '');
+const breadcrumbs = [
+  { name: ui[lang]['nav.projects'], path: 'projects/' },
+  { name: d.name, path: `projects/${project.id}/` },
+];
 ---
 <BaseLayout
   lang={lang}
   title={`${d.name} — Jordi Marçal Poy`}
   description={L(d.summary, lang)}
   path={`projects/${project.id}/`}
+  {breadcrumbs}
 >
   <article class="prose">
     <p class="muted mono">{d.year} · <a href={d.links.github}>{repo}</a></p>

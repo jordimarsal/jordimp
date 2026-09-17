@@ -24,12 +24,14 @@ const sorted = [...projects].sort(
 const featured = sorted.filter((p) => p.data.featured);
 const secondary = sorted.filter((p) => !p.data.featured);
 const stacks = [...new Set(sorted.flatMap((p) => p.data.stack))].sort((a, b) => a.localeCompare(b));
+const breadcrumbs = [{ name: t['nav.projects'], path: 'projects/' }];
 ---
 <BaseLayout
   lang={lang}
   title={`${t['projects.title']} — Jordi Marçal Poy`}
   description={t['projects.subtitle']}
   path="projects/"
+  {breadcrumbs}
 >
   <LocaleSwitcher slot="actions" {lang} path="projects/" />
   <h1>{t['projects.title']}</h1>

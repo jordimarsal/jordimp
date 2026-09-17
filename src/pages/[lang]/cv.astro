@@ -15,12 +15,14 @@ const t = ui[lang];
 
 const experience = (await getCollection('experience')).sort((a, b) => a.data.order - b.data.order);
 const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order);
+const breadcrumbs = [{ name: t['nav.cv'], path: 'cv/' }];
 ---
 <BaseLayout
   lang={lang}
   title={`${t['cv.title']} — Jordi Marçal Poy`}
   description={t['cv.title']}
   path="cv/"
+  {breadcrumbs}
 >
   <PageTitle label={t['cv.title']} />
 

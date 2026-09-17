@@ -14,12 +14,14 @@ const { lang } = Astro.props;
 const t = ui[lang];
 
 const groups = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order);
+const breadcrumbs = [{ name: t['nav.skills'], path: 'skills/' }];
 ---
 <BaseLayout
   lang={lang}
   title={`${t['skills.title']} — Jordi Marçal Poy`}
   description={t['skills.title']}
   path="skills/"
+  {breadcrumbs}
 >
   <PageTitle label={t['skills.title']} />
   <div class="skills-grid">

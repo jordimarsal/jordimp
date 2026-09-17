@@ -21,7 +21,7 @@
       depends_on: T1
       refs: R1, R2, R3, R4, R5, R6, R8, R9, R12, R20, R21
 
-- [ ] T5: Interior pages pass breadcrumbs — `experience.astro`, `skills.astro`, `about.astro`, `cv.astro`, `projects/index.astro` get `breadcrumbs={[{ name: t['nav.<route>'], path: '<route>/' }]}`; `projects/[slug].astro` gets the 2-item chain (projects index + project `name`); verify each interior page embeds exactly one BreadcrumbList and home embeds none
+- [x] T5: Interior pages pass breadcrumbs — `experience.astro`, `skills.astro`, `about.astro`, `cv.astro`, `projects/index.astro` get `breadcrumbs={[{ name: t['nav.<route>'], path: '<route>/' }]}`; `projects/[slug].astro` gets the 2-item chain (projects index + project `name`); verify each interior page embeds exactly one BreadcrumbList and home embeds none
       depends_on: T1, T4
       refs: R10, R11
 

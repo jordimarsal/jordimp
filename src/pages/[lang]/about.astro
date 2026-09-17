@@ -17,12 +17,14 @@ const mailto = `mailto:${SITE.email}?subject=Portfolio%20contact`;
 const githubHandle = SITE.github.replace('https://github.com/', '');
 const linkedinHandle = SITE.linkedin.replace('https://www.linkedin.com/in/', '');
 const values = [t['about.value.1'], t['about.value.2'], t['about.value.3'], t['about.value.4']];
+const breadcrumbs = [{ name: t['nav.about'], path: 'about/' }];
 ---
 <BaseLayout
   lang={lang}
   title={`${t['about.title']} — ${SITE.name}`}
   description={t['about.bio.p1']}
   path="about/"
+  {breadcrumbs}
 >
   <PageTitle label={t['about.title']} />
   <div class="prose">
