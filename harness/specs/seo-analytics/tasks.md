@@ -29,7 +29,7 @@
       depends_on: (none)
       refs: R13, R14, R15
 
-- [ ] T7: Generate `public/og.png` — 1200×630 PNG social card in the Terminal language (dark `#0b1220`, mono identity, accent); verify `file` reports PNG 1200 x 630, size > 5000 bytes, and `npm run build` emits `dist/og.png`
+- [x] T7: Generate `public/og.png` — 1200×630 PNG social card in the Terminal language (dark `#0b1220`, mono identity, accent); verify `file` reports PNG 1200 x 630, size > 5000 bytes, and `npm run build` emits `dist/og.png`
       depends_on: (none)
       refs: R6, R7
 
