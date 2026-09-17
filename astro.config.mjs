@@ -16,6 +16,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       i18n: { defaultLocale: 'en', locales: { en: 'en', es: 'es', ca: 'ca' } },
+      filter: (page) => page !== 'https://jordimp.net/',
     }),
   ],
 });

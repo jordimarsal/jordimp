@@ -25,7 +25,7 @@
       depends_on: T1, T4
       refs: R10, R11
 
-- [ ] T6: Build artifacts — `public/robots.txt` (`User-agent: *`, `Allow: /`, `Sitemap: https://jordimp.net/sitemap-index.xml`) and `astro.config.mjs` sitemap `filter` excluding `https://jordimp.net/`; verify `dist/robots.txt`, `dist/sitemap-index.xml` → `sitemap-0.xml`, and the sitemap's 51 `<loc>` / 153 alternates / no-root counts
+- [x] T6: Build artifacts — `public/robots.txt` (`User-agent: *`, `Allow: /`, `Sitemap: https://jordimp.net/sitemap-index.xml`) and `astro.config.mjs` sitemap `filter` excluding `https://jordimp.net/`; verify `dist/robots.txt`, `dist/sitemap-index.xml` → `sitemap-0.xml`, and the sitemap's 51 `<loc>` / 153 alternates / no-root counts
       depends_on: (none)
       refs: R13, R14, R15
 
