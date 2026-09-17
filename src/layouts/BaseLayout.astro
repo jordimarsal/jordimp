@@ -44,7 +44,7 @@ const { lang, title, description, path, noindex, breadcrumbs } = Astro.props;
   </head>
   <body>
     <header class="container">
-      <a href={`/${lang}/`} aria-label="Home"><slot name="logo"><Monogram /></slot></a>
+      <a href={`/${lang}/`} aria-label="JM — Home"><slot name="logo"><Monogram /></slot></a>
       <nav><slot name="nav"><HeaderNav {lang} {path} /></slot></nav>
       <slot name="actions"><LocaleSwitcher {lang} {path} /></slot>
       <ThemeToggle {lang} />
