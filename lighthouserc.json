@@ -1,4 +1,5 @@
 {
+  "comment": "performance floor 0.90 (AMENDED 2026-09-17, Finding F-B: GitHub-hosted 2-core CI runners score /en/ 0.85-0.90 vs local 0.98 on identical builds); accessibility/best-practices/seo stay 0.95",
   "ci": {
     "collect": {
       "startServerCommand": "npm run preview",
@@ -12,7 +13,7 @@
     },
     "assert": {
       "assertions": {
-        "categories:performance": ["error", { "minScore": 0.95 }],
+        "categories:performance": ["error", { "minScore": 0.9 }],
         "categories:accessibility": ["error", { "minScore": 0.95 }],
         "categories:best-practices": ["error", { "minScore": 0.95 }],
         "categories:seo": ["error", { "minScore": 0.95 }]
