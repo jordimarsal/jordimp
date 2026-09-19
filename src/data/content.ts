@@ -902,9 +902,9 @@ export const FOOTER: FooterContent = {
   github: { en: 'GITHUB', es: 'GITHUB', ca: 'GITHUB' },
   linkedin: { en: 'LINKEDIN', es: 'LINKEDIN', ca: 'LINKEDIN' },
   colo1: {
-    en: 'JORDIMP & CO. — REGISTERED NOWHERE, SHIPPING EVERYWHERE. HANDMADE HTML, ZERO TRACKERS.',
-    es: 'JORDIMP & CO. — REGISTRADA EN NINGUNA PARTE, ENTREGANDO EN TODAS PARTES. HTML HECHO A MANO, CERO TRACKERS.',
-    ca: 'JORDIMP & CO. — REGISTRADA ENLLOC, LLIURANT ARREU. HTML FET A MÀ, ZERO TRACKERS.',
+    en: 'JORDIMP & CO. — REGISTERED NOWHERE, SHIPPING EVERYWHERE. ASTRO-BUILT HTML, ZERO TRACKERS.',
+    es: 'JORDIMP & CO. — REGISTRADA EN NINGUNA PARTE, ENTREGANDO EN TODAS PARTES. HTML HECHO CON ASTRO, CERO TRACKERS.',
+    ca: 'JORDIMP & CO. — REGISTRADA ENLLOC, LLIURANT ARREU. HTML FET AMB ASTRO, ZERO TRACKERS.',
   },
   colo2: {
     en: 'BARCELONA · EN/ES/CA · EST. 2017 · © 2026',
@@ -1462,9 +1462,9 @@ export const FRONTDESK_PAGE: FrontdeskPageContent = {
   },
   colophonTitle: { en: 'Colophon', es: 'Colofón', ca: 'Colofó' },
   colophon: {
-    en: 'Handmade HTML — Bricolage Grotesque for display, Instrument Sans for body, Space Mono for labels. Static pages, zero trackers, zero external scripts; night shift included.',
-    es: 'HTML hecho a mano — Bricolage Grotesque para titulares, Instrument Sans para el cuerpo, Space Mono para etiquetas. Páginas estáticas, cero trackers, cero scripts externos; turno de noche incluido.',
-    ca: 'HTML fet a mà — Bricolage Grotesque per a titulars, Instrument Sans per al cos, Space Mono per a etiquetes. Pàgines estàtiques, zero trackers, zero scripts externs; torn de nit inclòs.',
+    en: 'Built with Astro — Bricolage Grotesque for display, Instrument Sans for body, Space Mono for labels. Static pages, zero trackers, zero external scripts; night shift included.',
+    es: 'Hecho con Astro — Bricolage Grotesque para titulares, Instrument Sans para el cuerpo, Space Mono para etiquetas. Páginas estáticas, cero trackers, cero scripts externos; turno de noche incluido.',
+    ca: 'Fet amb Astro — Bricolage Grotesque per a titulars, Instrument Sans per al cos, Space Mono per a etiquetes. Pàgines estàtiques, zero trackers, zero scripts externs; torn de nit inclòs.',
   },
 };
 
