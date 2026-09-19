@@ -122,6 +122,14 @@ before a release task can close:
 Content QA scripts derive their route matrix from `src/data/content.ts` — never
 duplicate route lists inside a script or test.
 
+Lighthouse note: manual Lighthouse 13 runs against the live site also report the
+`agentic-browsing` category (audit `llms-txt`, green since F8); the CI gate
+(`lighthouserc.json`) keeps asserting the four classic categories with unchanged
+thresholds. The remaining known findings in the full live report are GitHub Pages
+platform limitations (cache `max-age=600`, no custom HSTS/CSP/COOP headers, no
+HTTP/3) and browser-extension noise from the testing environment — not site
+defects.
+
 <!-- harness:module:security-audit:start -->
 ## Security Audit Checklist (security-audit module)
 

@@ -56,13 +56,23 @@ Phase 3). Full context: `docs/superpowers/specs/2026-09-16-portfolio-web-design.
 **Front (this repo, Phase 1)**
 ```
 src/data/content.ts (typed trilingual module)
-  ──▶ .astro pages/components + pure string emitters (src/lib/*-svg.ts, dept-blocks.ts)
+  ──▶ .astro pages/components + pure string emitters (src/lib/*-svg.ts, dept-blocks.ts,
+      llms.ts)
   ──▶ static HTML (Pages; splash root, building, night mode, zero network)
+  ──▶ llms.txt / llms-full.txt (src/pages/*.txt.ts over the pure emitters): Markdown
+      with every URL as a [text](url) link — llmstxt.org recommendations, enforced by
+      the Lighthouse Agentic Browsing audit; the email stays plain text (design
+      decision); the committed src/lib/__snapshots__/ snapshot is the format oracle
+      (regression oracle since F8, no longer adapted spike output)
   ──▶ QA tooling (scripts/qa-content.mjs derives its route matrix from it;
       tests/fixtures/parity.json is the committed oracle the build is asserted against)
 browser scripts (src/scripts: theme, building, filter, copy) · local-only state
 live widgets (Phase 2–3): fetch api.jordimp.net ──▶ Result ──▶ ok | offline | limited state
 ```
+
+The `SiteLayout` head is self-contained: inline night-mode bootstrap, the inline
+`@font-face` block (URLs via `assetPath`), and the font preloads — font CSS never
+ships as a separate request.
 
 **status-api (Phase 2)**
 ```

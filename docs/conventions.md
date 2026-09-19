@@ -75,6 +75,28 @@ Follow the plan's file map (`docs/superpowers/plans/2026-09-16-portfolio-phase0-
 
 ---
 
+## Markup Rules
+
+- **Oracle-first.** Production fixes touching markup or copy shared with the spike
+  oracle land in `spike/front/build/` first → regenerate the oracle
+  (`node spike/front/build/generate.js` → `spike/front/final/`) → re-port 1:1 to
+  `src/`. Precedent: F7 R29, applied to the F7 human feedback and again in F9 (R1/R2
+  aria-labels). The documented exception: optimizations only expressible in the Astro
+  pipeline (e.g. inlining the font CSS) are recorded as a head deviation in the
+  feature's design (F9 ADR-3) — body markup stays 1:1.
+- **Fonts ship inline.** The 8 `@font-face` declarations live in the `SiteLayout.astro`
+  head as one `is:inline set:html` string (`src/lib/font-face.ts`), URLs built via
+  `assetPath('fonts/<file>.woff2')` so demo-base builds resolve. `public/fonts/fonts.css`
+  no longer exists — never reintroduce a separate font stylesheet request. The 3 font
+  preloads and the 8 woff2 files under `public/fonts/` remain.
+- **Accessible names.** Icon-only / plate-only controls (`.floor-btn`) carry a composed
+  `aria-label` built from the plate's visible strings in reading order (WCAG 2.5.3
+  Label-in-Name). Repeated links sharing the same visible text ("View on GitHub") carry
+  an `aria-label` naming the resource (`<project> — View on GitHub`) to disambiguate
+  (axe `identical-links-same-purpose`).
+
+---
+
 ## Test Rules
 
 - **TDD**: failing test first for every behavior; red → green → refactor → commit.
