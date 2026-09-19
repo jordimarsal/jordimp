@@ -1,34 +1,49 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PageTitle from '../components/PageTitle.astro';
-import { ui } from '../i18n/ui';
-
-const t = ui.en;
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { L, LOCALES, NOTFOUND, SITE } from '../data/content';
+import { srcPath } from '../lib/paths';
 ---
-<BaseLayout
+<SiteLayout
   lang="en"
-  title={`${t['notfound.title']} — Jordi Marçal Poy`}
-  description={t['notfound.body']}
+  title={`404 — ${NOTFOUND.title.en} — ${SITE.brand}`}
+  description={NOTFOUND.body.en}
   noindex
+  navKey="home"
+  noCurrent
 >
-  <PageTitle label="404" />
-  <p class="notfound-body">{t['notfound.body']}</p>
-  <a class="back mono" href="/en/">{t['notfound.back']} →</a>
-</BaseLayout>
-
-<style>
-  .notfound-body {
-    color: var(--muted);
-    margin: 0 0 var(--space-6);
-  }
-
-  .back {
-    color: var(--accent-text);
-    font-size: 0.875rem;
-    text-decoration: none;
-  }
-
-  .back:hover {
-    text-decoration: underline;
-  }
-</style>
+  <main class="wrap" id="main">
+    <section class="hero" style="padding-top:clamp(40px,7vw,80px)">
+      <p class="kicker">{NOTFOUND.code} — {NOTFOUND.title.en.toUpperCase()}</p>
+      <h1>{NOTFOUND.title.en}</h1>
+      <svg class="b-svg nf-art" viewBox="0 0 360 220" role="img" aria-label={`404 — ${NOTFOUND.title.en}`}>
+        <rect class="b-wall" x="20" y="10" width="320" height="190" />
+        <rect class="b-ink" x="112" y="102" width="136" height="8" />
+        <rect fill="#2f2b29" x="120" y="110" width="120" height="90" />
+        <g class="b-accent-bricks">
+          <rect class="b-accent" x="120" y="110" width="56" height="22" stroke="var(--b-ink)" stroke-width="3" />
+          <rect class="b-accent" x="184" y="110" width="56" height="22" stroke="var(--b-ink)" stroke-width="3" />
+          <rect class="b-accent" x="98" y="132" width="56" height="22" stroke="var(--b-ink)" stroke-width="3" />
+          <rect class="b-accent" x="162" y="132" width="56" height="22" stroke="var(--b-ink)" stroke-width="3" />
+          <rect class="b-accent" x="226" y="132" width="56" height="22" stroke="var(--b-ink)" stroke-width="3" />
+          <rect class="b-accent" x="120" y="154" width="56" height="22" stroke="var(--b-ink)" stroke-width="3" />
+          <rect class="b-accent" x="184" y="154" width="56" height="22" stroke="var(--b-ink)" stroke-width="3" />
+          <rect class="b-accent" x="98" y="176" width="56" height="22" stroke="var(--b-ink)" stroke-width="3" />
+          <rect class="b-accent" x="162" y="176" width="56" height="22" stroke="var(--b-ink)" stroke-width="3" />
+          <rect class="b-accent" x="226" y="176" width="56" height="22" stroke="var(--b-ink)" stroke-width="3" />
+        </g>
+        <rect class="b-ink" x="60" y="34" width="240" height="40" />
+        <rect class="b-y1" x="54" y="28" width="240" height="40" stroke="var(--b-ink)" stroke-width="3" />
+        <text class="b-sign-word" x="174" y="58" text-anchor="middle" style="font-size:26px">404</text>
+        <rect class="b-ink" x="0" y="200" width="360" height="14" />
+      </svg>
+      <p class="stand">{NOTFOUND.body.en}</p>
+      <div class="pills" style="margin-top:26px">
+        {LOCALES.map((locale) => (
+          <a class="case" href={srcPath(locale, '')} hreflang={locale}>
+            {L[locale].short} — {NOTFOUND.back[locale]}
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+</SiteLayout>

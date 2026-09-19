@@ -1,9 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageTitle from '../../components/PageTitle.astro';
-import { LOCALES, L, type Locale } from '../../lib/i18n';
-import { ui } from '../../i18n/ui';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Breadcrumb from '../../components/site/Breadcrumb.astro';
+import SecHead from '../../components/site/SecHead.astro';
+import { LOCALES, type Locale } from '../../lib/i18n';
+import { BREADCRUMB_HOME, CV, PAGES } from '../../data/content';
+import { assetPath, dirRoute } from '../../lib/paths';
+import { ledgerHTML, skillGridHTML } from '../../lib/dept-blocks';
 
 export async function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
@@ -11,129 +13,46 @@ export async function getStaticPaths() {
 
 type Props = { lang: Locale };
 const { lang } = Astro.props;
-const t = ui[lang];
 
-const experience = (await getCollection('experience')).sort((a, b) => a.data.order - b.data.order);
-const skills = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order);
-const breadcrumbs = [{ name: t['nav.cv'], path: 'cv/' }];
+const route = dirRoute(PAGES.cv.route);
+const trail = [
+  { name: BREADCRUMB_HOME[lang], path: '' },
+  { name: 'CV', path: route },
+] as const;
 ---
-<BaseLayout
+<SiteLayout
   lang={lang}
-  title={`${t['cv.title']} — Jordi Marçal Poy`}
-  description={t['cv.title']}
-  path="cv/"
-  {breadcrumbs}
+  title={PAGES.cv.title[lang]}
+  description={PAGES.cv.description[lang]}
+  path={route}
+  navKey="cv"
+  breadcrumbs={trail.slice(1)}
 >
-  <PageTitle label={t['cv.title']} />
-
-  <div class="actions no-print">
-    <a class="cta cta-primary" href="/cv/Jordi-Marcal-Poy-CV-EN.pdf" download>{t['cv.download.en']}</a>
-    <a class="cta cta-primary" href="/cv/Jordi-Marcal-Poy-CV-ES.pdf" download>{t['cv.download.es']}</a>
-    <button type="button" class="cta cta-secondary" data-print>{t['cv.print']}</button>
-  </div>
-
-  <section class="summary">
-    <h2 class="section-h2">{t['experience.title']}</h2>
-    <ul class="cv-experience">
-      {experience.map((entry) => (
-        <li>
-          <span class="mono period muted">{entry.data.period}</span>
-          <strong>{entry.data.company}</strong>
-          <span class="muted"> — {L(entry.data.role, lang)}</span>
-        </li>
-      ))}
-    </ul>
-  </section>
-
-  <section class="summary">
-    <h2 class="section-h2">{t['skills.title']}</h2>
-    {skills.map((group) => (
-      <div class="cv-skill-group">
-        <strong>{L(group.data.group, lang)}</strong>
-        <ul class="chips">{group.data.items.map((item) => <li class="chip mono">{item}</li>)}</ul>
+  <main class="wrap" id="main">
+    <Breadcrumb lang={lang} {trail} />
+    <SecHead num={CV.head.num} title={CV.head.title[lang]} sub={CV.head.sub[lang]} id="page-title" asH1 />
+    <p class="prose">{CV.intro[lang]}</p>
+    <div class="cv-facts">
+      {CV.facts[lang].map((f) => <div><span class="k">{f.k}</span><span class="v">{f.v}</span></div>)}
+    </div>
+    <div class="cv-actions">
+      <a class="btn btn--big" href={assetPath(`cv/${CV.files.en}`)} download>
+        <span class="btn__label">{CV.buttons.enLabel}</span><span aria-hidden="true">&darr;</span>
+      </a>
+      <a class="btn btn--big" href={assetPath(`cv/${CV.files.es}`)} download>
+        <span class="btn__label">{CV.buttons.esLabel}</span><span aria-hidden="true">&darr;</span>
+      </a>
+    </div>
+    <p class="cv-note">{CV.buttons.note[lang]}</p>
+    <section class="section" aria-labelledby="cv-exp">
+      <h2 id="cv-exp" class="section-title">{CV.sections.experience[lang]}</h2>
+      <Fragment set:html={ledgerHTML(lang)} />
+    </section>
+    <section class="section" aria-labelledby="cv-skills">
+      <h2 id="cv-skills" class="section-title">{CV.sections.skills[lang]}</h2>
+      <div class="skillgrid">
+        <Fragment set:html={skillGridHTML(lang)} />
       </div>
-    ))}
-  </section>
-</BaseLayout>
-
-<style>
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    margin: 0 0 var(--space-8);
-  }
-
-  .cta {
-    border-radius: var(--radius-sm);
-    padding: var(--space-2) var(--space-4);
-    font-size: 0.875rem;
-    text-decoration: none;
-  }
-
-  .cta-primary {
-    background: var(--accent-strong);
-    border: 1px solid var(--accent-strong);
-    color: var(--accent-contrast);
-    font-weight: 600;
-  }
-
-  .cta-primary:hover {
-    background: var(--accent-deep);
-    border-color: var(--accent-deep);
-  }
-
-  .cta-secondary {
-    border: 1px solid var(--border);
-    color: var(--text);
-    background: transparent;
-    font: inherit;
-    font-size: 0.875rem;
-    cursor: pointer;
-  }
-
-  .cta-secondary:hover {
-    border-color: var(--accent);
-    color: var(--accent-text);
-  }
-
-  .summary {
-    margin-bottom: var(--space-8);
-    max-width: var(--prose);
-  }
-
-  .cv-experience {
-    margin: var(--space-3) 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .cv-experience li {
-    margin-bottom: var(--space-2);
-    font-size: 0.9375rem;
-  }
-
-  .period {
-    display: inline-block;
-    min-width: 9rem;
-    font-size: 0.8125rem;
-  }
-
-  .cv-skill-group {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-3);
-    margin: 0 0 var(--space-2);
-    font-size: 0.9375rem;
-  }
-
-  .cv-skill-group .chips {
-    margin: 0;
-  }
-</style>
-
-<script>
-  document.querySelector<HTMLButtonElement>('[data-print]')?.addEventListener('click', () => {
-    window.print();
-  });
-</script>
+    </section>
+  </main>
+</SiteLayout>

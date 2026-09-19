@@ -1,0 +1,107 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GET-ready llms-full.txt content (canonical data) > matches the spike copy with only the URL adaptation 1`] = `
+"# Jordimp & Co. — full reference
+
+Jordi Marçal Poy — Senior Backend Engineer (Java · Python · AI/LLM).
+One-person engineering firm, est. 2017, Barcelona. Languages: English, Español, Català.
+Contact: jordi.marsal@gmail.com · https://github.com/jordimarsal · https://www.linkedin.com/in/jordi-marsal-poy
+
+## The building
+
+## F3 — Research & Retrieval
+
+The top floor ships AI like infrastructure: deterministic cores, golden Q/A sets, evals gated in CI. If a model can’t be measured, it doesn’t ship.
+
+Projects:
+  - CodebaseRAG (2026): Hexagonal RAG over your own codebase, with a deterministic, eval-first core: ingest, query, and CI-gated retrieval evals. Stack: Python 3.13, FastAPI, pgvector, Qdrant, Ollama, Langfuse, mypy strict. https://github.com/jordimarsal/codebaserag
+  - Interview Simulator (2026): Voice interview simulator: a local LLM plays the interviewer and Whisper handles transcription, so you can rehearse technical interviews fully offline. Stack: Whisper, Local LLM. https://github.com/jordimarsal/interview-simulator
+  - Bible Text Analysis (2019): NLP study on the Bible: web scraping, NLTK processing, LDA topic modeling and sentiment analysis — my Data Science roots. Stack: Python, NLTK, LDA, Jupyter. https://github.com/jordimarsal/bible_text_analysis
+
+## F2 — Transport & Telemetry
+
+Event pipelines, rate limits and health tracking with honest failure modes. When a dependency goes down, callers know exactly where they stand.
+
+Projects:
+  - Kafka Adapter Telemetry (2026): Event-driven adapter telemetry: a Kafka gateway + hub pipeline with idempotent Oracle persistence, per-adapter health tracking, alerting, and a live SSE mission-control dashboard. Stack: Java 25, Spring Boot 4.1, Kafka, Oracle, Flyway, Testcontainers, SSE. https://github.com/jordimarsal/kafka-adapter-telemetry
+  - Redis Toolkit (2026): Rate-limiting toolkit for LLM gateways: atomic token-bucket quotas, pluggable stores, honest failure modes — with a Javalin gateway demo exposing an OpenAI-style endpoint. Stack: Java, Javalin, Redis, Testcontainers. https://github.com/jordimarsal/redis-toolkit
+  - Product Offers API (2026): Technical assessment: a product offers REST API — price inquiries by date, product and brand, served with Spring Boot. Stack: Java 17, Spring Boot 3.2, H2, JUnit 5, Mockito. https://github.com/jordimarsal/product-offers
+
+## F1 — Tooling & Platform
+
+The workshop floor: a multi-agent SDD harness, CLIs that do one thing well, and tooling kept intentionally small. Everything it needs, nothing it doesn’t.
+
+Projects:
+  - Harness Standard (2026): A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command. Stack: Agents, SDD, CLI, Conventions. https://github.com/jordimarsal/harness-standard
+  - Rustcut (2026): Tiny URL shortener in Rust: a deliberately minimalist REST API on Actix-web with SQLite storage. Stack: Rust, Actix-web, SQLite. https://github.com/jordimarsal/rustcut
+  - MD Mermaid PDF (2026): CLI that renders Markdown with Mermaid diagrams straight to PDF, engineered with TDD, mypy strict and CI. Stack: Python, Markdown, Mermaid, GitHub Actions. https://github.com/jordimarsal/md-mermaid-pdf
+  - MCP Transparent PNG (2026): MCP (Model Context Protocol) server that makes PNG colors transparent (alpha channel) with rgb/auto/greenscreen modes. Stack: Python 3.13, MCP, Pillow, GitHub Actions. https://github.com/jordimarsal/mcp-transparent-png
+  - Spring Boot Casino (2026): Technical assessment: a casino betting domain modeled in Spring Boot following a hexagonal architecture. Stack: Java, Spring Boot, Hexagonal Architecture. https://github.com/jordimarsal/spring-boot-casino
+
+## M — People & Principles
+
+The mezzanine keeps the house rules: SOLID, Clean Code and TDD as daily practice, I/O at the edges, and knowledge that flows across the team.
+
+
+## F0 — Operations
+
+The ground floor keeps the record: every engagement since 2017, what shipped, and what it was built with. One ledger, four chapters, zero rewrites.
+
+
+## B — Front Desk
+
+The door is always open. Questions about a floor, a repo, or a hire? Walk straight in — no appointment, no gatekeeper, no tracking scripts.
+
+
+## All repos
+
+- CodebaseRAG (2026): Hexagonal RAG over your own codebase, with a deterministic, eval-first core: ingest, query, and CI-gated retrieval evals. https://github.com/jordimarsal/codebaserag
+- Interview Simulator (2026): Voice interview simulator: a local LLM plays the interviewer and Whisper handles transcription, so you can rehearse technical interviews fully offline. https://github.com/jordimarsal/interview-simulator
+- Bible Text Analysis (2019): NLP study on the Bible: web scraping, NLTK processing, LDA topic modeling and sentiment analysis — my Data Science roots. https://github.com/jordimarsal/bible_text_analysis
+- Kafka Adapter Telemetry (2026): Event-driven adapter telemetry: a Kafka gateway + hub pipeline with idempotent Oracle persistence, per-adapter health tracking, alerting, and a live SSE mission-control dashboard. https://github.com/jordimarsal/kafka-adapter-telemetry
+- Redis Toolkit (2026): Rate-limiting toolkit for LLM gateways: atomic token-bucket quotas, pluggable stores, honest failure modes — with a Javalin gateway demo exposing an OpenAI-style endpoint. https://github.com/jordimarsal/redis-toolkit
+- Product Offers API (2026): Technical assessment: a product offers REST API — price inquiries by date, product and brand, served with Spring Boot. https://github.com/jordimarsal/product-offers
+- Harness Standard (2026): A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command. https://github.com/jordimarsal/harness-standard
+- Rustcut (2026): Tiny URL shortener in Rust: a deliberately minimalist REST API on Actix-web with SQLite storage. https://github.com/jordimarsal/rustcut
+- MD Mermaid PDF (2026): CLI that renders Markdown with Mermaid diagrams straight to PDF, engineered with TDD, mypy strict and CI. https://github.com/jordimarsal/md-mermaid-pdf
+- MCP Transparent PNG (2026): MCP (Model Context Protocol) server that makes PNG colors transparent (alpha channel) with rgb/auto/greenscreen modes. https://github.com/jordimarsal/mcp-transparent-png
+- Spring Boot Casino (2026): Technical assessment: a casino betting domain modeled in Spring Boot following a hexagonal architecture. https://github.com/jordimarsal/spring-boot-casino
+
+## Career ledger (Operations, F0)
+
+- 2022—NOW — Telefónica Kernel · Open Gateway, Backend Engineer — Microservices & Automation: Design and evolution of REST microservice adapters for Open Gateway. Author of a 12+ tool Python CLI suite operating ~90 adapters across 4 countries. Automatic OpenAPI (Swagger v2/v3) code generation and CI-integrated docs & diagrams.
+- 2026 — Axpe Consulting / Mapfre, Software Engineer — API Modernization: Drove the tech-modernization analysis of 39 corporate APIs to Node.js 24. Homogenized the stack and reduced technical debt across the API estate.
+- 2020—2022 — Zitro Laboratory, Java Backend Engineer: Maintenance and evolution of the Java server of the betting engine, Backoffice and online-casino integrations. Server-to-server sign-in, AWS Snowflake + Cassandra historicals, OneSignal integration.
+- 2017—2020 — Attendre S.L., Java Backend Developer: Evolution of Attend® (tickets/inventory/projects) and License Manager (Spring Boot 2.3 + REST).
+
+## Skills (Mezzanine)
+
+- Backend & APIs: Java 11/21/25, Spring Boot 4, Python, FastAPI, Node.js, TypeScript, REST, OpenAPI, Kafka, RabbitMQ
+- Data: SQL (Oracle/MySQL/SQLServer), MongoDB, Redis, Cassandra, Snowflake, Machine Learning, pandas/scikit-learn
+- AI & LLMs: RAG & vector search, MCP, llama.cpp local inference, agents & evals, prompt engineering
+- DevOps & Quality: Docker, Kubernetes, AWS Lambda/CDK/CloudFormation, GitHub Actions, Jenkins, SonarQube, SonarLint, Testcontainers, pytest, JUnit/Mockito
+- Leadership: team coordination, code review culture, mentoring, conflict resolution
+
+## Working principles (Mezzanine)
+
+- SOLID, Clean Code and TDD as daily practice.
+- Tell, Don’t Ask — immutability and semantic types when they model the domain.
+- I/O at the edges; pure, deterministic logic everywhere else.
+- Knowledge sharing and mentoring — the team improves together.
+
+## Pages
+
+- https://jordimp.net/en/ · /es/ · /ca/ (home, trilingual)
+- https://jordimp.net/en/projects/ — all projects with stack filter
+- https://jordimp.net/en/cv/ — CV summary with PDF downloads
+- https://jordimp.net/en/departments/research/ — F3 department page
+- https://jordimp.net/en/departments/telemetry/ — F2 department page
+- https://jordimp.net/en/departments/tooling/ — F1 department page
+- https://jordimp.net/en/departments/people/ — Mezzanine department page
+- https://jordimp.net/en/departments/operations/ — F0 department page
+- https://jordimp.net/en/departments/front-desk/ — Front Desk page
+- https://jordimp.net/en/projects/<slug>/ — one case page per project (11), e.g. https://jordimp.net/en/projects/codebaserag/
+
+This site is static HTML, zero trackers, zero external dependencies beyond linked fonts.
+"
+`;

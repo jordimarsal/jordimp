@@ -1,0 +1,234 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import Breadcrumb from '../../../components/site/Breadcrumb.astro';
+import BackBuilding from '../../../components/site/BackBuilding.astro';
+import DeptCard from '../../../components/site/DeptCard.astro';
+import SecHead from '../../../components/site/SecHead.astro';
+import { LOCALES, type Locale } from '../../../lib/i18n';
+import {
+  BREADCRUMB_DEPTS,
+  BREADCRUMB_HOME,
+  DEPTS,
+  FLOOR_ORDER,
+  FOOTER,
+  FRONTDESK_PAGE,
+  OPERATIONS_PAGE,
+  PAGES,
+  PEOPLE_PAGE,
+  PRINCIPLES,
+  RESEARCH_PAGE,
+  TELEMETRY_PAGE,
+  TOOLING_PAGE,
+  UI,
+  project,
+} from '../../../data/content';
+import type { DeptKey, StatEntry } from '../../../data/types';
+import { dirRoute, srcPath } from '../../../lib/paths';
+import { externalLinkAttrs } from '../../../lib/links';
+import { SITE } from '../../../config';
+import { coverageMap, orgChart, telemetryDiagrams } from '../../../lib/dept-svg';
+import { shiftLogHTML, skillGridHTML } from '../../../lib/dept-blocks';
+
+export async function getStaticPaths() {
+  const deptSlug = (key: DeptKey): string => dirRoute(PAGES[key].route).replace(/^departments\//, '');
+  return LOCALES.flatMap((lang) =>
+    FLOOR_ORDER.map((deptKey) => ({
+      params: { lang, dept: deptSlug(deptKey) },
+      props: { lang, deptKey },
+    })),
+  );
+}
+
+type Props = { lang: Locale; deptKey: DeptKey };
+const { lang, deptKey } = Astro.props;
+
+const d = DEPTS[deptKey];
+const route = dirRoute(PAGES[deptKey].route);
+const stats: readonly StatEntry[] | null =
+  deptKey === 'research'
+    ? RESEARCH_PAGE.stats[lang]
+    : deptKey === 'telemetry'
+      ? TELEMETRY_PAGE.stats[lang]
+      : deptKey === 'tooling'
+        ? TOOLING_PAGE.stats[lang]
+        : deptKey === 'operations'
+          ? OPERATIONS_PAGE.stats[lang]
+          : null;
+const githubAttrs = externalLinkAttrs(SITE.github, SITE.url);
+const linkedinAttrs = externalLinkAttrs(SITE.linkedin, SITE.url);
+const trail = [
+  { name: BREADCRUMB_HOME[lang], path: '' },
+  { name: BREADCRUMB_DEPTS[lang], path: '#building' },
+  { name: d.name[lang], path: route },
+] as const;
+---
+<SiteLayout
+  lang={lang}
+  title={PAGES[deptKey].title[lang]}
+  description={PAGES[deptKey].description[lang]}
+  path={route}
+  navKey="departments"
+  breadcrumbs={trail.slice(1)}
+>
+  <main class="wrap" id="main">
+    <Breadcrumb lang={lang} {trail} />
+    <SecHead num={d.code} title={d.name[lang]} sub={d.tag[lang]} id="page-title" asH1 />
+    <p class="prose">{d.intro[lang]}</p>
+    {stats && (
+      <div class="stats">
+        {stats.map((s) => <div class="stat"><b>{s.value}</b><span>{s.label}</span></div>)}
+      </div>
+    )}
+
+    {deptKey === 'research' && (
+      <section class="section">
+        <div class="cards cards--single">
+          {d.projects.map((slug) => <DeptCard lang={lang} project={project(slug)} />)}
+        </div>
+        <BackBuilding lang={lang} />
+      </section>
+    )}
+
+    {deptKey === 'telemetry' && (
+      <>
+        <section class="section" aria-labelledby="tl-diagrams">
+          <h2 id="tl-diagrams" class="section-title">{TELEMETRY_PAGE.diagramTitle[lang]}</h2>
+          <Fragment set:html={telemetryDiagrams(lang)} />
+        </section>
+        <aside class="oncall" aria-labelledby="tl-oncall">
+          <h3 id="tl-oncall">{TELEMETRY_PAGE.oncallTitle[lang]}</h3>
+          <p>{TELEMETRY_PAGE.oncallBody[lang]}</p>
+        </aside>
+        <section class="section" aria-labelledby="tl-work">
+          <h2 id="tl-work" class="section-title">{TELEMETRY_PAGE.workTitle[lang]}</h2>
+          <div class="cards cards--single">
+            {d.projects.map((slug) => <DeptCard lang={lang} project={project(slug)} />)}
+          </div>
+          <BackBuilding lang={lang} />
+        </section>
+      </>
+    )}
+
+    {deptKey === 'tooling' && (
+      <>
+        <aside class="oncall" aria-labelledby="tl-note">
+          <h3 id="tl-note">{TOOLING_PAGE.noteTitle[lang]}</h3>
+          <p>{TOOLING_PAGE.noteBody[lang]}</p>
+        </aside>
+        <section class="section" aria-labelledby="tl-bench">
+          <h2 id="tl-bench" class="section-title">{TOOLING_PAGE.workTitle[lang]}</h2>
+          <div class="cards">
+            {d.projects.map((slug) => <DeptCard lang={lang} project={project(slug)} />)}
+          </div>
+          <BackBuilding lang={lang} />
+        </section>
+      </>
+    )}
+
+    {deptKey === 'operations' && (
+      <>
+        <section class="section" aria-labelledby="op-log">
+          <h2 id="op-log" class="section-title">{OPERATIONS_PAGE.shiftLogTitle[lang]}</h2>
+          <Fragment set:html={shiftLogHTML(lang)} />
+        </section>
+        <section class="section" aria-labelledby="op-map">
+          <h2 id="op-map" class="section-title">{OPERATIONS_PAGE.coverageTitle[lang]}</h2>
+          <figure class="orgfig">
+            <Fragment set:html={coverageMap()} />
+            <figcaption>{OPERATIONS_PAGE.coverageCaption[lang]}</figcaption>
+          </figure>
+        </section>
+      </>
+    )}
+
+    {deptKey === 'people' && (
+      <>
+        <section class="section" aria-labelledby="pp-skills">
+          <h2 id="pp-skills" class="section-title">{PEOPLE_PAGE.skillsTitle[lang]}</h2>
+          <div class="skillgrid">
+            <Fragment set:html={skillGridHTML(lang)} />
+          </div>
+        </section>
+        <section class="section" aria-labelledby="pp-rules">
+          <h2 id="pp-rules" class="section-title">{PRINCIPLES.title[lang]}</h2>
+          <p class="prose">{PEOPLE_PAGE.principlesLead[lang]}</p>
+          <ol class="principles">
+            {PRINCIPLES.items[lang].map((item, i) => (
+              <li><span class="principles__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span><p>{item}</p></li>
+            ))}
+          </ol>
+        </section>
+        <section class="section" aria-labelledby="pp-org">
+          <h2 id="pp-org" class="section-title">{PEOPLE_PAGE.orgTitle[lang]}</h2>
+          <figure class="orgfig">
+            <Fragment set:html={orgChart(lang)} />
+            <figcaption>{PEOPLE_PAGE.orgCaption[lang]}</figcaption>
+          </figure>
+        </section>
+      </>
+    )}
+
+    {deptKey === 'frontdesk' && (
+      <>
+        <section class="section" aria-labelledby="fd-person">
+          <h2 id="fd-person" class="section-title">{FRONTDESK_PAGE.personTitle[lang]}</h2>
+          <div class="prose">
+            {FRONTDESK_PAGE.bio[lang].map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+          <p class="avail"><span class="dot dot--live" aria-hidden="true"></span>{FRONTDESK_PAGE.avail[lang]}</p>
+        </section>
+        <section class="section" aria-labelledby="fd-contact">
+          <h2 id="fd-contact" class="section-title">{FRONTDESK_PAGE.contactTitle[lang]}</h2>
+          <div class="contact-rows">
+            <div class="contact-row">
+              <span class="contact-row__k mono">{FOOTER.email[lang]}</span>
+              <span class="contact-row__v">{SITE.email}</span>
+              <button
+                class="copy-btn"
+                type="button"
+                data-copy={SITE.email}
+                data-copied={FRONTDESK_PAGE.copied[lang]}
+                data-fail={FRONTDESK_PAGE.copyFail[lang]}
+                aria-label={`${FRONTDESK_PAGE.copy[lang]}: ${SITE.email}`}
+              >{FRONTDESK_PAGE.copy[lang]}</button>
+            </div>
+            <a class="contact-row" href={SITE.github} {...githubAttrs}>
+              <span class="contact-row__k mono">{FOOTER.github[lang]}</span>
+              <span class="contact-row__v">github.com/jordimarsal</span>
+              <span class="contact-row__go" aria-hidden="true">&#8599;</span>
+            </a>
+            <a class="contact-row" href={SITE.linkedin} {...linkedinAttrs}>
+              <span class="contact-row__k mono">{FOOTER.linkedin[lang]}</span>
+              <span class="contact-row__v">linkedin.com/in/jordi-marsal-poy</span>
+              <span class="contact-row__go" aria-hidden="true">&#8599;</span>
+            </a>
+          </div>
+          <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+        </section>
+        <section class="section" aria-labelledby="fd-how">
+          <h2 id="fd-how" class="section-title">{FRONTDESK_PAGE.howTitle[lang]}</h2>
+          <ol class="steps">
+            {FRONTDESK_PAGE.how[lang].map((step) => (
+              <li><span class="steps__k">{step.k}</span><p>{step.v}</p></li>
+            ))}
+          </ol>
+        </section>
+        <section class="section" aria-labelledby="fd-colo">
+          <h2 id="fd-colo" class="section-title">{FRONTDESK_PAGE.colophonTitle[lang]}</h2>
+          <p class="prose">{FRONTDESK_PAGE.colophon[lang]}</p>
+        </section>
+      </>
+    )}
+
+    {deptKey === 'operations' && (
+      <div class="dept-panel__cta">
+        <a class="btn" href={srcPath(lang, dirRoute(PAGES.cv.route))}>
+          <span class="btn__label">{UI.nav.cv[lang]}</span><span aria-hidden="true">{UI.enterDeptArrow}</span>
+        </a>
+      </div>
+    )}
+    {(deptKey === 'people' || deptKey === 'operations' || deptKey === 'frontdesk') && (
+      <BackBuilding lang={lang} />
+    )}
+  </main>
+</SiteLayout>

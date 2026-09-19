@@ -1,11 +1,21 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import HeroPrompt from '../../components/HeroPrompt.astro';
-import ProjectCard from '../../components/ProjectCard.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Ticker from '../../components/site/Ticker.astro';
+import SecHead from '../../components/site/SecHead.astro';
+import Building from '../../components/site/Building.astro';
+import DeptStrip from '../../components/site/DeptStrip.astro';
+import ProjectCard from '../../components/site/ProjectCard.astro';
 import { LOCALES, type Locale } from '../../lib/i18n';
-import { ui } from '../../i18n/ui';
-import { SITE } from '../../config';
+import {
+  BREADCRUMB_HOME,
+  FLOOR_ORDER,
+  FEATURED,
+  HOME,
+  PAGES,
+  SITE,
+  UI,
+  project,
+} from '../../data/content';
 
 export async function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
@@ -13,156 +23,64 @@ export async function getStaticPaths() {
 
 type Props = { lang: Locale };
 const { lang } = Astro.props;
-const t = ui[lang];
 
-const projects = await getCollection('projects');
-const featured = projects
-  .filter((p) => p.data.featured)
-  .sort((a, b) => b.data.year - a.data.year || a.data.name.localeCompare(b.data.name))
-  .slice(0, 3);
+const BUILDING_HEAD: Record<Locale, { title: string; sub: string }> = {
+  en: { title: 'The Building', sub: 'FLOORS · 1 PAIR OF HANDS' },
+  es: { title: 'El edificio', sub: 'PLANTAS · 1 PAR DE MANOS' },
+  ca: { title: 'L’edifici', sub: 'PLANTES · 1 PARELL DE MANS' },
+};
 
-const pillars = [
-  {
-    title: t['hero.pillar1.title'],
-    desc: t['hero.pillar1.desc'],
-    chips: ['Java 25', 'Spring Boot 4', 'FastAPI'],
-  },
-  {
-    title: t['hero.pillar2.title'],
-    desc: t['hero.pillar2.desc'],
-    chips: ['Kafka', 'RAG', 'llama.cpp'],
-  },
-  {
-    title: t['hero.pillar3.title'],
-    desc: t['hero.pillar3.desc'],
-    chips: ['TDD', 'hexagonal', 'CI/CD'],
-  },
-];
+const featured = FEATURED.map((slug) => project(slug));
 ---
-<BaseLayout lang={lang} title={`${SITE.name} — ${t['hero.role']}`} description={t['hero.tagline']}>
-  <section class="hero">
-    <HeroPrompt text={`${t['hero.role']} · ${SITE.tagline}`} />
-    <h1>{SITE.name}</h1>
-    <p class="hero-tagline muted">{t['hero.tagline']}</p>
-    <div class="hero-ctas">
-      <a class="cta cta-primary" href={`/${lang}/projects/`}>{t['hero.cta.projects']}</a>
-      <a class="cta cta-secondary" href={`/${lang}/cv/`}>{t['hero.cta.cv']}</a>
-      <a class="cta cta-ask mono" href="/en/ask/" aria-disabled="true" title="phase 3">{t['hero.cta.ask']}</a>
-    </div>
-  </section>
-
-  <section class="pillars">
-    {pillars.map((pillar) => (
-      <article class:list={['card', 'pillar']}>
-        <h2>{pillar.title}</h2>
-        <p class="muted">{pillar.desc}</p>
-        <ul class="chips">{pillar.chips.map((chip) => <li class="chip mono">{chip}</li>)}</ul>
-      </article>
-    ))}
-  </section>
-
-  <section class="featured">
-    <h2 class="section-h2">{t['projects.featured']}</h2>
-    <div class="featured-grid">
-      {featured.map((project) => <ProjectCard project={project} {lang} />)}
-    </div>
-    <a class="see-all mono" href={`/${lang}/projects/`}>{t['hero.cta.projects']} →</a>
-  </section>
-</BaseLayout>
-
-<style>
-  .hero {
-    margin: var(--space-12) 0 var(--space-16);
-    max-width: 46rem;
-  }
-
-  .hero h1 {
-    margin: 0 0 var(--space-3);
-    font-size: clamp(2.25rem, 6vw, 3.5rem);
-    line-height: 1.1;
-  }
-
-  .hero-tagline {
-    margin: 0 0 var(--space-6);
-    font-size: 1.125rem;
-  }
-
-  .hero-ctas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-  }
-
-  .cta {
-    border-radius: var(--radius-sm);
-    padding: var(--space-2) var(--space-4);
-    font-size: 0.875rem;
-    text-decoration: none;
-  }
-
-  .cta-primary {
-    background: var(--accent-strong);
-    border: 1px solid var(--accent-strong);
-    color: var(--accent-contrast);
-    font-weight: 600;
-  }
-
-  .cta-primary:hover {
-    background: var(--accent-deep);
-    border-color: var(--accent-deep);
-  }
-
-  .cta-secondary {
-    border: 1px solid var(--border);
-    color: var(--text);
-  }
-
-  .cta-secondary:hover {
-    border-color: var(--accent);
-    color: var(--accent-text);
-  }
-
-  .cta-ask {
-    border: 1px dashed var(--border);
-    color: var(--muted);
-    font-size: 0.8125rem;
-  }
-
-  .pillars {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: var(--space-4);
-    margin-bottom: var(--space-16);
-  }
-
-  .pillar {
-    padding: var(--space-4);
-  }
-
-  .pillar h2 {
-    margin: 0 0 var(--space-2);
-    font-size: 1rem;
-  }
-
-  .pillar p {
-    margin: 0 0 var(--space-3);
-    font-size: 0.875rem;
-  }
-
-  .featured-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--space-4);
-    margin: var(--space-4) 0;
-  }
-
-  .see-all {
-    color: var(--accent-text);
-    font-size: 0.875rem;
-    text-decoration: none;
-  }
-
-  .see-all:hover {
-    text-decoration: underline;
-  }
-</style>
+<SiteLayout
+  lang={lang}
+  title={PAGES.home.title[lang]}
+  description={PAGES.home.description[lang]}
+  path=""
+  navKey="home"
+  breadcrumbs={[{ name: BREADCRUMB_HOME[lang], path: '' }]}
+>
+  <main class="wrap" id="main">
+    <section class="hero">
+      <p class="kicker">{HOME.kicker[lang]}</p>
+      <h1 set:html={HOME.h1[lang]} />
+      <p class="stand" set:html={HOME.stand[lang]} />
+      <div class="meta-row" aria-label={SITE.brand}>
+        {HOME.metaChips[lang].map((chip) => <span>{chip}</span>)}
+      </div>
+      <p class="hint"><span class="arr" aria-hidden="true">&darr;</span> {UI.buildingHint[lang]}</p>
+    </section>
+    <Ticker lang={lang} />
+    <section aria-labelledby="building-title">
+      <SecHead
+        num="01"
+        title={BUILDING_HEAD[lang].title}
+        sub={`${FLOOR_ORDER.length} ${BUILDING_HEAD[lang].sub}`}
+        id="building-title"
+      />
+      <Building lang={lang} />
+    </section>
+    <section aria-labelledby="featured-title">
+      <SecHead
+        num={HOME.featuredHead.num}
+        title={HOME.featuredHead.title[lang]}
+        sub={HOME.featuredHead.sub[lang]}
+        id="featured-title"
+      />
+      <div class="cards">
+        {featured.map((p) => (
+          <ProjectCard lang={lang} project={p} />
+        ))}
+      </div>
+    </section>
+    <section aria-labelledby="depts-title">
+      <SecHead
+        num={HOME.deptsHead.num}
+        title={HOME.deptsHead.title[lang]}
+        sub={HOME.deptsHead.sub[lang]}
+        id="depts-title"
+      />
+      <DeptStrip lang={lang} />
+    </section>
+  </main>
+</SiteLayout>

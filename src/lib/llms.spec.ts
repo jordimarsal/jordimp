@@ -1,138 +1,206 @@
 import { describe, expect, it } from 'vitest';
-import { buildLlmsFullTxt, buildLlmsTxt, type LlmsData } from './llms';
+import {
+  buildLlmsFullTxt,
+  buildLlmsTxt,
+  type LlmsData,
+  type LlmsDept,
+} from './llms';
+
+const projectRef = (slug: string, name: string, year: number) => ({
+  slug,
+  name,
+  year,
+  summary: `${name} summary.`,
+  stack: ['Java 25', 'Spring Boot 4'],
+  github: `https://github.com/jordimarsal/${slug}`,
+});
+
+const dept = (code: string, name: string, slugs: readonly string[]): LlmsDept => ({
+  code,
+  name,
+  line: `${name} LINE.`,
+  intro: `${name} intro.`,
+  route: `departments/${name.toLowerCase().replace(/[^a-z]+/g, '-')}/`,
+  projects: slugs.map((slug) => projectRef(slug, slug, 2026)),
+});
 
 const base: LlmsData = {
-  name: 'Jordi Marçal Poy',
+  person: 'Jordi Marçal Poy',
   role: 'Senior Backend Engineer',
   tagline: 'Java · Python · AI/LLM',
+  est: '2017',
+  city: 'Barcelona',
   email: 'jordi.marsal@gmail.com',
   github: 'https://github.com/jordimarsal',
   linkedin: 'https://www.linkedin.com/in/jordi-marsal-poy',
-  bio: ['First bio paragraph.', 'Second bio paragraph.'],
+  departments: [
+    dept('F3', 'Research & Retrieval', ['codebaserag']),
+    dept('F2', 'Transport & Telemetry', ['redis-toolkit']),
+    dept('F1', 'Tooling & Platform', ['rustcut', 'md-mermaid-pdf']),
+    dept('M', 'People & Principles', []),
+    dept('F0', 'Operations', []),
+    dept('B', 'Front Desk', []),
+  ],
   projects: [
-    {
-      id: 'alpha',
-      name: 'Alpha',
-      year: 2026,
-      summary: 'Alpha summary.',
-      problem: 'Alpha problem.',
-      highlights: ['Alpha highlight one.', 'Alpha highlight two.'],
-      stack: ['Java 25', 'Spring Boot 4'],
-      github: 'https://github.com/jordimarsal/alpha',
-    },
-    {
-      id: 'beta-tool',
-      name: 'Beta Tool',
-      year: 2025,
-      summary: 'Beta summary.',
-      problem: 'Beta problem.',
-      highlights: ['Beta highlight.'],
-      stack: ['Python'],
-      github: 'https://github.com/jordimarsal/beta-tool',
-    },
+    projectRef('codebaserag', 'CodebaseRAG', 2026),
+    projectRef('rustcut', 'Rustcut', 2026),
   ],
   experience: [
     {
-      company: 'Telefónica',
-      role: 'Backend Engineer',
-      period: '2024–Present',
-      points: ['Built APIs.', 'Led migration.'],
+      period: '2022—NOW',
+      company: 'Telefónica Kernel · Open Gateway',
+      role: 'Backend Engineer — Microservices & Automation',
+      points: ['Built adapters.', 'Authored a CLI suite.'],
     },
   ],
   skills: [
     { group: 'Backend & APIs', items: ['Java 25', 'Spring Boot 4'] },
     { group: 'Data', items: ['Kafka'] },
   ],
-};
-
-const range = (n: number) => Array.from({ length: n }, (_, i) => i);
-
-const fullScale: LlmsData = {
-  ...base,
-  projects: range(11).map((i) => ({ ...base.projects[0], id: `project-${i}`, name: `Project ${i}` })),
-  experience: range(4).map((i) => ({ ...base.experience[0], company: `Company ${i}` })),
-  skills: range(5).map((i) => ({ ...base.skills[0], group: `Group ${i}` })),
+  principles: ['SOLID, Clean Code and TDD as daily practice.', 'I/O at the edges.'],
 };
 
 describe('buildLlmsTxt()', () => {
-  it('opens with the H1 name and the role + tagline summary line', () => {
+  it('opens with the brand H1 and the person blockquote', () => {
     const lines = buildLlmsTxt(base).split('\n');
-    expect(lines[0]).toBe('# Jordi Marçal Poy');
-    expect(lines[2]).toBe('> Senior Backend Engineer. Java · Python · AI/LLM');
+    expect(lines[0]).toBe('# Jordimp & Co.');
+    expect(lines[2]).toBe(
+      '> Jordi Marçal Poy — Senior Backend Engineer (Java · Python · AI/LLM). A one-person engineering firm: backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since 2017. Barcelona. Business in English, Español or Català.',
+    );
   });
 
-  it('links every project at its en URL with its summary', () => {
+  it('lists every department as "CODE Name — LINE"', () => {
     const text = buildLlmsTxt(base);
-    expect(text).toContain('## Projects');
-    expect(text).toContain('- [Alpha](https://jordimp.net/en/projects/alpha/): Alpha summary.');
-    expect(text).toContain('- [Beta Tool](https://jordimp.net/en/projects/beta-tool/): Beta summary.');
+    expect(text).toContain('## Departments');
+    expect(text).toContain('- F3 Research & Retrieval — Research & Retrieval LINE.');
+    expect(text).toContain('- M People & Principles — People & Principles LINE.');
+    expect(text).toContain('- B Front Desk — Front Desk LINE.');
   });
 
-  it('emits one link per project', () => {
-    const links = buildLlmsTxt(fullScale).match(/https:\/\/jordimp\.net\/en\/projects\/[a-z0-9-]*\//g);
-    expect(links).toHaveLength(11);
-  });
-
-  it('lists the four static pages under ## Pages', () => {
+  it('lists home, projects, CV and departments at directory URLs', () => {
     const text = buildLlmsTxt(base);
-    expect(text).toContain('## Pages');
-    for (const page of ['about', 'cv', 'experience', 'skills']) {
-      expect(text).toContain(`https://jordimp.net/en/${page}/`);
-    }
-    expect(text.indexOf('## Pages')).toBeGreaterThan(text.indexOf('## Projects'));
+    expect(text).toContain('- Home: https://jordimp.net/en/ (also /es/, /ca/)');
+    expect(text).toContain('- Projects: https://jordimp.net/en/projects/');
+    expect(text).toContain('- CV: https://jordimp.net/en/cv/');
+    expect(text).toContain(
+      '- F1 Tooling & Platform: https://jordimp.net/en/departments/tooling-platform/',
+    );
+    expect(text).toContain(
+      '- B Front Desk: https://jordimp.net/en/departments/front-desk/',
+    );
+  });
+
+  it('points the case-pages line at directory slugs with the project count', () => {
+    expect(buildLlmsTxt(base)).toContain(
+      '- Project case pages: https://jordimp.net/en/projects/<slug>/ — one per project, 2 total',
+    );
+  });
+
+  it('closes with the contact block and the llms-full.txt pointer', () => {
+    const text = buildLlmsTxt(base);
+    expect(text).toContain('## Contact');
+    expect(text).toContain('- Email: jordi.marsal@gmail.com');
+    expect(text).toContain('- GitHub: https://github.com/jordimarsal');
+    expect(text).toContain('- LinkedIn: https://www.linkedin.com/in/jordi-marsal-poy');
+    expect(text.trimEnd().endsWith('Full details in llms-full.txt.')).toBe(true);
   });
 
   it('is deterministic', () => {
-    expect(buildLlmsTxt(fullScale)).toBe(buildLlmsTxt(fullScale));
+    expect(buildLlmsTxt(base)).toBe(buildLlmsTxt(base));
   });
 });
 
 describe('buildLlmsFullTxt()', () => {
-  it('counts 11 project + 4 experience + 5 skill headings', () => {
-    const headings = buildLlmsFullTxt(fullScale).match(/^### /gm);
-    expect(headings).toHaveLength(20);
+  it('opens with the full-reference header and contact line', () => {
+    const lines = buildLlmsFullTxt(base).split('\n');
+    expect(lines[0]).toBe('# Jordimp & Co. — full reference');
+    expect(lines[2]).toBe('Jordi Marçal Poy — Senior Backend Engineer (Java · Python · AI/LLM).');
+    expect(lines[4]).toBe(
+      'Contact: jordi.marsal@gmail.com · https://github.com/jordimarsal · https://www.linkedin.com/in/jordi-marsal-poy',
+    );
   });
 
-  it('carries every ## section', () => {
-    const text = buildLlmsFullTxt(fullScale);
-    for (const section of ['## About', '## Contact', '## Projects', '## Experience', '## Skills']) {
-      expect(text).toContain(section);
-    }
-  });
-
-  it('dumps each project with year, summary, problem, highlights, stack and repository', () => {
+  it('renders each department as a "CODE — Name" block with its intro', () => {
     const text = buildLlmsFullTxt(base);
-    expect(text).toContain('### Alpha (2026)');
-    expect(text).toContain('Summary: Alpha summary.');
-    expect(text).toContain('Problem: Alpha problem.');
-    expect(text).toContain('- Alpha highlight one.');
-    expect(text).toContain('Stack: Java 25, Spring Boot 4');
-    expect(text).toContain('Repository: https://github.com/jordimarsal/alpha');
+    expect(text).toContain('## The building');
+    expect(text).toContain('## F3 — Research & Retrieval');
+    expect(text).toContain('## F2 — Transport & Telemetry');
+    expect(text).toContain('## F1 — Tooling & Platform');
+    expect(text).toContain('## M — People & Principles');
+    expect(text).toContain('## F0 — Operations');
+    expect(text).toContain('## B — Front Desk');
+    expect(text).toContain('Research & Retrieval intro.');
   });
 
-  it('dumps experience entries as company — role (period) with points', () => {
+  it('dumps a department\'s projects with two-space bullets, stack and repository', () => {
     const text = buildLlmsFullTxt(base);
-    expect(text).toContain('### Telefónica — Backend Engineer (2024–Present)');
-    expect(text).toContain('- Built APIs.');
-    expect(text).toContain('- Led migration.');
+    expect(text).toContain(
+      '  - codebaserag (2026): codebaserag summary. Stack: Java 25, Spring Boot 4. https://github.com/jordimarsal/codebaserag',
+    );
+    expect(text).toContain(
+      '  - md-mermaid-pdf (2026): md-mermaid-pdf summary. Stack: Java 25, Spring Boot 4. https://github.com/jordimarsal/md-mermaid-pdf',
+    );
   });
 
-  it('dumps skill groups with their items', () => {
-    const text = buildLlmsFullTxt(base);
-    expect(text).toContain('### Backend & APIs');
-    expect(text).toContain('- Java 25');
+  it('omits the Projects block for departments without projects', () => {
+    const building = buildLlmsFullTxt(base).split('## All repos')[0];
+    expect(building).not.toMatch(/## M — People & Principles[\s\S]*Projects:/);
+    expect(building).not.toMatch(/## F0 — Operations[\s\S]*Projects:/);
   });
 
-  it('includes the bio and the contact block', () => {
+  it('lists one "All repos" line per project', () => {
+    const repos = buildLlmsFullTxt(base)
+      .split('## All repos')[1]
+      .split('## Career ledger')[0]
+      .trim()
+      .split('\n');
+    expect(repos).toHaveLength(2);
+    expect(repos[0]).toBe(
+      '- CodebaseRAG (2026): CodebaseRAG summary. https://github.com/jordimarsal/codebaserag',
+    );
+  });
+
+  it('flattens the career ledger as "period — company, role: points"', () => {
+    expect(buildLlmsFullTxt(base)).toContain(
+      '- 2022—NOW — Telefónica Kernel · Open Gateway, Backend Engineer — Microservices & Automation: Built adapters. Authored a CLI suite.',
+    );
+  });
+
+  it('flattens skills and principles as bullet lines', () => {
     const text = buildLlmsFullTxt(base);
-    expect(text).toContain('First bio paragraph.');
-    expect(text).toContain('Second bio paragraph.');
-    expect(text).toContain('jordi.marsal@gmail.com');
-    expect(text).toContain('https://github.com/jordimarsal');
-    expect(text).toContain('https://www.linkedin.com/in/jordi-marsal-poy');
+    expect(text).toContain('- Backend & APIs: Java 25, Spring Boot 4');
+    expect(text).toContain('- Data: Kafka');
+    expect(text).toContain('- SOLID, Clean Code and TDD as daily practice.');
+  });
+
+  it('lists the pages at directory URLs with Mezzanine and Front Desk suffixes', () => {
+    const text = buildLlmsFullTxt(base);
+    expect(text).toContain('- https://jordimp.net/en/ · /es/ · /ca/ (home, trilingual)');
+    expect(text).toContain('- https://jordimp.net/en/projects/ — all projects with stack filter');
+    expect(text).toContain('- https://jordimp.net/en/cv/ — CV summary with PDF downloads');
+    expect(text).toContain(
+      '- https://jordimp.net/en/departments/research-retrieval/ — F3 department page',
+    );
+    expect(text).toContain(
+      '- https://jordimp.net/en/departments/people-principles/ — Mezzanine department page',
+    );
+    expect(text).toContain(
+      '- https://jordimp.net/en/departments/front-desk/ — Front Desk page',
+    );
+    expect(text).toContain(
+      '- https://jordimp.net/en/projects/<slug>/ — one case page per project (2), e.g. https://jordimp.net/en/projects/codebaserag/',
+    );
+  });
+
+  it('closes with the static-site colophon', () => {
+    expect(
+      buildLlmsFullTxt(base)
+        .trimEnd()
+        .endsWith('This site is static HTML, zero trackers, zero external dependencies beyond linked fonts.'),
+    ).toBe(true);
   });
 
   it('is deterministic', () => {
-    expect(buildLlmsFullTxt(fullScale)).toBe(buildLlmsFullTxt(fullScale));
+    expect(buildLlmsFullTxt(base)).toBe(buildLlmsFullTxt(base));
   });
 });

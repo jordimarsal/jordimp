@@ -16,7 +16,7 @@ describe('siteUrl()', () => {
   });
 
   it('builds interior and project detail URLs per locale', () => {
-    expect(siteUrl('ca', 'about/')).toBe('https://jordimp.net/ca/about/');
+    expect(siteUrl('ca', 'cv/')).toBe('https://jordimp.net/ca/cv/');
     expect(siteUrl('es', 'projects/kafka-adapter-telemetry/')).toBe(
       'https://jordimp.net/es/projects/kafka-adapter-telemetry/',
     );
@@ -73,7 +73,7 @@ describe('personJsonLd()', () => {
 
 describe('breadcrumbJsonLd()', () => {
   it('prepends the locale home as position 1', () => {
-    const breadcrumb = breadcrumbJsonLd('es', [{ name: 'Experiencia', path: 'experience/' }]);
+    const breadcrumb = breadcrumbJsonLd('es', [{ name: 'CV', path: 'cv/' }]);
     expect(breadcrumb['@context']).toBe('https://schema.org');
     expect(breadcrumb['@type']).toBe('BreadcrumbList');
     expect(breadcrumb.itemListElement).toHaveLength(2);
@@ -86,8 +86,8 @@ describe('breadcrumbJsonLd()', () => {
     expect(breadcrumb.itemListElement[1]).toEqual({
       '@type': 'ListItem',
       position: 2,
-      item: 'https://jordimp.net/es/experience/',
-      name: 'Experiencia',
+      item: 'https://jordimp.net/es/cv/',
+      name: 'CV',
     });
   });
 
