@@ -1,0 +1,37 @@
+---
+import type { Locale } from '../../lib/i18n';
+import { DEPTS, PAGE_LABELS, UI } from '../../data/content';
+import type { Project } from '../../data/types';
+import { srcPath } from '../../lib/paths';
+import { externalLinkAttrs } from '../../lib/links';
+import { SITE } from '../../config';
+
+export interface Props {
+  lang: Locale;
+  project: Project;
+}
+
+const { lang, project: p } = Astro.props;
+const dept = DEPTS[p.dept];
+const caseHref = srcPath(lang, `projects/${p.slug}/`);
+---
+<article class="card">
+  <div class="card__top"><span class="chip2">{dept.code}</span><span class="year">{p.year}</span></div>
+  <h3>{p.name}</h3>
+  <p class="card__sum">{p.summary[lang]}</p>
+  <div class="prose">
+    <p><b>{PAGE_LABELS.problem[lang]}.</b> {p.problem[lang]}</p>
+    <p><b>{PAGE_LABELS.highlights[lang]}</b></p>
+    <ul>{p.highlights[lang].map((h) => <li>{h}</li>)}</ul>
+  </div>
+  {p.metrics.length > 0 && (
+    <div class="metrics">
+      {p.metrics.map((m) => <div class="m"><b>{m.value}</b><span>{m.label[lang]}</span></div>)}
+    </div>
+  )}
+  <p class="stack-line">{PAGE_LABELS.stack[lang]}: {p.stack.join(' · ')}</p>
+  <div class="case-row">
+    <a class="case" href={caseHref}>{PAGE_LABELS.caseFile[lang]}</a>
+    <a class="case" href={p.github} {...externalLinkAttrs(p.github, SITE.url)}>{UI.viewGithub[lang]} &#8599;</a>
+  </div>
+</article>

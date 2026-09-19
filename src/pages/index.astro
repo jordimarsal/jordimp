@@ -1,3 +1,77 @@
 ---
+import { SITE } from '../config';
+import { PAGES } from '../data/content';
+import { LOCALES } from '../lib/i18n';
+import { NIGHT_BOOTSTRAP } from '../lib/night-boot';
+import { assetPath, prodUrl, srcPath } from '../lib/paths';
+
+const target = srcPath('en', '');
+const description = PAGES.home.description.en;
+const alternates = LOCALES.map((lang) => ({ lang, href: prodUrl(lang, '') }));
+const demo = import.meta.env.PUBLIC_DEMO === '1';
 ---
-<html><body><a href="/en/">English</a></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{SITE.brand} — {SITE.name}</title>
+    <meta name="description" content={description} />
+    {demo && <meta name="robots" content="noindex" />}
+    <meta http-equiv="refresh" content={`1; url=${target}`} />
+    <link rel="canonical" href={prodUrl('en', '')} />
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.lang} href={alt.href} />)}
+    <link rel="alternate" hreflang="x-default" href={prodUrl('en', '')} />
+    <link rel="icon" type="image/svg+xml" href={assetPath('favicon.svg')} />
+    <script is:inline set:html={NIGHT_BOOTSTRAP} />
+    <style is:inline>
+      :root { --paper:#f6f5f2; --ink:#0c0b0a; --y1:#ffd54f; }
+      html[data-night='1'] { --paper:#16130d; --ink:#f1ecdc; }
+      * { box-sizing:border-box; margin:0; padding:0; }
+      body {
+        min-height:100vh; display:grid; place-items:center;
+        background:var(--paper); color:var(--ink);
+        font-family:'Space Mono', ui-monospace, Menlo, monospace;
+        background-image:repeating-linear-gradient(0deg, transparent 0 31px, rgba(12,11,10,0.035) 31px 32px);
+      }
+      html[data-night='1'] body { background-image:repeating-linear-gradient(0deg, transparent 0 31px, rgba(241,236,220,0.06) 31px 32px); }
+      .splash { text-align:center; padding:20px; }
+      .tile {
+        display:inline-grid; place-items:center; width:64px; height:64px;
+        background:var(--y1); color:#0c0b0a; border:3px solid #0c0b0a;
+        box-shadow:6px 6px 0 rgba(12,11,10,0.9);
+        font:800 22px 'Bricolage Grotesque','Arial Black',sans-serif;
+      }
+      .brand { margin-top:16px; font:800 clamp(26px,6vw,40px)/1 'Bricolage Grotesque','Arial Black',sans-serif; letter-spacing:-0.01em; }
+      .bar {
+        width:230px; max-width:70vw; height:14px; margin:20px auto 12px;
+        border:3px solid #0c0b0a;
+        background:repeating-linear-gradient(45deg, var(--y1) 0 12px, #0c0b0a 12px 24px);
+        background-size:33.94px 100%;
+        animation:slide 0.55s linear infinite;
+      }
+      @keyframes slide { to { background-position:33.94px 0; } }
+      .sub { font-size:10px; font-weight:700; letter-spacing:0.16em; opacity:0.7; text-transform:uppercase; }
+      .fallback { display:inline-block; margin-top:22px; font-size:10px; color:inherit; }
+      @media (prefers-reduced-motion: reduce) { .bar { animation:none; } }
+    </style>
+  </head>
+  <body>
+    <div class="splash" role="status" aria-live="polite">
+      <span class="tile" aria-hidden="true">J&amp;Co</span>
+      <p class="brand">{SITE.brand}</p>
+      <div class="bar" aria-hidden="true"></div>
+      <p class="sub">{SITE.name} · EST. {SITE.est} · {SITE.city.toUpperCase()}</p>
+      <a class="fallback" href={target}>{SITE.brand} — {SITE.name} →</a>
+    </div>
+    <script is:inline define:vars={{ target }}>
+      (function () {
+        var go = function () { location.replace(target); };
+        try {
+          var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+          setTimeout(go, reduced ? 0 : 700);
+        } catch (e) { go(); }
+      })();
+    </script>
+  </body>
+</html>

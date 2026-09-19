@@ -1,0 +1,17 @@
+---
+export interface Props {
+  num: string;
+  title: string;
+  sub: string;
+  id?: string;
+  asH1?: boolean;
+}
+
+const { num, title, sub, id, asH1 = false } = Astro.props;
+const Tag = asH1 ? 'h1' : 'h2';
+---
+<div class="sec-head">
+  <span class="sec-head__num">{num}</span>
+  <Tag id={id}>{title}</Tag>
+  <span class="sec-head__sub">{sub}</span>
+</div>

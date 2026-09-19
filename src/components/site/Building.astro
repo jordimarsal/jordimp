@@ -1,0 +1,39 @@
+---
+import type { Locale } from '../../lib/i18n';
+import { DEPTS, FLOOR_ORDER, UI } from '../../data/content';
+import type { DeptKey } from '../../data/types';
+import { svgEntrance, svgFloor, svgRoof } from '../../lib/building-svg';
+import DeptPanel from './DeptPanel.astro';
+
+export interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+
+const STREET: Record<Locale, string> = {
+  en: 'ONE-WAY STREET — DEPLOYS ONLY',
+  es: 'CALLE DE SENTIDO ÚNICO — SOLO DEPLOYS',
+  ca: 'CARRER DE SENTIT ÚNIC — NOMÉS DEPLOYS',
+};
+
+const floors = FLOOR_ORDER.map((key: DeptKey) => ({ key, dept: DEPTS[key] }));
+---
+<div class="sky" id="building">
+  <div class="building-scroll">
+    <div class="building-stack">
+      <Fragment set:html={svgRoof(lang)} />
+      {floors.map(({ key, dept }) => (
+        <>
+          <button class="floor-btn" type="button" id={`dept-${key}`} data-floor={key} aria-expanded="false" aria-controls={`dept-panel-${key}`} aria-label={dept.name[lang]} data-open={`${UI.openPanel[lang].toUpperCase()} ↗`}>
+            <Fragment set:html={svgFloor(lang, key)} />
+            <span class="icon-hit" aria-hidden="true"></span><span class="floor-bubble" aria-hidden="true">{dept.line[lang]}</span>
+          </button>
+          <DeptPanel lang={lang} deptKey={key} />
+        </>
+      ))}
+      <Fragment set:html={svgEntrance(lang)} />
+      <div class="street" aria-hidden="true"><span>{STREET[lang]}</span></div>
+    </div>
+  </div>
+</div>

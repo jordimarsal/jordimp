@@ -1,0 +1,18 @@
+---
+import type { Locale } from '../../lib/i18n';
+import { TICKER } from '../../data/content';
+import { esc } from '../../lib/building-svg';
+
+export interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const items = TICKER[lang].map(esc).join(' &#10022; ') + ' &#10022;&nbsp;';
+---
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__inner">
+    <span set:html={items} />
+    <span set:html={items} />
+  </div>
+</div>

@@ -1,0 +1,36 @@
+---
+import type { Locale } from '../../lib/i18n';
+import { L, LOCALES } from '../../data/content';
+import { PAGES, SITE, UI } from '../../data/content';
+import type { NavKey } from '../../data/types';
+import { dirRoute, srcPath } from '../../lib/paths';
+
+export interface Props {
+  lang: Locale;
+  current?: NavKey;
+  noCurrent?: boolean;
+  path?: string;
+}
+
+const { lang, current, noCurrent = false, path = '' } = Astro.props;
+const isCurrent = (key: NavKey): boolean => !noCurrent && current === key;
+---
+<header class="navbar">
+  <a class="navbar__brand" href={srcPath(lang, '')}><i class="navbar__tile" aria-hidden="true">J&amp;Co</i>{SITE.brand}</a>
+  <nav class="navbar__links" aria-label={`${UI.nav.home[lang]} — ${SITE.brand}`}>
+    <a href={srcPath(lang, '')} aria-current={isCurrent('home') ? 'page' : undefined}>{UI.nav.home[lang]}</a>
+    <a href={`${srcPath(lang, '')}#building`} aria-current={isCurrent('departments') ? 'page' : undefined}>{UI.nav.departments[lang]}</a>
+    <a href={srcPath(lang, dirRoute(PAGES.work.route))} aria-current={isCurrent('work') ? 'page' : undefined}>{UI.nav.work[lang]}</a>
+    <a href={srcPath(lang, dirRoute(PAGES.cv.route))} aria-current={isCurrent('cv') ? 'page' : undefined}>{UI.nav.cv[lang]}</a>
+    <a href="#desk">{UI.nav.contact[lang]}</a>
+  </nav>
+  <div class="navbar__lang" role="group" aria-label={`${L.en.name} / ${L.es.name} / ${L.ca.name}`}>
+    {LOCALES.map((locale) => (
+      <a href={srcPath(locale, path)} aria-current={locale === lang ? 'true' : undefined} hreflang={locale}>{L[locale].short}</a>
+    ))}
+  </div>
+  <button class="night-btn" type="button" data-night-toggle aria-pressed="false" aria-label={UI.themeToggle[lang]}>
+    <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3M4.2 4.2l2.2 2.2M17.6 17.6l2.2 2.2M19.8 4.2l-2.2 2.2M6.4 17.6l-2.2 2.2"/></svg>
+    <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
+  </button>
+</header>

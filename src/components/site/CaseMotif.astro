@@ -1,0 +1,10 @@
+---
+import { caseMotif } from '../../lib/case-svg';
+
+export interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+<div class="case-hero__motif" set:html={caseMotif(slug)} />

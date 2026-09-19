@@ -1,0 +1,26 @@
+---
+import type { Locale } from '../../lib/i18n';
+import { DEPTS, FLOOR_ORDER, PAGES, UI } from '../../data/content';
+import { dirRoute, srcPath } from '../../lib/paths';
+
+export interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+<div class="deptstrip">
+  {FLOOR_ORDER.map((key) => {
+    const d = DEPTS[key];
+    const href = d.page ? srcPath(lang, dirRoute(PAGES[d.page].route)) : `#dept-${key}`;
+    const go = d.page ? `${UI.enterDept[lang]} →` : `${UI.openPanel[lang]} →`;
+    return (
+      <a class="deptstrip__item" href={href} {...(d.page ? {} : { 'data-floor-link': true })}>
+        <span class="deptstrip__code">{d.code}</span>
+        <span class="deptstrip__name">{d.name[lang]}</span>
+        <span class="deptstrip__line">{d.line[lang]}</span>
+        <span class="deptstrip__go">{go}</span>
+      </a>
+    );
+  })}
+</div>

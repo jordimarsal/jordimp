@@ -1,0 +1,18 @@
+---
+import type { Locale } from '../../lib/i18n';
+import { esc } from '../../lib/building-svg';
+import { srcPath } from '../../lib/paths';
+
+export interface Props {
+  lang: Locale;
+  /** Trail items; the last one renders as the current page. `path` is a directory route (empty = locale home). */
+  trail: ReadonlyArray<{ readonly name: string; readonly path?: string }>;
+}
+
+const { lang, trail } = Astro.props;
+const parts = trail.map((item, i) => {
+  if (i === trail.length - 1) return `<span aria-current="page">${esc(item.name)}</span>`;
+  return `<a href="${srcPath(lang, item.path ?? '')}">${esc(item.name)}</a> <span aria-hidden="true">/</span>`;
+});
+---
+<nav class="breadcrumb" aria-label="Breadcrumb" set:html={parts.join(' ')} />

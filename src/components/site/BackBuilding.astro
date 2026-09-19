@@ -1,0 +1,19 @@
+---
+import type { Locale } from '../../lib/i18n';
+import { srcPath } from '../../lib/paths';
+
+const BACK_BUILDING = {
+  en: 'Back to the building',
+  es: 'Volver al edificio',
+  ca: 'Torna a l’edifici',
+} as const;
+
+export interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+<div class="dept-panel__cta">
+  <a class="btn" href={srcPath(lang, '')}><span class="btn__label">{BACK_BUILDING[lang]}</span><span aria-hidden="true">&uarr;</span></a>
+</div>

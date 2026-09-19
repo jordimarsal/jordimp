@@ -1,0 +1,31 @@
+---
+import type { Locale } from '../../lib/i18n';
+import { DEPTS, UI } from '../../data/content';
+import type { Project } from '../../data/types';
+
+export interface Props {
+  lang: Locale;
+  project: Project;
+  mini?: boolean;
+  stackAttr?: string;
+}
+
+const { lang, project: p, mini = false, stackAttr } = Astro.props;
+const metrics = mini ? p.metrics.slice(0, 1) : p.metrics;
+const sum = mini ? p.blurb[lang] : p.summary[lang];
+const dept = DEPTS[p.dept];
+---
+<article class="card" data-stack={stackAttr}>
+  <div class="card__top"><span class="chip2">{dept.code}</span><span class="year">{p.year}</span></div>
+  <h3>{p.name}</h3>
+  <p class="card__sum">{sum}</p>
+  {metrics.length > 0 && (
+    <div class="metrics">
+      {metrics.map((metric) => (
+        <div class="m"><b>{metric.value}</b><span>{metric.label[lang]}</span></div>
+      ))}
+    </div>
+  )}
+  <p class="stack-line">{p.stack.join(' · ')}</p>
+  <a class="case" href={p.github} target="_blank" rel="noopener noreferrer">{UI.viewGithub[lang]} &#8599;</a>
+</article>

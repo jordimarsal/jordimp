@@ -1,0 +1,69 @@
+---
+import '../styles/site.css';
+import Analytics from '../components/Analytics.astro';
+import SEO from '../components/SEO.astro';
+import Navbar from '../components/site/Navbar.astro';
+import FooterDesk from '../components/site/FooterDesk.astro';
+import { NIGHT_BOOTSTRAP } from '../lib/night-boot';
+import { assetPath } from '../lib/paths';
+import { UI } from '../data/content';
+import type { NavKey } from '../data/types';
+import type { Locale } from '../lib/i18n';
+import type { BreadcrumbItem } from '../lib/seo';
+
+export interface Props {
+  lang: Locale;
+  title: string;
+  description: string;
+  path?: string;
+  noindex?: boolean;
+  navKey?: NavKey;
+  noCurrent?: boolean;
+  breadcrumbs?: readonly BreadcrumbItem[];
+  ogType?: 'website' | 'article';
+  articleSection?: string;
+}
+
+const { lang, title, description, path = '', noindex = false, navKey, noCurrent = false, breadcrumbs, ogType, articleSection } = Astro.props;
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline set:html={NIGHT_BOOTSTRAP} />
+    <link rel="icon" type="image/svg+xml" href={assetPath('favicon.svg')} />
+    <link rel="preload" as="font" type="font/woff2" href={assetPath('fonts/bricolage-grotesque-800-latin.woff2')} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={assetPath('fonts/instrument-sans-var-latin.woff2')} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={assetPath('fonts/space-mono-700-latin.woff2')} crossorigin />
+    <link rel="stylesheet" href={assetPath('fonts/fonts.css')} />
+    <SEO {lang} {title} {description} {path} {noindex} {breadcrumbs} {ogType} {articleSection} />
+    <Analytics />
+  </head>
+  <body>
+    <a class="skipnav" href="#main">{UI.skip[lang]}</a>
+    <Navbar {lang} current={navKey} {noCurrent} {path} />
+    <slot />
+    <FooterDesk {lang} />
+  </body>
+</html>
+
+<script>
+  import { initTheme } from '../scripts/theme';
+  import { initBuilding } from '../scripts/building';
+  import { initFilter } from '../scripts/filter';
+  import { initCopy } from '../scripts/copy';
+
+  const boot = (): void => {
+    initTheme();
+    initBuilding();
+    initFilter();
+    initCopy();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+</script>

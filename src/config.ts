@@ -6,4 +6,8 @@ export const SITE = {
   email: 'jordi.marsal@gmail.com',
   github: 'https://github.com/jordimarsal',
   linkedin: 'https://www.linkedin.com/in/jordi-marsal-poy',
+  brand: 'JORDIMP & CO.',
+  est: '2017',
+  city: 'Barcelona',
+  ogImage: 'https://jordimp.net/og.png',
 } as const;

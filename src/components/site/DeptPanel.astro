@@ -1,0 +1,86 @@
+---
+import type { Locale } from '../../lib/i18n';
+import { DEPTS, EXPERIENCE, FOOTER, PAGES, PRINCIPLES, SITE, UI, project } from '../../data/content';
+import type { DeptKey } from '../../data/types';
+import { dirRoute, srcPath } from '../../lib/paths';
+import ProjectCard from './ProjectCard.astro';
+
+export interface Props {
+  lang: Locale;
+  deptKey: DeptKey;
+}
+
+const { lang, deptKey } = Astro.props;
+const d = DEPTS[deptKey];
+const body: 'cards' | 'principles' | 'ledger' | 'frontdesk' =
+  d.projects.length > 0 ? 'cards' : deptKey === 'people' ? 'principles' : deptKey === 'operations' ? 'ledger' : 'frontdesk';
+const principles = body === 'principles' ? PRINCIPLES.items[lang] : [];
+const ledger = body === 'ledger' ? EXPERIENCE : [];
+const pills =
+  body === 'frontdesk'
+    ? ([
+        { href: `mailto:${SITE.email}`, label: FOOTER.email[lang], external: false },
+        { href: SITE.github, label: FOOTER.github[lang], external: true },
+        { href: SITE.linkedin, label: FOOTER.linkedin[lang], external: true },
+      ] as const)
+    : [];
+---
+<div class="dept-panel" id={`dept-panel-${deptKey}`} role="region" aria-labelledby={`dept-panel-title-${deptKey}`}>
+  <div class="dept-panel__clip">
+    <div class="dept-panel__body">
+      <div class="dept-panel__bar">
+        <h3 id={`dept-panel-title-${deptKey}`} tabindex="-1">{d.code} — {d.name[lang].toUpperCase()}</h3>
+        <button class="dept-panel__close" type="button" data-close-panel aria-controls={`dept-panel-${deptKey}`}>&times; {UI.close[lang]}</button>
+      </div>
+      <p class="dept-line">{d.line[lang]}</p>
+      {body === 'cards' && (
+        <div class="cards">
+          {d.projects.map((slug) => (
+            <ProjectCard lang={lang} project={project(slug)} mini />
+          ))}
+        </div>
+      )}
+      {body === 'principles' && (
+        <div class="prose">
+          <ul>
+            {principles.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {body === 'ledger' && (
+        <div class="ledger">
+          {ledger.map((entry) => (
+            <div class="ledger__row">
+              <span class="ledger__per mono"><i>{entry.period}</i></span>
+              <div class="ledger__body">
+                <b>{entry.company}</b>
+                <p>{entry.points[lang].join(' ')}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      {body === 'frontdesk' && (
+        <div class="pills" style="margin-top:4px">
+          {pills.map((pill) => (
+            <a class="pill" href={pill.href} target={pill.external ? '_blank' : undefined} rel={pill.external ? 'noopener noreferrer' : undefined}>
+              {pill.label}
+            </a>
+          ))}
+        </div>
+      )}
+      <div class="dept-panel__cta">
+        <a class="btn" href={srcPath(lang, dirRoute(PAGES[d.page].route))}>
+          <span class="btn__label">{UI.enterDept[lang]}</span><span aria-hidden="true">{UI.enterDeptArrow}</span>
+        </a>
+        {deptKey === 'operations' && (
+          <a class="btn" href={srcPath(lang, dirRoute(PAGES.cv.route))}>
+            <span class="btn__label">{UI.nav.cv[lang]}</span><span aria-hidden="true">{UI.enterDeptArrow}</span>
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</div>

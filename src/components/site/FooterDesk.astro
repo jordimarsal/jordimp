@@ -1,0 +1,26 @@
+---
+import type { Locale } from '../../lib/i18n';
+import { FOOTER, SITE } from '../../data/content';
+
+export interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+<footer class="footer-desk" id="desk">
+  <div class="footer-desk__inner">
+    <span class="footer-desk__tag">{FOOTER.tag[lang]}</span>
+    <h2>{FOOTER.headline[lang]}</h2>
+    <p class="footer-desk__line">{FOOTER.line[lang]}</p>
+    <div class="pills">
+      <a class="pill" href={`mailto:${SITE.email}`}>{FOOTER.email[lang]}</a>
+      <a class="pill" href={SITE.github} target="_blank" rel="noopener noreferrer">{FOOTER.github[lang]}</a>
+      <a class="pill" href={SITE.linkedin} target="_blank" rel="noopener noreferrer">{FOOTER.linkedin[lang]}</a>
+    </div>
+    <div class="colo">
+      <p>{FOOTER.colo1[lang]}</p>
+      <p>{FOOTER.colo2[lang]}</p>
+    </div>
+  </div>
+</footer>
