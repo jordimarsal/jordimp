@@ -8,7 +8,6 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "build:demo": "DEMO=1 PUBLIC_DEMO=1 astro build --outDir dist-demo",
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",
