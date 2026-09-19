@@ -2,6 +2,11 @@ import type { Locale } from './i18n';
 import { DEPTS, FLOOR_LABELS, SITE, UI } from '../data/content';
 import type { DeptKey } from '../data/types';
 
+export function floorPlateLabel(lang: Locale, deptKey: DeptKey): string {
+  const d = DEPTS[deptKey];
+  return [d.code, d.tag[lang], d.name[lang], FLOOR_LABELS[deptKey][lang].replace(/^- /, '')].join(' — ');
+}
+
 const ESCAPES: Record<string, string> = {
   '&': '&amp;',
   '<': '&lt;',

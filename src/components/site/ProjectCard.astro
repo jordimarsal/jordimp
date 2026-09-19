@@ -27,5 +27,5 @@ const dept = DEPTS[p.dept];
     </div>
   )}
   <p class="stack-line">{p.stack.join(' · ')}</p>
-  <a class="case" href={p.github} target="_blank" rel="noopener noreferrer">{UI.viewGithub[lang]} &#8599;</a>
+  <a class="case" href={p.github} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} — ${UI.viewGithub[lang]}`}>{UI.viewGithub[lang]} &#8599;</a>
 </article>

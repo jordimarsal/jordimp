@@ -1,5 +1,60 @@
 import { describe, expect, it } from 'vitest';
-import { esc, roofSvg, svgEntrance, svgFloor, svgRoof } from './building-svg';
+import { esc, floorPlateLabel, roofSvg, svgEntrance, svgFloor, svgRoof } from './building-svg';
+import { FLOOR_ORDER } from '../data/content';
+import { LOCALES } from './i18n';
+
+const EXPECTED_FLOOR_LABELS: Record<string, Record<string, string>> = {
+  research: {
+    en: 'F3 — RETRIEVAL WITH RECEIPTS — Research & Retrieval — PROJECTS',
+    es: 'F3 — RECUPERACIÓN CON RECIBOS — Investigación y Recuperación — PROYECTOS',
+    ca: 'F3 — RECUPERACIÓ AMB REBUTS — Recerca i Recuperació — PROJECTES',
+  },
+  telemetry: {
+    en: 'F2 — HONEST FAILURE MODES — Transport & Telemetry — PROJECTS',
+    es: 'F2 — FALLOS HONESTOS — Transporte y Telemetría — PROYECTOS',
+    ca: 'F2 — FALLADES HONESTES — Transport i Telemetria — PROJECTES',
+  },
+  tooling: {
+    en: 'F1 — DELIBERATELY SMALL TOOLS — Tooling & Platform — PROJECTS',
+    es: 'F1 — HERRAMIENTAS DELIBERADAMENTE PEQUEÑAS — Herramientas y Plataforma — PROYECTOS',
+    ca: 'F1 — EINES DELIBERADAMENT PETITES — Eines i Plataforma — PROJECTES',
+  },
+  people: {
+    en: 'M — STACK · STANDARDS · RULES — People & Principles — VALUES',
+    es: 'M — STACK · ESTÁNDARES · REGLAS — Personas y Principios — VALORES',
+    ca: 'M — STACK · ESTÀNDARDS · REGLES — Persones i Principis — VALORS',
+  },
+  operations: {
+    en: 'F0 — ONE LEDGER, NO REWRITES — Operations — CV WORK',
+    es: 'F0 — UN HISTORIAL, SIN REESCRITURAS — Operaciones — TRAYECTORIA CV',
+    ca: 'F0 — UN HISTORIAL, SENSE REESCRIPTURES — Operacions — TRAJECTÒRIA CV',
+  },
+  frontdesk: {
+    en: 'B — WALK-INS WELCOME — Front Desk — CONTACT',
+    es: 'B — ENTRADA LIBRE — Recepción — CONTACTO',
+    ca: 'B — ENTRADA LLIURE — Recepció — CONTACTE',
+  },
+};
+
+describe('floorPlateLabel', () => {
+  it.each([...FLOOR_ORDER])('composes the plate strings for %s in every locale', (key) => {
+    for (const lang of LOCALES) {
+      expect(floorPlateLabel(lang, key)).toBe(EXPECTED_FLOOR_LABELS[key][lang]);
+    }
+  });
+
+  it('strips the leading dash from the localized floor suffix', () => {
+    expect(floorPlateLabel('en', 'research').endsWith(' PROJECTS')).toBe(true);
+    expect(floorPlateLabel('en', 'research')).not.toContain(' — -');
+    expect(floorPlateLabel('es', 'operations').endsWith(' TRAYECTORIA CV')).toBe(true);
+  });
+
+  it('joins the four plate strings with em dashes only', () => {
+    const label = floorPlateLabel('en', 'telemetry');
+    expect(label.match(/ — /g)).toHaveLength(3);
+    expect(label.split(' — ')).toHaveLength(4);
+  });
+});
 
 describe('esc', () => {
   it('escapes markup-significant characters', () => {

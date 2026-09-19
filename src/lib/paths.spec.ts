@@ -29,13 +29,13 @@ describe('assetPath', () => {
   it('prefixes public assets under the root base', () => {
     vi.stubEnv('BASE_URL', '/');
     expect(assetPath('favicon.svg')).toBe('/favicon.svg');
-    expect(assetPath('fonts/fonts.css')).toBe('/fonts/fonts.css');
+    expect(assetPath('fonts/instrument-sans-var-latin.woff2')).toBe('/fonts/instrument-sans-var-latin.woff2');
   });
 
   it('prefixes public assets under the demo base', () => {
     vi.stubEnv('BASE_URL', '/demo');
     expect(assetPath('favicon.svg')).toBe('/demo/favicon.svg');
-    expect(assetPath('fonts/fonts.css')).toBe('/demo/fonts/fonts.css');
+    expect(assetPath('fonts/instrument-sans-var-latin.woff2')).toBe('/demo/fonts/instrument-sans-var-latin.woff2');
   });
 });
 

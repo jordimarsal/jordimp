@@ -1,4 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
+import { floorPlateLabel } from '../src/lib/building-svg';
+import { FEATURED, UI, project } from '../src/data/content';
 
 const HOMES = ['/en/', '/es/', '/ca/'] as const;
 
@@ -38,6 +40,7 @@ async function expectHomeChrome(page: Page, home: string): Promise<void> {
     await expect(page.locator(`.floor-btn#dept-${key}`)).toHaveAttribute('data-floor', key);
     await expect(page.locator(`.floor-btn#dept-${key}`)).toHaveAttribute('aria-expanded', 'false');
     await expect(page.locator(`.floor-btn#dept-${key}`)).toHaveAttribute('aria-controls', `dept-panel-${key}`);
+    await expect(page.locator(`.floor-btn#dept-${key}`)).toHaveAttribute('aria-label', floorPlateLabel(lang, key));
     await expect(page.locator(`#dept-panel-${key}`)).not.toBeVisible();
   }
 
@@ -100,11 +103,20 @@ test.describe('home building page (T4)', () => {
 
     test(`keeps hero and featured copy localized at ${home}`, async ({ page }) => {
       await page.goto(home);
+      const lang = home.replace(/\//g, '');
       await expect(page.locator('.hero .kicker')).not.toBeEmpty();
       await expect(page.locator('.sec-head:has(#building-title) .sec-head__num')).toHaveText('01');
       await expect(page.locator('section:has(#featured-title) article.card')).toHaveCount(3);
       await expect(page.locator('section:has(#featured-title) .metrics .m').first()).toBeVisible();
       await expect(page.locator('#dept-panel-research .cards .metrics .m')).toHaveCount(2);
+      const featuredLinks = page.locator('section:has(#featured-title) article.card a.case');
+      for (let i = 0; i < FEATURED.length; i++) {
+        const p = project(FEATURED[i]);
+        await expect(featuredLinks.nth(i)).toHaveAttribute(
+          'aria-label',
+          `${p.name} — ${UI.viewGithub[lang]}`,
+        );
+      }
     });
   }
 });

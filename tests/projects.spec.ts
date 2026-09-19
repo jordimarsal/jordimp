@@ -137,6 +137,7 @@ test.describe('projects index page (T6)', () => {
         await expect(repo).toHaveAttribute('target', '_blank');
         await expect(repo).toHaveAttribute('rel', 'noopener noreferrer');
         await expect(repo).toContainText(expected.github);
+        await expect(repo).toHaveAttribute('aria-label', `${PROJECTS[i].name} — ${expected.github}`);
       }
 
       await expect(page.locator('.footer-desk#desk')).toHaveCount(1);

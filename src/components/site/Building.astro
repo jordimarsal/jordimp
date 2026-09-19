@@ -2,7 +2,7 @@
 import type { Locale } from '../../lib/i18n';
 import { DEPTS, FLOOR_ORDER, UI } from '../../data/content';
 import type { DeptKey } from '../../data/types';
-import { svgEntrance, svgFloor, svgRoof } from '../../lib/building-svg';
+import { svgEntrance, svgFloor, svgRoof, floorPlateLabel } from '../../lib/building-svg';
 import DeptPanel from './DeptPanel.astro';
 
 export interface Props {
@@ -25,7 +25,7 @@ const floors = FLOOR_ORDER.map((key: DeptKey) => ({ key, dept: DEPTS[key] }));
       <Fragment set:html={svgRoof(lang)} />
       {floors.map(({ key, dept }) => (
         <>
-          <button class="floor-btn" type="button" id={`dept-${key}`} data-floor={key} aria-expanded="false" aria-controls={`dept-panel-${key}`} aria-label={dept.name[lang]} data-open={`${UI.openPanel[lang].toUpperCase()} ↗`}>
+          <button class="floor-btn" type="button" id={`dept-${key}`} data-floor={key} aria-expanded="false" aria-controls={`dept-panel-${key}`} aria-label={floorPlateLabel(lang, key)} data-open={`${UI.openPanel[lang].toUpperCase()} ↗`}>
             <Fragment set:html={svgFloor(lang, key)} />
             <span class="icon-hit" aria-hidden="true"></span><span class="floor-bubble" aria-hidden="true">{dept.line[lang]}</span>
           </button>

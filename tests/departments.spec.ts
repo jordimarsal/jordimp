@@ -88,6 +88,7 @@ test.describe('department pages (T8)', () => {
       await expect(github).toHaveAttribute('href', p.github);
       await expect(github).toHaveAttribute('target', '_blank');
       await expect(github).toHaveAttribute('rel', 'noopener noreferrer');
+      await expect(github).toHaveAttribute('aria-label', `${p.name} — ${UI.viewGithub.en}`);
     }
 
     await expect(page.locator('section .dept-panel__cta a.btn .btn__label')).toHaveText(
@@ -278,6 +279,12 @@ test.describe('department pages (T8)', () => {
         await expect(page.locator('main .dept-panel__cta a.btn .btn__label').last()).toHaveText(
           BACK_LABEL[lang],
         );
+        for (const slug of d.projects) {
+          const p = project(slug);
+          await expect(
+            page.locator(`article.card a.case[href="${p.github}"]`),
+          ).toHaveAttribute('aria-label', `${p.name} — ${UI.viewGithub[lang]}`);
+        }
       }
     }
   });

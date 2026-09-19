@@ -32,6 +32,6 @@ const caseHref = srcPath(lang, `projects/${p.slug}/`);
   <p class="stack-line">{PAGE_LABELS.stack[lang]}: {p.stack.join(' · ')}</p>
   <div class="case-row">
     <a class="case" href={caseHref}>{PAGE_LABELS.caseFile[lang]}</a>
-    <a class="case" href={p.github} {...externalLinkAttrs(p.github, SITE.url)}>{UI.viewGithub[lang]} &#8599;</a>
+    <a class="case" href={p.github} {...externalLinkAttrs(p.github, SITE.url)} aria-label={`${p.name} — ${UI.viewGithub[lang]}`}>{UI.viewGithub[lang]} &#8599;</a>
   </div>
 </article>

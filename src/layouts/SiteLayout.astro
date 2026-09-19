@@ -6,6 +6,7 @@ import Navbar from '../components/site/Navbar.astro';
 import FooterDesk from '../components/site/FooterDesk.astro';
 import { NIGHT_BOOTSTRAP } from '../lib/night-boot';
 import { assetPath } from '../lib/paths';
+import { FONT_FACE_CSS } from '../lib/font-face';
 import { UI } from '../data/content';
 import type { NavKey } from '../data/types';
 import type { Locale } from '../lib/i18n';
@@ -36,7 +37,7 @@ const { lang, title, description, path = '', noindex = false, navKey, noCurrent 
     <link rel="preload" as="font" type="font/woff2" href={assetPath('fonts/bricolage-grotesque-800-latin.woff2')} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={assetPath('fonts/instrument-sans-var-latin.woff2')} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={assetPath('fonts/space-mono-700-latin.woff2')} crossorigin />
-    <link rel="stylesheet" href={assetPath('fonts/fonts.css')} />
+    <style is:inline set:html={FONT_FACE_CSS} />
     <SEO {lang} {title} {description} {path} {noindex} {breadcrumbs} {ogType} {articleSection} />
     <Analytics />
   </head>
