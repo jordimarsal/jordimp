@@ -76,7 +76,7 @@ export interface ProjectL10n {
 export interface Project extends ProjectL10n {
   readonly slug: string;
   readonly name: string;
-  readonly year: number;
+  readonly year: string;
   readonly featured: boolean;
   readonly dept: DeptKey;
   readonly stack: readonly string[];

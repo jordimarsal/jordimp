@@ -25,7 +25,7 @@ Event pipelines, rate limits and health tracking with honest failure modes. When
 Projects:
   - Kafka Adapter Telemetry (2026): Event-driven adapter telemetry: a Kafka gateway + hub pipeline with idempotent Oracle persistence, per-adapter health tracking, alerting, and a live SSE mission-control dashboard. Stack: Java 25, Spring Boot 4.1, Kafka, Oracle, Flyway, Testcontainers, SSE. https://github.com/jordimarsal/kafka-adapter-telemetry
   - Redis Toolkit (2026): Rate-limiting toolkit for LLM gateways: atomic token-bucket quotas, pluggable stores, honest failure modes — with a Javalin gateway demo exposing an OpenAI-style endpoint. Stack: Java, Javalin, Redis, Testcontainers. https://github.com/jordimarsal/redis-toolkit
-  - Product Offers API (2026): Technical assessment: a product offers REST API — price inquiries by date, product and brand, served with Spring Boot. Stack: Java 17, Spring Boot 3.2, H2, JUnit 5, Mockito. https://github.com/jordimarsal/product-offers
+  - Product Offers API (2023 - 2026): Technical assessment: a product offers REST API — price inquiries by date, product and brand, served with Spring Boot. Stack: Java 17, Spring Boot 3.2, H2, JUnit 5, Mockito. https://github.com/jordimarsal/product-offers
 
 ## F1 — Tooling & Platform
 
@@ -33,10 +33,10 @@ The workshop floor: a multi-agent SDD harness, CLIs that do one thing well, and 
 
 Projects:
   - Harness Standard (2026): A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command. Stack: Agents, SDD, CLI, Conventions. https://github.com/jordimarsal/harness-standard
-  - Rustcut (2026): Tiny URL shortener in Rust: a deliberately minimalist REST API on Actix-web with SQLite storage. Stack: Rust, Actix-web, SQLite. https://github.com/jordimarsal/rustcut
-  - MD Mermaid PDF (2026): CLI that renders Markdown with Mermaid diagrams straight to PDF, engineered with TDD, mypy strict and CI. Stack: Python, Markdown, Mermaid, GitHub Actions. https://github.com/jordimarsal/md-mermaid-pdf
+  - Rustcut (2024 - 2026): Tiny URL shortener in Rust: a deliberately minimalist REST API on Actix-web with SQLite storage. Stack: Rust, Actix-web, SQLite. https://github.com/jordimarsal/rustcut
+  - MD Mermaid PDF (2025 - 2026): CLI that renders Markdown with Mermaid diagrams straight to PDF, engineered with TDD, mypy strict and CI. Stack: Python, Markdown, Mermaid, GitHub Actions. https://github.com/jordimarsal/md-mermaid-pdf
   - MCP Transparent PNG (2026): MCP (Model Context Protocol) server that makes PNG colors transparent (alpha channel) with rgb/auto/greenscreen modes. Stack: Python 3.13, MCP, Pillow, GitHub Actions. https://github.com/jordimarsal/mcp-transparent-png
-  - Spring Boot Casino (2026): Technical assessment: a casino betting domain modeled in Spring Boot following a hexagonal architecture. Stack: Java, Spring Boot, Hexagonal Architecture. https://github.com/jordimarsal/spring-boot-casino
+  - Spring Boot Casino (2020 - 2026): Technical assessment: a casino betting domain modeled in Spring Boot following a hexagonal architecture. Stack: Java, Spring Boot, Hexagonal Architecture. https://github.com/jordimarsal/spring-boot-casino
 
 ## M — People & Principles
 
@@ -60,12 +60,12 @@ The door is always open. Questions about a floor, a repo, or a hire? Walk straig
 - Bible Text Analysis (2019): NLP study on the Bible: web scraping, NLTK processing, LDA topic modeling and sentiment analysis — my Data Science roots. https://github.com/jordimarsal/bible_text_analysis
 - Kafka Adapter Telemetry (2026): Event-driven adapter telemetry: a Kafka gateway + hub pipeline with idempotent Oracle persistence, per-adapter health tracking, alerting, and a live SSE mission-control dashboard. https://github.com/jordimarsal/kafka-adapter-telemetry
 - Redis Toolkit (2026): Rate-limiting toolkit for LLM gateways: atomic token-bucket quotas, pluggable stores, honest failure modes — with a Javalin gateway demo exposing an OpenAI-style endpoint. https://github.com/jordimarsal/redis-toolkit
-- Product Offers API (2026): Technical assessment: a product offers REST API — price inquiries by date, product and brand, served with Spring Boot. https://github.com/jordimarsal/product-offers
+- Product Offers API (2023 - 2026): Technical assessment: a product offers REST API — price inquiries by date, product and brand, served with Spring Boot. https://github.com/jordimarsal/product-offers
 - Harness Standard (2026): A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command. https://github.com/jordimarsal/harness-standard
-- Rustcut (2026): Tiny URL shortener in Rust: a deliberately minimalist REST API on Actix-web with SQLite storage. https://github.com/jordimarsal/rustcut
-- MD Mermaid PDF (2026): CLI that renders Markdown with Mermaid diagrams straight to PDF, engineered with TDD, mypy strict and CI. https://github.com/jordimarsal/md-mermaid-pdf
+- Rustcut (2024 - 2026): Tiny URL shortener in Rust: a deliberately minimalist REST API on Actix-web with SQLite storage. https://github.com/jordimarsal/rustcut
+- MD Mermaid PDF (2025 - 2026): CLI that renders Markdown with Mermaid diagrams straight to PDF, engineered with TDD, mypy strict and CI. https://github.com/jordimarsal/md-mermaid-pdf
 - MCP Transparent PNG (2026): MCP (Model Context Protocol) server that makes PNG colors transparent (alpha channel) with rgb/auto/greenscreen modes. https://github.com/jordimarsal/mcp-transparent-png
-- Spring Boot Casino (2026): Technical assessment: a casino betting domain modeled in Spring Boot following a hexagonal architecture. https://github.com/jordimarsal/spring-boot-casino
+- Spring Boot Casino (2020 - 2026): Technical assessment: a casino betting domain modeled in Spring Boot following a hexagonal architecture. https://github.com/jordimarsal/spring-boot-casino
 
 ## Career ledger (Operations, F0)
 

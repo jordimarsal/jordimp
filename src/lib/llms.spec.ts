@@ -6,7 +6,7 @@ import {
   type LlmsDept,
 } from './llms';
 
-const projectRef = (slug: string, name: string, year: number) => ({
+const projectRef = (slug: string, name: string, year: string) => ({
   slug,
   name,
   year,
@@ -21,7 +21,7 @@ const dept = (code: string, name: string, slugs: readonly string[]): LlmsDept =>
   line: `${name} LINE.`,
   intro: `${name} intro.`,
   route: `departments/${name.toLowerCase().replace(/[^a-z]+/g, '-')}/`,
-  projects: slugs.map((slug) => projectRef(slug, slug, 2026)),
+  projects: slugs.map((slug) => projectRef(slug, slug, '2026')),
 });
 
 const base: LlmsData = {
@@ -42,8 +42,8 @@ const base: LlmsData = {
     dept('B', 'Front Desk', []),
   ],
   projects: [
-    projectRef('codebaserag', 'CodebaseRAG', 2026),
-    projectRef('rustcut', 'Rustcut', 2026),
+    projectRef('codebaserag', 'CodebaseRAG', '2026'),
+    projectRef('rustcut', 'Rustcut', '2026'),
   ],
   experience: [
     {

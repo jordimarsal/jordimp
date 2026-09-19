@@ -1,7 +1,7 @@
 export interface LlmsProjectRef {
   readonly slug: string;
   readonly name: string;
-  readonly year: number;
+  readonly year: string;
   readonly summary: string;
   readonly stack: readonly string[];
   readonly github: string;

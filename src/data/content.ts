@@ -273,11 +273,11 @@ export const FLOOR_LABELS: Record<DeptKey, L10n<string>> = {
   frontdesk: { en: '- CONTACT', es: '- CONTACTO', ca: '- CONTACTE' },
 };
 
-const P = (slug: string, name: string, year: number, featured: boolean, dept: DeptKey, stack: readonly string[], github: string, l10n: ProjectL10n): Project =>
+const P = (slug: string, name: string, year: string, featured: boolean, dept: DeptKey, stack: readonly string[], github: string, l10n: ProjectL10n): Project =>
   ({ slug, name, year, featured, dept, stack, github, ...l10n });
 
 export const PROJECTS: readonly Project[] = [
-  P('codebaserag', 'CodebaseRAG', 2026, true, 'research',
+  P('codebaserag', 'CodebaseRAG', '2026', true, 'research',
     ['Python 3.13', 'FastAPI', 'pgvector', 'Qdrant', 'Ollama', 'Langfuse', 'mypy strict'],
     'https://github.com/jordimarsal/codebaserag',
     {
@@ -319,7 +319,7 @@ export const PROJECTS: readonly Project[] = [
         { value: 'strict', label: { en: 'mypy', es: 'mypy', ca: 'mypy' } },
       ],
     }),
-  P('interview-simulator', 'Interview Simulator', 2026, false, 'research',
+  P('interview-simulator', 'Interview Simulator', '2026', false, 'research',
     ['Whisper', 'Local LLM'],
     'https://github.com/jordimarsal/interview-simulator',
     {
@@ -348,7 +348,7 @@ export const PROJECTS: readonly Project[] = [
         { value: '100%', label: { en: 'offline', es: 'offline', ca: 'offline' } },
       ],
     }),
-  P('bible-text-analysis', 'Bible Text Analysis', 2019, false, 'research',
+  P('bible-text-analysis', 'Bible Text Analysis', '2019', false, 'research',
     ['Python', 'NLTK', 'LDA', 'Jupyter'],
     'https://github.com/jordimarsal/bible_text_analysis',
     {
@@ -374,7 +374,7 @@ export const PROJECTS: readonly Project[] = [
       },
       metrics: [],
     }),
-  P('kafka-adapter-telemetry', 'Kafka Adapter Telemetry', 2026, true, 'telemetry',
+  P('kafka-adapter-telemetry', 'Kafka Adapter Telemetry', '2026', true, 'telemetry',
     ['Java 25', 'Spring Boot 4.1', 'Kafka', 'Oracle', 'Flyway', 'Testcontainers', 'SSE'],
     'https://github.com/jordimarsal/kafka-adapter-telemetry',
     {
@@ -422,7 +422,7 @@ export const PROJECTS: readonly Project[] = [
         { value: '10/10', label: { en: 'SDD tasks done', es: 'tareas SDD hechas', ca: 'tasques SDD fetes' } },
       ],
     }),
-  P('redis-toolkit', 'Redis Toolkit', 2026, true, 'telemetry',
+  P('redis-toolkit', 'Redis Toolkit', '2026', true, 'telemetry',
     ['Java', 'Javalin', 'Redis', 'Testcontainers'],
     'https://github.com/jordimarsal/redis-toolkit',
     {
@@ -466,7 +466,7 @@ export const PROJECTS: readonly Project[] = [
         { value: '2', label: { en: 'stores, one contract suite', es: 'stores, una suite de contrato', ca: 'stores, una suite de contracte' } },
       ],
     }),
-  P('product-offers', 'Product Offers API', 2026, false, 'telemetry',
+  P('product-offers', 'Product Offers API', '2023 - 2026', false, 'telemetry',
     ['Java 17', 'Spring Boot 3.2', 'H2', 'JUnit 5', 'Mockito'],
     'https://github.com/jordimarsal/product-offers',
     {
@@ -492,7 +492,7 @@ export const PROJECTS: readonly Project[] = [
       },
       metrics: [],
     }),
-  P('harness-standard', 'Harness Standard', 2026, true, 'tooling',
+  P('harness-standard', 'Harness Standard', '2026', true, 'tooling',
     ['Agents', 'SDD', 'CLI', 'Conventions'],
     'https://github.com/jordimarsal/harness-standard',
     {
@@ -533,7 +533,7 @@ export const PROJECTS: readonly Project[] = [
         { value: '1 cmd', label: { en: 'install', es: 'instalación', ca: 'instal·lació' } },
       ],
     }),
-  P('rustcut', 'Rustcut', 2026, false, 'tooling',
+  P('rustcut', 'Rustcut', '2024 - 2026', false, 'tooling',
     ['Rust', 'Actix-web', 'SQLite'],
     'https://github.com/jordimarsal/rustcut',
     {
@@ -562,7 +562,7 @@ export const PROJECTS: readonly Project[] = [
         { value: '1', label: { en: 'SQLite file', es: 'fichero SQLite', ca: 'fitxer SQLite' } },
       ],
     }),
-  P('md-mermaid-pdf', 'MD Mermaid PDF', 2026, false, 'tooling',
+  P('md-mermaid-pdf', 'MD Mermaid PDF', '2025 - 2026', false, 'tooling',
     ['Python', 'Markdown', 'Mermaid', 'GitHub Actions'],
     'https://github.com/jordimarsal/md-mermaid-pdf',
     {
@@ -588,7 +588,7 @@ export const PROJECTS: readonly Project[] = [
       },
       metrics: [],
     }),
-  P('mcp-transparent-png', 'MCP Transparent PNG', 2026, true, 'tooling',
+  P('mcp-transparent-png', 'MCP Transparent PNG', '2026', true, 'tooling',
     ['Python 3.13', 'MCP', 'Pillow', 'GitHub Actions'],
     'https://github.com/jordimarsal/mcp-transparent-png',
     {
@@ -628,7 +628,7 @@ export const PROJECTS: readonly Project[] = [
         { value: '3', label: { en: 'transparency modes', es: 'modos de transparencia', ca: 'modes de transparència' } },
       ],
     }),
-  P('spring-boot-casino', 'Spring Boot Casino', 2026, false, 'tooling',
+  P('spring-boot-casino', 'Spring Boot Casino', '2020 - 2026', false, 'tooling',
     ['Java', 'Spring Boot', 'Hexagonal Architecture'],
     'https://github.com/jordimarsal/spring-boot-casino',
     {
