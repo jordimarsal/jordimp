@@ -46,13 +46,13 @@ collections, never inline in components.
 
 | Thing | Rule | Example |
 |---|---|---|
-| Astro components | `PascalCase.astro` | `ProjectCard.astro`, `ThemeToggle.astro` |
-| TS lib/config files | `kebab-case.ts` | `content.config.ts`, `i18n.ts` |
-| Content JSON | `kebab-case` = route slug = collection id | `kafka-adapter-telemetry.json` |
+| Astro components | `PascalCase.astro` | `SiteLayout.astro`, `DeptPanel.astro` |
+| TS lib/config files | `kebab-case.ts` | `paths.ts`, `content.ts` |
+| Content | typed module `src/data/content.ts` (+ `types.ts`) | `PROJECTS`, `DEPTS`, `PAGES` — never inline copy in pages |
 | Java classes | `PascalCase`, records like nouns, tests `XTest` | `StatusService`, `Result` |
 | Python modules | `snake_case.py`, tests `test_x.py` | `retriever.py` |
 | Locales | literal `'en' \| 'es' \| 'ca'`, type `Locale` | never `'EN'`, never free strings |
-| UI strings | dotted keys `section.item` | `nav.projects`, `hero.cta.ask` |
+| UI strings | `L10n<T>` records in `src/data/content.ts` (`{en,es,ca}`) | `PAGES.home.title`, `UI.skip` — template-local trios allowed where the spike kept them |
 | CSS custom props | `--noun-adjective` | `--accent-strong`, `--code-bg` |
 | Env vars | `SCREAMING_SNAKE`, `PUBLIC_` prefix for browser-visible | `PUBLIC_GOATCOUNTER` |
 
@@ -65,8 +65,11 @@ Follow the plan's file map (`docs/superpowers/plans/2026-09-16-portfolio-phase0-
 
 - One responsibility per file; a component/page file and its styles stay together
   (scoped `<style>` in Astro) unless shared → `src/styles/`.
-- Content JSON lives only in `src/content/<collection>/`; no content in pages.
-- Tests mirror the source tree (`tests/` for e2e; colocated `*.spec.ts` for units).
+- Content lives only in the typed module `src/data/content.ts`; no content in pages,
+  no content collections.
+- Tests mirror the source tree (`tests/` for e2e; colocated `*.spec.ts` for units;
+  `tests/fixtures/parity.json` is the committed ADR-6 oracle — regenerate only from
+  the spike, never hand-edit).
 - Later services are top-level workspaces: `status-api/`, `ask-api/` — never nested
   under `src/`.
 
@@ -77,8 +80,11 @@ Follow the plan's file map (`docs/superpowers/plans/2026-09-16-portfolio-phase0-
 - **TDD**: failing test first for every behavior; red → green → refactor → commit.
 - **One behavior per test**; Arrange–Act–Assert; no inter-test coupling, no shared
   mutable state.
-- TS: Vitest for units; Playwright for smoke (`tests/smoke.spec.ts` is the contract:
-  render, routing, i18n).
+- TS: Vitest for units; Playwright for e2e — `tests/smoke.spec.ts` is the contract:
+  62-page sweep (splash, 404, 60 locale routes) with zero console errors + parity
+  assertions against `tests/fixtures/parity.json`; behavior specs live in dedicated
+  `tests/*.spec.ts` files (interactions, projects, cases, departments, cv, notfound,
+  seo-head).
 - Java: JUnit 5 + AssertJ + Awaitility; SSE payload pinned by a contract test whose
   fixture is shared with the front.
 - Python: pytest (+ `pytest-asyncio` for FastAPI); retrieval quality gated by the

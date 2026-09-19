@@ -104,6 +104,24 @@ fix the issue before requesting the completion gate review.
 This check is not optional. It is not a suggestion. It is the final, non-negotiable
 proof that the system is in a working state.
 
+---
+
+## Project QA Gates (front)
+
+Beyond the levels above, the front site has these concrete gates. All must pass
+before a release task can close:
+
+| Gate | Command | What it proves |
+|---|---|---|
+| Unit + env | `./harness/init.sh` | Vitest suite green (incl. the WCAG contrast gate and data invariants) |
+| E2E | `npx astro build && npx astro preview` then `npx playwright test` | 62-page sweep with zero console errors + parity vs `tests/fixtures/parity.json` + behaviors |
+| Content QA | `npm run qa:content` | Route census matches `src/data` exactly; trilingual titles/descriptions; no phone/address; external links live |
+| Link resolution | `npm run qa:links` | Every internal `href`/`src` in the built HTML resolves to an emitted file; external links live |
+| Lighthouse | `npm run qa:lighthouse` | Category gates in `lighthouserc.json` on the three locale homes |
+
+Content QA scripts derive their route matrix from `src/data/content.ts` — never
+duplicate route lists inside a script or test.
+
 <!-- harness:module:security-audit:start -->
 ## Security Audit Checklist (security-audit module)
 

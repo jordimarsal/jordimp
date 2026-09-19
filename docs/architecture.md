@@ -43,8 +43,9 @@ Phase 3). Full context: `docs/superpowers/specs/2026-09-16-portfolio-web-design.
 7. **I/O at the edges.** Parsing, mapping, validation and decisions are pure and unit-
    testable without network. One adapter per external dependency; the adapter catches
    specific low-level errors and translates them into the core's error types.
-8. **Content is typed data.** Astro content collections + JSON schema are the content
-   contract. Templates render; they do not compute domain logic.
+8. **Content is typed data.** The content contract is the typed module
+   `src/data/content.ts` (+ `types.ts`): trilingual dictionaries and page data,
+   compile-time checked. Templates render; they do not compute domain logic.
 9. **Spec- and test-driven.** No feature without a spec (harness SDD flow) and no code
    without a failing test first.
 
@@ -54,8 +55,12 @@ Phase 3). Full context: `docs/superpowers/specs/2026-09-16-portfolio-web-design.
 
 **Front (this repo, Phase 1)**
 ```
-content/*.json ──schema──▶ collections ──▶ .astro templates ──▶ static HTML (Pages)
-browser islands (theme, filter)  ·  local-only state, zero network
+src/data/content.ts (typed trilingual module)
+  ──▶ .astro pages/components + pure string emitters (src/lib/*-svg.ts, dept-blocks.ts)
+  ──▶ static HTML (Pages; splash root, building, night mode, zero network)
+  ──▶ QA tooling (scripts/qa-content.mjs derives its route matrix from it;
+      tests/fixtures/parity.json is the committed oracle the build is asserted against)
+browser scripts (src/scripts: theme, building, filter, copy) · local-only state
 live widgets (Phase 2–3): fetch api.jordimp.net ──▶ Result ──▶ ok | offline | limited state
 ```
 
@@ -93,4 +98,4 @@ and the core never sees transport types.
   type is known and translate once, at the adapter.
 - Do not commit secrets, the phone number, or the street address; public contact data
   is limited to what `src/config.ts` already holds.
-- Do not hardcode locale lists outside `src/lib/i18n.ts` / the content schema.
+- Do not hardcode locale lists outside `src/data/content.ts` (`LOCALES`).
