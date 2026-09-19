@@ -31,10 +31,33 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
-      - run: npm run build
+      - name: Build demo (redesign, noindex, base /demo)
+        run: |
+          npm ci
+          npm run build:demo
+      - name: Check out current production source (v0.1.0)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: v0.1.0
+          path: old-site
+      - name: Build current production site (root until the switch)
+        working-directory: old-site
+        run: |
+          npm ci
+          npm run build
+      - name: Assemble transition artifact (old root + demo under /demo/)
+        run: |
+          mv old-site/dist dist
+          cp -r dist-demo dist/demo
+          cp public/robots.txt dist/robots.txt
       - name: Verify CNAME in build output
         run: test -f dist/CNAME && grep -qx 'jordimp.net' dist/CNAME
+      - name: Verify transition artifact before upload
+        run: |
+          test -f dist/demo/en/index.html
+          grep -q 'noindex' dist/demo/en/index.html
+          grep -q 'Disallow: /demo/' dist/robots.txt
+          grep -q '/en/experience/' dist/en/index.html
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
