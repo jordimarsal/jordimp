@@ -77,22 +77,20 @@ describe('buildLlmsTxt()', () => {
     expect(text).toContain('- B Front Desk — Front Desk LINE.');
   });
 
-  it('lists home, projects, CV and departments at directory URLs', () => {
+  it('lists home, projects, CV and departments as linked directory URLs', () => {
     const text = buildLlmsTxt(base);
-    expect(text).toContain('- Home: https://jordimp.net/en/ (also /es/, /ca/)');
-    expect(text).toContain('- Projects: https://jordimp.net/en/projects/');
-    expect(text).toContain('- CV: https://jordimp.net/en/cv/');
     expect(text).toContain(
-      '- F1 Tooling & Platform: https://jordimp.net/en/departments/tooling-platform/',
+      '- [Home](https://jordimp.net/en/) (also [Español](https://jordimp.net/es/), [Català](https://jordimp.net/ca/))',
     );
-    expect(text).toContain(
-      '- B Front Desk: https://jordimp.net/en/departments/front-desk/',
-    );
+    expect(text).toContain('- [Projects](https://jordimp.net/en/projects/)');
+    expect(text).toContain('- [CV](https://jordimp.net/en/cv/)');
+    expect(text).toContain('- [F1 Tooling & Platform](https://jordimp.net/en/departments/tooling-platform/)');
+    expect(text).toContain('- [B Front Desk](https://jordimp.net/en/departments/front-desk/)');
   });
 
   it('points the case-pages line at directory slugs with the project count', () => {
     expect(buildLlmsTxt(base)).toContain(
-      '- Project case pages: https://jordimp.net/en/projects/<slug>/ — one per project, 2 total',
+      '- [Project case pages](https://jordimp.net/en/projects/<slug>/) — one per project, 2 total',
     );
   });
 
@@ -100,8 +98,8 @@ describe('buildLlmsTxt()', () => {
     const text = buildLlmsTxt(base);
     expect(text).toContain('## Contact');
     expect(text).toContain('- Email: jordi.marsal@gmail.com');
-    expect(text).toContain('- GitHub: https://github.com/jordimarsal');
-    expect(text).toContain('- LinkedIn: https://www.linkedin.com/in/jordi-marsal-poy');
+    expect(text).toContain('- [GitHub](https://github.com/jordimarsal)');
+    expect(text).toContain('- [LinkedIn](https://www.linkedin.com/in/jordi-marsal-poy)');
     expect(text.trimEnd().endsWith('Full details in llms-full.txt.')).toBe(true);
   });
 
@@ -116,7 +114,7 @@ describe('buildLlmsFullTxt()', () => {
     expect(lines[0]).toBe('# Jordimp & Co. — full reference');
     expect(lines[2]).toBe('Jordi Marçal Poy — Senior Backend Engineer (Java · Python · AI/LLM).');
     expect(lines[4]).toBe(
-      'Contact: jordi.marsal@gmail.com · https://github.com/jordimarsal · https://www.linkedin.com/in/jordi-marsal-poy',
+      'Contact: jordi.marsal@gmail.com · [GitHub](https://github.com/jordimarsal) · [LinkedIn](https://www.linkedin.com/in/jordi-marsal-poy)',
     );
   });
 
@@ -132,13 +130,13 @@ describe('buildLlmsFullTxt()', () => {
     expect(text).toContain('Research & Retrieval intro.');
   });
 
-  it('dumps a department\'s projects with two-space bullets, stack and repository', () => {
+  it('dumps a department\'s projects with two-space bullets, stack and linked repository', () => {
     const text = buildLlmsFullTxt(base);
     expect(text).toContain(
-      '  - codebaserag (2026): codebaserag summary. Stack: Java 25, Spring Boot 4. https://github.com/jordimarsal/codebaserag',
+      '  - codebaserag (2026): codebaserag summary. Stack: Java 25, Spring Boot 4. [repo](https://github.com/jordimarsal/codebaserag)',
     );
     expect(text).toContain(
-      '  - md-mermaid-pdf (2026): md-mermaid-pdf summary. Stack: Java 25, Spring Boot 4. https://github.com/jordimarsal/md-mermaid-pdf',
+      '  - md-mermaid-pdf (2026): md-mermaid-pdf summary. Stack: Java 25, Spring Boot 4. [repo](https://github.com/jordimarsal/md-mermaid-pdf)',
     );
   });
 
@@ -156,7 +154,7 @@ describe('buildLlmsFullTxt()', () => {
       .split('\n');
     expect(repos).toHaveLength(2);
     expect(repos[0]).toBe(
-      '- CodebaseRAG (2026): CodebaseRAG summary. https://github.com/jordimarsal/codebaserag',
+      '- CodebaseRAG (2026): CodebaseRAG summary. [repo](https://github.com/jordimarsal/codebaserag)',
     );
   });
 
@@ -173,22 +171,18 @@ describe('buildLlmsFullTxt()', () => {
     expect(text).toContain('- SOLID, Clean Code and TDD as daily practice.');
   });
 
-  it('lists the pages at directory URLs with Mezzanine and Front Desk suffixes', () => {
+  it('lists the pages as linked directory URLs with Mezzanine and Front Desk labels', () => {
     const text = buildLlmsFullTxt(base);
-    expect(text).toContain('- https://jordimp.net/en/ · /es/ · /ca/ (home, trilingual)');
-    expect(text).toContain('- https://jordimp.net/en/projects/ — all projects with stack filter');
-    expect(text).toContain('- https://jordimp.net/en/cv/ — CV summary with PDF downloads');
     expect(text).toContain(
-      '- https://jordimp.net/en/departments/research-retrieval/ — F3 department page',
+      '- [Home](https://jordimp.net/en/) · [Español](https://jordimp.net/es/) · [Català](https://jordimp.net/ca/) (home, trilingual)',
     );
+    expect(text).toContain('- [Projects](https://jordimp.net/en/projects/) — all projects with stack filter');
+    expect(text).toContain('- [CV](https://jordimp.net/en/cv/) — CV summary with PDF downloads');
+    expect(text).toContain('- [F3 department page](https://jordimp.net/en/departments/research-retrieval/)');
+    expect(text).toContain('- [Mezzanine department page](https://jordimp.net/en/departments/people-principles/)');
+    expect(text).toContain('- [Front Desk page](https://jordimp.net/en/departments/front-desk/)');
     expect(text).toContain(
-      '- https://jordimp.net/en/departments/people-principles/ — Mezzanine department page',
-    );
-    expect(text).toContain(
-      '- https://jordimp.net/en/departments/front-desk/ — Front Desk page',
-    );
-    expect(text).toContain(
-      '- https://jordimp.net/en/projects/<slug>/ — one case page per project (2), e.g. https://jordimp.net/en/projects/codebaserag/',
+      '- [Case pages](https://jordimp.net/en/projects/<slug>/) — one case page per project (2), e.g. [CodebaseRAG](https://jordimp.net/en/projects/codebaserag/)',
     );
   });
 
@@ -202,5 +196,28 @@ describe('buildLlmsFullTxt()', () => {
 
   it('is deterministic', () => {
     expect(buildLlmsFullTxt(base)).toBe(buildLlmsFullTxt(base));
+  });
+});
+
+describe('link invariants (both builders)', () => {
+  const builders = [
+    ['buildLlmsTxt', buildLlmsTxt],
+    ['buildLlmsFullTxt', buildLlmsFullTxt],
+  ] as const;
+
+  it('leaves no https:// URL outside a Markdown link', () => {
+    for (const [name, build] of builders) {
+      const stripped = build(base).replace(/\[[^\]]*\]\([^)]*\)/g, '');
+      expect(stripped, name).not.toContain('https://');
+    }
+  });
+
+  it('never uses a URL as a link label', () => {
+    for (const [name, build] of builders) {
+      const labels = [...build(base).matchAll(/\[([^\]]*)\]\(([^)]*)\)/g)].map((match) => match[1]);
+      for (const label of labels) {
+        expect(label, name).not.toMatch(/https?:\/\//);
+      }
+    }
   });
 });

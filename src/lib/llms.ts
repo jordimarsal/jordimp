@@ -48,6 +48,10 @@ import { SITE } from '../config';
 
 const SITE_URL = SITE.url;
 
+function mdLink(label: string, url: string): string {
+  return `[${label}](${url})`;
+}
+
 function departmentsList(data: LlmsData): string {
   return data.departments
     .map((dept) => `- ${dept.code} ${dept.name} — ${dept.line}`)
@@ -56,8 +60,12 @@ function departmentsList(data: LlmsData): string {
 
 function departmentKeyPages(data: LlmsData): string {
   return data.departments
-    .map((dept) => `- ${dept.code} ${dept.name}: ${SITE_URL}/en/${dept.route}`)
+    .map((dept) => `- ${mdLink(`${dept.code} ${dept.name}`, `${SITE_URL}/en/${dept.route}`)}`)
     .join('\n');
+}
+
+function casePagesLine(data: LlmsData): string {
+  return `- ${mdLink('Project case pages', `${SITE_URL}/en/projects/<slug>/`)} — one per project, ${data.projects.length} total`;
 }
 
 export function buildLlmsTxt(data: LlmsData): string {
@@ -71,17 +79,17 @@ ${departmentsList(data)}
 
 ## Key pages
 
-- Home: ${SITE_URL}/en/ (also /es/, /ca/)
-- Projects: ${SITE_URL}/en/projects/
-- CV: ${SITE_URL}/en/cv/
+- ${mdLink('Home', `${SITE_URL}/en/`)} (also ${mdLink('Español', `${SITE_URL}/es/`)}, ${mdLink('Català', `${SITE_URL}/ca/`)})
+- ${mdLink('Projects', `${SITE_URL}/en/projects/`)}
+- ${mdLink('CV', `${SITE_URL}/en/cv/`)}
 ${departmentKeyPages(data)}
-- Project case pages: ${SITE_URL}/en/projects/<slug>/ — one per project, ${data.projects.length} total
+${casePagesLine(data)}
 
 ## Contact
 
 - Email: ${data.email}
-- GitHub: ${data.github}
-- LinkedIn: ${data.linkedin}
+- ${mdLink('GitHub', data.github)}
+- ${mdLink('LinkedIn', data.linkedin)}
 
 Full details in llms-full.txt.
 `;
@@ -100,7 +108,7 @@ function deptBlock(dept: LlmsDept): string {
       : `\nProjects:\n${dept.projects
           .map(
             (project) =>
-              `  - ${project.name} (${project.year}): ${project.summary} Stack: ${project.stack.join(', ')}. ${project.github}`,
+              `  - ${project.name} (${project.year}): ${project.summary} Stack: ${project.stack.join(', ')}. ${mdLink('repo', project.github)}`,
           )
           .join('\n')}`;
   return `## ${dept.code} — ${dept.name}\n\n${dept.intro}\n${projects}`;
@@ -112,7 +120,7 @@ function building(data: LlmsData): string {
 
 function repos(data: LlmsData): string {
   return data.projects
-    .map((project) => `- ${project.name} (${project.year}): ${project.summary} ${project.github}`)
+    .map((project) => `- ${project.name} (${project.year}): ${project.summary} ${mdLink('repo', project.github)}`)
     .join('\n');
 }
 
@@ -130,13 +138,19 @@ function principles(data: LlmsData): string {
   return data.principles.map((principle) => `- ${principle}`).join('\n');
 }
 
+function caseExampleLink(data: LlmsData): string {
+  const example = data.projects.find((project) => project.slug === 'codebaserag');
+  const label = example ? example.name : 'codebaserag';
+  return mdLink(label, `${SITE_URL}/en/projects/codebaserag/`);
+}
+
 function pagesSection(data: LlmsData): string {
   return [
-    `- ${SITE_URL}/en/ · /es/ · /ca/ (home, trilingual)`,
-    `- ${SITE_URL}/en/projects/ — all projects with stack filter`,
-    `- ${SITE_URL}/en/cv/ — CV summary with PDF downloads`,
-    ...data.departments.map((dept) => `- ${SITE_URL}/en/${dept.route} — ${deptPageSuffix(dept)}`),
-    `- ${SITE_URL}/en/projects/<slug>/ — one case page per project (${data.projects.length}), e.g. ${SITE_URL}/en/projects/codebaserag/`,
+    `- ${mdLink('Home', `${SITE_URL}/en/`)} · ${mdLink('Español', `${SITE_URL}/es/`)} · ${mdLink('Català', `${SITE_URL}/ca/`)} (home, trilingual)`,
+    `- ${mdLink('Projects', `${SITE_URL}/en/projects/`)} — all projects with stack filter`,
+    `- ${mdLink('CV', `${SITE_URL}/en/cv/`)} — CV summary with PDF downloads`,
+    ...data.departments.map((dept) => `- ${mdLink(deptPageSuffix(dept), `${SITE_URL}/en/${dept.route}`)}`),
+    `- ${mdLink('Case pages', `${SITE_URL}/en/projects/<slug>/`)} — one case page per project (${data.projects.length}), e.g. ${caseExampleLink(data)}`,
   ].join('\n');
 }
 
@@ -145,7 +159,7 @@ export function buildLlmsFullTxt(data: LlmsData): string {
 
 ${data.person} — ${data.role} (${data.tagline}).
 One-person engineering firm, est. ${data.est}, ${data.city}. Languages: English, Español, Català.
-Contact: ${data.email} · ${data.github} · ${data.linkedin}
+Contact: ${data.email} · ${mdLink('GitHub', data.github)} · ${mdLink('LinkedIn', data.linkedin)}
 
 ## The building
 

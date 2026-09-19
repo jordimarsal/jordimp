@@ -52,21 +52,21 @@ describe('GET-ready llms.txt content (canonical data)', () => {
     expect(text).toContain('- B Front Desk — WALK-INS WELCOME — QUESTIONS, REPOS OR HIRING.');
   });
 
-  it('uses the new directory URLs everywhere', () => {
-    expect(text).toContain('- Projects: https://jordimp.net/en/projects/');
-    expect(text).toContain('- CV: https://jordimp.net/en/cv/');
-    expect(text).toContain('- F3 Research & Retrieval: https://jordimp.net/en/departments/research/');
-    expect(text).toContain('- B Front Desk: https://jordimp.net/en/departments/front-desk/');
+  it('uses the linked directory URLs everywhere', () => {
+    expect(text).toContain('- [Projects](https://jordimp.net/en/projects/)');
+    expect(text).toContain('- [CV](https://jordimp.net/en/cv/)');
+    expect(text).toContain('- [F3 Research & Retrieval](https://jordimp.net/en/departments/research/)');
+    expect(text).toContain('- [B Front Desk](https://jordimp.net/en/departments/front-desk/)');
     expect(text).toContain(
-      '- Project case pages: https://jordimp.net/en/projects/<slug>/ — one per project, 11 total',
+      '- [Project case pages](https://jordimp.net/en/projects/<slug>/) — one per project, 11 total',
     );
     expect(text).not.toContain('.html');
   });
 
   it('closes with the contact block', () => {
     expect(text).toContain('- Email: jordi.marsal@gmail.com');
-    expect(text).toContain('- GitHub: https://github.com/jordimarsal');
-    expect(text).toContain('- LinkedIn: https://www.linkedin.com/in/jordi-marsal-poy');
+    expect(text).toContain('- [GitHub](https://github.com/jordimarsal)');
+    expect(text).toContain('- [LinkedIn](https://www.linkedin.com/in/jordi-marsal-poy)');
     expect(text.trimEnd().endsWith('Full details in llms-full.txt.')).toBe(true);
   });
 });
@@ -78,7 +78,7 @@ describe('GET-ready llms-full.txt content (canonical data)', () => {
     const repos = text.split('## All repos')[1].split('## Career ledger')[0].trim().split('\n');
     expect(repos).toHaveLength(11);
     expect(repos[0]).toContain('- CodebaseRAG (2026): Hexagonal RAG over your own codebase');
-    expect(text).toContain('  - CodebaseRAG (2026): Hexagonal RAG over your own codebase, with a deterministic, eval-first core: ingest, query, and CI-gated retrieval evals. Stack: Python 3.13, FastAPI, pgvector, Qdrant, Ollama, Langfuse, mypy strict. https://github.com/jordimarsal/codebaserag');
+    expect(text).toContain('  - CodebaseRAG (2026): Hexagonal RAG over your own codebase, with a deterministic, eval-first core: ingest, query, and CI-gated retrieval evals. Stack: Python 3.13, FastAPI, pgvector, Qdrant, Ollama, Langfuse, mypy strict. [repo](https://github.com/jordimarsal/codebaserag)');
   });
 
   it('keeps the spike section structure', () => {
@@ -94,10 +94,7 @@ describe('GET-ready llms-full.txt content (canonical data)', () => {
     }
   });
 
-  it('matches the spike copy with only the URL adaptation', () => {
-    const adapted = text
-      .replaceAll('.html', '/')
-      .replace('https://jordimp.net/en/work/', 'https://jordimp.net/en/projects/');
-    expect(adapted).toMatchSnapshot();
+  it('matches the committed llms-full.txt regression oracle', () => {
+    expect(text).toMatchSnapshot();
   });
 });
