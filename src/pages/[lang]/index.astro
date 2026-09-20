@@ -16,6 +16,8 @@ import {
   UI,
   project,
 } from '../../data/content';
+import qualityJson from '../../data/quality.json';
+import { parseQuality } from '../../lib/quality';
 
 export async function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
@@ -23,6 +25,9 @@ export async function getStaticPaths() {
 
 type Props = { lang: Locale };
 const { lang } = Astro.props;
+
+const quality = parseQuality(qualityJson);
+const report = quality.ok ? quality.value : null;
 
 const BUILDING_HEAD: Record<Locale, { title: string; sub: string }> = {
   en: { title: 'The Building', sub: 'FLOORS · 1 PAIR OF HANDS' },
@@ -58,7 +63,7 @@ const featured = FEATURED.map((slug) => project(slug));
         sub={`${FLOOR_ORDER.length} ${BUILDING_HEAD[lang].sub}`}
         id="building-title"
       />
-      <Building lang={lang} />
+      <Building lang={lang} report={report} />
     </section>
     <section aria-labelledby="featured-title">
       <SecHead

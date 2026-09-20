@@ -1,7 +1,13 @@
 import { expect, test, type Page } from '@playwright/test';
+import { readFileSync } from 'node:fs';
 import { floorPlateLabel } from '../src/lib/building-svg';
-import { plaqueText } from '../src/lib/quality';
+import { parseQuality, plaqueText } from '../src/lib/quality';
 import { FEATURED, UI, project } from '../src/data/content';
+
+const qualityJson: unknown = JSON.parse(
+  readFileSync(new URL('../src/data/quality.json', import.meta.url), 'utf8'),
+);
+const homeReport = parseQuality(qualityJson).ok ? parseQuality(qualityJson).value : null;
 
 const HOMES = ['/en/', '/es/', '/ca/'] as const;
 
@@ -105,7 +111,7 @@ test.describe('home building page (T4)', () => {
       await expect(page.locator('#dept-panel-research .cards .card a.case[rel="noopener noreferrer"]')).toHaveCount(3);
       const plaqueCopy = page.locator('#dept-panel-inspections .q-plaque-copy');
       await expect(plaqueCopy).toHaveCount(1);
-      await expect(plaqueCopy).toHaveText(plaqueText(lang, null));
+      await expect(plaqueCopy).toHaveText(plaqueText(lang, homeReport));
       await expect(page.locator('#dept-panel-inspections .dept-panel__cta .btn').first()).toHaveAttribute(
         'href',
         `${home}departments/inspections/`,
@@ -144,7 +150,7 @@ test.describe('home ITE plaque (F10 R10, R12)', () => {
       await expect(plaque).toHaveAttribute('href', `${home}departments/inspections/`);
       await expect(plaque.locator('svg.ite-plaque__svg')).toHaveAttribute('aria-hidden', 'true');
       const visible = (await plaque.locator('.ite-plaque__text').textContent()) ?? '';
-      expect(visible.trim()).toBe(plaqueText(lang, null));
+      expect(visible.trim()).toBe(plaqueText(lang, homeReport));
       const ariaLabel = (await plaque.getAttribute('aria-label')) ?? '';
       expect(ariaLabel).toContain(visible.trim());
     });

@@ -12,6 +12,7 @@ import {
   FLOOR_ORDER,
   FOOTER,
   FRONTDESK_PAGE,
+  INSPECTIONS_PAGE,
   OPERATIONS_PAGE,
   PAGES,
   PEOPLE_PAGE,
@@ -28,6 +29,14 @@ import { externalLinkAttrs } from '../../../lib/links';
 import { SITE } from '../../../config';
 import { coverageMap, orgChart, telemetryDiagrams } from '../../../lib/dept-svg';
 import { shiftLogHTML, skillGridHTML } from '../../../lib/dept-blocks';
+import {
+  CATEGORY_KEYS,
+  gaugeBadgeHtml,
+  parseQuality,
+  plaqueDate,
+  sparklineSvgHtml,
+} from '../../../lib/quality';
+import qualityJson from '../../../data/quality.json';
 
 export async function getStaticPaths() {
   const deptSlug = (key: DeptKey): string => dirRoute(PAGES[key].route).replace(/^departments\//, '');
@@ -44,6 +53,18 @@ const { lang, deptKey } = Astro.props;
 
 const d = DEPTS[deptKey];
 const route = dirRoute(PAGES[deptKey].route);
+const quality = parseQuality(qualityJson);
+const qualityReport = quality.ok ? quality.value : null;
+const qualityCats = INSPECTIONS_PAGE.categories[lang];
+const qualitySparks =
+  qualityReport && qualityReport.history.length >= 2
+    ? CATEGORY_KEYS.map((key, i) =>
+        sparklineSvgHtml(
+          qualityReport.history.map((entry) => entry.scores[key]),
+          `${qualityCats[i]} — ${qualityReport.history[0].date} → ${qualityReport.history[qualityReport.history.length - 1].date}`,
+        ),
+      )
+    : null;
 const stats: readonly StatEntry[] | null =
   deptKey === 'research'
     ? RESEARCH_PAGE.stats[lang]
@@ -217,6 +238,52 @@ const trail = [
           <h2 id="fd-colo" class="section-title">{FRONTDESK_PAGE.colophonTitle[lang]}</h2>
           <p class="prose">{FRONTDESK_PAGE.colophon[lang]}</p>
         </section>
+      </>
+    )}
+
+    {deptKey === 'inspections' && (
+      <>
+        {qualityReport ? (
+          <>
+            <section class="section" aria-labelledby="q-gauges">
+              <h2 id="q-gauges" class="section-title">{INSPECTIONS_PAGE.gaugesTitle[lang]}</h2>
+              <div class="q-gauges">
+                {CATEGORY_KEYS.map((key, i) => (
+                  <Fragment set:html={gaugeBadgeHtml(qualityCats[i], qualityReport.lighthouse[key])} />
+                ))}
+              </div>
+            </section>
+            <section class="section" aria-labelledby="q-history">
+              <h2 id="q-history" class="section-title">{INSPECTIONS_PAGE.historyTitle[lang]}</h2>
+              {qualitySparks ? (
+                <div class="q-sparks" set:html={qualitySparks.join('\n')} />
+              ) : (
+                <p class="q-history-note">{INSPECTIONS_PAGE.historyNote[lang]}</p>
+              )}
+            </section>
+            <section class="section" aria-labelledby="q-counters">
+              <h2 id="q-counters" class="section-title">{INSPECTIONS_PAGE.countersTitle[lang]}</h2>
+              <dl class="q-counters">
+                <div class="q-counter"><dt>{INSPECTIONS_PAGE.labels.unit[lang]}</dt><dd>{qualityReport.tests.unit.passed} / {qualityReport.tests.unit.total}</dd></div>
+                <div class="q-counter"><dt>{INSPECTIONS_PAGE.labels.e2e[lang]}</dt><dd>{qualityReport.tests.e2e.passed} / {qualityReport.tests.e2e.total}</dd></div>
+                <div class="q-counter"><dt>{INSPECTIONS_PAGE.labels.pages[lang]}</dt><dd>{qualityReport.repo.pagesGenerated}</dd></div>
+                <div class="q-counter"><dt>{INSPECTIONS_PAGE.labels.bundle[lang]}</dt><dd>{qualityReport.repo.bundleKb} {INSPECTIONS_PAGE.kbUnit}</dd></div>
+                <div class="q-counter"><dt>{INSPECTIONS_PAGE.labels.depsProd[lang]}</dt><dd>{qualityReport.repo.deps.prod}</dd></div>
+                <div class="q-counter"><dt>{INSPECTIONS_PAGE.labels.depsDev[lang]}</dt><dd>{qualityReport.repo.deps.dev}</dd></div>
+                <div class="q-counter"><dt>{INSPECTIONS_PAGE.labels.auditDate[lang]}</dt><dd>{plaqueDate(qualityReport)}</dd></div>
+              </dl>
+              <a class="case" href={SITE.actionsUrl} target="_blank" rel="noopener noreferrer">
+                {INSPECTIONS_PAGE.labels.workflow[lang]} <span aria-hidden="true">&#8599;</span>
+              </a>
+            </section>
+          </>
+        ) : (
+          <section class="section" aria-labelledby="q-empty">
+            <h2 id="q-empty" class="section-title">{INSPECTIONS_PAGE.plaqueTitle[lang]}</h2>
+            <p class="q-noaudit">{INSPECTIONS_PAGE.noAudit[lang]}</p>
+          </section>
+        )}
+        <BackBuilding lang={lang} />
       </>
     )}
 

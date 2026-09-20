@@ -6,6 +6,7 @@ export const SITE = {
   email: 'jordi.marsal@gmail.com',
   github: 'https://github.com/jordimarsal',
   linkedin: 'https://www.linkedin.com/in/jordi-marsal-poy',
+  actionsUrl: 'https://github.com/jordimarsal/jordimp/actions/workflows/quality.yml',
   brand: 'JORDIMP & CO.',
   est: '2017',
   city: 'Barcelona',

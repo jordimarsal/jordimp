@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { readFileSync } from 'node:fs';
 import {
   BREADCRUMB_DEPTS,
   BREADCRUMB_HOME,
@@ -6,6 +7,7 @@ import {
   EXPERIENCE,
   FLOOR_ORDER,
   FRONTDESK_PAGE,
+  INSPECTIONS_PAGE,
   OPERATIONS_PAGE,
   PAGES,
   PAGE_LABELS,
@@ -21,6 +23,11 @@ import {
 import { LOCALES, type Locale } from '../src/lib/i18n';
 import type { DeptKey } from '../src/data/types';
 import { SITE } from '../src/config';
+import { CATEGORY_KEYS, formatScore, parseQuality, plaqueText } from '../src/lib/quality';
+
+const qualityJson: unknown = JSON.parse(
+  readFileSync(new URL('../src/data/quality.json', import.meta.url), 'utf8'),
+);
 
 const deptSlug = (key: DeptKey): string =>
   PAGES[key].route.replace(/^departments\//, '').replace(/\.html$/, '');
@@ -262,7 +269,73 @@ test.describe('department pages (T8)', () => {
     await expect(page.locator('main > .dept-panel__cta a.btn')).toHaveAttribute('href', '/en/');
   });
 
-  test('renders all 18 department pages across the three locales', async ({ page }) => {
+  test('renders the inspections quality wall from the committed audit (F10)', async ({
+    page,
+  }) => {
+    const key: DeptKey = 'inspections';
+    const parsed = parseQuality(qualityJson);
+    expect(parsed.ok, 'committed quality.json must parse (R5)').toBe(true);
+    const report = parsed.ok ? parsed.value : null;
+    expect(report).not.toBeNull();
+    if (!report) return;
+
+    await page.goto(deptRoute('en', key));
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    expect(await page.title()).toBe(PAGES[key].title.en);
+    await expect(page.locator('h1#page-title')).toHaveText(DEPTS[key].name.en);
+    await expect(page.locator('.sec-head__num')).toHaveText('Q');
+
+    const gauges = page.locator('.q-gauges .q-gauge');
+    await expect(gauges).toHaveCount(4);
+    for (let i = 0; i < 4; i++) {
+      await expect(gauges.nth(i).locator('.q-gauge__label')).toHaveText(INSPECTIONS_PAGE.categories.en[i]);
+      await expect(gauges.nth(i).locator('.q-gauge__score')).toHaveText(
+        formatScore(report.lighthouse[CATEGORY_KEYS[i]]),
+      );
+    }
+
+    if (report.history.length >= 2) {
+      await expect(page.locator('.q-sparks .q-spark')).toHaveCount(4);
+    } else {
+      await expect(page.locator('.q-history-note')).toHaveText(INSPECTIONS_PAGE.historyNote.en);
+    }
+
+    const counters = page.locator('.q-counters .q-counter');
+    await expect(counters).toHaveCount(7);
+    await expect(counters.nth(0).locator('dt')).toHaveText(INSPECTIONS_PAGE.labels.unit.en);
+    await expect(counters.nth(0).locator('dd')).toHaveText(
+      `${report.tests.unit.passed} / ${report.tests.unit.total}`,
+    );
+    await expect(counters.nth(1).locator('dd')).toHaveText(
+      `${report.tests.e2e.passed} / ${report.tests.e2e.total}`,
+    );
+    await expect(counters.nth(2).locator('dd')).toHaveText(String(report.repo.pagesGenerated));
+    await expect(counters.nth(3).locator('dd')).toHaveText(
+      `${report.repo.bundleKb} ${INSPECTIONS_PAGE.kbUnit}`,
+    );
+    await expect(counters.nth(4).locator('dd')).toHaveText(String(report.repo.deps.prod));
+    await expect(counters.nth(5).locator('dd')).toHaveText(String(report.repo.deps.dev));
+    await expect(counters.nth(6).locator('dt')).toHaveText(INSPECTIONS_PAGE.labels.auditDate.en);
+    await expect(counters.nth(6).locator('dd')).toHaveText(report.generatedAt.slice(0, 10));
+
+    const workflowLink = page.locator('.section a.case[href="' + SITE.actionsUrl + '"]');
+    await expect(workflowLink).toHaveCount(1);
+    await expect(workflowLink).toContainText(INSPECTIONS_PAGE.labels.workflow.en);
+
+    await expect(page.locator('main > .dept-panel__cta a.btn .btn__label')).toHaveText(
+      'Back to the building',
+    );
+  });
+
+  test('resolves the entrance plaque with the real audit on home (F10 R10)', async ({ page }) => {
+    await page.goto('/en/');
+    const plaque = page.locator('a.ite-plaque');
+    const visible = ((await plaque.locator('.ite-plaque__text').textContent()) ?? '').trim();
+    expect(visible).toBe(plaqueText('en', parseQuality(qualityJson).ok ? parseQuality(qualityJson).value : null));
+    expect(visible).toMatch(/· 2026-\d{2}-\d{2} · /);
+  });
+
+  test('renders all 21 department pages across the three locales', async ({ page }) => {
     for (const lang of LOCALES) {
       for (const key of FLOOR_ORDER) {
         const d = DEPTS[key];
