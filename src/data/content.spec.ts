@@ -153,9 +153,9 @@ describe('inspections page copy (F10)', () => {
   });
 
   it('localizes all counter labels in en, es and ca', () => {
-    for (const key of Object.keys(INSPECTIONS_PAGE.labels)) {
+    for (const [key, label] of Object.entries(INSPECTIONS_PAGE.labels)) {
       for (const lang of LOCALES) {
-        expect(INSPECTIONS_PAGE.labels[key][lang].trim(), `labels.${key}.${lang}`).not.toBe('');
+        expect(label[lang].trim(), `labels.${key}.${lang}`).not.toBe('');
       }
     }
   });

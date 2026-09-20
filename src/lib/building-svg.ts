@@ -59,6 +59,7 @@ const GLYPHS: Record<string, string> = {
   ledger:
     '<rect class="b-glyph" x="558" y="38" width="28" height="30"/><rect class="b-glyph-fill" x="558" y="38" width="6" height="30"/><rect class="b-glyph-fill" x="570" y="46" width="12" height="3"/><rect class="b-glyph-fill" x="570" y="54" width="12" height="3"/>',
   bell: '<polygon class="b-glyph" points="564,60 580,60 576,46 568,46"/><rect class="b-glyph-fill" x="570" y="41" width="4" height="4"/><circle class="b-glyph-fill" cx="572" cy="65" r="3"/>',
+  seal: '<rect class="b-glyph-fill" x="568" y="30" width="8" height="6"/><circle class="b-glyph" cx="572" cy="54" r="16"/><circle class="b-glyph-fill" cx="572" cy="54" r="6"/>',
 };
 
 const starRect = ([x, y, d]: Star): string =>
@@ -159,8 +160,7 @@ export function svgFloor(lang: Locale, deptKey: DeptKey): string {
   <svg class="b-svg b-svg--m" viewBox="86 0 448 100" aria-hidden="true">${inner}</svg>`;
 }
 
-export function svgEntrance(lang: Locale): string {
-  const d = DEPTS.frontdesk;
+export function svgEntrance(lang: Locale): string {  const d = DEPTS.frontdesk;
   const windows = [200, 276, 700, 776]
     .map(
       (x, i) =>
@@ -195,4 +195,16 @@ export function svgEntrance(lang: Locale): string {
   <rect class="b-ink" x="0" y="124" width="980" height="24"/>`;
   return `<svg class="b-svg b-svg--d" viewBox="0 0 980 148" aria-hidden="true">${inner}</svg>
   <svg class="b-svg b-svg--m" viewBox="86 0 468 148" aria-hidden="true">${inner}</svg>`;
+}
+
+export function itePlaqueSvg(): string {
+  return `<svg class="ite-plaque__svg" viewBox="0 0 200 56" aria-hidden="true">
+  <rect class="b-plate" x="2" y="2" width="196" height="52" stroke="var(--b-ink)" stroke-width="3"/>
+  <rect class="b-y1" x="12" y="12" width="30" height="16"/>
+  <text class="b-plate-code" x="27" y="25" text-anchor="middle" fill="#0c0b0a">Q</text>
+  <text class="ite-plaque__mark" x="52" y="25">ITE</text>
+  <rect class="b-glyph-fill" x="164" y="10" width="8" height="6"/>
+  <circle class="b-glyph" cx="168" cy="32" r="14"/>
+  <circle class="b-glyph-fill" cx="168" cy="32" r="6"/>
+</svg>`;
 }

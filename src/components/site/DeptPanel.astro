@@ -1,19 +1,29 @@
 ---
 import type { Locale } from '../../lib/i18n';
 import { DEPTS, EXPERIENCE, FOOTER, PAGES, PRINCIPLES, SITE, UI, project } from '../../data/content';
-import type { DeptKey } from '../../data/types';
+import type { DeptKey, QualityReport } from '../../data/types';
 import { dirRoute, srcPath } from '../../lib/paths';
+import { plaqueText } from '../../lib/quality';
 import ProjectCard from './ProjectCard.astro';
 
 export interface Props {
   lang: Locale;
   deptKey: DeptKey;
+  report?: QualityReport | null;
 }
 
-const { lang, deptKey } = Astro.props;
+const { lang, deptKey, report = null } = Astro.props;
 const d = DEPTS[deptKey];
-const body: 'cards' | 'principles' | 'ledger' | 'frontdesk' =
-  d.projects.length > 0 ? 'cards' : deptKey === 'people' ? 'principles' : deptKey === 'operations' ? 'ledger' : 'frontdesk';
+const body: 'cards' | 'principles' | 'ledger' | 'frontdesk' | 'inspections' =
+  d.projects.length > 0
+    ? 'cards'
+    : deptKey === 'people'
+      ? 'principles'
+      : deptKey === 'operations'
+        ? 'ledger'
+        : deptKey === 'inspections'
+          ? 'inspections'
+          : 'frontdesk';
 const principles = body === 'principles' ? PRINCIPLES.items[lang] : [];
 const ledger = body === 'ledger' ? EXPERIENCE : [];
 const pills =
@@ -62,6 +72,7 @@ const pills =
           ))}
         </div>
       )}
+      {body === 'inspections' && <p class="q-plaque-copy">{plaqueText(lang, report)}</p>}
       {body === 'frontdesk' && (
         <div class="pills" style="margin-top:4px">
           {pills.map((pill) => (

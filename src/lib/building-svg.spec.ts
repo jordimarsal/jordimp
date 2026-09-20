@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { esc, floorPlateLabel, roofSvg, svgEntrance, svgFloor, svgRoof } from './building-svg';
+import { esc, floorPlateLabel, itePlaqueSvg, roofSvg, svgEntrance, svgFloor, svgRoof } from './building-svg';
 import { FLOOR_ORDER } from '../data/content';
 import { LOCALES } from './i18n';
 
@@ -18,6 +18,11 @@ const EXPECTED_FLOOR_LABELS: Record<string, Record<string, string>> = {
     en: 'F1 — DELIBERATELY SMALL TOOLS — Tooling & Platform — PROJECTS',
     es: 'F1 — HERRAMIENTAS DELIBERADAMENTE PEQUEÑAS — Herramientas y Plataforma — PROYECTOS',
     ca: 'F1 — EINES DELIBERADAMENT PETITES — Eines i Plataforma — PROJECTES',
+  },
+  inspections: {
+    en: 'Q — THE QUALITY WALL — Inspections — AUDITS',
+    es: 'Q — EL MURO DE CALIDAD — Inspección — AUDITORÍAS',
+    ca: 'Q — EL MUR DE QUALITAT — Inspecció — AUDITORIES',
   },
   people: {
     en: 'M — STACK · STANDARDS · RULES — People & Principles — VALUES',
@@ -158,6 +163,29 @@ describe('svgFloor', () => {
     expect(floor).toContain('class="b-plate b-floorplate"');
     expect(floor).toContain('class="b-plate-name"');
     expect(floor).not.toContain('b-plate-name--dark');
+  });
+
+  it('renders the inspections floor with the Q chip, audits suffix and seal glyph', () => {
+    const floor = svgFloor('en', 'inspections');
+    expect(floor).toContain('>Q</text>');
+    expect(floor).toContain('<tspan class="b-plate-suffix"> - AUDITS</tspan>');
+    expect(floor).toContain('class="b-glyph" cx="572" cy="54" r="16"');
+    expect(floor).toContain('class="b-glyph-fill" cx="572" cy="54" r="6"');
+    expect(floor).toContain('class="b-glyph-fill" x="568" y="30" width="8" height="6"');
+    expect(floor).toContain('aria-hidden="true"');
+    expect(svgFloor('es', 'inspections')).toContain('EL MURO DE CALIDAD');
+    expect(svgFloor('ca', 'inspections')).toContain('<tspan class="b-plate-suffix"> - AUDITORIES</tspan>');
+  });
+});
+
+describe('itePlaqueSvg', () => {
+  it('emits the decorative street plaque with the Q chip and ITE mark', () => {
+    const plaque = itePlaqueSvg();
+    expect(plaque).toContain('class="ite-plaque__svg" viewBox="0 0 200 56" aria-hidden="true"');
+    expect(plaque).toContain('>Q</text>');
+    expect(plaque).toContain('>ITE</text>');
+    expect(plaque).toContain('class="b-glyph" cx="168" cy="32" r="14"');
+    expect(plaque).not.toContain('TECHNICAL INSPECTION');
   });
 });
 

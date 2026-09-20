@@ -320,18 +320,18 @@ test.describe('mobile building and compact nav (R9, ≤760px)', () => {
         .locator(selector)
         .evaluateAll((els) => els.map((el) => getComputedStyle(el).display));
 
-    expect(await displays('.building-stack svg.b-svg--d')).toEqual(Array(8).fill('none'));
-    expect(await displays('.building-stack svg.b-svg--m')).toEqual(Array(8).fill('block'));
-    expect(await displays('.icon-hit')).toEqual(Array(6).fill('none'));
-    expect(await displays('.floor-bubble')).toEqual(Array(6).fill('none'));
+    expect(await displays('.building-stack svg.b-svg--d')).toEqual(Array(9).fill('none'));
+    expect(await displays('.building-stack svg.b-svg--m')).toEqual(Array(9).fill('block'));
+    expect(await displays('.icon-hit')).toEqual(Array(7).fill('none'));
+    expect(await displays('.floor-bubble')).toEqual(Array(7).fill('none'));
     const sky = page.locator('.sky');
     expect(await sky.evaluate((el) => getComputedStyle(el).marginLeft)).toBe('-20px');
     expect(await sky.evaluate((el) => getComputedStyle(el).marginRight)).toBe('-20px');
 
     await page.setViewportSize({ width: 1280, height: 720 });
-    expect(await displays('.building-stack svg.b-svg--d')).toEqual(Array(8).fill('block'));
-    expect(await displays('.building-stack svg.b-svg--m')).toEqual(Array(8).fill('none'));
-    expect(await displays('.icon-hit')).toEqual(Array(6).fill('block'));
+    expect(await displays('.building-stack svg.b-svg--d')).toEqual(Array(9).fill('block'));
+    expect(await displays('.building-stack svg.b-svg--m')).toEqual(Array(9).fill('none'));
+    expect(await displays('.icon-hit')).toEqual(Array(7).fill('block'));
     expect(await displays('.floor-bubble')).not.toContain('none');
     expect(await sky.evaluate((el) => getComputedStyle(el).marginLeft)).toBe('0px');
   });

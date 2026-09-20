@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { floorPlateLabel } from '../src/lib/building-svg';
+import { plaqueText } from '../src/lib/quality';
 import { FEATURED, UI, project } from '../src/data/content';
 
 const HOMES = ['/en/', '/es/', '/ca/'] as const;
@@ -16,7 +17,7 @@ const SUFFIX: Record<string, { research: string; operations: string; name: strin
   '/ca/': { research: '- PROJECTES', operations: '- TRAJECTÒRIA CV', name: 'RECERCA I RECUPERACIÓ' },
 };
 
-const FLOOR_KEYS = ['research', 'telemetry', 'tooling', 'people', 'operations', 'frontdesk'] as const;
+const FLOOR_KEYS = ['research', 'telemetry', 'tooling', 'inspections', 'people', 'operations', 'frontdesk'] as const;
 
 async function expectHomeChrome(page: Page, home: string): Promise<void> {
   const lang = home.replace(/\//g, '');
@@ -34,8 +35,8 @@ async function expectHomeChrome(page: Page, home: string): Promise<void> {
   await expect(page.locator('.hint')).toContainText(/CLICK A FLOOR|PULSA UNA PLANTA|PITJA UNA PLANTA/);
   await expect(page.locator('.ticker .ticker__inner span')).toHaveCount(2);
 
-  await expect(page.locator('.floor-btn')).toHaveCount(6);
-  await expect(page.locator('.dept-panel')).toHaveCount(6);
+  await expect(page.locator('.floor-btn')).toHaveCount(7);
+  await expect(page.locator('.dept-panel')).toHaveCount(7);
   for (const key of FLOOR_KEYS) {
     await expect(page.locator(`.floor-btn#dept-${key}`)).toHaveAttribute('data-floor', key);
     await expect(page.locator(`.floor-btn#dept-${key}`)).toHaveAttribute('aria-expanded', 'false');
@@ -44,8 +45,8 @@ async function expectHomeChrome(page: Page, home: string): Promise<void> {
     await expect(page.locator(`#dept-panel-${key}`)).not.toBeVisible();
   }
 
-  await expect(page.locator('.building-stack svg.b-svg--m')).toHaveCount(8);
-  await expect(page.locator('.deptstrip__item')).toHaveCount(6);
+  await expect(page.locator('.building-stack svg.b-svg--m')).toHaveCount(9);
+  await expect(page.locator('.deptstrip__item')).toHaveCount(7);
   await expect(page.locator('.footer-desk#desk')).toHaveCount(1);
   await expect(page.locator('.footer-desk .pill[href^="mailto:"]')).toHaveCount(1);
   await expect(page.locator('.footer-desk .pill[rel="noopener noreferrer"]')).toHaveCount(2);
@@ -74,19 +75,22 @@ test.describe('home building page (T4)', () => {
 
     test(`renders plate suffixes and hover hooks at ${home}`, async ({ page }) => {
       await page.goto(home);
-      for (const key of ['research', 'operations']) {
+      for (const key of ['research', 'operations', 'inspections']) {
         const plate = page.locator(`.floor-btn#dept-${key} .b-plategroup`);
         await expect(plate.locator('.b-floorplate')).toHaveCount(2);
         await expect(plate.locator('.b-plate-code')).toHaveCount(2);
-        await expect(plate.locator('.b-plate-suffix').first()).toHaveText(SUFFIX[home][key]);
       }
+      await expect(page.locator('.floor-btn#dept-research .b-plate-suffix').first()).toHaveText(SUFFIX[home].research);
+      await expect(page.locator('.floor-btn#dept-operations .b-plate-suffix').first()).toHaveText(SUFFIX[home].operations);
       await expect(page.locator('.floor-btn#dept-research .b-svg--d .b-plate-name').first()).toContainText(SUFFIX[home].name);
+      await expect(page.locator('.floor-btn#dept-inspections .b-plate-code').first()).toHaveText('Q');
       await expect(page.locator('.floor-btn#dept-research .icon-hit')).toHaveCount(1);
       await expect(page.locator('.floor-btn#dept-research .floor-bubble')).not.toBeEmpty();
     });
 
     test(`renders department panel bodies at ${home}`, async ({ page }) => {
       await page.goto(home);
+      const lang = home.replace(/\//g, '');
       await expect(page.locator('#dept-panel-research .cards .card')).toHaveCount(3);
       await expect(page.locator('#dept-panel-telemetry .cards .card')).toHaveCount(3);
       await expect(page.locator('#dept-panel-tooling .cards .card')).toHaveCount(5);
@@ -99,6 +103,13 @@ test.describe('home building page (T4)', () => {
         await expect(page.locator(`#dept-panel-${key} .dept-panel__cta .btn`).first()).toHaveAttribute('href', /\/departments\//);
       }
       await expect(page.locator('#dept-panel-research .cards .card a.case[rel="noopener noreferrer"]')).toHaveCount(3);
+      const plaqueCopy = page.locator('#dept-panel-inspections .q-plaque-copy');
+      await expect(plaqueCopy).toHaveCount(1);
+      await expect(plaqueCopy).toHaveText(plaqueText(lang, null));
+      await expect(page.locator('#dept-panel-inspections .dept-panel__cta .btn').first()).toHaveAttribute(
+        'href',
+        `${home}departments/inspections/`,
+      );
     });
 
     test(`keeps hero and featured copy localized at ${home}`, async ({ page }) => {
@@ -117,6 +128,31 @@ test.describe('home building page (T4)', () => {
           `${p.name} — ${UI.viewGithub[lang]}`,
         );
       }
+    });
+  }
+});
+
+test.describe('home ITE plaque (F10 R10, R12)', () => {
+  for (const home of HOMES) {
+    test(`links the entrance plaque to the inspections floor with a composed label at ${home}`, async ({
+      page,
+    }) => {
+      await page.goto(home);
+      const lang = home.replace(/\//g, '');
+      const plaque = page.locator('a.ite-plaque');
+      await expect(plaque).toHaveCount(1);
+      await expect(plaque).toHaveAttribute('href', `${home}departments/inspections/`);
+      await expect(plaque.locator('svg.ite-plaque__svg')).toHaveAttribute('aria-hidden', 'true');
+      const visible = (await plaque.locator('.ite-plaque__text').textContent()) ?? '';
+      expect(visible.trim()).toBe(plaqueText(lang, null));
+      const ariaLabel = (await plaque.getAttribute('aria-label')) ?? '';
+      expect(ariaLabel).toContain(visible.trim());
+    });
+
+    test(`keeps the roof neon sign out of any link at ${home}`, async ({ page }) => {
+      await page.goto(home);
+      await expect(page.locator('a:has(svg[role="img"])')).toHaveCount(0);
+      await expect(page.locator('.building-stack svg[role="img"]')).toHaveCount(2);
     });
   }
 });
