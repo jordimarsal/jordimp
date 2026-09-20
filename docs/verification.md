@@ -114,13 +114,23 @@ before a release task can close:
 | Gate | Command | What it proves |
 |---|---|---|
 | Unit + env | `./harness/init.sh` | Vitest suite green (incl. the WCAG contrast gate and data invariants) |
-| E2E | `npx astro build && npx astro preview` then `npx playwright test` | 62-page sweep with zero console errors + parity vs `tests/fixtures/parity.json` + behaviors |
+| E2E | `npx astro build && npx astro preview` then `npx playwright test` | 65-page sweep (21 routes × 3 locales + splash + 404) with zero console errors + parity vs `tests/fixtures/parity.json` + behaviors |
 | Content QA | `npm run qa:content` | Route census matches `src/data` exactly; trilingual titles/descriptions; no phone/address; external links live |
 | Link resolution | `npm run qa:links` | Every internal `href`/`src` in the built HTML resolves to an emitted file; external links live |
-| Lighthouse | `npm run qa:lighthouse` | Category gates in `lighthouserc.json` on the three locale homes |
+| Lighthouse | `npm run qa:lighthouse` | Category gates in `lighthouserc.json` on the six audited URLs (three locale homes + three inspections pages) |
 
 Content QA scripts derive their route matrix from `src/data/content.ts` — never
 duplicate route lists inside a script or test.
+
+Weekly self-audit (F10): `.github/workflows/quality.yml` (weekly cron + manual
+dispatch, no push trigger — the JSON commit rides the normal deploy) runs the full
+pipeline and commits `src/data/quality.json` via `scripts/collect-quality.mjs`. To
+verify locally: run the pipeline steps (build, vitest, playwright, `qa:lighthouse`)
+then `node scripts/collect-quality.mjs` — it exits non-zero with a named message and
+writes nothing if any source report is missing. The committed JSON is schema-validated
+by `parseQuality` on every vitest run; the verdict thresholds mirrored in
+`src/lib/quality.ts` are JSON-parsed from the real `lighthouserc.json` in the spec, so
+gate and verdict cannot drift apart.
 
 Lighthouse note: manual Lighthouse 13 runs against the live site also report the
 `agentic-browsing` category (audit `llms-txt`, green since F8); the CI gate

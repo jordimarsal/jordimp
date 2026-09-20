@@ -25,6 +25,10 @@ collections, never inline in components.
 - Islands: zero-framework `<script>` blocks; each script owns one behavior (theme,
   filter) and registers it on load — no global namespaces.
 - Prefer `const`, early returns, and exhaustive discriminated unions over boolean flags.
+- Pure `src/lib/*.ts` modules loaded by zero-dependency Node adapters (`scripts/*.mjs`,
+  type-stripping) import their relative specifiers **with the explicit `.ts` extension**
+  — Node cannot resolve extensionless specifiers; `allowImportingTsExtensions` keeps
+  `astro check` green (precedent: `quality.ts` / `collect-quality.mjs`).
 - Component props declared as an exported `interface Props`; `Astro.props as Props` once.
 
 **Java 25 (status-api, Phase 2)**
@@ -89,11 +93,12 @@ Follow the plan's file map (`docs/superpowers/plans/2026-09-16-portfolio-phase0-
   `assetPath('fonts/<file>.woff2')` so demo-base builds resolve. `public/fonts/fonts.css`
   no longer exists — never reintroduce a separate font stylesheet request. The 3 font
   preloads and the 8 woff2 files under `public/fonts/` remain.
-- **Accessible names.** Icon-only / plate-only controls (`.floor-btn`) carry a composed
-  `aria-label` built from the plate's visible strings in reading order (WCAG 2.5.3
-  Label-in-Name). Repeated links sharing the same visible text ("View on GitHub") carry
-  an `aria-label` naming the resource (`<project> — View on GitHub`) to disambiguate
-  (axe `identical-links-same-purpose`).
+- **Accessible names.** Icon-only / plate-only controls (`.floor-btn`, the ITE
+  entrance plaque) carry a composed `aria-label` built from the control's visible
+  strings in reading order (WCAG 2.5.3 Label-in-Name). Repeated links sharing the same
+  visible text ("View on GitHub") carry an `aria-label` naming the resource
+  (`<project> — View on GitHub`) to disambiguate (axe `identical-links-same-purpose`).
+  The decorative roof neon sign is `aria-hidden` and never wrapped by an `<a>`.
 
 ---
 
@@ -103,10 +108,12 @@ Follow the plan's file map (`docs/superpowers/plans/2026-09-16-portfolio-phase0-
 - **One behavior per test**; Arrange–Act–Assert; no inter-test coupling, no shared
   mutable state.
 - TS: Vitest for units; Playwright for e2e — `tests/smoke.spec.ts` is the contract:
-  62-page sweep (splash, 404, 60 locale routes) with zero console errors + parity
+  65-page sweep (splash, 404, 63 locale routes) with zero console errors + parity
   assertions against `tests/fixtures/parity.json`; behavior specs live in dedicated
   `tests/*.spec.ts` files (interactions, projects, cases, departments, cv, notfound,
-  seo-head).
+  seo-head). Infrastructure contracts are pinned by tests too: the audit workflow
+  (`quality.yml`) is asserted by `quality.spec.ts` (triggers, permissions, 40-hex
+  action pins) so a workflow regression fails the unit suite.
 - Java: JUnit 5 + AssertJ + Awaitility; SSE payload pinned by a contract test whose
   fixture is shared with the front.
 - Python: pytest (+ `pytest-asyncio` for FastAPI); retrieval quality gated by the

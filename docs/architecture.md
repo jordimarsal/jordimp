@@ -66,9 +66,20 @@ src/data/content.ts (typed trilingual module)
       (regression oracle since F8, no longer adapted spike output)
   ──▶ QA tooling (scripts/qa-content.mjs derives its route matrix from it;
       tests/fixtures/parity.json is the committed oracle the build is asserted against)
+  ──▶ weekly self-audit (F10): quality.yml (cron + dispatch, never push) runs the
+      pipeline ──▶ scripts/collect-quality.mjs, a thin adapter over the pure
+      src/lib/quality.ts (parseQuality → Result, sparkline math, history ring cap 30)
+      ──▶ src/data/quality.json committed ──▶ inspections page gauges/sparklines and
+      the ITE entrance plaque render from it at build time; thresholds on the page are
+      mirrored from lighthouserc.json, asserted equal by quality.spec.ts
 browser scripts (src/scripts: theme, building, filter, copy) · local-only state
 live widgets (Phase 2–3): fetch api.jordimp.net ──▶ Result ──▶ ok | offline | limited state
 ```
+
+Committed audit data is versioned content — same class as `parity.json`, distilled by
+the repo's own CI from real runs, never hand-edited, never fetched from an API at
+build time. Static-first holds: stale audits render with their date, never as live
+state; `Err` from `parseQuality` renders the explicit "no audit on file" state.
 
 The `SiteLayout` head is self-contained: inline night-mode bootstrap, the inline
 `@font-face` block (URLs via `assetPath`), and the font preloads — font CSS never
