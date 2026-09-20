@@ -6,8 +6,20 @@ import type {
   QualityResult,
   QualityScores,
 } from '../data/types';
-import { INSPECTIONS_PAGE } from '../data/content';
-import { esc } from './building-svg';
+// Explicit .ts extension: the zero-dep collector adapter loads this module with
+// Node type-stripping, which does not resolve extensionless specifiers.
+import { INSPECTIONS_PAGE } from '../data/content.ts';
+
+const ESCAPES: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+};
+
+const esc = (value: string): string =>
+  value.replace(/[&<>"']/g, (char) => ESCAPES[char] ?? char);
 
 export interface VerdictThresholds {
   readonly performance: number;
