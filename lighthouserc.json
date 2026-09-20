@@ -7,7 +7,10 @@
       "url": [
         "http://localhost:4321/en/",
         "http://localhost:4321/es/",
-        "http://localhost:4321/ca/"
+        "http://localhost:4321/ca/",
+        "http://localhost:4321/en/departments/inspections/",
+        "http://localhost:4321/es/departments/inspections/",
+        "http://localhost:4321/ca/departments/inspections/"
       ],
       "numberOfRuns": 3
     },
