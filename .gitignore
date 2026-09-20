@@ -36,3 +36,6 @@ harness/
 opencode.json
 .opencode/
 spike/
+
+# local quality-audit reports (workflow artifacts)
+reports/
