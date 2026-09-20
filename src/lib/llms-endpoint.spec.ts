@@ -5,12 +5,13 @@ import { llmsData } from '../pages/llms.txt';
 const data = llmsData();
 
 describe('llmsData() against src/data/content', () => {
-  it('resolves all six departments in floor order with their directory routes', () => {
-    expect(data.departments.map((dept) => dept.code)).toEqual(['F3', 'F2', 'F1', 'M', 'F0', 'B']);
+  it('resolves all seven departments in floor order with their directory routes', () => {
+    expect(data.departments.map((dept) => dept.code)).toEqual(['F3', 'F2', 'F1', 'Q', 'M', 'F0', 'B']);
     expect(data.departments.map((dept) => dept.route)).toEqual([
       'departments/research/',
       'departments/telemetry/',
       'departments/tooling/',
+      'departments/inspections/',
       'departments/people/',
       'departments/operations/',
       'departments/front-desk/',
@@ -43,10 +44,11 @@ describe('GET-ready llms.txt content (canonical data)', () => {
     );
   });
 
-  it('lists the six departments with their canonical lines', () => {
+  it('lists the seven departments with their canonical lines', () => {
     expect(text).toContain('- F3 Research & Retrieval — APPLIED AI YOU CAN EVALUATE — RETRIEVAL WITH RECEIPTS.');
     expect(text).toContain('- F2 Transport & Telemetry — THE PLUMBING THAT MUST NOT LIE — TELEMETRY WITH HONEST FAILURE MODES.');
     expect(text).toContain('- F1 Tooling & Platform — THE WORKSHOP FLOOR — HARNESSES, CLIS AND DELIBERATELY SMALL TOOLS.');
+    expect(text).toContain('- Q Inspections — THE ITE CERTIFICATE — EVERY SCORE ON THE WALL, DATED AND SIGNED.');
     expect(text).toContain('- M People & Principles — HOW THE WORK GETS DONE — STACK, STANDARDS AND THE WORKING RULES.');
     expect(text).toContain('- F0 Operations — THE CAREER LEDGER — 2017 TO PRESENT, SAME PAIR OF HANDS.');
     expect(text).toContain('- B Front Desk — WALK-INS WELCOME — QUESTIONS, REPOS OR HIRING.');
@@ -56,6 +58,7 @@ describe('GET-ready llms.txt content (canonical data)', () => {
     expect(text).toContain('- [Projects](https://jordimp.net/en/projects/)');
     expect(text).toContain('- [CV](https://jordimp.net/en/cv/)');
     expect(text).toContain('- [F3 Research & Retrieval](https://jordimp.net/en/departments/research/)');
+    expect(text).toContain('- [Q Inspections](https://jordimp.net/en/departments/inspections/)');
     expect(text).toContain('- [B Front Desk](https://jordimp.net/en/departments/front-desk/)');
     expect(text).toContain(
       '- [Project case pages](https://jordimp.net/en/projects/<slug>/) — one per project, 11 total',
@@ -92,6 +95,14 @@ describe('GET-ready llms-full.txt content (canonical data)', () => {
     ]) {
       expect(text).toContain(section);
     }
+  });
+
+  it('carries the inspections floor through the default Q page suffix', () => {
+    expect(text).toContain('## Q — Inspections');
+    expect(text).toContain(
+      'The inspection floor keeps the quality wall: Lighthouse gauges, test counters, bundle weight and dependency census',
+    );
+    expect(text).toContain('- [Q department page](https://jordimp.net/en/departments/inspections/)');
   });
 
   it('matches the committed llms-full.txt regression oracle', () => {

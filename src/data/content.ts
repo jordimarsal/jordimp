@@ -8,6 +8,7 @@ import type {
   FooterContent,
   FrontdeskPageContent,
   HomeContent,
+  InspectionsPageContent,
   L10n,
   Locale,
   LocaleInfo,
@@ -123,7 +124,7 @@ export const HOME: HomeContent = {
   deptsHead: {
     num: '03',
     title: { en: 'Departments', es: 'Departamentos', ca: 'Departaments' },
-    sub: { en: '6 FLOORS · 1 PAIR OF HANDS', es: '6 PLANTAS · 1 PAR DE MANOS', ca: '6 PLANTES · 1 PARELL DE MANS' },
+    sub: { en: '7 FLOORS · 1 PAIR OF HANDS', es: '7 PLANTAS · 1 PAR DE MANOS', ca: '7 PLANTES · 1 PARELL DE MANS' },
   },
 };
 
@@ -194,6 +195,28 @@ export const DEPTS: Record<DeptKey, Dept> = {
     projects: ['harness-standard', 'rustcut', 'md-mermaid-pdf', 'mcp-transparent-png', 'spring-boot-casino'],
     page: 'tooling',
   },
+  inspections: {
+    code: 'Q',
+    icon: 'seal',
+    tag: {
+      en: 'THE QUALITY WALL', es: 'EL MURO DE CALIDAD', ca: 'EL MUR DE QUALITAT',
+    },
+    name: {
+      en: 'Inspections', es: 'Inspección', ca: 'Inspecció',
+    },
+    line: {
+      en: 'THE ITE CERTIFICATE — EVERY SCORE ON THE WALL, DATED AND SIGNED.',
+      es: 'EL CERTIFICADO ITE — CADA PUNTUACIÓN EN LA PARED, FECHADA Y FIRMADA.',
+      ca: 'EL CERTIFICAT ITE — CADA PUNTUACIÓ AL MUR, DATADA I SIGNADA.',
+    },
+    intro: {
+      en: 'The inspection floor keeps the quality wall: Lighthouse gauges, test counters, bundle weight and dependency census — audited on a schedule, dated, and hung at the entrance as the ITE plaque. Static-first: the certificate shows the last audit, never a broken promise.',
+      es: 'La planta de inspección guarda el muro de calidad: indicadores Lighthouse, contadores de tests, peso del bundle y censo de dependencias — auditados por calendario, fechados y colgados en la entrada como la placa ITE. Static-first: el certificado muestra la última auditoría, nunca una promesa rota.',
+      ca: 'La planta d’inspecció guarda el mur de qualitat: indicadors Lighthouse, comptadors de tests, pes del bundle i cens de dependències — auditats per calendari, datats i penjats a l’entrada com la placa ITE. Static-first: el certificat mostra l’última auditoria, mai una promesa trencada.',
+    },
+    projects: [],
+    page: 'inspections',
+  },
   people: {
     code: 'M',
     icon: 'people',
@@ -262,12 +285,13 @@ export const DEPTS: Record<DeptKey, Dept> = {
   },
 };
 
-export const FLOOR_ORDER: readonly DeptKey[] = ['research', 'telemetry', 'tooling', 'people', 'operations', 'frontdesk'];
+export const FLOOR_ORDER: readonly DeptKey[] = ['research', 'telemetry', 'tooling', 'inspections', 'people', 'operations', 'frontdesk'];
 
 export const FLOOR_LABELS: Record<DeptKey, L10n<string>> = {
   research: { en: '- PROJECTS', es: '- PROYECTOS', ca: '- PROJECTES' },
   telemetry: { en: '- PROJECTS', es: '- PROYECTOS', ca: '- PROJECTES' },
   tooling: { en: '- PROJECTS', es: '- PROYECTOS', ca: '- PROJECTES' },
+  inspections: { en: '- AUDITS', es: '- AUDITORÍAS', ca: '- AUDITORIES' },
   people: { en: '- VALUES', es: '- VALORES', ca: '- VALORS' },
   operations: { en: '- CV WORK', es: '- TRAYECTORIA CV', ca: '- TRAJECTÒRIA CV' },
   frontdesk: { en: '- CONTACT', es: '- CONTACTO', ca: '- CONTACTE' },
@@ -1040,6 +1064,20 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'Entrada lliure: qui és darrere el mostrador, com contactar-lo, disponibilitat i com avança un projecte de brief a auditoria. Sense porter.',
     },
   },
+  inspections: {
+    route: 'departments/inspections.html',
+    nav: 'departments',
+    title: {
+      en: 'Q · Inspections — Jordimp & Co.',
+      es: 'Q · Inspección — Jordimp & Co.',
+      ca: 'Q · Inspecció — Jordimp & Co.',
+    },
+    description: {
+      en: 'The quality wall: Lighthouse gauges, test counters, bundle size and dependency census from the last audit — the building’s ITE certificate, refreshed weekly.',
+      es: 'El muro de calidad: indicadores Lighthouse, contadores de tests, peso del bundle y censo de dependencias de la última auditoría — el certificado ITE del edificio, renovado cada semana.',
+      ca: 'El mur de qualitat: indicadors Lighthouse, comptadors de tests, pes del bundle i cens de dependències de l’última auditoria — el certificat ITE de l’edifici, renovat cada setmana.',
+    },
+  },
 };
 
 export const RESEARCH_PAGE: ResearchPageContent = {
@@ -1475,3 +1513,44 @@ export function project(slug: string): Project {
   }
   return found;
 }
+
+export const INSPECTIONS_PAGE: InspectionsPageContent = {
+  plaqueTitle: {
+    en: 'TECHNICAL INSPECTION', es: 'INSPECCIÓN TÉCNICA', ca: 'INSPECCIÓ TÈCNICA',
+  },
+  verdictPass: { en: 'PASS', es: 'APTO', ca: 'APTE' },
+  verdictFail: { en: 'FAIL', es: 'NO APTO', ca: 'NO APTE' },
+  noAudit: {
+    en: 'NO AUDIT ON FILE — THE INSPECTOR HAS YET TO SIGN',
+    es: 'SIN AUDITORÍA EN EL EXPEDIENTE — EL INSPECTOR AÚN NO HA FIRMADO',
+    ca: 'SENSE AUDITORIA A L’EXPEDIENT — L’INSPECTOR ENCARA NO HA FIRMAT',
+  },
+  gaugesTitle: {
+    en: 'Lighthouse gauges', es: 'Indicadores Lighthouse', ca: 'Indicadors Lighthouse',
+  },
+  categories: {
+    en: ['PERFORMANCE', 'ACCESSIBILITY', 'BEST PRACTICES', 'SEO'],
+    es: ['RENDIMIENTO', 'ACCESIBILIDAD', 'MEJORES PRÁCTICAS', 'SEO'],
+    ca: ['RENDIMENT', 'ACCESSIBILITAT', 'MILLORES PRÀCTIQUES', 'SEO'],
+  },
+  historyTitle: {
+    en: 'Score history', es: 'Historial de puntuaciones', ca: 'Historial de puntuacions',
+  },
+  historyNote: {
+    en: 'NOT ENOUGH HISTORY YET — SPARKLINES APPEAR FROM THE SECOND AUDIT',
+    es: 'AÚN NO HAY HISTORIAL SUFICIENTE — LAS SPARKLINES APARECEN DESDE LA SEGUNDA AUDITORÍA',
+    ca: 'ENCARA NO HI HA HISTORIAL SUFICIENT — LES SPARKLINES APAREIXEN DES DE LA SEGONA AUDITORIA',
+  },
+  countersTitle: { en: 'The counters', es: 'Los contadores', ca: 'Els comptadors' },
+  labels: {
+    unit: { en: 'Unit tests', es: 'Tests unitarios', ca: 'Tests unitaris' },
+    e2e: { en: 'End-to-end tests', es: 'Tests end-to-end', ca: 'Tests end-to-end' },
+    pages: { en: 'Pages generated', es: 'Páginas generadas', ca: 'Pàgines generades' },
+    bundle: { en: 'Bundle size', es: 'Peso del bundle', ca: 'Pes del bundle' },
+    depsProd: { en: 'Production dependencies', es: 'Dependencias de producción', ca: 'Dependències de producció' },
+    depsDev: { en: 'Development dependencies', es: 'Dependencias de desarrollo', ca: 'Dependències de desenvolupament' },
+    auditDate: { en: 'Last audit', es: 'Última auditoría', ca: 'Última auditoria' },
+    workflow: { en: 'Quality workflow runs', es: 'Ejecuciones del workflow de calidad', ca: 'Execucions del workflow de qualitat' },
+  },
+  kbUnit: 'KB',
+};

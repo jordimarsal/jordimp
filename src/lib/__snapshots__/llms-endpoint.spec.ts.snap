@@ -38,6 +38,11 @@ Projects:
   - MCP Transparent PNG (2026): MCP (Model Context Protocol) server that makes PNG colors transparent (alpha channel) with rgb/auto/greenscreen modes. Stack: Python 3.13, MCP, Pillow, GitHub Actions. [repo](https://github.com/jordimarsal/mcp-transparent-png)
   - Spring Boot Casino (2020 - 2026): Technical assessment: a casino betting domain modeled in Spring Boot following a hexagonal architecture. Stack: Java, Spring Boot, Hexagonal Architecture. [repo](https://github.com/jordimarsal/spring-boot-casino)
 
+## Q — Inspections
+
+The inspection floor keeps the quality wall: Lighthouse gauges, test counters, bundle weight and dependency census — audited on a schedule, dated, and hung at the entrance as the ITE plaque. Static-first: the certificate shows the last audit, never a broken promise.
+
+
 ## M — People & Principles
 
 The mezzanine keeps the house rules: SOLID, Clean Code and TDD as daily practice, I/O at the edges, and knowledge that flows across the team.
@@ -97,6 +102,7 @@ The door is always open. Questions about a floor, a repo, or a hire? Walk straig
 - [F3 department page](https://jordimp.net/en/departments/research/)
 - [F2 department page](https://jordimp.net/en/departments/telemetry/)
 - [F1 department page](https://jordimp.net/en/departments/tooling/)
+- [Q department page](https://jordimp.net/en/departments/inspections/)
 - [Mezzanine department page](https://jordimp.net/en/departments/people/)
 - [F0 department page](https://jordimp.net/en/departments/operations/)
 - [Front Desk page](https://jordimp.net/en/departments/front-desk/)

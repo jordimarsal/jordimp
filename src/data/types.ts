@@ -2,7 +2,7 @@ export type Locale = 'en' | 'es' | 'ca';
 
 export type L10n<T> = Record<Locale, T>;
 
-export type DeptKey = 'research' | 'telemetry' | 'tooling' | 'people' | 'operations' | 'frontdesk';
+export type DeptKey = 'research' | 'telemetry' | 'tooling' | 'inspections' | 'people' | 'operations' | 'frontdesk';
 
 export type NavKey = 'home' | 'work' | 'cv' | 'departments';
 
@@ -262,4 +262,69 @@ export interface FrontdeskPageContent {
   readonly how: L10n<readonly KVEntry[]>;
   readonly colophonTitle: L10n<string>;
   readonly colophon: L10n<string>;
+}
+
+export interface QualityScores {
+  readonly performance: number;
+  readonly accessibility: number;
+  readonly bestPractices: number;
+  readonly seo: number;
+}
+
+export interface QualityHistoryEntry {
+  readonly date: string;
+  readonly scores: QualityScores;
+}
+
+export interface QualityTests {
+  readonly total: number;
+  readonly passed: number;
+}
+
+export interface QualityReport {
+  readonly generatedAt: string;
+  readonly commit: string;
+  readonly lighthouse: QualityScores;
+  readonly history: readonly QualityHistoryEntry[];
+  readonly tests: { readonly unit: QualityTests; readonly e2e: QualityTests };
+  readonly repo: {
+    readonly pagesGenerated: number;
+    readonly bundleKb: number;
+    readonly deps: { readonly prod: number; readonly dev: number };
+  };
+}
+
+export type QualityError =
+  | { readonly kind: 'missing-field'; readonly field: string }
+  | { readonly kind: 'bad-range'; readonly field: string }
+  | { readonly kind: 'bad-history'; readonly reason: string }
+  | { readonly kind: 'bad-shape'; readonly field: string };
+
+export type QualityResult =
+  | { readonly ok: true; readonly value: QualityReport }
+  | { readonly ok: false; readonly error: QualityError };
+
+export interface InspectionsCounterLabels {
+  readonly unit: L10n<string>;
+  readonly e2e: L10n<string>;
+  readonly pages: L10n<string>;
+  readonly bundle: L10n<string>;
+  readonly depsProd: L10n<string>;
+  readonly depsDev: L10n<string>;
+  readonly auditDate: L10n<string>;
+  readonly workflow: L10n<string>;
+}
+
+export interface InspectionsPageContent {
+  readonly plaqueTitle: L10n<string>;
+  readonly verdictPass: L10n<string>;
+  readonly verdictFail: L10n<string>;
+  readonly noAudit: L10n<string>;
+  readonly gaugesTitle: L10n<string>;
+  readonly categories: L10n<readonly string[]>;
+  readonly historyTitle: L10n<string>;
+  readonly historyNote: L10n<string>;
+  readonly countersTitle: L10n<string>;
+  readonly labels: InspectionsCounterLabels;
+  readonly kbUnit: string;
 }

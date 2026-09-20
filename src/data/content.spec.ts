@@ -8,6 +8,7 @@ import {
   FLOOR_LABELS,
   FLOOR_ORDER,
   FOOTER,
+  INSPECTIONS_PAGE,
   LOCALES,
   PAGES,
   PROJECTS,
@@ -19,7 +20,7 @@ import {
 
 const PROJECT_COUNT = 11;
 const FEATURED_COUNT = 3;
-const DEPT_COUNT = 6;
+const DEPT_COUNT = 7;
 const EXPERIENCE_COUNT = 4;
 
 describe('projects data', () => {
@@ -55,16 +56,17 @@ describe('projects data', () => {
 });
 
 describe('departments data', () => {
-  it('exposes exactly the six floor keys in the fixed floor order', () => {
+  it('exposes exactly the seven floor keys in the fixed floor order', () => {
     expect(FLOOR_ORDER).toHaveLength(DEPT_COUNT);
     expect(Object.keys(DEPTS).sort()).toEqual([...FLOOR_ORDER].sort());
   });
 
-  it('pins the fixed floor order itself', () => {
+  it('pins the fixed floor order itself, inspections between tooling and people', () => {
     expect([...FLOOR_ORDER]).toEqual([
       'research',
       'telemetry',
       'tooling',
+      'inspections',
       'people',
       'operations',
       'frontdesk',
@@ -79,12 +81,90 @@ describe('departments data', () => {
     }
   });
 
-  it('covers all six departments in FLOOR_LABELS with trilingual labels', () => {
+  it('covers all seven departments in FLOOR_LABELS with trilingual labels', () => {
     expect(Object.keys(FLOOR_LABELS).sort()).toEqual([...FLOOR_ORDER].sort());
     for (const key of FLOOR_ORDER) {
       for (const lang of LOCALES) {
         expect(FLOOR_LABELS[key][lang].trim(), `${key}:${lang}`).not.toBe('');
       }
+    }
+  });
+});
+
+describe('inspections department data (F10)', () => {
+  it('registers the Q floor with the seal icon, no projects and its own page', () => {
+    const d = DEPTS.inspections;
+    expect(d.code).toBe('Q');
+    expect(d.icon).toBe('seal');
+    expect(d.projects).toEqual([]);
+    expect(d.page).toBe('inspections');
+  });
+
+  it('gives the inspections floor trilingual tag, name, line and intro', () => {
+    const d = DEPTS.inspections;
+    for (const lang of LOCALES) {
+      expect(d.tag[lang].trim(), `inspections:tag.${lang}`).not.toBe('');
+      expect(d.name[lang].trim(), `inspections:name.${lang}`).not.toBe('');
+      expect(d.line[lang].trim(), `inspections:line.${lang}`).not.toBe('');
+      expect(d.intro[lang].trim(), `inspections:intro.${lang}`).not.toBe('');
+    }
+    expect(d.name.en).toBe('Inspections');
+    expect(d.name.es).toBe('Inspección');
+    expect(d.name.ca).toBe('Inspecció');
+  });
+
+  it('labels the inspections floor plate with the audits suffix in three locales', () => {
+    expect(FLOOR_LABELS.inspections).toEqual({
+      en: '- AUDITS',
+      es: '- AUDITORÍAS',
+      ca: '- AUDITORIES',
+    });
+  });
+});
+
+describe('inspections page copy (F10)', () => {
+  const L10N_KEYS = [
+    'plaqueTitle',
+    'verdictPass',
+    'verdictFail',
+    'noAudit',
+    'gaugesTitle',
+    'historyTitle',
+    'historyNote',
+    'countersTitle',
+  ] as const;
+
+  it('localizes every plaque, gauge and state string in en, es and ca', () => {
+    for (const key of L10N_KEYS) {
+      for (const lang of LOCALES) {
+        expect(INSPECTIONS_PAGE[key][lang].trim(), `${key}.${lang}`).not.toBe('');
+      }
+    }
+    expect(INSPECTIONS_PAGE.kbUnit.trim()).not.toBe('');
+  });
+
+  it('names the four Lighthouse categories in every locale', () => {
+    for (const lang of LOCALES) {
+      expect(INSPECTIONS_PAGE.categories[lang]).toHaveLength(4);
+      for (const cat of INSPECTIONS_PAGE.categories[lang]) {
+        expect(cat.trim(), `categories.${lang}`).not.toBe('');
+      }
+    }
+  });
+
+  it('localizes all counter labels in en, es and ca', () => {
+    for (const key of Object.keys(INSPECTIONS_PAGE.labels)) {
+      for (const lang of LOCALES) {
+        expect(INSPECTIONS_PAGE.labels[key][lang].trim(), `labels.${key}.${lang}`).not.toBe('');
+      }
+    }
+  });
+
+  it('registers the inspections page with route and trilingual title and description', () => {
+    expect(PAGES.inspections.route).toBe('departments/inspections.html');
+    for (const lang of LOCALES) {
+      expect(PAGES.inspections.title[lang].trim(), `pages.inspections.title.${lang}`).not.toBe('');
+      expect(PAGES.inspections.description[lang].trim(), `pages.inspections.description.${lang}`).not.toBe('');
     }
   });
 });
