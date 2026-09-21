@@ -36,7 +36,8 @@ interface ParityFixture {
 }
 
 // Validated boundary: the fixture is committed oracle data (ADR-6), its shape is
-// enforced by the assertions below and by the one-off generator that produced it.
+// enforced by the assertions below and by scripts/distill-parity.mjs, which distilled
+// it from the built site (never hand-edit).
 const parity = JSON.parse(
   readFileSync(new URL('./fixtures/parity.json', import.meta.url), 'utf8')
 ) as ParityFixture;
@@ -140,7 +141,7 @@ test.describe('65-page sweep (R27, F10 R16)', () => {
   });
 });
 
-test.describe('golden parity vs spike/front/final (R27, ADR-6)', () => {
+test.describe('golden parity vs the distilled build oracle (R27, ADR-6)', () => {
   test('parity: the splash matches the oracle fixture', async ({ page }) => {
     await holdSplash(page);
     await page.goto('/');

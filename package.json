@@ -15,7 +15,8 @@
     "test:e2e": "npm run build && playwright test",
     "qa:lighthouse": "lhci autorun --config=lighthouserc.json",
     "qa:content": "node scripts/qa-content.mjs",
-    "qa:links": "node scripts/check-links.mjs"
+    "qa:links": "node scripts/check-links.mjs",
+    "distill:parity": "node scripts/distill-parity.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

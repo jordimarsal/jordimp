@@ -72,8 +72,8 @@ Follow the plan's file map (`docs/superpowers/plans/2026-09-16-portfolio-phase0-
 - Content lives only in the typed module `src/data/content.ts`; no content in pages,
   no content collections.
 - Tests mirror the source tree (`tests/` for e2e; colocated `*.spec.ts` for units;
-  `tests/fixtures/parity.json` is the committed ADR-6 oracle — regenerate only from
-  the spike, never hand-edit).
+  `tests/fixtures/parity.json` is the committed ADR-6 oracle — regenerate only via
+  `npm run distill:parity` from the built site, never hand-edit).
 - Later services are top-level workspaces: `status-api/`, `ask-api/` — never nested
   under `src/`.
 
@@ -84,7 +84,8 @@ Follow the plan's file map (`docs/superpowers/plans/2026-09-16-portfolio-phase0-
 - **Oracle-first.** Production fixes touching markup or copy shared with the spike
   oracle land in `spike/front/build/` first → regenerate the oracle
   (`node spike/front/build/generate.js` → `spike/front/final/`) → re-port 1:1 to
-  `src/`. Precedent: F7 R29, applied to the F7 human feedback and again in F9 (R1/R2
+  `src/` → re-distill the fixture (`npm run build && npm run distill:parity`).
+  Precedent: F7 R29, applied to the F7 human feedback and again in F9 (R1/R2
   aria-labels). The documented exception: optimizations only expressible in the Astro
   pipeline (e.g. inlining the font CSS) are recorded as a head deviation in the
   feature's design (F9 ADR-3) — body markup stays 1:1.
