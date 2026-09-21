@@ -855,9 +855,9 @@ export const CV: CvContent = {
     sub: { en: 'PRINTED EDITION · TWO LANGUAGES ON THE SHELF', es: 'EDICIÓN IMPRESA · DOS IDIOMAS EN LA BALDA', ca: 'EDICIÓ IMPRESA · DOS IDIOMES A LA PRESTATGERIA' },
   },
   intro: {
-    en: 'The short version of the ledger: one engineer, 8+ years of backend, event pipelines and applied AI — for the full story, take the printed edition.',
-    es: 'La versión corta del historial: un ingeniero, 8+ años de backend, pipelines de eventos e IA aplicada — para la historia completa, llévate la edición impresa.',
-    ca: 'La versió curta de l’historial: un enginyer, 8+ anys de backend, pipelines d’esdeveniments i IA aplicada — per la història completa, emporta’t l’edició impresa.',
+    en: 'The short version of the ledger: one engineer, 9+ years of backend, event pipelines and applied AI — for the full story, take the printed edition.',
+    es: 'La versión corta del historial: un ingeniero, 9+ años de backend, pipelines de eventos e IA aplicada — para la historia completa, llévate la edición impresa.',
+    ca: 'La versió curta de l’historial: un enginyer, 9+ anys de backend, pipelines d’esdeveniments i IA aplicada — per la història completa, emporta’t l’edició impresa.',
   },
   facts: {
     en: [
@@ -975,9 +975,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'CV — Jordimp & Co.',
     },
     description: {
-      en: 'The printed dossier: 8+ years of backend engineering, event pipelines and applied AI. Download the PDF in English or Spanish.',
-      es: 'El dosier impreso: 8+ años de ingeniería backend, pipelines de eventos e IA aplicada. Descarga el PDF en inglés o español.',
-      ca: 'El dossier imprès: 8+ anys d’enginyeria backend, pipelines d’esdeveniments i IA aplicada. Descarrega el PDF en anglès o espanyol.',
+      en: 'The printed dossier: 9+ years of backend engineering, event pipelines and applied AI. Download the PDF in English or Spanish.',
+      es: 'El dosier impreso: 9+ años de ingeniería backend, pipelines de eventos e IA aplicada. Descarga el PDF en inglés o español.',
+      ca: 'El dossier imprès: 9+ anys d’enginyeria backend, pipelines d’esdeveniments i IA aplicada. Descarrega el PDF en anglès o espanyol.',
     },
   },
   research: {
@@ -1453,17 +1453,17 @@ export const FRONTDESK_PAGE: FrontdeskPageContent = {
   personTitle: { en: 'The person at the desk', es: 'La persona en el mostrador', ca: 'La persona al mostrador' },
   bio: {
     en: [
-      'Behind the desk: Jordi Marçal Poy, software engineer with a Master’s in Data Science and 8+ years building REST APIs and microservices in Java (Spring Boot) and Python — plus the automation, testing and CI/CD tooling around them.',
+      'Behind the desk: Jordi Marçal Poy, software engineer with a Master’s in Data Science and 9+ years building REST APIs and microservices in Java (Spring Boot) and Python — plus the automation, testing and CI/CD tooling around them.',
       'SOLID, Clean Code and TDD as daily practice: tests first, traceable decisions and two-way code reviews. Working close to the end user, honest processes, and knowledge that flows across the team.',
       'The desk is attended in English, Español or Català — pick a floor, pick a language.',
     ],
     es: [
-      'Detrás del mostrador: Jordi Marçal Poy, ingeniero informático con máster en Ciencia de Datos y más de 8 años construyendo APIs REST y microservicios en Java (Spring Boot) y Python — además del tooling de automatización, testing y CI/CD que los rodea.',
+      'Detrás del mostrador: Jordi Marçal Poy, ingeniero informático con máster en Ciencia de Datos y más de 9 años construyendo APIs REST y microservicios en Java (Spring Boot) y Python — además del tooling de automatización, testing y CI/CD que los rodea.',
       'SOLID, Clean Code y TDD como práctica diaria: pruebas primero, decisiones trazables y code reviews bidireccionales. Trabajo cercano al cliente final, procesos honestos y conocimiento que fluye por el equipo.',
       'El mostrador se atiende en inglés, español o catalán — elige planta y elige idioma.',
     ],
     ca: [
-      'Darrere el mostrador: Jordi Marçal Poy, enginyer informàtic amb màster en Ciència de Dades i més de 8 anys construint APIs REST i microserveis en Java (Spring Boot) i Python — a més de les eines d’automatització, testing i CI/CD que els envolten.',
+      'Darrere el mostrador: Jordi Marçal Poy, enginyer informàtic amb màster en Ciència de Dades i més de 9 anys construint APIs REST i microserveis en Java (Spring Boot) i Python — a més de les eines d’automatització, testing i CI/CD que els envolten.',
       'SOLID, Clean Code i TDD com a pràctica diària: proves primer, decisions traçables i code reviews bidireccionals. Treball proper al client final, processos honestos i coneixement que flueix per l’equip.',
       'El mostrador s’atén en anglès, espanyol o català — tria planta i tria idioma.',
     ],
