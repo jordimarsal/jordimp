@@ -1,12 +1,13 @@
 import { expect, test } from '@playwright/test';
-import { PROJECTS, TIER_ORDER, tierProjects } from '../src/data/content';
+import { PROJECTS, TIER_ORDER, tierProjects, WORK } from '../src/data/content';
+import type { Locale } from '../src/lib/i18n';
 
 const ROUTES = ['/en/projects/', '/es/projects/', '/ca/projects/'] as const;
 
 const EXPECTED: Record<
   (typeof ROUTES)[number],
   {
-    lang: string;
+    lang: Locale;
     title: string;
     crumbHome: string;
     sub: string;
@@ -107,6 +108,7 @@ test.describe('projects index page (T6)', () => {
       await expect(head.locator('.sec-head__sub')).toHaveText(expected.sub);
 
       await expect(page.locator('main > p.prose')).not.toBeEmpty();
+      await expect(page.locator('main > p.prose')).toHaveText(WORK.intro[expected.lang]);
 
       const details = page.locator('details.filter-wrap[data-filter-wrap]');
       await expect(details).toHaveAttribute('open', '');
@@ -139,7 +141,7 @@ test.describe('projects index page (T6)', () => {
         await expect(tiers.nth(i).locator('article.card')).toHaveCount(counts[i]);
       }
 
-      const cards = page.locator('section.cards article.card');
+      const cards = page.locator('section.cards--tier article.card');
       const ordered = TIER_ORDER.flatMap((tier) => tierProjects(tier));
       await expect(cards).toHaveCount(ordered.length);
       for (let i = 0; i < ordered.length; i++) {
@@ -197,6 +199,19 @@ test.describe('projects index page (T6)', () => {
     await expect(shown).toHaveCount(1);
     await expect(annexCards.nth(2).locator('h3')).toHaveText('Rustcut');
     await expect(status).toHaveText(EXPECTED['/en/projects/'].oneStatus);
+  });
+
+  test('hides tier groups whose cards all filter out (en)', async ({ page }) => {
+    await page.goto('/en/projects/');
+    const thesis = page.locator('section.cards--tier[data-tier="thesis"]');
+    const satellite = page.locator('section.cards--tier[data-tier="satellite"]');
+    const annex = page.locator('section.cards--tier[data-tier="annex"]');
+
+    await page.locator('.filter-chips button[data-stack="Rust"]').click();
+
+    await expect(annex).not.toHaveAttribute('hidden', '');
+    await expect(satellite).toHaveAttribute('hidden', '');
+    await expect(thesis).toHaveAttribute('hidden', '');
   });
 
   test('OR-matches a multi-select union and resets (en)', async ({ page }) => {
