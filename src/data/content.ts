@@ -271,14 +271,14 @@ export const DEPTS: Record<DeptKey, Dept> = {
       en: 'Front Desk', es: 'Recepción', ca: 'Recepció',
     },
     line: {
-      en: 'WALK-INS WELCOME — QUESTIONS, REPOS OR HIRING.',
-      es: 'ENTRADA LIBRE — PREGUNTAS, REPOS O CONTRATACIÓN.',
-      ca: 'ENTRADA LLIURE — PREGUNTES, REPOS O CONTRACTACIÓ.',
+      en: 'WALK-INS WELCOME — ROLES, REPOS OR A SPEC-FIRST ENGAGEMENT.',
+      es: 'ENTRADA LIBRE — ROLES, REPOS O UN ENCARGO CON SPEC PRIMERO.',
+      ca: 'ENTRADA LLIURE — ROLS, REPOS O UN ENCÀRREC AMB SPEC PRIMER.',
     },
     intro: {
-      en: 'The door is always open. Questions about a floor, a repo, or a hire? Walk straight in — no appointment, no gatekeeper, no tracking scripts.',
-      es: 'La puerta siempre está abierta. ¿Preguntas sobre una planta, un repo o una contratación? Pasa sin cita, sin portero y sin scripts de rastreo.',
-      ca: 'La porta sempre és oberta. Preguntes sobre una planta, un repo o una contractació? Entra sense cita, sense porter i sense scripts de rastreig.',
+      en: 'The desk takes three things: senior or staff backend roles, short spec-first engagements, and questions about a floor or a repo. Bring the problem in your own words — if it can’t be written down, it doesn’t start.',
+      es: 'El mostrador acepta tres cosas: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo. Trae el problema con tus palabras — si no se puede escribir, no se empieza.',
+      ca: 'El mostrador accepta tres coses: rols backend sènior o staff, encàrrecs curts amb spec primer i preguntes sobre una planta o un repo. Porta el problema amb les teves paraules — si no es pot escriure, no comença.',
     },
     projects: [],
     page: 'frontdesk',
@@ -1503,6 +1503,52 @@ export const FRONTDESK_PAGE: FrontdeskPageContent = {
     en: 'Built with Astro — Bricolage Grotesque for display, Instrument Sans for body, Space Mono for labels. Static pages, zero trackers, zero external scripts; night shift included.',
     es: 'Hecho con Astro — Bricolage Grotesque para titulares, Instrument Sans para el cuerpo, Space Mono para etiquetas. Páginas estáticas, cero trackers, cero scripts externos; turno de noche incluido.',
     ca: 'Fet amb Astro — Bricolage Grotesque per a titulars, Instrument Sans per al cos, Space Mono per a etiquetes. Pàgines estàtiques, zero trackers, zero scripts externs; torn de nit inclòs.',
+  },
+  offer: {
+    openTitle: { en: 'Open for', es: 'Abierto a', ca: 'Obert a' },
+    openItems: {
+      en: [
+        'Senior / staff backend roles — platform, events, or applied AI with measurable retrieval.',
+        'Short spec-first engagements (4–8 weeks). If it can’t be written down, it doesn’t start.',
+        'Questions about a floor or a repo. No tracking, no funnel.',
+      ],
+      es: [
+        'Roles backend senior / staff — plataforma, eventos o IA aplicada con retrieval medible.',
+        'Encargos cortos con spec primero (4–8 semanas). Si no se puede escribir, no se empieza.',
+        'Preguntas sobre una planta o un repo. Sin tracking, sin funnel.',
+      ],
+      ca: [
+        'Rols backend sènior / staff — plataforma, esdeveniments o IA aplicada amb retrieval mesurable.',
+        'Encàrrecs curts amb spec primer (4–8 setmanes). Si no es pot escriure, no comença.',
+        'Preguntes sobre una planta o un repo. Sense tracking, sense funnel.',
+      ],
+    },
+    notOpenTitle: { en: 'Not open for', es: 'No abierto a', ca: 'No obert a' },
+    notOpenItems: {
+      en: ['Vibe-coded MVPs, “add ChatGPT to our app”, or unbounded retainers.'],
+      es: ['MVPs vibe-coded, «añádeme ChatGPT a la app» o retainers sin límite.'],
+      ca: ['MVPs vibe-coded, «posa ChatGPT a la nostra app» o retainers sense límit.'],
+    },
+    firmLine: {
+      en: 'Jordimp & Co. is how the work is done — currently inside a telco platform team, not a staffing firm.',
+      es: 'Jordimp & Co. es cómo se hace el trabajo — ahora dentro de un equipo de plataforma telco, no una consultora de personal.',
+      ca: 'Jordimp & Co. és com es fa la feina — ara dins d’un equip de plataforma telco, no una consultora de personal.',
+    },
+    howLine: {
+      en: 'How it works — 01 Brief · 02 Spec · 03 Build (tests first) · 04 Audit.',
+      es: 'Cómo funciona — 01 Brief · 02 Spec · 03 Build (tests primero) · 04 Auditoría.',
+      ca: 'Com funciona — 01 Brief · 02 Spec · 03 Build (proves primer) · 04 Auditoria.',
+    },
+    deskLine: {
+      en: 'Desk attended in English, Español or Català.',
+      es: 'Mostrador atendido en English, Español o Català.',
+      ca: 'Mostrador atès en English, Español o Català.',
+    },
+  },
+  cta: {
+    en: 'WALK-INS WELCOME — ROLE, REPO OR A SPEC-FIRST ENGAGEMENT.',
+    es: 'ENTRADA LIBRE — ROL, REPO O ENCARGO CON SPEC.',
+    ca: 'ENTRADA LLIURE — ROL, REPO O ENCÀRREC AMB SPEC.',
   },
 };
 

@@ -191,6 +191,26 @@ const trail = [
 
     {deptKey === 'frontdesk' && (
       <>
+        <section class="section" aria-labelledby="fd-offer">
+          <p class="dept-line">{FRONTDESK_PAGE.cta[lang]}</p>
+          <h2 id="fd-offer" class="section-title">{FRONTDESK_PAGE.offer.openTitle[lang]}</h2>
+          <div class="prose">
+            <ul>
+              {FRONTDESK_PAGE.offer.openItems[lang].map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+          <h2 id="fd-not-open" class="section-title">{FRONTDESK_PAGE.offer.notOpenTitle[lang]}</h2>
+          <div class="prose" aria-labelledby="fd-not-open">
+            <ul>
+              {FRONTDESK_PAGE.offer.notOpenItems[lang].map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+          <aside class="oncall" aria-labelledby="fd-firm">
+            <h3 id="fd-firm">{FRONTDESK_PAGE.offer.firmLine[lang]}</h3>
+            <p>{FRONTDESK_PAGE.offer.howLine[lang]}</p>
+            <p>{FRONTDESK_PAGE.offer.deskLine[lang]}</p>
+          </aside>
+        </section>
         <section class="section" aria-labelledby="fd-person">
           <h2 id="fd-person" class="section-title">{FRONTDESK_PAGE.personTitle[lang]}</h2>
           <div class="prose">

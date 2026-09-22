@@ -8,6 +8,7 @@ import {
   FLOOR_LABELS,
   FLOOR_ORDER,
   FOOTER,
+  FRONTDESK_PAGE,
   HOME,
   INSPECTIONS_PAGE,
   LOCALES,
@@ -199,6 +200,65 @@ describe('home positioning (F11)', () => {
     for (const lang of LOCALES) {
       expect(HOME.stand[lang], lang).toContain('<b>2017</b>');
     }
+  });
+});
+
+describe('front-desk positioning (F11)', () => {
+  it('defines the offer block with the exact English copy in three locales (R4)', () => {
+    expect(FRONTDESK_PAGE.offer.openTitle.en).toBe('Open for');
+    expect(FRONTDESK_PAGE.offer.openItems.en).toEqual([
+      'Senior / staff backend roles — platform, events, or applied AI with measurable retrieval.',
+      'Short spec-first engagements (4–8 weeks). If it can’t be written down, it doesn’t start.',
+      'Questions about a floor or a repo. No tracking, no funnel.',
+    ]);
+    expect(FRONTDESK_PAGE.offer.notOpenTitle.en).toBe('Not open for');
+    expect(FRONTDESK_PAGE.offer.notOpenItems.en).toEqual([
+      'Vibe-coded MVPs, “add ChatGPT to our app”, or unbounded retainers.',
+    ]);
+    expect(FRONTDESK_PAGE.offer.firmLine.en).toBe(
+      'Jordimp & Co. is how the work is done — currently inside a telco platform team, not a staffing firm.',
+    );
+    expect(FRONTDESK_PAGE.offer.howLine.en).toBe(
+      'How it works — 01 Brief · 02 Spec · 03 Build (tests first) · 04 Audit.',
+    );
+    expect(FRONTDESK_PAGE.offer.deskLine.en).toBe('Desk attended in English, Español or Català.');
+
+    for (const lang of LOCALES) {
+      expect(FRONTDESK_PAGE.offer.openTitle[lang].trim(), lang).not.toBe('');
+      expect(FRONTDESK_PAGE.offer.notOpenTitle[lang].trim(), lang).not.toBe('');
+      expect(FRONTDESK_PAGE.offer.firmLine[lang].trim(), lang).not.toBe('');
+      expect(FRONTDESK_PAGE.offer.howLine[lang].trim(), lang).not.toBe('');
+      expect(FRONTDESK_PAGE.offer.deskLine[lang].trim(), lang).not.toBe('');
+      expect(FRONTDESK_PAGE.offer.openItems[lang]).toHaveLength(3);
+      expect(FRONTDESK_PAGE.offer.notOpenItems[lang]).toHaveLength(1);
+      for (const item of [
+        ...FRONTDESK_PAGE.offer.openItems[lang],
+        ...FRONTDESK_PAGE.offer.notOpenItems[lang],
+      ]) {
+        expect(item.trim(), lang).not.toBe('');
+      }
+    }
+  });
+
+  it('sets the hall CTA tagline in three locales (R5)', () => {
+    expect(FRONTDESK_PAGE.cta).toEqual({
+      en: 'WALK-INS WELCOME — ROLE, REPO OR A SPEC-FIRST ENGAGEMENT.',
+      es: 'ENTRADA LIBRE — ROL, REPO O ENCARGO CON SPEC.',
+      ca: 'ENTRADA LLIURE — ROL, REPO O ENCÀRREC AMB SPEC.',
+    });
+  });
+
+  it('repoints the front-desk floor line and intro at the offer (R6, R7)', () => {
+    expect(DEPTS.frontdesk.line).toEqual({
+      en: 'WALK-INS WELCOME — ROLES, REPOS OR A SPEC-FIRST ENGAGEMENT.',
+      es: 'ENTRADA LIBRE — ROLES, REPOS O UN ENCARGO CON SPEC PRIMERO.',
+      ca: 'ENTRADA LLIURE — ROLS, REPOS O UN ENCÀRREC AMB SPEC PRIMER.',
+    });
+    expect(DEPTS.frontdesk.intro).toEqual({
+      en: 'The desk takes three things: senior or staff backend roles, short spec-first engagements, and questions about a floor or a repo. Bring the problem in your own words — if it can’t be written down, it doesn’t start.',
+      es: 'El mostrador acepta tres cosas: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo. Trae el problema con tus palabras — si no se puede escribir, no se empieza.',
+      ca: 'El mostrador accepta tres coses: rols backend sènior o staff, encàrrecs curts amb spec primer i preguntes sobre una planta o un repo. Porta el problema amb les teves paraules — si no es pot escriure, no comença.',
+    });
   });
 });
 
