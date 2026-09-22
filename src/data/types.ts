@@ -4,6 +4,8 @@ export type L10n<T> = Record<Locale, T>;
 
 export type DeptKey = 'research' | 'telemetry' | 'tooling' | 'inspections' | 'people' | 'operations' | 'frontdesk';
 
+export type Tier = 'thesis' | 'satellite' | 'annex';
+
 export type NavKey = 'home' | 'work' | 'cv' | 'departments';
 
 export interface SiteInfo {
@@ -78,6 +80,7 @@ export interface Project extends ProjectL10n {
   readonly name: string;
   readonly year: string;
   readonly featured: boolean;
+  readonly tier: Tier;
   readonly dept: DeptKey;
   readonly stack: readonly string[];
   readonly github: string;

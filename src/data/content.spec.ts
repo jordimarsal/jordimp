@@ -17,8 +17,11 @@ import {
   SITE,
   SKILLS,
   TICKER,
+  TIER_LABELS,
+  TIER_ORDER,
   UI,
   project,
+  tierProjects,
 } from './content';
 import { SITE as CONFIG_SITE } from '../config';
 
@@ -335,6 +338,32 @@ describe('featured data', () => {
     expect(new Set(FEATURED).size).toBe(FEATURED_COUNT);
     for (const slug of FEATURED) {
       expect(PROJECTS.map((p) => p.slug), slug).toContain(slug);
+    }
+  });
+});
+
+const TIER_MAP: Record<string, string> = {
+  codebaserag: 'thesis', 'kafka-adapter-telemetry': 'thesis', 'harness-standard': 'thesis',
+  'redis-toolkit': 'satellite', 'interview-simulator': 'satellite',
+  'md-mermaid-pdf': 'satellite', 'mcp-transparent-png': 'satellite',
+  'bible-text-analysis': 'annex', 'product-offers': 'annex',
+  'spring-boot-casino': 'annex', rustcut: 'annex',
+};
+
+describe('project tiers', () => {
+  it('assigns exactly the R3 tier map', () => {
+    expect(Object.fromEntries(PROJECTS.map((p) => [p.slug, p.tier]))).toEqual(TIER_MAP);
+  });
+
+  it('keeps the thesis tier equal to FEATURED', () => {
+    expect(tierProjects('thesis').map((p) => p.slug)).toEqual([...FEATURED]);
+  });
+
+  it('partitions the 11 projects 3 / 4 / 4 in tier order', () => {
+    expect(TIER_ORDER).toEqual(['thesis', 'satellite', 'annex']);
+    expect(TIER_ORDER.map((t) => tierProjects(t).length)).toEqual([3, 4, 4]);
+    for (const tier of TIER_ORDER) {
+      for (const lang of LOCALES) expect(TIER_LABELS[tier][lang].trim()).not.toBe('');
     }
   });
 });
