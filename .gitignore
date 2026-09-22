@@ -39,3 +39,6 @@ spike/
 
 # local quality-audit reports (workflow artifacts)
 reports/
+
+# local review notes
+MILLORES.md
