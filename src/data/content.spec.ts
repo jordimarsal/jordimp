@@ -8,15 +8,19 @@ import {
   FLOOR_LABELS,
   FLOOR_ORDER,
   FOOTER,
+  FRONTDESK_PAGE,
+  HOME,
   INSPECTIONS_PAGE,
   LOCALES,
   PAGES,
   PROJECTS,
+  SITE,
   SKILLS,
   TICKER,
   UI,
   project,
 } from './content';
+import { SITE as CONFIG_SITE } from '../config';
 
 const PROJECT_COUNT = 11;
 const FEATURED_COUNT = 3;
@@ -166,6 +170,162 @@ describe('inspections page copy (F10)', () => {
       expect(PAGES.inspections.title[lang].trim(), `pages.inspections.title.${lang}`).not.toBe('');
       expect(PAGES.inspections.description[lang].trim(), `pages.inspections.description.${lang}`).not.toBe('');
     }
+  });
+});
+
+describe('home positioning (F11)', () => {
+  it('repositions the home kicker (R1)', () => {
+    expect(HOME.kicker).toEqual({
+      en: 'SENIOR BACKEND ENGINEER — SYSTEMS YOU CAN AUDIT',
+      es: 'INGENIERO BACKEND SENIOR — SISTEMAS QUE SE PUEDEN AUDITAR',
+      ca: 'ENGINYER BACKEND SÈNIOR — SISTEMES QUE ES PODEN AUDITAR',
+    });
+  });
+
+  it('repositions the home h1 keeping exactly one highlight mark (R2)', () => {
+    expect(HOME.h1).toEqual({
+      en: 'One company. One engineer. <mark>Specs before code.</mark>',
+      es: 'Una empresa. Un ingeniero. <mark>Specs antes que código.</mark>',
+      ca: 'Una empresa. Un enginyer. <mark>Specs abans de codi.</mark>',
+    });
+    for (const lang of LOCALES) {
+      expect(HOME.h1[lang].match(/<mark>/g), lang).toHaveLength(1);
+    }
+  });
+
+  it('repositions the home standfirst keeping the est. mark (R3)', () => {
+    expect(HOME.stand).toEqual({
+      en: 'Jordimp & Co. is the working name of one engineer: backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since <b>2017</b>. Currently inside a telco platform team. Walk-ins: roles, repos, or a short spec-first engagement.',
+      es: 'Jordimp & Co. es el nombre de trabajo de un solo ingeniero: sistemas backend, pipelines de eventos e IA aplicada, diseñados, construidos y auditados por el mismo par de manos desde <b>2017</b>. Ahora, dentro de un equipo de plataforma telco. Entrada libre: roles, repos o un encargo corto con spec primero.',
+      ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer: sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des del <b>2017</b>. Ara, dins d’un equip de plataforma telco. Entrada lliure: rols, repos, o un encàrrec curt amb spec primer.',
+    });
+    for (const lang of LOCALES) {
+      expect(HOME.stand[lang], lang).toContain('<b>2017</b>');
+    }
+  });
+});
+
+describe('front-desk positioning (F11)', () => {
+  it('defines the offer block with the exact English copy in three locales (R4)', () => {
+    expect(FRONTDESK_PAGE.offer.openTitle.en).toBe('Open for');
+    expect(FRONTDESK_PAGE.offer.openItems.en).toEqual([
+      'Senior / staff backend roles — platform, events, or applied AI with measurable retrieval.',
+      'Short spec-first engagements (4–8 weeks). If it can’t be written down, it doesn’t start.',
+      'Questions about a floor or a repo. No tracking, no funnel.',
+    ]);
+    expect(FRONTDESK_PAGE.offer.notOpenTitle.en).toBe('Not open for');
+    expect(FRONTDESK_PAGE.offer.notOpenItems.en).toEqual([
+      'Vibe-coded MVPs, “add ChatGPT to our app”, or unbounded retainers.',
+    ]);
+    expect(FRONTDESK_PAGE.offer.firmLine.en).toBe(
+      'Jordimp & Co. is how the work is done — currently inside a telco platform team, not a staffing firm.',
+    );
+    expect(FRONTDESK_PAGE.offer.howLine.en).toBe(
+      'How it works — 01 Brief · 02 Spec · 03 Build (tests first) · 04 Audit.',
+    );
+    expect(FRONTDESK_PAGE.offer.deskLine.en).toBe('Desk attended in English, Español or Català.');
+
+    for (const lang of LOCALES) {
+      expect(FRONTDESK_PAGE.offer.openTitle[lang].trim(), lang).not.toBe('');
+      expect(FRONTDESK_PAGE.offer.notOpenTitle[lang].trim(), lang).not.toBe('');
+      expect(FRONTDESK_PAGE.offer.firmLine[lang].trim(), lang).not.toBe('');
+      expect(FRONTDESK_PAGE.offer.howLine[lang].trim(), lang).not.toBe('');
+      expect(FRONTDESK_PAGE.offer.deskLine[lang].trim(), lang).not.toBe('');
+      expect(FRONTDESK_PAGE.offer.openItems[lang]).toHaveLength(3);
+      expect(FRONTDESK_PAGE.offer.notOpenItems[lang]).toHaveLength(1);
+      for (const item of [
+        ...FRONTDESK_PAGE.offer.openItems[lang],
+        ...FRONTDESK_PAGE.offer.notOpenItems[lang],
+      ]) {
+        expect(item.trim(), lang).not.toBe('');
+      }
+    }
+  });
+
+  it('sets the hall CTA tagline in three locales (R5)', () => {
+    expect(FRONTDESK_PAGE.cta).toEqual({
+      en: 'WALK-INS WELCOME — ROLE, REPO OR A SPEC-FIRST ENGAGEMENT.',
+      es: 'ENTRADA LIBRE — ROL, REPO O ENCARGO CON SPEC.',
+      ca: 'ENTRADA LLIURE — ROL, REPO O ENCÀRREC AMB SPEC.',
+    });
+  });
+
+  it('repoints the front-desk floor line and intro at the offer (R6, R7)', () => {
+    expect(DEPTS.frontdesk.line).toEqual({
+      en: 'WALK-INS WELCOME — ROLES, REPOS OR A SPEC-FIRST ENGAGEMENT.',
+      es: 'ENTRADA LIBRE — ROLES, REPOS O UN ENCARGO CON SPEC PRIMERO.',
+      ca: 'ENTRADA LLIURE — ROLS, REPOS O UN ENCÀRREC AMB SPEC PRIMER.',
+    });
+    expect(DEPTS.frontdesk.intro).toEqual({
+      en: 'The desk takes three things: senior or staff backend roles, short spec-first engagements, and questions about a floor or a repo. Bring the problem in your own words — if it can’t be written down, it doesn’t start.',
+      es: 'El mostrador acepta tres cosas: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo. Trae el problema con tus palabras — si no se puede escribir, no se empieza.',
+      ca: 'El mostrador accepta tres coses: rols backend sènior o staff, encàrrecs curts amb spec primer i preguntes sobre una planta o un repo. Porta el problema amb les teves paraules — si no es pot escriure, no comença.',
+    });
+  });
+
+  it('aligns the footer line and page descriptions with the positioning (R8, R9, R10)', () => {
+    expect(FOOTER.line).toEqual({
+      en: 'Jordimp & Co. is the working name of one engineer — currently inside a telco platform team. Walk-ins: roles, repos, or a short spec-first engagement.',
+      es: 'Jordimp & Co. es el nombre de trabajo de un solo ingeniero — ahora dentro de un equipo de plataforma telco. Entrada libre: roles, repos o un encargo corto con spec primero.',
+      ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer — ara dins d’un equip de plataforma telco. Entrada lliure: rols, repos o un encàrrec curt amb spec primer.',
+    });
+    expect(PAGES.home.description).toEqual({
+      en: 'Jordimp & Co. is the working name of one engineer: backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since 2017. Currently inside a telco platform team. Walk-ins: roles, repos, or a short spec-first engagement.',
+      es: 'Jordimp & Co. es el nombre de trabajo de un solo ingeniero: sistemas backend, pipelines de eventos e IA aplicada, diseñados, construidos y auditados por el mismo par de manos desde 2017. Ahora, dentro de un equipo de plataforma telco. Entrada libre: roles, repos o un encargo corto con spec primero.',
+      ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer: sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des del 2017. Ara, dins d’un equip de plataforma telco. Entrada lliure: rols, repos o un encàrrec curt amb spec primer.',
+    });
+    expect(PAGES.frontdesk.description).toEqual({
+      en: 'Walk-ins welcome: senior or staff backend roles, short spec-first engagements, and questions about a floor or a repo — no tracking, no funnel. Jordimp & Co. is how the work is done, not a staffing firm.',
+      es: 'Entrada libre: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo — sin tracking, sin funnel. Jordimp & Co. es como se hace el trabajo, no una consultora de personal.',
+      ca: 'Entrada lliure: rols backend sènior o staff, encàrrecs curts amb spec primer i preguntes sobre una planta o un repo — sense tracking, sense funnel. Jordimp & Co. és com es fa la feina, no una consultora de personal.',
+    });
+    for (const lang of LOCALES) {
+      expect(PAGES.home.description[lang], lang).not.toMatch(/[<>]/);
+      expect(PAGES.frontdesk.description[lang], lang).not.toMatch(/[<>]/);
+    }
+  });
+
+  it('adds the Open Gateway conflict-of-interest line to F2 (R11)', () => {
+    const coi = {
+      en: 'Personal study of the Open Gateway telemetry problem. Not Telefónica code. Not production traffic.',
+      es: 'Estudio personal del problema de telemetría de Open Gateway. No es código de Telefónica. No es tráfico de producción.',
+      ca: 'Estudi personal del problema de telemetria d’Open Gateway. No és codi de Telefónica. No és trànsit de producció.',
+    } as const;
+    for (const lang of LOCALES) {
+      expect(DEPTS.telemetry.intro[lang].endsWith(coi[lang]), lang).toBe(true);
+    }
+  });
+
+  it('keeps the four how-it-works steps verbatim (R12)', () => {
+    const expected = {
+      en: [
+        { k: '01 — BRIEF', v: 'You bring the problem, in your own words.' },
+        { k: '02 — SPEC', v: 'We pin it down in writing, before any code.' },
+        { k: '03 — BUILD', v: 'Tests first, I/O at the edges, demos as it grows.' },
+        { k: '04 — AUDIT', v: 'You get answers you can check, not vibes you can hope for.' },
+      ],
+      es: [
+        { k: '01 — BRIEF', v: 'Traes el problema, con tus palabras.' },
+        { k: '02 — SPEC', v: 'Lo fijamos por escrito, antes de cualquier código.' },
+        { k: '03 — BUILD', v: 'Tests primero, I/O en los bordes, demos mientras crece.' },
+        { k: '04 — AUDIT', v: 'Recibes respuestas que puedes verificar, no promesas que tienes que creer.' },
+      ],
+      ca: [
+        { k: '01 — BRIEF', v: 'Portes el problema, amb les teves paraules.' },
+        { k: '02 — SPEC', v: 'El fixem per escrit, abans de qualsevol codi.' },
+        { k: '03 — BUILD', v: 'Proves primer, I/O a les vores, demos mentre creix.' },
+        { k: '04 — AUDIT', v: 'Reps respostes que pots verificar, no promeses que has de creure.' },
+      ],
+    } as const;
+    for (const lang of LOCALES) {
+      expect(FRONTDESK_PAGE.how[lang], lang).toEqual(expected[lang]);
+    }
+  });
+
+  it('keeps the contact email unchanged in content and config (R13)', () => {
+    expect(SITE.email).toBe('jordi.marsal@gmail.com');
+    expect(CONFIG_SITE.email).toBe(SITE.email);
+    expect(CONFIG_SITE.email).toBe('jordi.marsal@gmail.com');
   });
 });
 

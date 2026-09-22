@@ -250,6 +250,16 @@ export interface PeoplePageContent {
   readonly orgRoles: L10n<readonly string[]>;
 }
 
+export interface FrontdeskOffer {
+  readonly openTitle: L10n<string>;
+  readonly openItems: L10n<readonly string[]>;
+  readonly notOpenTitle: L10n<string>;
+  readonly notOpenItems: L10n<readonly string[]>;
+  readonly firmLine: L10n<string>;
+  readonly howLine: L10n<string>;
+  readonly deskLine: L10n<string>;
+}
+
 export interface FrontdeskPageContent {
   readonly personTitle: L10n<string>;
   readonly bio: L10n<readonly string[]>;
@@ -262,6 +272,8 @@ export interface FrontdeskPageContent {
   readonly how: L10n<readonly KVEntry[]>;
   readonly colophonTitle: L10n<string>;
   readonly colophon: L10n<string>;
+  readonly offer: FrontdeskOffer;
+  readonly cta: L10n<string>;
 }
 
 export interface QualityScores {

@@ -229,6 +229,23 @@ test.describe('department pages (T8)', () => {
     await expect(page.locator('p.avail .dot--live')).toHaveCount(1);
     await expect(page.locator('p.avail')).toContainText(FRONTDESK_PAGE.avail.en);
 
+    const offer = page.locator('section:has(#fd-offer)');
+    await expect(page.locator('#fd-offer')).toHaveText(FRONTDESK_PAGE.offer.openTitle.en);
+    await expect(page.locator('#fd-not-open')).toHaveText(FRONTDESK_PAGE.offer.notOpenTitle.en);
+    await expect(offer.locator('p.dept-line')).toHaveText(FRONTDESK_PAGE.cta.en);
+    const openItems = offer.locator('.prose').nth(0).locator('li');
+    await expect(openItems).toHaveCount(FRONTDESK_PAGE.offer.openItems.en.length);
+    for (let i = 0; i < FRONTDESK_PAGE.offer.openItems.en.length; i++) {
+      await expect(openItems.nth(i)).toHaveText(FRONTDESK_PAGE.offer.openItems.en[i]);
+    }
+    const notOpenItems = offer.locator('.prose').nth(1).locator('li');
+    await expect(notOpenItems).toHaveCount(FRONTDESK_PAGE.offer.notOpenItems.en.length);
+    await expect(notOpenItems.nth(0)).toHaveText(FRONTDESK_PAGE.offer.notOpenItems.en[0]);
+    await expect(offer.locator('aside.oncall h3')).toHaveText(FRONTDESK_PAGE.offer.firmLine.en);
+    const closing = offer.locator('aside.oncall p');
+    await expect(closing.nth(0)).toHaveText(FRONTDESK_PAGE.offer.howLine.en);
+    await expect(closing.nth(1)).toHaveText(FRONTDESK_PAGE.offer.deskLine.en);
+
     const rows = page.locator('.contact-rows .contact-row');
     await expect(rows).toHaveCount(3);
     const emailRow = rows.nth(0);

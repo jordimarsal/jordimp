@@ -51,7 +51,7 @@ describe('GET-ready llms.txt content (canonical data)', () => {
     expect(text).toContain('- Q Inspections — THE ITE CERTIFICATE — EVERY SCORE ON THE WALL, DATED AND SIGNED.');
     expect(text).toContain('- M People & Principles — HOW THE WORK GETS DONE — STACK, STANDARDS AND THE WORKING RULES.');
     expect(text).toContain('- F0 Operations — THE CAREER LEDGER — 2017 TO PRESENT, SAME PAIR OF HANDS.');
-    expect(text).toContain('- B Front Desk — WALK-INS WELCOME — QUESTIONS, REPOS OR HIRING.');
+    expect(text).toContain('- B Front Desk — WALK-INS WELCOME — ROLES, REPOS OR A SPEC-FIRST ENGAGEMENT.');
   });
 
   it('uses the linked directory URLs everywhere', () => {
@@ -103,6 +103,18 @@ describe('GET-ready llms-full.txt content (canonical data)', () => {
       'The inspection floor keeps the quality wall: Lighthouse gauges, test counters, bundle weight and dependency census',
     );
     expect(text).toContain('- [Q department page](https://jordimp.net/en/departments/inspections/)');
+  });
+
+  it('carries the updated Front Desk offer intro', () => {
+    expect(text).toContain(
+      'The desk takes three things: senior or staff backend roles, short spec-first engagements, and questions about a floor or a repo.',
+    );
+  });
+
+  it('carries the telemetry conflict-of-interest line', () => {
+    expect(text).toContain(
+      'Personal study of the Open Gateway telemetry problem. Not Telefónica code. Not production traffic.',
+    );
   });
 
   it('matches the committed llms-full.txt regression oracle', () => {

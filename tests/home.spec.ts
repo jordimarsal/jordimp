@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { floorPlateLabel } from '../src/lib/building-svg';
 import { parseQuality, plaqueText } from '../src/lib/quality';
-import { FEATURED, UI, project } from '../src/data/content';
+import { FEATURED, HOME, UI, project } from '../src/data/content';
 
 const qualityJson: unknown = JSON.parse(
   readFileSync(new URL('../src/data/quality.json', import.meta.url), 'utf8'),
@@ -24,6 +24,8 @@ const SUFFIX: Record<string, { research: string; operations: string; name: strin
 };
 
 const FLOOR_KEYS = ['research', 'telemetry', 'tooling', 'inspections', 'people', 'operations', 'frontdesk'] as const;
+
+const MARK_TEXT = { en: 'Specs before code.', es: 'Specs antes que código.', ca: 'Specs abans de codi.' } as const;
 
 async function expectHomeChrome(page: Page, home: string): Promise<void> {
   const lang = home.replace(/\//g, '');
@@ -134,6 +136,14 @@ test.describe('home building page (T4)', () => {
           `${p.name} — ${UI.viewGithub[lang]}`,
         );
       }
+    });
+
+    test(`positions the hero copy at ${home}`, async ({ page }) => {
+      await page.goto(home);
+      const lang = home.replace(/\//g, '') as 'en' | 'es' | 'ca';
+      await expect(page.locator('.hero .kicker')).toHaveText(HOME.kicker[lang]);
+      await expect(page.locator('h1 mark')).toHaveText(MARK_TEXT[lang]);
+      await expect(page.locator('.stand')).toHaveText(HOME.stand[lang].replace(/<[^>]+>/g, ''));
     });
   }
 });

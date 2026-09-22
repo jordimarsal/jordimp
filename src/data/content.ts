@@ -97,19 +97,19 @@ export const TICKER: L10n<readonly string[]> = {
 
 export const HOME: HomeContent = {
   kicker: {
-    en: 'SENIOR BACKEND ENGINEER — JAVA · PYTHON · AI/LLM',
-    es: 'INGENIERO BACKEND SENIOR — JAVA · PYTHON · IA/LLM',
-    ca: 'ENGINYER BACKEND SÈNIOR — JAVA · PYTHON · IA/LLM',
+    en: 'SENIOR BACKEND ENGINEER — SYSTEMS YOU CAN AUDIT',
+    es: 'INGENIERO BACKEND SENIOR — SISTEMAS QUE SE PUEDEN AUDITAR',
+    ca: 'ENGINYER BACKEND SÈNIOR — SISTEMES QUE ES PODEN AUDITAR',
   },
   h1: {
-    en: 'One company. One engineer. <mark>Walk the floors.</mark>',
-    es: 'Una empresa. Un ingeniero. <mark>Recorre las plantas.</mark>',
-    ca: 'Una empresa. Un enginyer. <mark>Recorre les plantes.</mark>',
+    en: 'One company. One engineer. <mark>Specs before code.</mark>',
+    es: 'Una empresa. Un ingeniero. <mark>Specs antes que código.</mark>',
+    ca: 'Una empresa. Un enginyer. <mark>Specs abans de codi.</mark>',
   },
   stand: {
-    en: 'Jordimp & Co. is a one-person engineering firm — backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since <b>2017</b>. Answers you can audit, not vibes you can hope for.',
-    es: 'Jordimp & Co. es una ingeniería de una sola persona — sistemas backend, pipelines de eventos e IA aplicada, diseñados, construidos y auditados por el mismo par de manos desde <b>2017</b>. Respuestas que puedes auditar, no promesas que tienes que creer.',
-    ca: 'Jordimp & Co. és una enginyeria d’una sola persona — sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des de <b>2017</b>. Respostes que pots auditar, no promeses que has de creure.',
+    en: 'Jordimp & Co. is the working name of one engineer: backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since <b>2017</b>. Currently inside a telco platform team. Walk-ins: roles, repos, or a short spec-first engagement.',
+    es: 'Jordimp & Co. es el nombre de trabajo de un solo ingeniero: sistemas backend, pipelines de eventos e IA aplicada, diseñados, construidos y auditados por el mismo par de manos desde <b>2017</b>. Ahora, dentro de un equipo de plataforma telco. Entrada libre: roles, repos o un encargo corto con spec primero.',
+    ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer: sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des del <b>2017</b>. Ara, dins d’un equip de plataforma telco. Entrada lliure: rols, repos, o un encàrrec curt amb spec primer.',
   },
   metaChips: {
     en: ['EST. 2017', 'BARCELONA', 'EN / ES / CA', '11 OPEN REPOS', '1 ENGINEER'],
@@ -166,9 +166,9 @@ export const DEPTS: Record<DeptKey, Dept> = {
       ca: 'LA TUBERIA QUE NO POT MENTIR — TELEMETRIA AMB FALLADES HONESTES.',
     },
     intro: {
-      en: 'Event pipelines, rate limits and health tracking with honest failure modes. When a dependency goes down, callers know exactly where they stand.',
-      es: 'Pipelines de eventos, rate limits y salud de servicios con modos de fallo honestos. Cuando una dependencia se cae, el que llama sabe exactamente dónde está.',
-      ca: 'Pipelines d’esdeveniments, rate limits i salut de serveis amb modes de fallada honests. Quan una dependència cau, qui crida sap exactament on és.',
+      en: 'Event pipelines, rate limits and health tracking with honest failure modes. When a dependency goes down, callers know exactly where they stand. Personal study of the Open Gateway telemetry problem. Not Telefónica code. Not production traffic.',
+      es: 'Pipelines de eventos, rate limits y salud de servicios con modos de fallo honestos. Cuando una dependencia se cae, el que llama sabe exactamente dónde está. Estudio personal del problema de telemetría de Open Gateway. No es código de Telefónica. No es tráfico de producción.',
+      ca: 'Pipelines d’esdeveniments, rate limits i salut de serveis amb modes de fallada honests. Quan una dependència cau, qui crida sap exactament on és. Estudi personal del problema de telemetria d’Open Gateway. No és codi de Telefónica. No és trànsit de producció.',
     },
     projects: ['kafka-adapter-telemetry', 'redis-toolkit', 'product-offers'],
     page: 'telemetry',
@@ -271,14 +271,14 @@ export const DEPTS: Record<DeptKey, Dept> = {
       en: 'Front Desk', es: 'Recepción', ca: 'Recepció',
     },
     line: {
-      en: 'WALK-INS WELCOME — QUESTIONS, REPOS OR HIRING.',
-      es: 'ENTRADA LIBRE — PREGUNTAS, REPOS O CONTRATACIÓN.',
-      ca: 'ENTRADA LLIURE — PREGUNTES, REPOS O CONTRACTACIÓ.',
+      en: 'WALK-INS WELCOME — ROLES, REPOS OR A SPEC-FIRST ENGAGEMENT.',
+      es: 'ENTRADA LIBRE — ROLES, REPOS O UN ENCARGO CON SPEC PRIMERO.',
+      ca: 'ENTRADA LLIURE — ROLS, REPOS O UN ENCÀRREC AMB SPEC PRIMER.',
     },
     intro: {
-      en: 'The door is always open. Questions about a floor, a repo, or a hire? Walk straight in — no appointment, no gatekeeper, no tracking scripts.',
-      es: 'La puerta siempre está abierta. ¿Preguntas sobre una planta, un repo o una contratación? Pasa sin cita, sin portero y sin scripts de rastreo.',
-      ca: 'La porta sempre és oberta. Preguntes sobre una planta, un repo o una contractació? Entra sense cita, sense porter i sense scripts de rastreig.',
+      en: 'The desk takes three things: senior or staff backend roles, short spec-first engagements, and questions about a floor or a repo. Bring the problem in your own words — if it can’t be written down, it doesn’t start.',
+      es: 'El mostrador acepta tres cosas: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo. Trae el problema con tus palabras — si no se puede escribir, no se empieza.',
+      ca: 'El mostrador accepta tres coses: rols backend sènior o staff, encàrrecs curts amb spec primer i preguntes sobre una planta o un repo. Porta el problema amb les teves paraules — si no es pot escriure, no comença.',
     },
     projects: [],
     page: 'frontdesk',
@@ -918,9 +918,9 @@ export const FOOTER: FooterContent = {
     ca: 'La porta sempre és oberta.',
   },
   line: {
-    en: 'Questions about a floor, a repo, or a hire? Walk straight in — no appointment, no gatekeeper, no tracking scripts.',
-    es: '¿Preguntas sobre una planta, un repo o una contratación? Pasa sin cita, sin portero y sin scripts de rastreo.',
-    ca: 'Preguntes sobre una planta, un repo o una contractació? Entra sense cita, sense porter i sense scripts de rastreig.',
+    en: 'Jordimp & Co. is the working name of one engineer — currently inside a telco platform team. Walk-ins: roles, repos, or a short spec-first engagement.',
+    es: 'Jordimp & Co. es el nombre de trabajo de un solo ingeniero — ahora dentro de un equipo de plataforma telco. Entrada libre: roles, repos o un encargo corto con spec primero.',
+    ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer — ara dins d’un equip de plataforma telco. Entrada lliure: rols, repos o un encàrrec curt amb spec primer.',
   },
   email: { en: 'EMAIL', es: 'EMAIL', ca: 'EMAIL' },
   github: { en: 'GITHUB', es: 'GITHUB', ca: 'GITHUB' },
@@ -947,9 +947,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'Jordimp & Co. — Jordi Marçal Poy, Enginyer Backend Sènior',
     },
     description: {
-      en: 'Jordimp & Co. is a one-person engineering firm — backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since 2017. Walk the floors.',
-      es: 'Jordimp & Co. es una ingeniería de una sola persona — sistemas backend, pipelines de eventos e IA aplicada, diseñados, construidos y auditados por el mismo par de manos desde 2017. Recorre las plantas.',
-      ca: 'Jordimp & Co. és una enginyeria d’una sola persona — sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des del 2017. Recorre les plantes.',
+      en: 'Jordimp & Co. is the working name of one engineer: backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since 2017. Currently inside a telco platform team. Walk-ins: roles, repos, or a short spec-first engagement.',
+      es: 'Jordimp & Co. es el nombre de trabajo de un solo ingeniero: sistemas backend, pipelines de eventos e IA aplicada, diseñados, construidos y auditados por el mismo par de manos desde 2017. Ahora, dentro de un equipo de plataforma telco. Entrada libre: roles, repos o un encargo corto con spec primero.',
+      ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer: sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des del 2017. Ara, dins d’un equip de plataforma telco. Entrada lliure: rols, repos o un encàrrec curt amb spec primer.',
     },
   },
   work: {
@@ -1059,9 +1059,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'B · Recepció — Jordimp & Co.',
     },
     description: {
-      en: 'Walk-ins welcome: who is behind the desk, how to reach it, availability, and how a project runs from brief to audit. No gatekeeper.',
-      es: 'Entrada libre: quién está detrás del mostrador, cómo contactarlo, disponibilidad y cómo avanza un proyecto de brief a auditoría. Sin portero.',
-      ca: 'Entrada lliure: qui és darrere el mostrador, com contactar-lo, disponibilitat i com avança un projecte de brief a auditoria. Sense porter.',
+      en: 'Walk-ins welcome: senior or staff backend roles, short spec-first engagements, and questions about a floor or a repo — no tracking, no funnel. Jordimp & Co. is how the work is done, not a staffing firm.',
+      es: 'Entrada libre: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo — sin tracking, sin funnel. Jordimp & Co. es como se hace el trabajo, no una consultora de personal.',
+      ca: 'Entrada lliure: rols backend sènior o staff, encàrrecs curts amb spec primer i preguntes sobre una planta o un repo — sense tracking, sense funnel. Jordimp & Co. és com es fa la feina, no una consultora de personal.',
     },
   },
   inspections: {
@@ -1503,6 +1503,52 @@ export const FRONTDESK_PAGE: FrontdeskPageContent = {
     en: 'Built with Astro — Bricolage Grotesque for display, Instrument Sans for body, Space Mono for labels. Static pages, zero trackers, zero external scripts; night shift included.',
     es: 'Hecho con Astro — Bricolage Grotesque para titulares, Instrument Sans para el cuerpo, Space Mono para etiquetas. Páginas estáticas, cero trackers, cero scripts externos; turno de noche incluido.',
     ca: 'Fet amb Astro — Bricolage Grotesque per a titulars, Instrument Sans per al cos, Space Mono per a etiquetes. Pàgines estàtiques, zero trackers, zero scripts externs; torn de nit inclòs.',
+  },
+  offer: {
+    openTitle: { en: 'Open for', es: 'Abierto a', ca: 'Obert a' },
+    openItems: {
+      en: [
+        'Senior / staff backend roles — platform, events, or applied AI with measurable retrieval.',
+        'Short spec-first engagements (4–8 weeks). If it can’t be written down, it doesn’t start.',
+        'Questions about a floor or a repo. No tracking, no funnel.',
+      ],
+      es: [
+        'Roles backend senior / staff — plataforma, eventos o IA aplicada con retrieval medible.',
+        'Encargos cortos con spec primero (4–8 semanas). Si no se puede escribir, no se empieza.',
+        'Preguntas sobre una planta o un repo. Sin tracking, sin funnel.',
+      ],
+      ca: [
+        'Rols backend sènior / staff — plataforma, esdeveniments o IA aplicada amb retrieval mesurable.',
+        'Encàrrecs curts amb spec primer (4–8 setmanes). Si no es pot escriure, no comença.',
+        'Preguntes sobre una planta o un repo. Sense tracking, sense funnel.',
+      ],
+    },
+    notOpenTitle: { en: 'Not open for', es: 'No abierto a', ca: 'No obert a' },
+    notOpenItems: {
+      en: ['Vibe-coded MVPs, “add ChatGPT to our app”, or unbounded retainers.'],
+      es: ['MVPs vibe-coded, «añádeme ChatGPT a la app» o retainers sin límite.'],
+      ca: ['MVPs vibe-coded, «posa ChatGPT a la nostra app» o retainers sense límit.'],
+    },
+    firmLine: {
+      en: 'Jordimp & Co. is how the work is done — currently inside a telco platform team, not a staffing firm.',
+      es: 'Jordimp & Co. es como se hace el trabajo — ahora dentro de un equipo de plataforma telco, no una consultora de personal.',
+      ca: 'Jordimp & Co. és com es fa la feina — ara dins d’un equip de plataforma telco, no una consultora de personal.',
+    },
+    howLine: {
+      en: 'How it works — 01 Brief · 02 Spec · 03 Build (tests first) · 04 Audit.',
+      es: 'Cómo funciona — 01 Brief · 02 Spec · 03 Build (tests primero) · 04 Auditoría.',
+      ca: 'Com funciona — 01 Brief · 02 Spec · 03 Build (proves primer) · 04 Auditoria.',
+    },
+    deskLine: {
+      en: 'Desk attended in English, Español or Català.',
+      es: 'Mostrador atendido en English, Español o Català.',
+      ca: 'Mostrador atès en English, Español o Català.',
+    },
+  },
+  cta: {
+    en: 'WALK-INS WELCOME — ROLE, REPO OR A SPEC-FIRST ENGAGEMENT.',
+    es: 'ENTRADA LIBRE — ROL, REPO O ENCARGO CON SPEC.',
+    ca: 'ENTRADA LLIURE — ROL, REPO O ENCÀRREC AMB SPEC.',
   },
 };
 
