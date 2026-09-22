@@ -15,12 +15,15 @@ import {
   OPERATIONS_PAGE,
   PAGES,
   PROJECTS,
+  RESEARCH_PAGE,
   SITE,
   SKILLS,
   TICKER,
   TIER_LABELS,
   TIER_ORDER,
+  TOOLING_PAGE,
   UI,
+  WORK,
   project,
   tierProjects,
 } from './content';
@@ -455,6 +458,41 @@ describe('operations notes (F0)', () => {
   it('names the displaced technology in the toolbelt note', () => {
     for (const tool of ['Kubernetes', 'CDK/CloudFormation', 'Cassandra', 'Snowflake', 'RabbitMQ', 'pandas']) {
       expect(OPERATIONS_PAGE.toolbeltNote.en).toContain(tool);
+    }
+  });
+});
+
+describe('curated floor copy', () => {
+  it('reports 2 research projects and 3 tooling projects', () => {
+    expect(RESEARCH_PAGE.stats.en).toHaveLength(3);
+    expect(RESEARCH_PAGE.stats.en[0]).toEqual({ value: '2', label: 'PROJECTS ON THIS FLOOR' });
+    expect(TOOLING_PAGE.stats.en).toHaveLength(3);
+    expect(TOOLING_PAGE.stats.en[0]).toEqual({ value: '3', label: 'PROJECTS ON THIS FLOOR' });
+    expect(JSON.stringify(TOOLING_PAGE.stats)).not.toMatch(/ASSESSMENT/);
+  });
+
+  it('names exactly the floor projects in each department description', () => {
+    const expected: Record<'research' | 'telemetry' | 'tooling', string[]> = {
+      research: ['CodebaseRAG', 'Interview Simulator'],
+      telemetry: ['kafka-adapter-telemetry', 'redis-toolkit'],
+      tooling: ['harness-standard', 'md-mermaid-pdf', 'mcp-transparent-png'],
+    };
+    for (const [key, names] of Object.entries(expected)) {
+      for (const lang of LOCALES) {
+        for (const name of names) expect(PAGES[key].description[lang]).toContain(name);
+      }
+    }
+    expect(PAGES.research.description.en).not.toContain('bible-text-analysis');
+    expect(PAGES.telemetry.description.en).not.toContain('product-offers');
+    expect(PAGES.tooling.description.en).not.toContain('rustcut');
+    expect(PAGES.tooling.description.en).not.toContain('spring-boot-casino');
+  });
+
+  it('states 11 projects and the three tiers', () => {
+    const eleven: Record<(typeof LOCALES)[number], string> = { en: 'Eleven', es: 'Once', ca: 'Onze' };
+    for (const lang of LOCALES) {
+      expect(WORK.head.sub[lang]).toContain('11');
+      expect(WORK.intro[lang]).toContain(eleven[lang]);
     }
   });
 });

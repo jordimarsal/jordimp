@@ -972,9 +972,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'Projectes — Jordimp & Co.',
     },
     description: {
-      en: 'All 11 projects on the premises: backend systems, event pipelines, applied AI and tooling. Filter by the stack you care about.',
-      es: 'Los 11 proyectos del edificio: sistemas backend, pipelines de eventos, IA aplicada y herramientas. Filtra por el stack que te interese.',
-      ca: 'Els 11 projectes de l’edifici: sistemes backend, pipelines d’esdeveniments, IA aplicada i eines. Filtra pel stack que et vagi bé.',
+      en: 'Eleven projects in three tiers — thesis, satellites and annex — across backend systems, event pipelines, applied AI and tooling. Filter by the stack you care about.',
+      es: 'Once proyectos en tres niveles — tesis, satélites y anexo — entre sistemas backend, pipelines de eventos, IA aplicada y herramientas. Filtra por el stack que te interese.',
+      ca: 'Onze projectes en tres nivells — tesi, satèl·lits i annex — entre sistemes backend, pipelines d’esdeveniments, IA aplicada i eines. Filtra pel stack que et vagi bé.',
     },
   },
   cv: {
@@ -1000,9 +1000,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'F3 · Recerca i Recuperació — Jordimp & Co.',
     },
     description: {
-      en: 'Applied AI shipped like infrastructure: CodebaseRAG, Interview Simulator and Bible Text Analysis — retrieval with receipts.',
-      es: 'IA aplicada entregada como infraestructura: CodebaseRAG, Interview Simulator y Bible Text Analysis — recuperación con recibos.',
-      ca: 'IA aplicada lliurada com a infraestructura: CodebaseRAG, Interview Simulator i Bible Text Analysis — recuperació amb rebuts.',
+      en: 'Applied AI shipped like infrastructure: CodebaseRAG, with the offline Interview Simulator as its satellite — retrieval with receipts.',
+      es: 'IA aplicada entregada como infraestructura: CodebaseRAG, con el Interview Simulator offline como satélite — recuperación con recibos.',
+      ca: 'IA aplicada lliurada com a infraestructura: CodebaseRAG, amb l’Interview Simulator offline com a satèl·lit — recuperació amb rebuts.',
     },
   },
   telemetry: {
@@ -1014,9 +1014,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'F2 · Transport i Telemetria — Jordimp & Co.',
     },
     description: {
-      en: 'The plumbing that must not lie: kafka-adapter-telemetry, redis-toolkit and product-offers — event pipelines, atomic rate limits and honest failure modes.',
-      es: 'La tubería que no puede mentir: kafka-adapter-telemetry, redis-toolkit y product-offers — pipelines de eventos, rate limits atómicos y modos de fallo honestos.',
-      ca: 'La tuberia que no pot mentir: kafka-adapter-telemetry, redis-toolkit i product-offers — pipelines d’esdeveniments, rate limits atòmics i modes de fallada honests.',
+      en: 'The plumbing that must not lie: kafka-adapter-telemetry and redis-toolkit — event pipelines, atomic rate limits and honest failure modes.',
+      es: 'La tubería que no puede mentir: kafka-adapter-telemetry y redis-toolkit — pipelines de eventos, rate limits atómicos y modos de fallo honestos.',
+      ca: 'La tuberia que no pot mentir: kafka-adapter-telemetry i redis-toolkit — pipelines d’esdeveniments, rate limits atòmics i modes de fallada honests.',
     },
   },
   tooling: {
@@ -1028,9 +1028,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'F1 · Eines i Plataforma — Jordimp & Co.',
     },
     description: {
-      en: 'The workshop floor: harness-standard, rustcut, md-mermaid-pdf, mcp-transparent-png and spring-boot-casino — deliberately small tools, production standards.',
-      es: 'El taller: harness-standard, rustcut, md-mermaid-pdf, mcp-transparent-png y spring-boot-casino — herramientas deliberadamente pequeñas, estándares de producción.',
-      ca: 'El taller: harness-standard, rustcut, md-mermaid-pdf, mcp-transparent-png i spring-boot-casino — eines deliberadament petites, estàndards de producció.',
+      en: 'The workshop floor: harness-standard, md-mermaid-pdf and mcp-transparent-png — deliberately small tools, production standards.',
+      es: 'El taller: harness-standard, md-mermaid-pdf y mcp-transparent-png — herramientas deliberadamente pequeñas, estándares de producción.',
+      ca: 'El taller: harness-standard, md-mermaid-pdf i mcp-transparent-png — eines deliberadament petites, estàndards de producció.',
     },
   },
   operations: {
@@ -1100,22 +1100,19 @@ export const RESEARCH_PAGE: ResearchPageContent = {
   },
   stats: {
     en: [
-      { value: '3', label: 'PROJECTS ON THIS FLOOR' },
+      { value: '2', label: 'PROJECTS ON THIS FLOOR' },
       { value: '≥40', label: 'GOLDEN Q/A PAIRS' },
       { value: '0.409', label: 'MEAN RECALL@5' },
-      { value: '0', label: 'CLOUD DEPENDENCIES IN INTERVIEWS' },
     ],
     es: [
-      { value: '3', label: 'PROYECTOS EN ESTA PLANTA' },
+      { value: '2', label: 'PROYECTOS EN ESTA PLANTA' },
       { value: '≥40', label: 'PARES Q/A GOLDEN' },
       { value: '0.409', label: 'RECALL@5 MEDIO' },
-      { value: '0', label: 'DEPENDENCIAS DE NUBE EN ENTREVISTAS' },
     ],
     ca: [
-      { value: '3', label: 'PROJECTES EN AQUESTA PLANTA' },
+      { value: '2', label: 'PROJECTES EN AQUESTA PLANTA' },
       { value: '≥40', label: 'PARELLS Q/A GOLDEN' },
       { value: '0.409', label: 'RECALL@5 MITJÀ' },
-      { value: '0', label: 'DEPENDÈNCIES DE NÚVOL A LES ENTREVISTES' },
     ],
   },
   problemLabel: { en: 'The problem', es: 'El problema', ca: 'El problema' },
@@ -1386,30 +1383,27 @@ export const TELEMETRY_PAGE: TelemetryPageContent = {
 export const TOOLING_PAGE: ToolingPageContent = {
   stats: {
     en: [
-      { value: '5', label: 'PROJECTS ON THIS FLOOR' },
+      { value: '3', label: 'PROJECTS ON THIS FLOOR' },
       { value: '7', label: 'STACKS COVERED BY THE HARNESS' },
       { value: '1', label: 'COMMAND INSTALLS THE HARNESS' },
-      { value: '2', label: 'TECH ASSESSMENTS, PRODUCTION BAR' },
     ],
     es: [
-      { value: '5', label: 'PROYECTOS EN ESTA PLANTA' },
+      { value: '3', label: 'PROYECTOS EN ESTA PLANTA' },
       { value: '7', label: 'STACKS CUBIERTOS POR EL HARNESS' },
       { value: '1', label: 'COMANDO INSTALA EL HARNESS' },
-      { value: '2', label: 'PRUEBAS TÉCNICAS, NIVEL PRODUCCIÓN' },
     ],
     ca: [
-      { value: '5', label: 'PROJECTES EN AQUESTA PLANTA' },
+      { value: '3', label: 'PROJECTES EN AQUESTA PLANTA' },
       { value: '7', label: 'STACKS COBERTS PEL HARNESS' },
       { value: '1', label: 'COMANDA INSTAL·LA EL HARNESS' },
-      { value: '2', label: 'PROVES TÈCNIQUES, NIVELL PRODUCCIÓ' },
     ],
   },
   workTitle: { en: 'The workshop bench', es: 'La mesa del taller', ca: 'La taula del taller' },
   noteTitle: { en: 'Workshop rule', es: 'Regla del taller', ca: 'Regla del taller' },
   noteBody: {
-    en: 'Every tool on this floor does one thing and gets out of the way. The harness standardizes the process, not your code; each CLI automates exactly one boring step; and the two technical assessments are held to production standards — CI, coverage and clean checks included. Small is a feature.',
-    es: 'Cada herramienta de esta planta hace una sola cosa y no se mete. El harness estandariza el proceso, no tu código; cada CLI automatiza exactamente un paso aburrido; y las dos pruebas técnicas se sostienen al nivel de producción — CI, cobertura y comprobaciones de limpieza incluidas. Pequeño es una característica.',
-    ca: 'Cada eina d’aquesta planta fa una sola cosa i no s’entremet. El harness estandarditza el procés, no el teu codi; cada CLI automatitza exactament un pas avorrit; i les dues proves tècniques es sostenen al nivell de producció — CI, cobertura i comprovacions de neteja incloses. Petit és una característica.',
+    en: 'Every tool on this floor does one thing and gets out of the way. The harness standardizes the process, not your code; each CLI automates exactly one boring step. Small is a feature.',
+    es: 'Cada herramienta de esta planta hace una sola cosa y no se mete. El harness estandariza el proceso, no tu código; cada CLI automatiza exactamente un paso aburrido. Pequeño es una característica.',
+    ca: 'Cada eina d’aquesta planta fa una sola cosa i no s’entremet. El harness estandarditza el procés, no el teu codi; cada CLI automatitza exactament un pas avorrit. Petit és una característica.',
   },
 };
 
