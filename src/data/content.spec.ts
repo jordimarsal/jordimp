@@ -14,11 +14,13 @@ import {
   LOCALES,
   PAGES,
   PROJECTS,
+  SITE,
   SKILLS,
   TICKER,
   UI,
   project,
 } from './content';
+import { SITE as CONFIG_SITE } from '../config';
 
 const PROJECT_COUNT = 11;
 const FEATURED_COUNT = 3;
@@ -292,6 +294,22 @@ describe('front-desk positioning (F11)', () => {
     for (const lang of LOCALES) {
       expect(DEPTS.telemetry.intro[lang].endsWith(coi[lang]), lang).toBe(true);
     }
+  });
+
+  it('keeps the four how-it-works steps intact (R12)', () => {
+    const keys = ['01 — BRIEF', '02 — SPEC', '03 — BUILD', '04 — AUDIT'];
+    for (const lang of LOCALES) {
+      expect(FRONTDESK_PAGE.how[lang].map((step) => step.k), lang).toEqual(keys);
+      for (const step of FRONTDESK_PAGE.how[lang]) {
+        expect(step.v.trim(), lang).not.toBe('');
+      }
+    }
+  });
+
+  it('keeps the contact email unchanged in content and config (R13)', () => {
+    expect(SITE.email).toBe('jordi.marsal@gmail.com');
+    expect(CONFIG_SITE.email).toBe(SITE.email);
+    expect(CONFIG_SITE.email).toBe('jordi.marsal@gmail.com');
   });
 });
 
