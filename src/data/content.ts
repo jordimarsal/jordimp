@@ -841,12 +841,12 @@ export const WORK: WorkContent = {
   head: {
     num: 'P',
     title: { en: 'Projects', es: 'Proyectos', ca: 'Projectes' },
-    sub: { en: '11 PROJECTS · FILTER BY STACK', es: '11 PROYECTOS · FILTRA POR STACK', ca: '11 PROJECTES · FILTRA PER STACK' },
+    sub: { en: '11 PROJECTS · 3 TIERS · FILTER BY STACK', es: '11 PROYECTOS · 3 NIVELES · FILTRA POR STACK', ca: '11 PROJECTES · 3 NIVELLS · FILTRA PER STACK' },
   },
   intro: {
-    en: 'Everything on the premises, one list, no curation. Filter by the stack you care about.',
-    es: 'Todo lo del edificio, en una lista y sin selección previa. Filtra por el stack que te interese.',
-    ca: 'Tot el que hi ha a l’edifici, en una llista i sense selecció prèvia. Filtra pel stack que et vagi bé.',
+    en: 'Eleven projects in three tiers: the thesis, the satellites around it, and an annex for roots, take-home assessments and size exercises. Filter by the stack you care about.',
+    es: 'Once proyectos en tres niveles: la tesis, sus satélites y un anexo para raíces, pruebas técnicas y ejercicios de tamaño. Filtra por el stack que te interese.',
+    ca: 'Onze projectes en tres nivells: la tesi, els seus satèl·lits i un annex per a arrels, proves tècniques i exercicis de mida. Filtra pel stack que et vagi bé.',
   },
   filterAll: { en: 'All', es: 'Todos', ca: 'Tots' },
   filterSummary: { en: 'FILTER BY STACK ({n})', es: 'FILTRA POR STACK ({n})', ca: 'FILTRA PER STACK ({n})' },

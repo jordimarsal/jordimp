@@ -36,6 +36,11 @@ export function initFilter(): void {
       if (show) visible += 1;
     });
     syncStatus(visible);
+    document.querySelectorAll<HTMLElement>('.cards--tier').forEach((section) => {
+      const anyVisible = Array.from(section.querySelectorAll<HTMLElement>('.card[data-stack]'))
+        .some((card) => !card.hidden);
+      section.hidden = !anyVisible;
+    });
   };
 
   buttons.forEach((btn) => {
