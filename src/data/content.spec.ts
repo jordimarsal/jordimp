@@ -14,6 +14,7 @@ import {
   LOCALES,
   OPERATIONS_PAGE,
   PAGES,
+  PEOPLE_PAGE,
   PROJECTS,
   RESEARCH_PAGE,
   SITE,
@@ -28,6 +29,7 @@ import {
   tierProjects,
 } from './content';
 import { SITE as CONFIG_SITE } from '../config';
+import type { Tier } from './types';
 
 const PROJECT_COUNT = 11;
 const FEATURED_COUNT = 3;
@@ -352,7 +354,7 @@ describe('featured data', () => {
   });
 });
 
-const TIER_MAP: Record<string, string> = {
+const TIER_MAP: Record<string, Tier> = {
   codebaserag: 'thesis', 'kafka-adapter-telemetry': 'thesis', 'harness-standard': 'thesis',
   'redis-toolkit': 'satellite', 'interview-simulator': 'satellite',
   'md-mermaid-pdf': 'satellite', 'mcp-transparent-png': 'satellite',
@@ -372,9 +374,15 @@ describe('project tiers', () => {
   it('partitions the 11 projects 3 / 4 / 4 in tier order', () => {
     expect(TIER_ORDER).toEqual(['thesis', 'satellite', 'annex']);
     expect(TIER_ORDER.map((t) => tierProjects(t).length)).toEqual([3, 4, 4]);
-    for (const tier of TIER_ORDER) {
-      for (const lang of LOCALES) expect(TIER_LABELS[tier][lang].trim()).not.toBe('');
-    }
+    expect(TIER_LABELS).toEqual({
+      thesis: { en: 'Thesis', es: 'Tesis', ca: 'Tesi' },
+      satellite: { en: 'Satellites', es: 'Satélites', ca: 'Satèl·lits' },
+      annex: {
+        en: 'Annex — roots, assessments & size exercises',
+        es: 'Anexo — raíces, pruebas y ejercicios de tamaño',
+        ca: 'Annex — arrels, proves i exercicis de mida',
+      },
+    });
   });
 });
 
@@ -408,6 +416,8 @@ describe('cv and experience data', () => {
 
   it('keeps five thesis skill piles and drops the toolbelt technology', () => {
     expect(SKILLS.map((g) => g.group.en)).toEqual(['Backend', 'Data', 'AI', 'Quality', 'Leadership']);
+    expect(SKILLS.map((g) => g.group.es)).toEqual(['Backend', 'Datos', 'IA', 'Calidad', 'Liderazgo']);
+    expect(SKILLS.map((g) => g.group.ca)).toEqual(['Backend', 'Dades', 'IA', 'Qualitat', 'Lideratge']);
     expect(SKILLS.map((g) => [...g.items])).toEqual([
       ['Java 21/25', 'Spring Boot', 'Python 3.13', 'FastAPI', 'Kafka'],
       ['Oracle', 'Redis', 'pgvector'],
@@ -423,10 +433,17 @@ describe('cv and experience data', () => {
 
   it('adds exactly one outcome line to the three non-Telefónica jobs', () => {
     const byCompany = Object.fromEntries(EXPERIENCE.map((e) => [e.company, e]));
-    expect(byCompany['Telefónica Kernel · Open Gateway'].points.en).toHaveLength(3);
-    expect(byCompany['Axpe Consulting / Mapfre'].points.en).toHaveLength(3);
-    expect(byCompany['Zitro Laboratory'].points.en).toHaveLength(3);
-    expect(byCompany['Attendre S.L.'].points.en).toHaveLength(2);
+    const lengths: Record<string, number> = {
+      'Telefónica Kernel · Open Gateway': 3,
+      'Axpe Consulting / Mapfre': 3,
+      'Zitro Laboratory': 3,
+      'Attendre S.L.': 2,
+    };
+    for (const [company, count] of Object.entries(lengths)) {
+      for (const lang of LOCALES) {
+        expect(byCompany[company].points[lang], `${company}:${lang}`).toHaveLength(count);
+      }
+    }
   });
 });
 
@@ -481,10 +498,9 @@ describe('curated floor copy', () => {
     for (const lang of LOCALES) {
       expect(RESEARCH_PAGE.stats[lang], lang).toHaveLength(3);
       expect(TOOLING_PAGE.stats[lang], lang).toHaveLength(3);
-      expect(JSON.stringify(TOOLING_PAGE.stats[lang]).toLowerCase(), lang).not.toMatch(
-        /assessment|prueba|prova|proves/,
-      );
     }
+    const statsText = LOCALES.map((lang) => JSON.stringify(TOOLING_PAGE.stats[lang])).join(' ');
+    expect(statsText).not.toMatch(/\b(?:assessment|prueba|proves)\b/i);
     expect(RESEARCH_PAGE.stats.en[0]).toEqual({ value: '2', label: 'PROJECTS ON THIS FLOOR' });
     expect(TOOLING_PAGE.stats.en[0]).toEqual({ value: '3', label: 'PROJECTS ON THIS FLOOR' });
   });
@@ -521,5 +537,15 @@ describe('curated floor copy', () => {
       expect(WORK.head.sub[lang]).toContain('11');
       expect(WORK.intro[lang]).toContain(eleven[lang]);
     }
+  });
+});
+
+describe('people page org roles (R23)', () => {
+  it('pins the org gag roles in three locales', () => {
+    expect(PEOPLE_PAGE.orgRoles).toEqual({
+      en: ['CEO', 'ENGINEER', 'QA', 'SUPPORT'],
+      es: ['CEO', 'INGENIERO', 'QA', 'SOPORTE'],
+      ca: ['CEO', 'ENGINYER', 'QA', 'SUPORT'],
+    });
   });
 });
