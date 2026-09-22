@@ -918,9 +918,9 @@ export const FOOTER: FooterContent = {
     ca: 'La porta sempre és oberta.',
   },
   line: {
-    en: 'Questions about a floor, a repo, or a hire? Walk straight in — no appointment, no gatekeeper, no tracking scripts.',
-    es: '¿Preguntas sobre una planta, un repo o una contratación? Pasa sin cita, sin portero y sin scripts de rastreo.',
-    ca: 'Preguntes sobre una planta, un repo o una contractació? Entra sense cita, sense porter i sense scripts de rastreig.',
+    en: 'Jordimp & Co. is the working name of one engineer — currently inside a telco platform team. Walk-ins: roles, repos, or a short spec-first engagement.',
+    es: 'Jordimp & Co. es el nombre de trabajo de un solo ingeniero — ahora dentro de un equipo de plataforma telco. Entrada libre: roles, repos o un encargo corto con spec primero.',
+    ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer — ara dins d’un equip de plataforma telco. Entrada lliure: rols, repos o un encàrrec curt amb spec primer.',
   },
   email: { en: 'EMAIL', es: 'EMAIL', ca: 'EMAIL' },
   github: { en: 'GITHUB', es: 'GITHUB', ca: 'GITHUB' },
@@ -947,9 +947,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'Jordimp & Co. — Jordi Marçal Poy, Enginyer Backend Sènior',
     },
     description: {
-      en: 'Jordimp & Co. is a one-person engineering firm — backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since 2017. Walk the floors.',
-      es: 'Jordimp & Co. es una ingeniería de una sola persona — sistemas backend, pipelines de eventos e IA aplicada, diseñados, construidos y auditados por el mismo par de manos desde 2017. Recorre las plantas.',
-      ca: 'Jordimp & Co. és una enginyeria d’una sola persona — sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des del 2017. Recorre les plantes.',
+      en: 'Jordimp & Co. is the working name of one engineer: backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since 2017. Currently inside a telco platform team. Walk-ins: roles, repos, or a short spec-first engagement.',
+      es: 'Jordimp & Co. es el nombre de trabajo de un solo ingeniero: sistemas backend, pipelines de eventos e IA aplicada, diseñados, construidos y auditados por el mismo par de manos desde 2017. Ahora, dentro de un equipo de plataforma telco. Entrada libre: roles, repos o un encargo corto con spec primero.',
+      ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer: sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des del 2017. Ara, dins d’un equip de plataforma telco. Entrada lliure: rols, repos o un encàrrec curt amb spec primer.',
     },
   },
   work: {
@@ -1059,9 +1059,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'B · Recepció — Jordimp & Co.',
     },
     description: {
-      en: 'Walk-ins welcome: who is behind the desk, how to reach it, availability, and how a project runs from brief to audit. No gatekeeper.',
-      es: 'Entrada libre: quién está detrás del mostrador, cómo contactarlo, disponibilidad y cómo avanza un proyecto de brief a auditoría. Sin portero.',
-      ca: 'Entrada lliure: qui és darrere el mostrador, com contactar-lo, disponibilitat i com avança un projecte de brief a auditoria. Sense porter.',
+      en: 'Walk-ins welcome: senior or staff backend roles, short spec-first engagements, and questions about a floor or a repo — no tracking, no funnel. Jordimp & Co. is how the work is done, not a staffing firm.',
+      es: 'Entrada libre: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo — sin tracking, sin funnel. Jordimp & Co. es cómo se hace el trabajo, no una consultora de personal.',
+      ca: 'Entrada lliure: rols backend sènior o staff, encàrrecs curts amb spec primer i preguntes sobre una planta o un repo — sense tracking, sense funnel. Jordimp & Co. és com es fa la feina, no una consultora de personal.',
     },
   },
   inspections: {
