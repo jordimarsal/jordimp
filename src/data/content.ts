@@ -1442,6 +1442,22 @@ export const OPERATIONS_PAGE: OperationsPageContent = {
       { value: '12+', label: 'EINES CLI AL KIT DIARI' },
     ],
   },
+  rootsTitle: { en: 'Data Science roots', es: 'Raíces de Data Science', ca: 'Arrels de Data Science' },
+  rootsNote: {
+    en: '2019 · Data Science roots — Bible Text Analysis: scraping, NLTK, LDA topics and sentiment over a raw corpus. Provenance, not a headline.',
+    es: '2019 · Raíces de Data Science — Bible Text Analysis: scraping, NLTK, temas LDA y sentimiento sobre un corpus crudo. Procedencia, no un titular.',
+    ca: '2019 · Arrels de Data Science — Bible Text Analysis: scraping, NLTK, temes LDA i sentiment sobre un corpus cru. Procedència, no un titular.',
+  },
+  toolbeltTitle: {
+    en: 'Operations toolbelt',
+    es: 'Caja de herramientas de operaciones',
+    ca: 'Caixa d’eines d’operacions',
+  },
+  toolbeltNote: {
+    en: 'The rest of the toolbelt, kept where it was used: Kubernetes and AWS CDK/CloudFormation from platform and deployment work; Cassandra and Snowflake at Zitro’s betting platform; RabbitMQ in event pipelines; pandas from the 2019 Data Science years. Listed by engagement, not as résumé soup.',
+    es: 'El resto de la caja de herramientas, donde se usó: Kubernetes y AWS CDK/CloudFormation del trabajo de plataforma y despliegue; Cassandra y Snowflake en la plataforma de apuestas de Zitro; RabbitMQ en pipelines de eventos; pandas de los años de Data Science (2019). Listado por proyecto, no como sopa de siglas.',
+    ca: 'La resta de la caixa d’eines, allà on es va fer servir: Kubernetes i AWS CDK/CloudFormation de la feina de plataforma i desplegament; Cassandra i Snowflake a la plataforma d’apostes de Zitro; RabbitMQ en pipelines d’esdeveniments; pandas dels anys de Data Science (2019). Llistat per projecte, no com a sopa de sigles.',
+  },
 };
 
 export const PEOPLE_PAGE: PeoplePageContent = {

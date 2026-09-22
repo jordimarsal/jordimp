@@ -12,6 +12,7 @@ import {
   HOME,
   INSPECTIONS_PAGE,
   LOCALES,
+  OPERATIONS_PAGE,
   PAGES,
   PROJECTS,
   SITE,
@@ -441,5 +442,19 @@ describe('project()', () => {
 
   it('throws on unknown slug', () => {
     expect(() => project('nope')).toThrow('unknown project: nope');
+  });
+});
+
+describe('operations notes (F0)', () => {
+  it('localizes the roots and toolbelt notes', () => {
+    for (const key of ['rootsTitle', 'rootsNote', 'toolbeltTitle', 'toolbeltNote'] as const) {
+      for (const lang of LOCALES) expect(OPERATIONS_PAGE[key][lang].trim(), `${key}.${lang}`).not.toBe('');
+    }
+  });
+
+  it('names the displaced technology in the toolbelt note', () => {
+    for (const tool of ['Kubernetes', 'CDK/CloudFormation', 'Cassandra', 'Snowflake', 'RabbitMQ', 'pandas']) {
+      expect(OPERATIONS_PAGE.toolbeltNote.en).toContain(tool);
+    }
   });
 });

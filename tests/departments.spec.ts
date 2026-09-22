@@ -172,6 +172,11 @@ test.describe('department pages (T8)', () => {
     await expect(coverage.locator('svg')).toContainText('OPEN GATEWAY');
     await expect(coverage.locator('figcaption')).toHaveText(OPERATIONS_PAGE.coverageCaption.en);
 
+    await expect(page.locator('h2#op-roots')).toHaveText(OPERATIONS_PAGE.rootsTitle.en);
+    await expect(page.locator('#op-roots + p')).toHaveText(OPERATIONS_PAGE.rootsNote.en);
+    await expect(page.locator('h2#op-toolbelt')).toHaveText(OPERATIONS_PAGE.toolbeltTitle.en);
+    await expect(page.locator('#op-toolbelt + p')).toHaveText(OPERATIONS_PAGE.toolbeltNote.en);
+
     const cv = page.locator('main a.btn[href="/en/cv/"]');
     await expect(cv).toHaveCount(1);
     await expect(cv.locator('.btn__label')).toHaveText(UI.nav.cv.en);

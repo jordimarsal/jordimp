@@ -243,6 +243,10 @@ export interface OperationsPageContent {
   readonly coverageTitle: L10n<string>;
   readonly coverageCaption: L10n<string>;
   readonly stats: L10n<readonly StatEntry[]>;
+  readonly rootsTitle: L10n<string>;
+  readonly rootsNote: L10n<string>;
+  readonly toolbeltTitle: L10n<string>;
+  readonly toolbeltNote: L10n<string>;
 }
 
 export interface PeoplePageContent {
