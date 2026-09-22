@@ -420,6 +420,14 @@ describe('cv and experience data', () => {
       expect(flat).not.toContain(tool);
     }
   });
+
+  it('adds exactly one outcome line to the three non-Telefónica jobs', () => {
+    const byCompany = Object.fromEntries(EXPERIENCE.map((e) => [e.company, e]));
+    expect(byCompany['Telefónica Kernel · Open Gateway'].points.en).toHaveLength(3);
+    expect(byCompany['Axpe Consulting / Mapfre'].points.en).toHaveLength(3);
+    expect(byCompany['Zitro Laboratory'].points.en).toHaveLength(3);
+    expect(byCompany['Attendre S.L.'].points.en).toHaveLength(2);
+  });
 });
 
 describe('shared strings', () => {

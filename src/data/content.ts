@@ -735,14 +735,17 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
       en: [
         'Drove the tech-modernization analysis of 39 corporate APIs to Node.js 24.',
         'Homogenized the stack and reduced technical debt across the API estate.',
+        '39 APIs onto one Node.js 24 stack and one pattern — less drift for every team that owns one.',
       ],
       es: [
         'Impulsé el análisis de modernización tecnológica de 39 APIs corporativas a Node.js 24.',
         'Homogeneicé el stack y reduje la deuda técnica del parque de APIs.',
+        '39 APIs sobre un único stack Node.js 24 y un solo patrón — menos deriva para cada equipo que posee una.',
       ],
       ca: [
         'Vaig impulsar l’anàlisi de modernització tecnològica de 39 APIs corporatives a Node.js 24.',
         'Vaig homogeneïtzar el stack i reduir el deute tècnic del parc d’APIs.',
+        '39 APIs sobre un únic stack Node.js 24 i un sol patró — menys deriva per a cada equip que en posseeix una.',
       ],
     },
     stack: ['Node.js 24', 'TypeScript', 'REST'],
@@ -760,14 +763,17 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
       en: [
         'Maintenance and evolution of the Java server of the betting engine, Backoffice and online-casino integrations.',
         'Server-to-server sign-in, AWS Snowflake + Cassandra historicals, OneSignal integration.',
+        'Kept the Java betting server live while historicals moved to Snowflake + Cassandra and sign-in went server-to-server.',
       ],
       es: [
         'Mantenimiento y evolución del servidor Java del motor de apuestas, Backoffice e integraciones con casinos online.',
         'Sign-in server-to-server, históricos en AWS Snowflake + Cassandra, integración OneSignal.',
+        'Mantuve en vivo el servidor Java de apuestas mientras los históricos pasaban a Snowflake + Cassandra y el sign-in pasaba a server-to-server.',
       ],
       ca: [
         'Manteniment i evolució del servidor Java del motor d’apostes, Backoffice i integracions amb casinos online.',
         'Sign-in server-to-server, històrics a AWS Snowflake + Cassandra, integració OneSignal.',
+        'Vaig mantenir en viu el servidor Java d’apostes mentre els històrics passaven a Snowflake + Cassandra i el sign-in passava a server-to-server.',
       ],
     },
     stack: ['Java', 'Spring', 'AWS', 'Cassandra', 'Snowflake'],
@@ -782,9 +788,18 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
       ca: 'Desenvolupador Backend Java',
     },
     points: {
-      en: ['Evolution of Attend® (tickets/inventory/projects) and License Manager (Spring Boot 2.3 + REST).'],
-      es: ['Evolución de Attend® (tickets/inventario/proyectos) y License Manager (Spring Boot 2.3 + REST).'],
-      ca: ['Evolució d’Attend® (tickets/inventari/projectes) i License Manager (Spring Boot 2.3 + REST).'],
+      en: [
+        'Evolution of Attend® (tickets/inventory/projects) and License Manager (Spring Boot 2.3 + REST).',
+        'Attend® is still the live product — the tickets/inventory core and the License Manager remain in service.',
+      ],
+      es: [
+        'Evolución de Attend® (tickets/inventario/proyectos) y License Manager (Spring Boot 2.3 + REST).',
+        'Attend® sigue siendo el producto vivo — el núcleo de tickets/inventario y el License Manager siguen en servicio.',
+      ],
+      ca: [
+        'Evolució d’Attend® (tickets/inventari/projectes) i License Manager (Spring Boot 2.3 + REST).',
+        'Attend® continua sent el producte viu — el nucli de tickets/inventari i el License Manager continuen en servei.',
+      ],
     },
     stack: ['Java', 'Spring Boot', 'REST'],
   },
