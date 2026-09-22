@@ -99,9 +99,9 @@ test.describe('home building page (T4)', () => {
     test(`renders department panel bodies at ${home}`, async ({ page }) => {
       await page.goto(home);
       const lang = home.replace(/\//g, '');
-      await expect(page.locator('#dept-panel-research .cards .card')).toHaveCount(3);
-      await expect(page.locator('#dept-panel-telemetry .cards .card')).toHaveCount(3);
-      await expect(page.locator('#dept-panel-tooling .cards .card')).toHaveCount(5);
+      await expect(page.locator('#dept-panel-research .cards .card')).toHaveCount(2);
+      await expect(page.locator('#dept-panel-telemetry .cards .card')).toHaveCount(2);
+      await expect(page.locator('#dept-panel-tooling .cards .card')).toHaveCount(3);
       await expect(page.locator('#dept-panel-people .prose li')).toHaveCount(4);
       await expect(page.locator('#dept-panel-operations .ledger__row')).toHaveCount(4);
       await expect(page.locator('#dept-panel-operations .dept-panel__cta .btn')).toHaveCount(2);
@@ -110,7 +110,7 @@ test.describe('home building page (T4)', () => {
       for (const key of FLOOR_KEYS) {
         await expect(page.locator(`#dept-panel-${key} .dept-panel__cta .btn`).first()).toHaveAttribute('href', /\/departments\//);
       }
-      await expect(page.locator('#dept-panel-research .cards .card a.case[rel="noopener noreferrer"]')).toHaveCount(3);
+      await expect(page.locator('#dept-panel-research .cards .card a.case[rel="noopener noreferrer"]')).toHaveCount(2);
       const plaqueCopy = page.locator('#dept-panel-inspections .q-plaque-copy');
       await expect(plaqueCopy).toHaveCount(1);
       await expect(plaqueCopy).toHaveText(plaqueText(lang, homeReport));

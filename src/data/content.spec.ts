@@ -12,15 +12,24 @@ import {
   HOME,
   INSPECTIONS_PAGE,
   LOCALES,
+  OPERATIONS_PAGE,
   PAGES,
+  PEOPLE_PAGE,
   PROJECTS,
+  RESEARCH_PAGE,
   SITE,
   SKILLS,
   TICKER,
+  TIER_LABELS,
+  TIER_ORDER,
+  TOOLING_PAGE,
   UI,
+  WORK,
   project,
+  tierProjects,
 } from './content';
 import { SITE as CONFIG_SITE } from '../config';
+import type { Tier } from './types';
 
 const PROJECT_COUNT = 11;
 const FEATURED_COUNT = 3;
@@ -83,6 +92,12 @@ describe('departments data', () => {
         expect(project(slug).dept, slug).toBe(key);
       }
     }
+  });
+
+  it('curates the three card floors to their strong pieces', () => {
+    expect(DEPTS.research.projects).toEqual(['codebaserag', 'interview-simulator']);
+    expect(DEPTS.telemetry.projects).toEqual(['kafka-adapter-telemetry', 'redis-toolkit']);
+    expect(DEPTS.tooling.projects).toEqual(['harness-standard', 'md-mermaid-pdf', 'mcp-transparent-png']);
   });
 
   it('covers all seven departments in FLOOR_LABELS with trilingual labels', () => {
@@ -339,6 +354,38 @@ describe('featured data', () => {
   });
 });
 
+const TIER_MAP: Record<string, Tier> = {
+  codebaserag: 'thesis', 'kafka-adapter-telemetry': 'thesis', 'harness-standard': 'thesis',
+  'redis-toolkit': 'satellite', 'interview-simulator': 'satellite',
+  'md-mermaid-pdf': 'satellite', 'mcp-transparent-png': 'satellite',
+  'bible-text-analysis': 'annex', 'product-offers': 'annex',
+  'spring-boot-casino': 'annex', rustcut: 'annex',
+};
+
+describe('project tiers', () => {
+  it('assigns exactly the R3 tier map', () => {
+    expect(Object.fromEntries(PROJECTS.map((p) => [p.slug, p.tier]))).toEqual(TIER_MAP);
+  });
+
+  it('keeps the thesis tier equal to FEATURED', () => {
+    expect(tierProjects('thesis').map((p) => p.slug)).toEqual([...FEATURED]);
+  });
+
+  it('partitions the 11 projects 3 / 4 / 4 in tier order', () => {
+    expect(TIER_ORDER).toEqual(['thesis', 'satellite', 'annex']);
+    expect(TIER_ORDER.map((t) => tierProjects(t).length)).toEqual([3, 4, 4]);
+    expect(TIER_LABELS).toEqual({
+      thesis: { en: 'Thesis', es: 'Tesis', ca: 'Tesi' },
+      satellite: { en: 'Satellites', es: 'Satélites', ca: 'Satèl·lits' },
+      annex: {
+        en: 'Annex — roots, assessments & size exercises',
+        es: 'Anexo — raíces, pruebas y ejercicios de tamaño',
+        ca: 'Annex — arrels, proves i exercicis de mida',
+      },
+    });
+  });
+});
+
 describe('pages data', () => {
   it('registers home, work, cv, the 6 departments and the 11 project pages', () => {
     const expected = [
@@ -367,11 +414,34 @@ describe('cv and experience data', () => {
     expect(EXPERIENCE).toHaveLength(EXPERIENCE_COUNT);
   });
 
-  it('groups skills with trilingual group titles', () => {
-    expect(SKILLS.length).toBeGreaterThan(0);
-    for (const group of SKILLS) {
+  it('keeps five thesis skill piles and drops the toolbelt technology', () => {
+    expect(SKILLS.map((g) => g.group.en)).toEqual(['Backend', 'Data', 'AI', 'Quality', 'Leadership']);
+    expect(SKILLS.map((g) => g.group.es)).toEqual(['Backend', 'Datos', 'IA', 'Calidad', 'Liderazgo']);
+    expect(SKILLS.map((g) => g.group.ca)).toEqual(['Backend', 'Dades', 'IA', 'Qualitat', 'Lideratge']);
+    expect(SKILLS.map((g) => [...g.items])).toEqual([
+      ['Java 21/25', 'Spring Boot', 'Python 3.13', 'FastAPI', 'Kafka'],
+      ['Oracle', 'Redis', 'pgvector'],
+      ['RAG + evals in CI', 'MCP', 'Ollama / llama.cpp'],
+      ['Testcontainers', 'GitHub Actions', 'mypy strict', 'TDD'],
+      ['team coordination', 'code review culture', 'mentoring', 'conflict resolution'],
+    ]);
+    const flat = SKILLS.flatMap((g) => g.items).join(' ');
+    for (const tool of ['Kubernetes', 'CDK', 'Cassandra', 'Snowflake', 'RabbitMQ', 'pandas']) {
+      expect(flat).not.toContain(tool);
+    }
+  });
+
+  it('adds exactly one outcome line to the three non-Telefónica jobs', () => {
+    const byCompany = Object.fromEntries(EXPERIENCE.map((e) => [e.company, e]));
+    const lengths: Record<string, number> = {
+      'Telefónica Kernel · Open Gateway': 3,
+      'Axpe Consulting / Mapfre': 3,
+      'Zitro Laboratory': 3,
+      'Attendre S.L.': 2,
+    };
+    for (const [company, count] of Object.entries(lengths)) {
       for (const lang of LOCALES) {
-        expect(group.group[lang].trim()).not.toBe('');
+        expect(byCompany[company].points[lang], `${company}:${lang}`).toHaveLength(count);
       }
     }
   });
@@ -406,5 +476,76 @@ describe('project()', () => {
 
   it('throws on unknown slug', () => {
     expect(() => project('nope')).toThrow('unknown project: nope');
+  });
+});
+
+describe('operations notes (F0)', () => {
+  it('localizes the roots and toolbelt notes', () => {
+    for (const key of ['rootsTitle', 'rootsNote', 'toolbeltTitle', 'toolbeltNote'] as const) {
+      for (const lang of LOCALES) expect(OPERATIONS_PAGE[key][lang].trim(), `${key}.${lang}`).not.toBe('');
+    }
+  });
+
+  it('names the displaced technology in the toolbelt note', () => {
+    for (const tool of ['Kubernetes', 'CDK/CloudFormation', 'Cassandra', 'Snowflake', 'RabbitMQ', 'pandas']) {
+      expect(OPERATIONS_PAGE.toolbeltNote.en).toContain(tool);
+    }
+  });
+});
+
+describe('curated floor copy', () => {
+  it('reports 2 research projects and 3 tooling projects', () => {
+    for (const lang of LOCALES) {
+      expect(RESEARCH_PAGE.stats[lang], lang).toHaveLength(3);
+      expect(TOOLING_PAGE.stats[lang], lang).toHaveLength(3);
+    }
+    const statsText = LOCALES.map((lang) => JSON.stringify(TOOLING_PAGE.stats[lang])).join(' ');
+    expect(statsText).not.toMatch(/\b(?:assessment|prueba|proves)\b/i);
+    expect(RESEARCH_PAGE.stats.en[0]).toEqual({ value: '2', label: 'PROJECTS ON THIS FLOOR' });
+    expect(TOOLING_PAGE.stats.en[0]).toEqual({ value: '3', label: 'PROJECTS ON THIS FLOOR' });
+  });
+
+  it('names exactly the floor projects in each department description', () => {
+    const expected: Record<
+      'research' | 'telemetry' | 'tooling',
+      { positive: string[]; negative: string[] }
+    > = {
+      research: {
+        positive: ['CodebaseRAG', 'Interview Simulator'],
+        negative: ['Bible Text Analysis'],
+      },
+      telemetry: {
+        positive: ['kafka-adapter-telemetry', 'redis-toolkit'],
+        negative: ['Product Offers API'],
+      },
+      tooling: {
+        positive: ['harness-standard', 'md-mermaid-pdf', 'mcp-transparent-png'],
+        negative: ['Rustcut', 'Spring Boot Casino'],
+      },
+    };
+    for (const [key, { positive, negative }] of Object.entries(expected)) {
+      for (const lang of LOCALES) {
+        for (const name of positive) expect(PAGES[key].description[lang]).toContain(name);
+        for (const name of negative) expect(PAGES[key].description[lang]).not.toContain(name);
+      }
+    }
+  });
+
+  it('states 11 projects and the three tiers', () => {
+    const eleven: Record<(typeof LOCALES)[number], string> = { en: 'Eleven', es: 'Once', ca: 'Onze' };
+    for (const lang of LOCALES) {
+      expect(WORK.head.sub[lang]).toContain('11');
+      expect(WORK.intro[lang]).toContain(eleven[lang]);
+    }
+  });
+});
+
+describe('people page org roles (R23)', () => {
+  it('pins the org gag roles in three locales', () => {
+    expect(PEOPLE_PAGE.orgRoles).toEqual({
+      en: ['CEO', 'ENGINEER', 'QA', 'SUPPORT'],
+      es: ['CEO', 'INGENIERO', 'QA', 'SOPORTE'],
+      ca: ['CEO', 'ENGINYER', 'QA', 'SUPORT'],
+    });
   });
 });

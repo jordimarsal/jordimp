@@ -24,6 +24,7 @@ import type {
   SkillGroup,
   SiteInfo,
   TelemetryPageContent,
+  Tier,
   ToolingPageContent,
   UiStrings,
   WorkContent,
@@ -148,7 +149,7 @@ export const DEPTS: Record<DeptKey, Dept> = {
       es: 'La planta más alta entrega IA como infraestructura: núcleos deterministas, sets golden de Q/A y evals con gate en CI. Si un modelo no se puede medir, no se entrega.',
       ca: 'La planta de dalt lliura IA com a infraestructura: nuclis deterministes, sets golden de Q/A i evals amb gate a CI. Si un model no es pot mesurar, no es lliura.',
     },
-    projects: ['codebaserag', 'interview-simulator', 'bible-text-analysis'],
+    projects: ['codebaserag', 'interview-simulator'],
     page: 'research',
   },
   telemetry: {
@@ -170,7 +171,7 @@ export const DEPTS: Record<DeptKey, Dept> = {
       es: 'Pipelines de eventos, rate limits y salud de servicios con modos de fallo honestos. Cuando una dependencia se cae, el que llama sabe exactamente dónde está. Estudio personal del problema de telemetría de Open Gateway. No es código de Telefónica. No es tráfico de producción.',
       ca: 'Pipelines d’esdeveniments, rate limits i salut de serveis amb modes de fallada honests. Quan una dependència cau, qui crida sap exactament on és. Estudi personal del problema de telemetria d’Open Gateway. No és codi de Telefónica. No és trànsit de producció.',
     },
-    projects: ['kafka-adapter-telemetry', 'redis-toolkit', 'product-offers'],
+    projects: ['kafka-adapter-telemetry', 'redis-toolkit'],
     page: 'telemetry',
   },
   tooling: {
@@ -192,7 +193,7 @@ export const DEPTS: Record<DeptKey, Dept> = {
       es: 'El taller: un harness multi-agente SDD, CLIs que hacen una cosa bien y herramientas deliberadamente pequeñas. Lo que necesita, nada más.',
       ca: 'El taller: un harness multi-agent SDD, CLIs que fan una cosa bé i eines deliberadament petites. El que necessita, res més.',
     },
-    projects: ['harness-standard', 'rustcut', 'md-mermaid-pdf', 'mcp-transparent-png', 'spring-boot-casino'],
+    projects: ['harness-standard', 'md-mermaid-pdf', 'mcp-transparent-png'],
     page: 'tooling',
   },
   inspections: {
@@ -297,11 +298,11 @@ export const FLOOR_LABELS: Record<DeptKey, L10n<string>> = {
   frontdesk: { en: '- CONTACT', es: '- CONTACTO', ca: '- CONTACTE' },
 };
 
-const P = (slug: string, name: string, year: string, featured: boolean, dept: DeptKey, stack: readonly string[], github: string, l10n: ProjectL10n): Project =>
-  ({ slug, name, year, featured, dept, stack, github, ...l10n });
+const P = (slug: string, name: string, year: string, featured: boolean, tier: Tier, dept: DeptKey, stack: readonly string[], github: string, l10n: ProjectL10n): Project =>
+  ({ slug, name, year, featured, tier, dept, stack, github, ...l10n });
 
 export const PROJECTS: readonly Project[] = [
-  P('codebaserag', 'CodebaseRAG', '2026', true, 'research',
+  P('codebaserag', 'CodebaseRAG', '2026', true, 'thesis', 'research',
     ['Python 3.13', 'FastAPI', 'pgvector', 'Qdrant', 'Ollama', 'Langfuse', 'mypy strict'],
     'https://github.com/jordimarsal/codebaserag',
     {
@@ -343,7 +344,7 @@ export const PROJECTS: readonly Project[] = [
         { value: 'strict', label: { en: 'mypy', es: 'mypy', ca: 'mypy' } },
       ],
     }),
-  P('interview-simulator', 'Interview Simulator', '2026', false, 'research',
+  P('interview-simulator', 'Interview Simulator', '2026', false, 'satellite', 'research',
     ['Whisper', 'Local LLM'],
     'https://github.com/jordimarsal/interview-simulator',
     {
@@ -372,7 +373,7 @@ export const PROJECTS: readonly Project[] = [
         { value: '100%', label: { en: 'offline', es: 'offline', ca: 'offline' } },
       ],
     }),
-  P('bible-text-analysis', 'Bible Text Analysis', '2019', false, 'research',
+  P('bible-text-analysis', 'Bible Text Analysis', '2019', false, 'annex', 'research',
     ['Python', 'NLTK', 'LDA', 'Jupyter'],
     'https://github.com/jordimarsal/bible_text_analysis',
     {
@@ -398,7 +399,7 @@ export const PROJECTS: readonly Project[] = [
       },
       metrics: [],
     }),
-  P('kafka-adapter-telemetry', 'Kafka Adapter Telemetry', '2026', true, 'telemetry',
+  P('kafka-adapter-telemetry', 'Kafka Adapter Telemetry', '2026', true, 'thesis', 'telemetry',
     ['Java 25', 'Spring Boot 4.1', 'Kafka', 'Oracle', 'Flyway', 'Testcontainers', 'SSE'],
     'https://github.com/jordimarsal/kafka-adapter-telemetry',
     {
@@ -446,7 +447,7 @@ export const PROJECTS: readonly Project[] = [
         { value: '10/10', label: { en: 'SDD tasks done', es: 'tareas SDD hechas', ca: 'tasques SDD fetes' } },
       ],
     }),
-  P('redis-toolkit', 'Redis Toolkit', '2026', true, 'telemetry',
+  P('redis-toolkit', 'Redis Toolkit', '2026', true, 'satellite', 'telemetry',
     ['Java', 'Javalin', 'Redis', 'Testcontainers'],
     'https://github.com/jordimarsal/redis-toolkit',
     {
@@ -490,7 +491,7 @@ export const PROJECTS: readonly Project[] = [
         { value: '2', label: { en: 'stores, one contract suite', es: 'stores, una suite de contrato', ca: 'stores, una suite de contracte' } },
       ],
     }),
-  P('product-offers', 'Product Offers API', '2023 - 2026', false, 'telemetry',
+  P('product-offers', 'Product Offers API', '2023 - 2026', false, 'annex', 'telemetry',
     ['Java 17', 'Spring Boot 3.2', 'H2', 'JUnit 5', 'Mockito'],
     'https://github.com/jordimarsal/product-offers',
     {
@@ -516,7 +517,7 @@ export const PROJECTS: readonly Project[] = [
       },
       metrics: [],
     }),
-  P('harness-standard', 'Harness Standard', '2026', true, 'tooling',
+  P('harness-standard', 'Harness Standard', '2026', true, 'thesis', 'tooling',
     ['Agents', 'SDD', 'CLI', 'Conventions'],
     'https://github.com/jordimarsal/harness-standard',
     {
@@ -557,7 +558,7 @@ export const PROJECTS: readonly Project[] = [
         { value: '1 cmd', label: { en: 'install', es: 'instalación', ca: 'instal·lació' } },
       ],
     }),
-  P('rustcut', 'Rustcut', '2024 - 2026', false, 'tooling',
+  P('rustcut', 'Rustcut', '2024 - 2026', false, 'annex', 'tooling',
     ['Rust', 'Actix-web', 'SQLite'],
     'https://github.com/jordimarsal/rustcut',
     {
@@ -586,7 +587,7 @@ export const PROJECTS: readonly Project[] = [
         { value: '1', label: { en: 'SQLite file', es: 'fichero SQLite', ca: 'fitxer SQLite' } },
       ],
     }),
-  P('md-mermaid-pdf', 'MD Mermaid PDF', '2025 - 2026', false, 'tooling',
+  P('md-mermaid-pdf', 'MD Mermaid PDF', '2025 - 2026', false, 'satellite', 'tooling',
     ['Python', 'Markdown', 'Mermaid', 'GitHub Actions'],
     'https://github.com/jordimarsal/md-mermaid-pdf',
     {
@@ -612,7 +613,7 @@ export const PROJECTS: readonly Project[] = [
       },
       metrics: [],
     }),
-  P('mcp-transparent-png', 'MCP Transparent PNG', '2026', true, 'tooling',
+  P('mcp-transparent-png', 'MCP Transparent PNG', '2026', true, 'satellite', 'tooling',
     ['Python 3.13', 'MCP', 'Pillow', 'GitHub Actions'],
     'https://github.com/jordimarsal/mcp-transparent-png',
     {
@@ -652,7 +653,7 @@ export const PROJECTS: readonly Project[] = [
         { value: '3', label: { en: 'transparency modes', es: 'modos de transparencia', ca: 'modes de transparència' } },
       ],
     }),
-  P('spring-boot-casino', 'Spring Boot Casino', '2020 - 2026', false, 'tooling',
+  P('spring-boot-casino', 'Spring Boot Casino', '2020 - 2026', false, 'annex', 'tooling',
     ['Java', 'Spring Boot', 'Hexagonal Architecture'],
     'https://github.com/jordimarsal/spring-boot-casino',
     {
@@ -679,6 +680,16 @@ export const PROJECTS: readonly Project[] = [
       metrics: [],
     }),
 ];
+
+export const TIER_ORDER: readonly Tier[] = ['thesis', 'satellite', 'annex'];
+
+export const TIER_LABELS: Record<Tier, L10n<string>> = {
+  thesis: { en: 'Thesis', es: 'Tesis', ca: 'Tesi' },
+  satellite: { en: 'Satellites', es: 'Satélites', ca: 'Satèl·lits' },
+  annex: { en: 'Annex — roots, assessments & size exercises', es: 'Anexo — raíces, pruebas y ejercicios de tamaño', ca: 'Annex — arrels, proves i exercicis de mida' },
+};
+
+export const tierProjects = (tier: Tier): readonly Project[] => PROJECTS.filter((p) => p.tier === tier);
 
 export const FEATURED: readonly string[] = ['codebaserag', 'kafka-adapter-telemetry', 'harness-standard'];
 
@@ -724,14 +735,17 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
       en: [
         'Drove the tech-modernization analysis of 39 corporate APIs to Node.js 24.',
         'Homogenized the stack and reduced technical debt across the API estate.',
+        '39 APIs onto one Node.js 24 stack and one pattern — less drift for every team that owns one.',
       ],
       es: [
         'Impulsé el análisis de modernización tecnológica de 39 APIs corporativas a Node.js 24.',
         'Homogeneicé el stack y reduje la deuda técnica del parque de APIs.',
+        '39 APIs sobre un único stack Node.js 24 y un solo patrón — menos deriva para cada equipo que posee una.',
       ],
       ca: [
         'Vaig impulsar l’anàlisi de modernització tecnològica de 39 APIs corporatives a Node.js 24.',
         'Vaig homogeneïtzar el stack i reduir el deute tècnic del parc d’APIs.',
+        '39 APIs sobre un únic stack Node.js 24 i un sol patró — menys deriva per a cada equip que en posseeix una.',
       ],
     },
     stack: ['Node.js 24', 'TypeScript', 'REST'],
@@ -749,14 +763,17 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
       en: [
         'Maintenance and evolution of the Java server of the betting engine, Backoffice and online-casino integrations.',
         'Server-to-server sign-in, AWS Snowflake + Cassandra historicals, OneSignal integration.',
+        'Kept the Java betting server live while historicals moved to Snowflake + Cassandra and sign-in went server-to-server.',
       ],
       es: [
         'Mantenimiento y evolución del servidor Java del motor de apuestas, Backoffice e integraciones con casinos online.',
         'Sign-in server-to-server, históricos en AWS Snowflake + Cassandra, integración OneSignal.',
+        'Mantuve en vivo el servidor Java de apuestas mientras los históricos pasaban a Snowflake + Cassandra y el sign-in pasaba a server-to-server.',
       ],
       ca: [
         'Manteniment i evolució del servidor Java del motor d’apostes, Backoffice i integracions amb casinos online.',
         'Sign-in server-to-server, històrics a AWS Snowflake + Cassandra, integració OneSignal.',
+        'Vaig mantenir en viu el servidor Java d’apostes mentre els històrics passaven a Snowflake + Cassandra i el sign-in passava a server-to-server.',
       ],
     },
     stack: ['Java', 'Spring', 'AWS', 'Cassandra', 'Snowflake'],
@@ -771,9 +788,18 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
       ca: 'Desenvolupador Backend Java',
     },
     points: {
-      en: ['Evolution of Attend® (tickets/inventory/projects) and License Manager (Spring Boot 2.3 + REST).'],
-      es: ['Evolución de Attend® (tickets/inventario/proyectos) y License Manager (Spring Boot 2.3 + REST).'],
-      ca: ['Evolució d’Attend® (tickets/inventari/projectes) i License Manager (Spring Boot 2.3 + REST).'],
+      en: [
+        'Evolution of Attend® (tickets/inventory/projects) and License Manager (Spring Boot 2.3 + REST).',
+        'Attend® is still the live product — the tickets/inventory core and the License Manager remain in service.',
+      ],
+      es: [
+        'Evolución de Attend® (tickets/inventario/proyectos) y License Manager (Spring Boot 2.3 + REST).',
+        'Attend® sigue siendo el producto vivo — el núcleo de tickets/inventario y el License Manager siguen en servicio.',
+      ],
+      ca: [
+        'Evolució d’Attend® (tickets/inventari/projectes) i License Manager (Spring Boot 2.3 + REST).',
+        'Attend® continua sent el producte viu — el nucli de tickets/inventari i el License Manager continuen en servei.',
+      ],
     },
     stack: ['Java', 'Spring Boot', 'REST'],
   },
@@ -781,20 +807,20 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
 
 export const SKILLS: readonly SkillGroup[] = [
   {
-    group: { en: 'Backend & APIs', es: 'Backend y APIs', ca: 'Backend i APIs' },
-    items: ['Java 11/21/25', 'Spring Boot 4', 'Python', 'FastAPI', 'Node.js', 'TypeScript', 'REST', 'OpenAPI', 'Kafka', 'RabbitMQ'],
+    group: { en: 'Backend', es: 'Backend', ca: 'Backend' },
+    items: ['Java 21/25', 'Spring Boot', 'Python 3.13', 'FastAPI', 'Kafka'],
   },
   {
     group: { en: 'Data', es: 'Datos', ca: 'Dades' },
-    items: ['SQL (Oracle/MySQL/SQLServer)', 'MongoDB', 'Redis', 'Cassandra', 'Snowflake', 'Machine Learning', 'pandas/scikit-learn'],
+    items: ['Oracle', 'Redis', 'pgvector'],
   },
   {
-    group: { en: 'AI & LLMs', es: 'IA y LLMs', ca: 'IA i LLMs' },
-    items: ['RAG & vector search', 'MCP', 'llama.cpp local inference', 'agents & evals', 'prompt engineering'],
+    group: { en: 'AI', es: 'IA', ca: 'IA' },
+    items: ['RAG + evals in CI', 'MCP', 'Ollama / llama.cpp'],
   },
   {
-    group: { en: 'DevOps & Quality', es: 'DevOps y Calidad', ca: 'DevOps i Qualitat' },
-    items: ['Docker', 'Kubernetes', 'AWS Lambda/CDK/CloudFormation', 'GitHub Actions', 'Jenkins', 'SonarQube', 'SonarLint', 'Testcontainers', 'pytest', 'JUnit/Mockito'],
+    group: { en: 'Quality', es: 'Calidad', ca: 'Qualitat' },
+    items: ['Testcontainers', 'GitHub Actions', 'mypy strict', 'TDD'],
   },
   {
     group: { en: 'Leadership', es: 'Liderazgo', ca: 'Lideratge' },
@@ -830,12 +856,12 @@ export const WORK: WorkContent = {
   head: {
     num: 'P',
     title: { en: 'Projects', es: 'Proyectos', ca: 'Projectes' },
-    sub: { en: '11 PROJECTS · FILTER BY STACK', es: '11 PROYECTOS · FILTRA POR STACK', ca: '11 PROJECTES · FILTRA PER STACK' },
+    sub: { en: '11 PROJECTS · 3 TIERS · FILTER BY STACK', es: '11 PROYECTOS · 3 NIVELES · FILTRA POR STACK', ca: '11 PROJECTES · 3 NIVELLS · FILTRA PER STACK' },
   },
   intro: {
-    en: 'Everything on the premises, one list, no curation. Filter by the stack you care about.',
-    es: 'Todo lo del edificio, en una lista y sin selección previa. Filtra por el stack que te interese.',
-    ca: 'Tot el que hi ha a l’edifici, en una llista i sense selecció prèvia. Filtra pel stack que et vagi bé.',
+    en: 'Eleven projects in three tiers: the thesis, the satellites around it, and an annex for roots, take-home assessments and size exercises. Filter by the stack you care about.',
+    es: 'Once proyectos en tres niveles: la tesis, sus satélites y un anexo para raíces, pruebas técnicas y ejercicios de tamaño. Filtra por el stack que te interese.',
+    ca: 'Onze projectes en tres nivells: la tesi, els seus satèl·lits i un annex per a arrels, proves tècniques i exercicis de mida. Filtra pel stack que et vagi bé.',
   },
   filterAll: { en: 'All', es: 'Todos', ca: 'Tots' },
   filterSummary: { en: 'FILTER BY STACK ({n})', es: 'FILTRA POR STACK ({n})', ca: 'FILTRA PER STACK ({n})' },
@@ -961,9 +987,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'Projectes — Jordimp & Co.',
     },
     description: {
-      en: 'All 11 projects on the premises: backend systems, event pipelines, applied AI and tooling. Filter by the stack you care about.',
-      es: 'Los 11 proyectos del edificio: sistemas backend, pipelines de eventos, IA aplicada y herramientas. Filtra por el stack que te interese.',
-      ca: 'Els 11 projectes de l’edifici: sistemes backend, pipelines d’esdeveniments, IA aplicada i eines. Filtra pel stack que et vagi bé.',
+      en: 'Eleven projects in three tiers — thesis, satellites and annex — across backend systems, event pipelines, applied AI and tooling. Filter by the stack you care about.',
+      es: 'Once proyectos en tres niveles — tesis, satélites y anexo — entre sistemas backend, pipelines de eventos, IA aplicada y herramientas. Filtra por el stack que te interese.',
+      ca: 'Onze projectes en tres nivells — tesi, satèl·lits i annex — entre sistemes backend, pipelines d’esdeveniments, IA aplicada i eines. Filtra pel stack que et vagi bé.',
     },
   },
   cv: {
@@ -989,9 +1015,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'F3 · Recerca i Recuperació — Jordimp & Co.',
     },
     description: {
-      en: 'Applied AI shipped like infrastructure: CodebaseRAG, Interview Simulator and Bible Text Analysis — retrieval with receipts.',
-      es: 'IA aplicada entregada como infraestructura: CodebaseRAG, Interview Simulator y Bible Text Analysis — recuperación con recibos.',
-      ca: 'IA aplicada lliurada com a infraestructura: CodebaseRAG, Interview Simulator i Bible Text Analysis — recuperació amb rebuts.',
+      en: 'Applied AI shipped like infrastructure: CodebaseRAG, with the offline Interview Simulator as its satellite — retrieval with receipts.',
+      es: 'IA aplicada entregada como infraestructura: CodebaseRAG, con el Interview Simulator offline como satélite — recuperación con recibos.',
+      ca: 'IA aplicada lliurada com a infraestructura: CodebaseRAG, amb l’Interview Simulator offline com a satèl·lit — recuperació amb rebuts.',
     },
   },
   telemetry: {
@@ -1003,9 +1029,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'F2 · Transport i Telemetria — Jordimp & Co.',
     },
     description: {
-      en: 'The plumbing that must not lie: kafka-adapter-telemetry, redis-toolkit and product-offers — event pipelines, atomic rate limits and honest failure modes.',
-      es: 'La tubería que no puede mentir: kafka-adapter-telemetry, redis-toolkit y product-offers — pipelines de eventos, rate limits atómicos y modos de fallo honestos.',
-      ca: 'La tuberia que no pot mentir: kafka-adapter-telemetry, redis-toolkit i product-offers — pipelines d’esdeveniments, rate limits atòmics i modes de fallada honests.',
+      en: 'The plumbing that must not lie: kafka-adapter-telemetry and redis-toolkit — event pipelines, atomic rate limits and honest failure modes.',
+      es: 'La tubería que no puede mentir: kafka-adapter-telemetry y redis-toolkit — pipelines de eventos, rate limits atómicos y modos de fallo honestos.',
+      ca: 'La tuberia que no pot mentir: kafka-adapter-telemetry i redis-toolkit — pipelines d’esdeveniments, rate limits atòmics i modes de fallada honests.',
     },
   },
   tooling: {
@@ -1017,9 +1043,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'F1 · Eines i Plataforma — Jordimp & Co.',
     },
     description: {
-      en: 'The workshop floor: harness-standard, rustcut, md-mermaid-pdf, mcp-transparent-png and spring-boot-casino — deliberately small tools, production standards.',
-      es: 'El taller: harness-standard, rustcut, md-mermaid-pdf, mcp-transparent-png y spring-boot-casino — herramientas deliberadamente pequeñas, estándares de producción.',
-      ca: 'El taller: harness-standard, rustcut, md-mermaid-pdf, mcp-transparent-png i spring-boot-casino — eines deliberadament petites, estàndards de producció.',
+      en: 'The workshop floor: harness-standard, md-mermaid-pdf and mcp-transparent-png — deliberately small tools, production standards.',
+      es: 'El taller: harness-standard, md-mermaid-pdf y mcp-transparent-png — herramientas deliberadamente pequeñas, estándares de producción.',
+      ca: 'El taller: harness-standard, md-mermaid-pdf i mcp-transparent-png — eines deliberadament petites, estàndards de producció.',
     },
   },
   operations: {
@@ -1089,22 +1115,19 @@ export const RESEARCH_PAGE: ResearchPageContent = {
   },
   stats: {
     en: [
-      { value: '3', label: 'PROJECTS ON THIS FLOOR' },
+      { value: '2', label: 'PROJECTS ON THIS FLOOR' },
       { value: '≥40', label: 'GOLDEN Q/A PAIRS' },
       { value: '0.409', label: 'MEAN RECALL@5' },
-      { value: '0', label: 'CLOUD DEPENDENCIES IN INTERVIEWS' },
     ],
     es: [
-      { value: '3', label: 'PROYECTOS EN ESTA PLANTA' },
+      { value: '2', label: 'PROYECTOS EN ESTA PLANTA' },
       { value: '≥40', label: 'PARES Q/A GOLDEN' },
       { value: '0.409', label: 'RECALL@5 MEDIO' },
-      { value: '0', label: 'DEPENDENCIAS DE NUBE EN ENTREVISTAS' },
     ],
     ca: [
-      { value: '3', label: 'PROJECTES EN AQUESTA PLANTA' },
+      { value: '2', label: 'PROJECTES EN AQUESTA PLANTA' },
       { value: '≥40', label: 'PARELLS Q/A GOLDEN' },
       { value: '0.409', label: 'RECALL@5 MITJÀ' },
-      { value: '0', label: 'DEPENDÈNCIES DE NÚVOL A LES ENTREVISTES' },
     ],
   },
   problemLabel: { en: 'The problem', es: 'El problema', ca: 'El problema' },
@@ -1375,30 +1398,27 @@ export const TELEMETRY_PAGE: TelemetryPageContent = {
 export const TOOLING_PAGE: ToolingPageContent = {
   stats: {
     en: [
-      { value: '5', label: 'PROJECTS ON THIS FLOOR' },
+      { value: '3', label: 'PROJECTS ON THIS FLOOR' },
       { value: '7', label: 'STACKS COVERED BY THE HARNESS' },
       { value: '1', label: 'COMMAND INSTALLS THE HARNESS' },
-      { value: '2', label: 'TECH ASSESSMENTS, PRODUCTION BAR' },
     ],
     es: [
-      { value: '5', label: 'PROYECTOS EN ESTA PLANTA' },
+      { value: '3', label: 'PROYECTOS EN ESTA PLANTA' },
       { value: '7', label: 'STACKS CUBIERTOS POR EL HARNESS' },
       { value: '1', label: 'COMANDO INSTALA EL HARNESS' },
-      { value: '2', label: 'PRUEBAS TÉCNICAS, NIVEL PRODUCCIÓN' },
     ],
     ca: [
-      { value: '5', label: 'PROJECTES EN AQUESTA PLANTA' },
+      { value: '3', label: 'PROJECTES EN AQUESTA PLANTA' },
       { value: '7', label: 'STACKS COBERTS PEL HARNESS' },
       { value: '1', label: 'COMANDA INSTAL·LA EL HARNESS' },
-      { value: '2', label: 'PROVES TÈCNIQUES, NIVELL PRODUCCIÓ' },
     ],
   },
   workTitle: { en: 'The workshop bench', es: 'La mesa del taller', ca: 'La taula del taller' },
   noteTitle: { en: 'Workshop rule', es: 'Regla del taller', ca: 'Regla del taller' },
   noteBody: {
-    en: 'Every tool on this floor does one thing and gets out of the way. The harness standardizes the process, not your code; each CLI automates exactly one boring step; and the two technical assessments are held to production standards — CI, coverage and clean checks included. Small is a feature.',
-    es: 'Cada herramienta de esta planta hace una sola cosa y no se mete. El harness estandariza el proceso, no tu código; cada CLI automatiza exactamente un paso aburrido; y las dos pruebas técnicas se sostienen al nivel de producción — CI, cobertura y comprobaciones de limpieza incluidas. Pequeño es una característica.',
-    ca: 'Cada eina d’aquesta planta fa una sola cosa i no s’entremet. El harness estandarditza el procés, no el teu codi; cada CLI automatitza exactament un pas avorrit; i les dues proves tècniques es sostenen al nivell de producció — CI, cobertura i comprovacions de neteja incloses. Petit és una característica.',
+    en: 'Every tool on this floor does one thing and gets out of the way. The harness standardizes the process, not your code; each CLI automates exactly one boring step. Small is a feature.',
+    es: 'Cada herramienta de esta planta hace una sola cosa y no se mete. El harness estandariza el proceso, no tu código; cada CLI automatiza exactamente un paso aburrido. Pequeño es una característica.',
+    ca: 'Cada eina d’aquesta planta fa una sola cosa i no s’entremet. El harness estandarditza el procés, no el teu codi; cada CLI automatitza exactament un pas avorrit. Petit és una característica.',
   },
 };
 
@@ -1430,6 +1450,22 @@ export const OPERATIONS_PAGE: OperationsPageContent = {
       { value: '~90', label: 'ADAPTADORS OPERATS AVUI' },
       { value: '12+', label: 'EINES CLI AL KIT DIARI' },
     ],
+  },
+  rootsTitle: { en: 'Data Science roots', es: 'Raíces de Data Science', ca: 'Arrels de Data Science' },
+  rootsNote: {
+    en: '2019 · Data Science roots — Bible Text Analysis: scraping, NLTK, LDA topics and sentiment over a raw corpus. Provenance, not a headline.',
+    es: '2019 · Raíces de Data Science — Bible Text Analysis: scraping, NLTK, temas LDA y sentimiento sobre un corpus crudo. Procedencia, no un titular.',
+    ca: '2019 · Arrels de Data Science — Bible Text Analysis: scraping, NLTK, temes LDA i sentiment sobre un corpus cru. Procedència, no un titular.',
+  },
+  toolbeltTitle: {
+    en: 'Operations toolbelt',
+    es: 'Caja de herramientas de operaciones',
+    ca: 'Caixa d’eines d’operacions',
+  },
+  toolbeltNote: {
+    en: 'The rest of the toolbelt, kept where it was used: Kubernetes and AWS CDK/CloudFormation from platform and deployment work; Cassandra and Snowflake at Zitro’s betting platform; RabbitMQ in event pipelines; pandas from the 2019 Data Science years. Listed by engagement, not as résumé soup.',
+    es: 'El resto de la caja de herramientas, donde se usó: Kubernetes y AWS CDK/CloudFormation del trabajo de plataforma y despliegue; Cassandra y Snowflake en la plataforma de apuestas de Zitro; RabbitMQ en pipelines de eventos; pandas de los años de Data Science (2019). Listado por proyecto, no como sopa de siglas.',
+    ca: 'La resta de la caixa d’eines, allà on es va fer servir: Kubernetes i AWS CDK/CloudFormation de la feina de plataforma i desplegament; Cassandra i Snowflake a la plataforma d’apostes de Zitro; RabbitMQ en pipelines d’esdeveniments; pandas dels anys de Data Science (2019). Llistat per projecte, no com a sopa de sigles.',
   },
 };
 

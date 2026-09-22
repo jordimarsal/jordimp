@@ -16,7 +16,6 @@ The top floor ships AI like infrastructure: deterministic cores, golden Q/A sets
 Projects:
   - CodebaseRAG (2026): Hexagonal RAG over your own codebase, with a deterministic, eval-first core: ingest, query, and CI-gated retrieval evals. Stack: Python 3.13, FastAPI, pgvector, Qdrant, Ollama, Langfuse, mypy strict. [repo](https://github.com/jordimarsal/codebaserag)
   - Interview Simulator (2026): Voice interview simulator: a local LLM plays the interviewer and Whisper handles transcription, so you can rehearse technical interviews fully offline. Stack: Whisper, Local LLM. [repo](https://github.com/jordimarsal/interview-simulator)
-  - Bible Text Analysis (2019): NLP study on the Bible: web scraping, NLTK processing, LDA topic modeling and sentiment analysis — my Data Science roots. Stack: Python, NLTK, LDA, Jupyter. [repo](https://github.com/jordimarsal/bible_text_analysis)
 
 ## F2 — Transport & Telemetry
 
@@ -25,7 +24,6 @@ Event pipelines, rate limits and health tracking with honest failure modes. When
 Projects:
   - Kafka Adapter Telemetry (2026): Event-driven adapter telemetry: a Kafka gateway + hub pipeline with idempotent Oracle persistence, per-adapter health tracking, alerting, and a live SSE mission-control dashboard. Stack: Java 25, Spring Boot 4.1, Kafka, Oracle, Flyway, Testcontainers, SSE. [repo](https://github.com/jordimarsal/kafka-adapter-telemetry)
   - Redis Toolkit (2026): Rate-limiting toolkit for LLM gateways: atomic token-bucket quotas, pluggable stores, honest failure modes — with a Javalin gateway demo exposing an OpenAI-style endpoint. Stack: Java, Javalin, Redis, Testcontainers. [repo](https://github.com/jordimarsal/redis-toolkit)
-  - Product Offers API (2023 - 2026): Technical assessment: a product offers REST API — price inquiries by date, product and brand, served with Spring Boot. Stack: Java 17, Spring Boot 3.2, H2, JUnit 5, Mockito. [repo](https://github.com/jordimarsal/product-offers)
 
 ## F1 — Tooling & Platform
 
@@ -33,10 +31,8 @@ The workshop floor: a multi-agent SDD harness, CLIs that do one thing well, and 
 
 Projects:
   - Harness Standard (2026): A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command. Stack: Agents, SDD, CLI, Conventions. [repo](https://github.com/jordimarsal/harness-standard)
-  - Rustcut (2024 - 2026): Tiny URL shortener in Rust: a deliberately minimalist REST API on Actix-web with SQLite storage. Stack: Rust, Actix-web, SQLite. [repo](https://github.com/jordimarsal/rustcut)
   - MD Mermaid PDF (2025 - 2026): CLI that renders Markdown with Mermaid diagrams straight to PDF, engineered with TDD, mypy strict and CI. Stack: Python, Markdown, Mermaid, GitHub Actions. [repo](https://github.com/jordimarsal/md-mermaid-pdf)
   - MCP Transparent PNG (2026): MCP (Model Context Protocol) server that makes PNG colors transparent (alpha channel) with rgb/auto/greenscreen modes. Stack: Python 3.13, MCP, Pillow, GitHub Actions. [repo](https://github.com/jordimarsal/mcp-transparent-png)
-  - Spring Boot Casino (2020 - 2026): Technical assessment: a casino betting domain modeled in Spring Boot following a hexagonal architecture. Stack: Java, Spring Boot, Hexagonal Architecture. [repo](https://github.com/jordimarsal/spring-boot-casino)
 
 ## Q — Inspections
 
@@ -75,16 +71,16 @@ The desk takes three things: senior or staff backend roles, short spec-first eng
 ## Career ledger (Operations, F0)
 
 - 2022—NOW — Telefónica Kernel · Open Gateway, Backend Engineer — Microservices & Automation: Design and evolution of REST microservice adapters for Open Gateway. Author of a 12+ tool Python CLI suite operating ~90 adapters across 4 countries. Automatic OpenAPI (Swagger v2/v3) code generation and CI-integrated docs & diagrams.
-- 2026 — Axpe Consulting / Mapfre, Software Engineer — API Modernization: Drove the tech-modernization analysis of 39 corporate APIs to Node.js 24. Homogenized the stack and reduced technical debt across the API estate.
-- 2020—2022 — Zitro Laboratory, Java Backend Engineer: Maintenance and evolution of the Java server of the betting engine, Backoffice and online-casino integrations. Server-to-server sign-in, AWS Snowflake + Cassandra historicals, OneSignal integration.
-- 2017—2020 — Attendre S.L., Java Backend Developer: Evolution of Attend® (tickets/inventory/projects) and License Manager (Spring Boot 2.3 + REST).
+- 2026 — Axpe Consulting / Mapfre, Software Engineer — API Modernization: Drove the tech-modernization analysis of 39 corporate APIs to Node.js 24. Homogenized the stack and reduced technical debt across the API estate. 39 APIs onto one Node.js 24 stack and one pattern — less drift for every team that owns one.
+- 2020—2022 — Zitro Laboratory, Java Backend Engineer: Maintenance and evolution of the Java server of the betting engine, Backoffice and online-casino integrations. Server-to-server sign-in, AWS Snowflake + Cassandra historicals, OneSignal integration. Kept the Java betting server live while historicals moved to Snowflake + Cassandra and sign-in went server-to-server.
+- 2017—2020 — Attendre S.L., Java Backend Developer: Evolution of Attend® (tickets/inventory/projects) and License Manager (Spring Boot 2.3 + REST). Attend® is still the live product — the tickets/inventory core and the License Manager remain in service.
 
 ## Skills (Mezzanine)
 
-- Backend & APIs: Java 11/21/25, Spring Boot 4, Python, FastAPI, Node.js, TypeScript, REST, OpenAPI, Kafka, RabbitMQ
-- Data: SQL (Oracle/MySQL/SQLServer), MongoDB, Redis, Cassandra, Snowflake, Machine Learning, pandas/scikit-learn
-- AI & LLMs: RAG & vector search, MCP, llama.cpp local inference, agents & evals, prompt engineering
-- DevOps & Quality: Docker, Kubernetes, AWS Lambda/CDK/CloudFormation, GitHub Actions, Jenkins, SonarQube, SonarLint, Testcontainers, pytest, JUnit/Mockito
+- Backend: Java 21/25, Spring Boot, Python 3.13, FastAPI, Kafka
+- Data: Oracle, Redis, pgvector
+- AI: RAG + evals in CI, MCP, Ollama / llama.cpp
+- Quality: Testcontainers, GitHub Actions, mypy strict, TDD
 - Leadership: team coordination, code review culture, mentoring, conflict resolution
 
 ## Working principles (Mezzanine)

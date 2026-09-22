@@ -956,6 +956,21 @@ html[data-night='1'] .win {
   max-width: 760px;
 }
 
+.tier-head {
+  grid-column: 1 / -1;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink2);
+  margin: 0;
+}
+
+.cards--tier + .cards--tier {
+  margin-top: 32px;
+}
+
 .card {
   position: relative;
   overflow: hidden;

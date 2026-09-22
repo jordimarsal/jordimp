@@ -13,6 +13,7 @@ import {
   PAGES,
   PROJECTS,
   project,
+  tierProjects,
 } from '../../../data/content';
 import type { Project } from '../../../data/types';
 import { dirRoute, srcPath } from '../../../lib/paths';
@@ -35,7 +36,7 @@ const floorLabel = `DEPT·${d.code} — ${d.name[lang].toUpperCase()}`;
 const build = (CASE_BUILD[p.slug] ?? p.highlights)[lang];
 const buildSteps = build.map((text, i) => ({ n: String(i + 1).padStart(2, '0'), text }));
 const backLabel = CASE_UI.backDept[lang].replace('{dept}', d.name[lang]);
-const list = d.projects;
+const list = tierProjects(p.tier).map((c) => c.slug);
 const idx = list.indexOf(p.slug);
 const prev = project(list[(idx - 1 + list.length) % list.length]);
 const next = project(list[(idx + 1) % list.length]);

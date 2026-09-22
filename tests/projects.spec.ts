@@ -1,12 +1,13 @@
 import { expect, test } from '@playwright/test';
-import { PROJECTS } from '../src/data/content';
+import { PROJECTS, TIER_ORDER, tierProjects, WORK } from '../src/data/content';
+import type { Locale } from '../src/lib/i18n';
 
 const ROUTES = ['/en/projects/', '/es/projects/', '/ca/projects/'] as const;
 
 const EXPECTED: Record<
   (typeof ROUTES)[number],
   {
-    lang: string;
+    lang: Locale;
     title: string;
     crumbHome: string;
     sub: string;
@@ -23,7 +24,7 @@ const EXPECTED: Record<
     lang: 'en',
     title: 'Projects — Jordimp & Co.',
     crumbHome: 'Home',
-    sub: '11 PROJECTS · FILTER BY STACK',
+    sub: '11 PROJECTS · 3 TIERS · FILTER BY STACK',
     summary: 'FILTER BY STACK (42)',
     all: 'All',
     initialStatus: '11 PROJECTS ON SHOW',
@@ -36,7 +37,7 @@ const EXPECTED: Record<
     lang: 'es',
     title: 'Proyectos — Jordimp & Co.',
     crumbHome: 'Inicio',
-    sub: '11 PROYECTOS · FILTRA POR STACK',
+    sub: '11 PROYECTOS · 3 NIVELES · FILTRA POR STACK',
     summary: 'FILTRA POR STACK (42)',
     all: 'Todos',
     initialStatus: '11 PROYECTOS A LA VISTA',
@@ -49,7 +50,7 @@ const EXPECTED: Record<
     lang: 'ca',
     title: 'Projectes — Jordimp & Co.',
     crumbHome: 'Inici',
-    sub: '11 PROJECTES · FILTRA PER STACK',
+    sub: '11 PROJECTES · 3 NIVELLS · FILTRA PER STACK',
     summary: 'FILTRA PER STACK (42)',
     all: 'Tots',
     initialStatus: '11 PROJECTES A LA VISTA',
@@ -107,6 +108,7 @@ test.describe('projects index page (T6)', () => {
       await expect(head.locator('.sec-head__sub')).toHaveText(expected.sub);
 
       await expect(page.locator('main > p.prose')).not.toBeEmpty();
+      await expect(page.locator('main > p.prose')).toHaveText(WORK.intro[expected.lang]);
 
       const details = page.locator('details.filter-wrap[data-filter-wrap]');
       await expect(details).toHaveAttribute('open', '');
@@ -128,16 +130,28 @@ test.describe('projects index page (T6)', () => {
       await expect(status).toHaveAttribute('data-empty-label', /.+/);
       await expect(status).toHaveText(expected.initialStatus);
 
-      const cards = page.locator('section.cards article.card');
-      await expect(cards).toHaveCount(PROJECTS.length);
-      for (let i = 0; i < PROJECTS.length; i++) {
+      const tiers = page.locator('section.cards--tier');
+      await expect(tiers).toHaveCount(3);
+      await expect(tiers.nth(0)).toHaveAttribute('data-tier', 'thesis');
+      await expect(tiers.nth(1)).toHaveAttribute('data-tier', 'satellite');
+      await expect(tiers.nth(2)).toHaveAttribute('data-tier', 'annex');
+      const counts = [3, 4, 4];
+      for (let i = 0; i < 3; i++) {
+        await expect(tiers.nth(i).locator('h2.tier-head')).not.toBeEmpty();
+        await expect(tiers.nth(i).locator('article.card')).toHaveCount(counts[i]);
+      }
+
+      const cards = page.locator('section.cards--tier article.card');
+      const ordered = TIER_ORDER.flatMap((tier) => tierProjects(tier));
+      await expect(cards).toHaveCount(ordered.length);
+      for (let i = 0; i < ordered.length; i++) {
         await expect(cards.nth(i)).toHaveAttribute('data-stack', /.+/);
-        await expect(cards.nth(i).locator('h3')).toHaveText(PROJECTS[i].name);
+        await expect(cards.nth(i).locator('h3')).toHaveText(ordered[i].name);
         const repo = cards.nth(i).locator('a.case');
         await expect(repo).toHaveAttribute('target', '_blank');
         await expect(repo).toHaveAttribute('rel', 'noopener noreferrer');
         await expect(repo).toContainText(expected.github);
-        await expect(repo).toHaveAttribute('aria-label', `${PROJECTS[i].name} — ${expected.github}`);
+        await expect(repo).toHaveAttribute('aria-label', `${ordered[i].name} — ${expected.github}`);
       }
 
       await expect(page.locator('.footer-desk#desk')).toHaveCount(1);
@@ -171,8 +185,8 @@ test.describe('projects index page (T6)', () => {
 
   test('filters by a single stack with the one-count label (en)', async ({ page }) => {
     await page.goto('/en/projects/');
-    const cards = page.locator('section.cards article.card');
-    const shown = page.locator('section.cards article.card:not([hidden])');
+    const annexCards = page.locator('section[data-tier="annex"] article.card');
+    const shown = page.locator('section.cards--tier article.card:not([hidden])');
     const status = page.locator('#filter-status');
     const reset = page.locator('.filter-chips button[data-reset]');
 
@@ -183,14 +197,28 @@ test.describe('projects index page (T6)', () => {
     await expect(rust).toHaveAttribute('aria-pressed', 'true');
     await expect(reset).toHaveAttribute('aria-pressed', 'false');
     await expect(shown).toHaveCount(1);
-    await expect(cards.nth(7).locator('h3')).toHaveText('Rustcut');
+    await expect(annexCards.nth(2).locator('h3')).toHaveText('Rustcut');
     await expect(status).toHaveText(EXPECTED['/en/projects/'].oneStatus);
+  });
+
+  test('hides tier groups whose cards all filter out (en)', async ({ page }) => {
+    await page.goto('/en/projects/');
+    const thesis = page.locator('section.cards--tier[data-tier="thesis"]');
+    const satellite = page.locator('section.cards--tier[data-tier="satellite"]');
+    const annex = page.locator('section.cards--tier[data-tier="annex"]');
+
+    await page.locator('.filter-chips button[data-stack="Rust"]').click();
+
+    await expect(annex).not.toHaveAttribute('hidden', '');
+    await expect(satellite).toHaveAttribute('hidden', '');
+    await expect(thesis).toHaveAttribute('hidden', '');
   });
 
   test('OR-matches a multi-select union and resets (en)', async ({ page }) => {
     await page.goto('/en/projects/');
-    const cards = page.locator('section.cards article.card');
-    const shown = page.locator('section.cards article.card:not([hidden])');
+    const satelliteCards = page.locator('section[data-tier="satellite"] article.card');
+    const annexCards = page.locator('section[data-tier="annex"] article.card');
+    const shown = page.locator('section.cards--tier article.card:not([hidden])');
     const status = page.locator('#filter-status');
     const reset = page.locator('.filter-chips button[data-reset]');
 
@@ -200,8 +228,8 @@ test.describe('projects index page (T6)', () => {
     await expect(whisper).toHaveAttribute('aria-pressed', 'true');
 
     await expect(shown).toHaveCount(2);
-    await expect(cards.nth(1).locator('h3')).toHaveText('Interview Simulator');
-    await expect(cards.nth(7).locator('h3')).toHaveText('Rustcut');
+    await expect(satelliteCards.nth(0).locator('h3')).toHaveText('Interview Simulator');
+    await expect(annexCards.nth(2).locator('h3')).toHaveText('Rustcut');
     await expect(status).toHaveText(EXPECTED['/en/projects/'].twoStatus);
 
     await whisper.click();
@@ -221,7 +249,7 @@ test.describe('projects index page (T6)', () => {
     // stripping Rust from every card, then filter on Rust (apply() re-reads the
     // attribute on each pass, exactly like the spike).
     await page.evaluate(() => {
-      document.querySelectorAll('section.cards article.card').forEach((card) => {
+      document.querySelectorAll('section.cards--tier article.card').forEach((card) => {
         card.setAttribute(
           'data-stack',
           (card.getAttribute('data-stack') ?? '')
@@ -247,7 +275,7 @@ test.describe('projects index page (T6)', () => {
 
   test('announces localized counts in es', async ({ page }) => {
     await page.goto('/es/projects/');
-    const shown = page.locator('section.cards article.card:not([hidden])');
+    const shown = page.locator('section.cards--tier article.card:not([hidden])');
     const status = page.locator('#filter-status');
     const es = EXPECTED['/es/projects/'];
 

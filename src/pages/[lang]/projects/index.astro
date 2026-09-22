@@ -4,7 +4,7 @@ import Breadcrumb from '../../../components/site/Breadcrumb.astro';
 import SecHead from '../../../components/site/SecHead.astro';
 import ProjectCard from '../../../components/site/ProjectCard.astro';
 import { LOCALES, type Locale } from '../../../lib/i18n';
-import { BREADCRUMB_HOME, PAGES, PROJECTS, WORK } from '../../../data/content';
+import { BREADCRUMB_HOME, PAGES, PROJECTS, TIER_LABELS, TIER_ORDER, WORK, tierProjects } from '../../../data/content';
 import { dirRoute } from '../../../lib/paths';
 
 export async function getStaticPaths() {
@@ -53,10 +53,13 @@ const trail = [
       data-empty-label={WORK.emptyLabel[lang]}
       set:html={WORK.countLabel[lang].replace('{n}', String(PROJECTS.length))}
     />
-    <section class="cards">
-      {PROJECTS.map((p) => (
-        <ProjectCard lang={lang} project={p} stackAttr={p.stack.join('|')} />
-      ))}
-    </section>
+    {TIER_ORDER.map((tier) => (
+      <section class="cards cards--tier" data-tier={tier} aria-labelledby={`tier-${tier}`}>
+        <h2 class="tier-head" id={`tier-${tier}`}>{TIER_LABELS[tier][lang]}</h2>
+        {tierProjects(tier).map((p) => (
+          <ProjectCard lang={lang} project={p} stackAttr={p.stack.join('|')} />
+        ))}
+      </section>
+    ))}
   </main>
 </SiteLayout>
