@@ -111,6 +111,12 @@ describe('GET-ready llms-full.txt content (canonical data)', () => {
     );
   });
 
+  it('carries the telemetry conflict-of-interest line', () => {
+    expect(text).toContain(
+      'Personal study of the Open Gateway telemetry problem. Not Telefónica code. Not production traffic.',
+    );
+  });
+
   it('matches the committed llms-full.txt regression oracle', () => {
     expect(text).toMatchSnapshot();
   });

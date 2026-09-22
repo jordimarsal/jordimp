@@ -282,6 +282,17 @@ describe('front-desk positioning (F11)', () => {
       expect(PAGES.frontdesk.description[lang], lang).not.toMatch(/[<>]/);
     }
   });
+
+  it('adds the Open Gateway conflict-of-interest line to F2 (R11)', () => {
+    const coi = {
+      en: 'Personal study of the Open Gateway telemetry problem. Not Telefónica code. Not production traffic.',
+      es: 'Estudio personal del problema de telemetría de Open Gateway. No es código de Telefónica. No es tráfico de producción.',
+      ca: 'Estudi personal del problema de telemetria d’Open Gateway. No és codi de Telefónica. No és trànsit de producció.',
+    } as const;
+    for (const lang of LOCALES) {
+      expect(DEPTS.telemetry.intro[lang].endsWith(coi[lang]), lang).toBe(true);
+    }
+  });
 });
 
 describe('featured data', () => {

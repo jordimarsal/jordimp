@@ -20,7 +20,7 @@ Projects:
 
 ## F2 — Transport & Telemetry
 
-Event pipelines, rate limits and health tracking with honest failure modes. When a dependency goes down, callers know exactly where they stand.
+Event pipelines, rate limits and health tracking with honest failure modes. When a dependency goes down, callers know exactly where they stand. Personal study of the Open Gateway telemetry problem. Not Telefónica code. Not production traffic.
 
 Projects:
   - Kafka Adapter Telemetry (2026): Event-driven adapter telemetry: a Kafka gateway + hub pipeline with idempotent Oracle persistence, per-adapter health tracking, alerting, and a live SSE mission-control dashboard. Stack: Java 25, Spring Boot 4.1, Kafka, Oracle, Flyway, Testcontainers, SSE. [repo](https://github.com/jordimarsal/kafka-adapter-telemetry)

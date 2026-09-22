@@ -166,9 +166,9 @@ export const DEPTS: Record<DeptKey, Dept> = {
       ca: 'LA TUBERIA QUE NO POT MENTIR — TELEMETRIA AMB FALLADES HONESTES.',
     },
     intro: {
-      en: 'Event pipelines, rate limits and health tracking with honest failure modes. When a dependency goes down, callers know exactly where they stand.',
-      es: 'Pipelines de eventos, rate limits y salud de servicios con modos de fallo honestos. Cuando una dependencia se cae, el que llama sabe exactamente dónde está.',
-      ca: 'Pipelines d’esdeveniments, rate limits i salut de serveis amb modes de fallada honests. Quan una dependència cau, qui crida sap exactament on és.',
+      en: 'Event pipelines, rate limits and health tracking with honest failure modes. When a dependency goes down, callers know exactly where they stand. Personal study of the Open Gateway telemetry problem. Not Telefónica code. Not production traffic.',
+      es: 'Pipelines de eventos, rate limits y salud de servicios con modos de fallo honestos. Cuando una dependencia se cae, el que llama sabe exactamente dónde está. Estudio personal del problema de telemetría de Open Gateway. No es código de Telefónica. No es tráfico de producción.',
+      ca: 'Pipelines d’esdeveniments, rate limits i salut de serveis amb modes de fallada honests. Quan una dependència cau, qui crida sap exactament on és. Estudi personal del problema de telemetria d’Open Gateway. No és codi de Telefónica. No és trànsit de producció.',
     },
     projects: ['kafka-adapter-telemetry', 'redis-toolkit', 'product-offers'],
     page: 'telemetry',
