@@ -149,7 +149,7 @@ export const DEPTS: Record<DeptKey, Dept> = {
       es: 'La planta más alta entrega IA como infraestructura: núcleos deterministas, sets golden de Q/A y evals con gate en CI. Si un modelo no se puede medir, no se entrega.',
       ca: 'La planta de dalt lliura IA com a infraestructura: nuclis deterministes, sets golden de Q/A i evals amb gate a CI. Si un model no es pot mesurar, no es lliura.',
     },
-    projects: ['codebaserag', 'interview-simulator', 'bible-text-analysis'],
+    projects: ['codebaserag', 'interview-simulator'],
     page: 'research',
   },
   telemetry: {
@@ -171,7 +171,7 @@ export const DEPTS: Record<DeptKey, Dept> = {
       es: 'Pipelines de eventos, rate limits y salud de servicios con modos de fallo honestos. Cuando una dependencia se cae, el que llama sabe exactamente dónde está. Estudio personal del problema de telemetría de Open Gateway. No es código de Telefónica. No es tráfico de producción.',
       ca: 'Pipelines d’esdeveniments, rate limits i salut de serveis amb modes de fallada honests. Quan una dependència cau, qui crida sap exactament on és. Estudi personal del problema de telemetria d’Open Gateway. No és codi de Telefónica. No és trànsit de producció.',
     },
-    projects: ['kafka-adapter-telemetry', 'redis-toolkit', 'product-offers'],
+    projects: ['kafka-adapter-telemetry', 'redis-toolkit'],
     page: 'telemetry',
   },
   tooling: {
@@ -193,7 +193,7 @@ export const DEPTS: Record<DeptKey, Dept> = {
       es: 'El taller: un harness multi-agente SDD, CLIs que hacen una cosa bien y herramientas deliberadamente pequeñas. Lo que necesita, nada más.',
       ca: 'El taller: un harness multi-agent SDD, CLIs que fan una cosa bé i eines deliberadament petites. El que necessita, res més.',
     },
-    projects: ['harness-standard', 'rustcut', 'md-mermaid-pdf', 'mcp-transparent-png', 'spring-boot-casino'],
+    projects: ['harness-standard', 'md-mermaid-pdf', 'mcp-transparent-png'],
     page: 'tooling',
   },
   inspections: {

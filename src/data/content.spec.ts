@@ -88,6 +88,12 @@ describe('departments data', () => {
     }
   });
 
+  it('curates the three card floors to their strong pieces', () => {
+    expect(DEPTS.research.projects).toEqual(['codebaserag', 'interview-simulator']);
+    expect(DEPTS.telemetry.projects).toEqual(['kafka-adapter-telemetry', 'redis-toolkit']);
+    expect(DEPTS.tooling.projects).toEqual(['harness-standard', 'md-mermaid-pdf', 'mcp-transparent-png']);
+  });
+
   it('covers all seven departments in FLOOR_LABELS with trilingual labels', () => {
     expect(Object.keys(FLOOR_LABELS).sort()).toEqual([...FLOOR_ORDER].sort());
     for (const key of FLOOR_ORDER) {
