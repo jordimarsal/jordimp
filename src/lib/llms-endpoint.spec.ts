@@ -18,13 +18,16 @@ describe('llmsData() against src/data/content', () => {
     ]);
   });
 
-  it('resolves all 11 projects and their department memberships', () => {
+  it('exposes the curated members and keeps all 11 projects reachable', () => {
     expect(data.projects).toHaveLength(11);
     const members = data.departments.flatMap((dept) => dept.projects).map((p) => p.slug);
-    expect(members).toHaveLength(11);
-    expect(new Set(members).size).toBe(11);
+    expect(members).toHaveLength(7);
+    expect(new Set(members).size).toBe(7);
+    for (const annex of ['bible-text-analysis', 'product-offers', 'rustcut', 'spring-boot-casino']) {
+      expect(members).not.toContain(annex);
+    }
     for (const project of data.projects) {
-      expect(members).toContain(project.slug);
+      expect(data.projects.map((p) => p.slug)).toContain(project.slug);
     }
   });
 
