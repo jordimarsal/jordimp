@@ -276,7 +276,7 @@ describe('front-desk positioning (F11)', () => {
     });
     expect(PAGES.frontdesk.description).toEqual({
       en: 'Walk-ins welcome: senior or staff backend roles, short spec-first engagements, and questions about a floor or a repo — no tracking, no funnel. Jordimp & Co. is how the work is done, not a staffing firm.',
-      es: 'Entrada libre: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo — sin tracking, sin funnel. Jordimp & Co. es cómo se hace el trabajo, no una consultora de personal.',
+      es: 'Entrada libre: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo — sin tracking, sin funnel. Jordimp & Co. es como se hace el trabajo, no una consultora de personal.',
       ca: 'Entrada lliure: rols backend sènior o staff, encàrrecs curts amb spec primer i preguntes sobre una planta o un repo — sense tracking, sense funnel. Jordimp & Co. és com es fa la feina, no una consultora de personal.',
     });
     for (const lang of LOCALES) {
@@ -296,13 +296,29 @@ describe('front-desk positioning (F11)', () => {
     }
   });
 
-  it('keeps the four how-it-works steps intact (R12)', () => {
-    const keys = ['01 — BRIEF', '02 — SPEC', '03 — BUILD', '04 — AUDIT'];
+  it('keeps the four how-it-works steps verbatim (R12)', () => {
+    const expected = {
+      en: [
+        { k: '01 — BRIEF', v: 'You bring the problem, in your own words.' },
+        { k: '02 — SPEC', v: 'We pin it down in writing, before any code.' },
+        { k: '03 — BUILD', v: 'Tests first, I/O at the edges, demos as it grows.' },
+        { k: '04 — AUDIT', v: 'You get answers you can check, not vibes you can hope for.' },
+      ],
+      es: [
+        { k: '01 — BRIEF', v: 'Traes el problema, con tus palabras.' },
+        { k: '02 — SPEC', v: 'Lo fijamos por escrito, antes de cualquier código.' },
+        { k: '03 — BUILD', v: 'Tests primero, I/O en los bordes, demos mientras crece.' },
+        { k: '04 — AUDIT', v: 'Recibes respuestas que puedes verificar, no promesas que tienes que creer.' },
+      ],
+      ca: [
+        { k: '01 — BRIEF', v: 'Portes el problema, amb les teves paraules.' },
+        { k: '02 — SPEC', v: 'El fixem per escrit, abans de qualsevol codi.' },
+        { k: '03 — BUILD', v: 'Proves primer, I/O a les vores, demos mentre creix.' },
+        { k: '04 — AUDIT', v: 'Reps respostes que pots verificar, no promeses que has de creure.' },
+      ],
+    } as const;
     for (const lang of LOCALES) {
-      expect(FRONTDESK_PAGE.how[lang].map((step) => step.k), lang).toEqual(keys);
-      for (const step of FRONTDESK_PAGE.how[lang]) {
-        expect(step.v.trim(), lang).not.toBe('');
-      }
+      expect(FRONTDESK_PAGE.how[lang], lang).toEqual(expected[lang]);
     }
   });
 

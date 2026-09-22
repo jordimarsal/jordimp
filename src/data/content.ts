@@ -1060,7 +1060,7 @@ export const PAGES: Record<string, PageMeta> = {
     },
     description: {
       en: 'Walk-ins welcome: senior or staff backend roles, short spec-first engagements, and questions about a floor or a repo — no tracking, no funnel. Jordimp & Co. is how the work is done, not a staffing firm.',
-      es: 'Entrada libre: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo — sin tracking, sin funnel. Jordimp & Co. es cómo se hace el trabajo, no una consultora de personal.',
+      es: 'Entrada libre: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo — sin tracking, sin funnel. Jordimp & Co. es como se hace el trabajo, no una consultora de personal.',
       ca: 'Entrada lliure: rols backend sènior o staff, encàrrecs curts amb spec primer i preguntes sobre una planta o un repo — sense tracking, sense funnel. Jordimp & Co. és com es fa la feina, no una consultora de personal.',
     },
   },
@@ -1531,7 +1531,7 @@ export const FRONTDESK_PAGE: FrontdeskPageContent = {
     },
     firmLine: {
       en: 'Jordimp & Co. is how the work is done — currently inside a telco platform team, not a staffing firm.',
-      es: 'Jordimp & Co. es cómo se hace el trabajo — ahora dentro de un equipo de plataforma telco, no una consultora de personal.',
+      es: 'Jordimp & Co. es como se hace el trabajo — ahora dentro de un equipo de plataforma telco, no una consultora de personal.',
       ca: 'Jordimp & Co. és com es fa la feina — ara dins d’un equip de plataforma telco, no una consultora de personal.',
     },
     howLine: {
