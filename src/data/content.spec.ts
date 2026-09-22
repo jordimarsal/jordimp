@@ -464,28 +464,41 @@ describe('operations notes (F0)', () => {
 
 describe('curated floor copy', () => {
   it('reports 2 research projects and 3 tooling projects', () => {
-    expect(RESEARCH_PAGE.stats.en).toHaveLength(3);
+    for (const lang of LOCALES) {
+      expect(RESEARCH_PAGE.stats[lang], lang).toHaveLength(3);
+      expect(TOOLING_PAGE.stats[lang], lang).toHaveLength(3);
+      expect(JSON.stringify(TOOLING_PAGE.stats[lang]).toLowerCase(), lang).not.toMatch(
+        /assessment|prueba|prova|proves/,
+      );
+    }
     expect(RESEARCH_PAGE.stats.en[0]).toEqual({ value: '2', label: 'PROJECTS ON THIS FLOOR' });
-    expect(TOOLING_PAGE.stats.en).toHaveLength(3);
     expect(TOOLING_PAGE.stats.en[0]).toEqual({ value: '3', label: 'PROJECTS ON THIS FLOOR' });
-    expect(JSON.stringify(TOOLING_PAGE.stats)).not.toMatch(/ASSESSMENT/);
   });
 
   it('names exactly the floor projects in each department description', () => {
-    const expected: Record<'research' | 'telemetry' | 'tooling', string[]> = {
-      research: ['CodebaseRAG', 'Interview Simulator'],
-      telemetry: ['kafka-adapter-telemetry', 'redis-toolkit'],
-      tooling: ['harness-standard', 'md-mermaid-pdf', 'mcp-transparent-png'],
+    const expected: Record<
+      'research' | 'telemetry' | 'tooling',
+      { positive: string[]; negative: string[] }
+    > = {
+      research: {
+        positive: ['CodebaseRAG', 'Interview Simulator'],
+        negative: ['Bible Text Analysis'],
+      },
+      telemetry: {
+        positive: ['kafka-adapter-telemetry', 'redis-toolkit'],
+        negative: ['Product Offers API'],
+      },
+      tooling: {
+        positive: ['harness-standard', 'md-mermaid-pdf', 'mcp-transparent-png'],
+        negative: ['Rustcut', 'Spring Boot Casino'],
+      },
     };
-    for (const [key, names] of Object.entries(expected)) {
+    for (const [key, { positive, negative }] of Object.entries(expected)) {
       for (const lang of LOCALES) {
-        for (const name of names) expect(PAGES[key].description[lang]).toContain(name);
+        for (const name of positive) expect(PAGES[key].description[lang]).toContain(name);
+        for (const name of negative) expect(PAGES[key].description[lang]).not.toContain(name);
       }
     }
-    expect(PAGES.research.description.en).not.toContain('bible-text-analysis');
-    expect(PAGES.telemetry.description.en).not.toContain('product-offers');
-    expect(PAGES.tooling.description.en).not.toContain('rustcut');
-    expect(PAGES.tooling.description.en).not.toContain('spring-boot-casino');
   });
 
   it('states 11 projects and the three tiers', () => {
