@@ -31,6 +31,23 @@ reviewer → done`). The in-repo site stays a pure static Astro build; no stack 
 
 **Source:** `MILLORES.md` (Catalan review, 2026-09-22) — §§0–9.
 
+## Execution status (updated 2026-09-22)
+
+- ✅ **F11 front-desk-positioning** — `done`. Merged `e6b37ad`; 240-test gate green.
+- ✅ **F12 showcase-curation** — `done`. Merged `6cbd690`; 240 unit + 108 e2e green.
+- ⏳ **Next: F13 rag-eval-article** — spec at `harness/specs/rag-eval-article/`, plan at
+  `docs/superpowers/plans/2026-09-22-rag-eval-article.md`. Flow: approve spec → implement → review → merge.
+- ⏳ **Then: F14 contact-email** — blocked on **BRAND Task 1** (provision `hello@jordimp.net` on a free
+  tier; options in the F14 design). Fails closed until the mailbox exists.
+- ⏳ **External workstreams** — EXT-1/2/3 and BRAND not started
+  (`docs/superpowers/plans/2026-09-22-external-public-artifacts.md`, `…-external-brand-hygiene.md`).
+- **Parked environment condition:** `npm run qa:content` / `qa:links` fail only on the LinkedIn URL
+  returning HTTP 999 (anti-bot), reproduced with a browser UA and present on `main`;
+  `qa:lighthouse` needs `CHROME_PATH` pointing at Playwright chromium in this environment.
+- **Harness note:** the SDD specs live in the gitignored `harness/specs/`; the durable, tracked
+  artifacts are the plans under `docs/superpowers/plans/`. Progress for the last session is in
+  `harness/progress/history.md` (F11, F12) and `harness/progress/current.md` (next step).
+
 ## Global Constraints
 
 - **Trilingual invariant:** every new or changed string exists in `en`, `es`, `ca`; technical
@@ -168,11 +185,11 @@ beats but the README lacks the conflict line).
 
 **Week 1 — truth and clarity (site + profiles):**
 1. `- [ ]` BRAND Task 1 — provision `hello@jordimp.net` → Gmail (unblocks F14).
-2. `- [ ]` F11 — approve spec → implement → review → `done`.
-3. `- [ ]` F12 — approve spec → implement → review → `done`.
+2. `- [x]` F11 — approve spec → implement → review → `done`.
+3. `- [x]` F12 — approve spec → implement → review → `done`.
 4. `- [ ]` F14 — approve spec → implement → review → `done` (only after step 1 verified).
 5. `- [ ]` BRAND Tasks 2–7 — LinkedIn headline/about/experience, GitHub profile README + pins.
-6. `- [ ]` Register the newly approved features in `harness/feature_list.json` (see Task 0).
+6. `- [x]` Register the newly approved features in `harness/feature_list.json` (see Task 0).
 
 **Week 2 — Harness installable for real (EXT-1):**
 7. `- [ ]` EXT-1 Tasks 1.1–1.3 — `HARNESS.md` + `Next:` line, remote `install.sh`, publish
