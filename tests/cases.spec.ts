@@ -10,6 +10,7 @@ import {
   PAGES,
   PROJECTS,
   project,
+  tierProjects,
 } from '../src/data/content';
 import type { Locale } from '../src/data/types';
 
@@ -109,12 +110,12 @@ test.describe('case pages (T7)', () => {
       await expect(pager).toHaveAttribute('aria-label', CASE_UI.pagerLabel[lang]);
       const prevLink = pager.locator('a.pager__link').first();
       const nextLink = pager.locator('a.pager__link--end');
-      await expect(prevLink).toHaveAttribute('href', caseRoute(lang, 'bible-text-analysis'));
+      await expect(prevLink).toHaveAttribute('href', caseRoute(lang, 'harness-standard'));
       await expect(prevLink.locator('.pager__k')).toHaveText(CASE_UI.prev[lang]);
-      await expect(prevLink.locator('.pager__name')).toHaveText(project('bible-text-analysis').name);
-      await expect(nextLink).toHaveAttribute('href', caseRoute(lang, 'interview-simulator'));
+      await expect(prevLink.locator('.pager__name')).toHaveText(project('harness-standard').name);
+      await expect(nextLink).toHaveAttribute('href', caseRoute(lang, 'kafka-adapter-telemetry'));
       await expect(nextLink.locator('.pager__k')).toHaveText(CASE_UI.next[lang]);
-      await expect(nextLink.locator('.pager__name')).toHaveText(project('interview-simulator').name);
+      await expect(nextLink.locator('.pager__name')).toHaveText(project('kafka-adapter-telemetry').name);
 
       await expect(page.locator('.pager-back a.case')).toHaveAttribute(
         'href',
@@ -142,8 +143,27 @@ test.describe('case pages (T7)', () => {
   test('navigates to the next project through the pager (en)', async ({ page }) => {
     await page.goto(caseRoute('en', 'codebaserag'));
     await page.locator('nav.pager a.pager__link--end').click();
-    await expect(page).toHaveURL(new RegExp('/en/projects/interview-simulator/$'));
-    await expect(page.locator('h1#page-title')).toHaveText('Interview Simulator');
+    await expect(page).toHaveURL(new RegExp('/en/projects/kafka-adapter-telemetry/$'));
+    await expect(page.locator('h1#page-title')).toHaveText('Kafka Adapter Telemetry');
+  });
+
+  test('pages each case within its tier cohort without self-links', async ({ page }) => {
+    for (const lang of LOCALES) {
+      for (const p of PROJECTS) {
+        await page.goto(caseRoute(lang, p.slug));
+        const pager = page.locator('nav.pager');
+        const prevLink = pager.locator('a.pager__link').first();
+        const nextLink = pager.locator('a.pager__link--end');
+        const cohort = tierProjects(p.tier).map((c) => c.slug);
+        const idx = cohort.indexOf(p.slug);
+        const prev = cohort[(idx - 1 + cohort.length) % cohort.length];
+        const next = cohort[(idx + 1) % cohort.length];
+        await expect(prevLink).toHaveAttribute('href', caseRoute(lang, prev));
+        await expect(nextLink).toHaveAttribute('href', caseRoute(lang, next));
+        expect(prev).not.toBe(p.slug);
+        expect(next).not.toBe(p.slug);
+      }
+    }
   });
 
   test('shows field notes instead of metrics for projects without metrics', async ({ page }) => {
