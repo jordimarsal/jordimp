@@ -406,12 +406,18 @@ describe('cv and experience data', () => {
     expect(EXPERIENCE).toHaveLength(EXPERIENCE_COUNT);
   });
 
-  it('groups skills with trilingual group titles', () => {
-    expect(SKILLS.length).toBeGreaterThan(0);
-    for (const group of SKILLS) {
-      for (const lang of LOCALES) {
-        expect(group.group[lang].trim()).not.toBe('');
-      }
+  it('keeps five thesis skill piles and drops the toolbelt technology', () => {
+    expect(SKILLS.map((g) => g.group.en)).toEqual(['Backend', 'Data', 'AI', 'Quality', 'Leadership']);
+    expect(SKILLS.map((g) => [...g.items])).toEqual([
+      ['Java 21/25', 'Spring Boot', 'Python 3.13', 'FastAPI', 'Kafka'],
+      ['Oracle', 'Redis', 'pgvector'],
+      ['RAG + evals in CI', 'MCP', 'Ollama / llama.cpp'],
+      ['Testcontainers', 'GitHub Actions', 'mypy strict', 'TDD'],
+      ['team coordination', 'code review culture', 'mentoring', 'conflict resolution'],
+    ]);
+    const flat = SKILLS.flatMap((g) => g.items).join(' ');
+    for (const tool of ['Kubernetes', 'CDK', 'Cassandra', 'Snowflake', 'RabbitMQ', 'pandas']) {
+      expect(flat).not.toContain(tool);
     }
   });
 });

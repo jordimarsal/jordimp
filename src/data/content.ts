@@ -792,20 +792,20 @@ export const EXPERIENCE: readonly ExperienceEntry[] = [
 
 export const SKILLS: readonly SkillGroup[] = [
   {
-    group: { en: 'Backend & APIs', es: 'Backend y APIs', ca: 'Backend i APIs' },
-    items: ['Java 11/21/25', 'Spring Boot 4', 'Python', 'FastAPI', 'Node.js', 'TypeScript', 'REST', 'OpenAPI', 'Kafka', 'RabbitMQ'],
+    group: { en: 'Backend', es: 'Backend', ca: 'Backend' },
+    items: ['Java 21/25', 'Spring Boot', 'Python 3.13', 'FastAPI', 'Kafka'],
   },
   {
     group: { en: 'Data', es: 'Datos', ca: 'Dades' },
-    items: ['SQL (Oracle/MySQL/SQLServer)', 'MongoDB', 'Redis', 'Cassandra', 'Snowflake', 'Machine Learning', 'pandas/scikit-learn'],
+    items: ['Oracle', 'Redis', 'pgvector'],
   },
   {
-    group: { en: 'AI & LLMs', es: 'IA y LLMs', ca: 'IA i LLMs' },
-    items: ['RAG & vector search', 'MCP', 'llama.cpp local inference', 'agents & evals', 'prompt engineering'],
+    group: { en: 'AI', es: 'IA', ca: 'IA' },
+    items: ['RAG + evals in CI', 'MCP', 'Ollama / llama.cpp'],
   },
   {
-    group: { en: 'DevOps & Quality', es: 'DevOps y Calidad', ca: 'DevOps i Qualitat' },
-    items: ['Docker', 'Kubernetes', 'AWS Lambda/CDK/CloudFormation', 'GitHub Actions', 'Jenkins', 'SonarQube', 'SonarLint', 'Testcontainers', 'pytest', 'JUnit/Mockito'],
+    group: { en: 'Quality', es: 'Calidad', ca: 'Qualitat' },
+    items: ['Testcontainers', 'GitHub Actions', 'mypy strict', 'TDD'],
   },
   {
     group: { en: 'Leadership', es: 'Liderazgo', ca: 'Lideratge' },
