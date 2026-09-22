@@ -97,19 +97,19 @@ export const TICKER: L10n<readonly string[]> = {
 
 export const HOME: HomeContent = {
   kicker: {
-    en: 'SENIOR BACKEND ENGINEER — JAVA · PYTHON · AI/LLM',
-    es: 'INGENIERO BACKEND SENIOR — JAVA · PYTHON · IA/LLM',
-    ca: 'ENGINYER BACKEND SÈNIOR — JAVA · PYTHON · IA/LLM',
+    en: 'SENIOR BACKEND ENGINEER — SYSTEMS YOU CAN AUDIT',
+    es: 'INGENIERO BACKEND SENIOR — SISTEMAS QUE SE PUEDEN AUDITAR',
+    ca: 'ENGINYER BACKEND SÈNIOR — SISTEMES QUE ES PODEN AUDITAR',
   },
   h1: {
-    en: 'One company. One engineer. <mark>Walk the floors.</mark>',
-    es: 'Una empresa. Un ingeniero. <mark>Recorre las plantas.</mark>',
-    ca: 'Una empresa. Un enginyer. <mark>Recorre les plantes.</mark>',
+    en: 'One company. One engineer. <mark>Specs before code.</mark>',
+    es: 'Una empresa. Un ingeniero. <mark>Specs antes que código.</mark>',
+    ca: 'Una empresa. Un enginyer. <mark>Specs abans de codi.</mark>',
   },
   stand: {
-    en: 'Jordimp & Co. is a one-person engineering firm — backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since <b>2017</b>. Answers you can audit, not vibes you can hope for.',
-    es: 'Jordimp & Co. es una ingeniería de una sola persona — sistemas backend, pipelines de eventos e IA aplicada, diseñados, construidos y auditados por el mismo par de manos desde <b>2017</b>. Respuestas que puedes auditar, no promesas que tienes que creer.',
-    ca: 'Jordimp & Co. és una enginyeria d’una sola persona — sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des de <b>2017</b>. Respostes que pots auditar, no promeses que has de creure.',
+    en: 'Jordimp & Co. is the working name of one engineer: backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since <b>2017</b>. Currently inside a telco platform team. Walk-ins: roles, repos, or a short spec-first engagement.',
+    es: 'Jordimp & Co. es el nombre de trabajo de un solo ingeniero: sistemas backend, pipelines de eventos e IA aplicada, diseñados, construidos y auditados por el mismo par de manos desde <b>2017</b>. Ahora, dentro de un equipo de plataforma telco. Entrada libre: roles, repos o un encargo corto con spec primero.',
+    ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer: sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des del <b>2017</b>. Ara, dins d’un equip de plataforma telco. Entrada lliure: rols, repos, o un encàrrec curt amb spec primer.',
   },
   metaChips: {
     en: ['EST. 2017', 'BARCELONA', 'EN / ES / CA', '11 OPEN REPOS', '1 ENGINEER'],

@@ -8,6 +8,7 @@ import {
   FLOOR_LABELS,
   FLOOR_ORDER,
   FOOTER,
+  HOME,
   INSPECTIONS_PAGE,
   LOCALES,
   PAGES,
@@ -165,6 +166,38 @@ describe('inspections page copy (F10)', () => {
     for (const lang of LOCALES) {
       expect(PAGES.inspections.title[lang].trim(), `pages.inspections.title.${lang}`).not.toBe('');
       expect(PAGES.inspections.description[lang].trim(), `pages.inspections.description.${lang}`).not.toBe('');
+    }
+  });
+});
+
+describe('home positioning (F11)', () => {
+  it('repositions the home kicker (R1)', () => {
+    expect(HOME.kicker).toEqual({
+      en: 'SENIOR BACKEND ENGINEER — SYSTEMS YOU CAN AUDIT',
+      es: 'INGENIERO BACKEND SENIOR — SISTEMAS QUE SE PUEDEN AUDITAR',
+      ca: 'ENGINYER BACKEND SÈNIOR — SISTEMES QUE ES PODEN AUDITAR',
+    });
+  });
+
+  it('repositions the home h1 keeping exactly one highlight mark (R2)', () => {
+    expect(HOME.h1).toEqual({
+      en: 'One company. One engineer. <mark>Specs before code.</mark>',
+      es: 'Una empresa. Un ingeniero. <mark>Specs antes que código.</mark>',
+      ca: 'Una empresa. Un enginyer. <mark>Specs abans de codi.</mark>',
+    });
+    for (const lang of LOCALES) {
+      expect(HOME.h1[lang].match(/<mark>/g), lang).toHaveLength(1);
+    }
+  });
+
+  it('repositions the home standfirst keeping the est. mark (R3)', () => {
+    expect(HOME.stand).toEqual({
+      en: 'Jordimp & Co. is the working name of one engineer: backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since <b>2017</b>. Currently inside a telco platform team. Walk-ins: roles, repos, or a short spec-first engagement.',
+      es: 'Jordimp & Co. es el nombre de trabajo de un solo ingeniero: sistemas backend, pipelines de eventos e IA aplicada, diseñados, construidos y auditados por el mismo par de manos desde <b>2017</b>. Ahora, dentro de un equipo de plataforma telco. Entrada libre: roles, repos o un encargo corto con spec primero.',
+      ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer: sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des del <b>2017</b>. Ara, dins d’un equip de plataforma telco. Entrada lliure: rols, repos, o un encàrrec curt amb spec primer.',
+    });
+    for (const lang of LOCALES) {
+      expect(HOME.stand[lang], lang).toContain('<b>2017</b>');
     }
   });
 });
