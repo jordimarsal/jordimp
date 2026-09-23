@@ -2097,6 +2097,37 @@ figure.diagram figcaption {
   margin-top: var(--sp-2);
 }
 
+.article-callout {
+  margin-top: var(--sp-4);
+  padding: var(--sp-3);
+  border: var(--bd);
+  border-left-width: 10px;
+  background: var(--paper2);
+  box-shadow: var(--sh);
+  max-width: 76ch;
+}
+
+.article-callout__stamp {
+  color: var(--ink2);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.article-callout h3 {
+  font-family: var(--disp);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+  margin-block: var(--sp-1);
+}
+
+.article-callout p {
+  color: var(--ink2);
+  font-size: 0.95rem;
+  margin-bottom: var(--sp-2);
+}
+
 .principles {
   list-style: none;
   display: grid;

@@ -6,6 +6,7 @@ import DeptCard from '../../../components/site/DeptCard.astro';
 import SecHead from '../../../components/site/SecHead.astro';
 import { LOCALES, type Locale } from '../../../lib/i18n';
 import {
+  ARTICLE,
   BREADCRUMB_DEPTS,
   BREADCRUMB_HOME,
   DEPTS,
@@ -102,12 +103,22 @@ const trail = [
     )}
 
     {deptKey === 'research' && (
-      <section class="section">
-        <div class="cards cards--single">
-          {d.projects.map((slug) => <DeptCard lang={lang} project={project(slug)} />)}
-        </div>
-        <BackBuilding lang={lang} />
-      </section>
+      <>
+        <aside class="article-callout" aria-labelledby="f3-writing">
+          <p class="article-callout__stamp mono">{`${ARTICLE.dateLabel[lang]} ${ARTICLE.date} · ${ARTICLE.revision}`}</p>
+          <h3 id="f3-writing">{ARTICLE.title[lang]}</h3>
+          <p>{ARTICLE.relatedBody[lang]}</p>
+          <a class="case" href={srcPath(lang, dirRoute(PAGES['article-rag-eval-gate'].route))}>
+            {ARTICLE.readLabel[lang]} <span aria-hidden="true">&rarr;</span>
+          </a>
+        </aside>
+        <section class="section">
+          <div class="cards cards--single">
+            {d.projects.map((slug) => <DeptCard lang={lang} project={project(slug)} />)}
+          </div>
+          <BackBuilding lang={lang} />
+        </section>
+      </>
     )}
 
     {deptKey === 'telemetry' && (
