@@ -90,7 +90,7 @@ jordimp/
 **Interfaces:**
 - Produces: every successful install writes `HARNESS.md` at the destination root and prints one `Next:` line. `install.sh` (Task 1.2) relies on this.
 
-- [ ] **Step 1: Replace the success `Next steps` block in `init.sh`**
+- [x] **Step 1: Replace the success `Next steps` block in `init.sh`**
 
 Replace this block (current lines 529–540):
 
@@ -156,7 +156,7 @@ else
 fi
 ```
 
-- [ ] **Step 2: Extend `tests/test-install.sh`**
+- [x] **Step 2: Extend `tests/test-install.sh`**
 
 Add to `assert_harness_layout()` (after line 98):
 
@@ -165,12 +165,12 @@ Add to `assert_harness_layout()` (after line 98):
   assert_grep "$t" "^## Next" "$d/HARNESS.md"
 ```
 
-- [ ] **Step 3: Run the installer tests**
+- [x] **Step 3: Run the installer tests**
 
 Run: `bash tests/test-install.sh`
 Expected: `PASS: <n>  FAIL: 0`.
 
-- [ ] **Step 4: Run one manual install and inspect stdout**
+- [x] **Step 4: Run one manual install and inspect stdout**
 
 Run:
 ```bash
@@ -178,7 +178,7 @@ d=$(mktemp -d) && (cd "$d" && bash /path/to/harness-standard/init.sh --tool=open
 ```
 Expected: stdout's last line matches `^Next: opencode —`; exactly one line starts with `Next:`; `HARNESS.md` lists stack, roles and `## Next`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add init.sh tests/test-install.sh
@@ -195,7 +195,7 @@ git commit -m "feat(installer): write HARNESS.md and print a single Next line"
 - Consumes: `init.sh` from Task 1.1 (expects `HARNESS.md` + `Next:` line).
 - Produces: `install.sh` accepts `--tool=`, `--dest=`, `--ref=`, `--force`, `--modules=`, `--audit-level=`; reads `HARNESS_REPO_URL` / `HARNESS_REF`.
 
-- [ ] **Step 1: Create `install.sh`** (exact content)
+- [x] **Step 1: Create `install.sh`** (exact content)
 
 ```bash
 #!/usr/bin/env bash
@@ -258,7 +258,7 @@ ARGS+=("${PASSTHRU[@]+"${PASSTHRU[@]}"}")
 ( cd "$DEST_ABS" && bash "$TMP/harness-standard/init.sh" "${ARGS[@]+"${ARGS[@]}"}" )
 ```
 
-- [ ] **Step 2: Add `test_remote_install` to `tests/test-install.sh`**
+- [x] **Step 2: Add `test_remote_install` to `tests/test-install.sh`**
 
 Add before the `# ── Main ──` line:
 
@@ -288,7 +288,7 @@ and call it in the Main section after `test_wekan_tickets_tool_dst`:
 test_remote_install
 ```
 
-- [ ] **Step 3: Verify the bootstrap from a clean temp destination**
+- [x] **Step 3: Verify the bootstrap from a clean temp destination**
 
 Run:
 ```bash
@@ -296,12 +296,12 @@ d=$(mktemp -d) && HARNESS_REPO_URL="$PWD" HARNESS_REF=HEAD ./install.sh --tool=c
 ```
 Expected: prints exactly `Next: claude — open claude, then prompt: ...`; `test -f "$d/HARNESS.md"` is true.
 
-- [ ] **Step 4: Run the full suite**
+- [x] **Step 4: Run the full suite**
 
 Run: `bash tests/test-install.sh`
 Expected: `FAIL: 0`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add install.sh tests/test-install.sh
@@ -316,7 +316,7 @@ git commit -m "feat(install): add remote bootstrap install.sh"
 - Create: `public/harness/install.sh` (byte-identical copy of harness-standard `install.sh` from Task 1.2)
 - Create: `scripts/sync-install-sh.sh` (maintainer helper + CI parity guard)
 
-- [ ] **Step 1: Create the sync helper `scripts/sync-install-sh.sh`**
+- [x] **Step 1: Create the sync helper `scripts/sync-install-sh.sh`**
 
 ```bash
 #!/usr/bin/env bash
@@ -332,7 +332,7 @@ chmod +x "$DST"
 echo "synced $SRC -> $DST"
 ```
 
-- [ ] **Step 2: Create the served copy**
+- [x] **Step 2: Create the served copy**
 
 ```bash
 mkdir -p public/harness
@@ -340,12 +340,12 @@ cp ../harness-standard/install.sh public/harness/install.sh
 chmod +x public/harness/install.sh
 ```
 
-- [ ] **Step 3: Verify Astro serves it verbatim**
+- [x] **Step 3: Verify Astro serves it verbatim**
 
 Run: `npm run build && test -f dist/harness/install.sh && head -1 dist/harness/install.sh`
 Expected: file exists; first line is `#!/usr/bin/env bash`.
 
-- [ ] **Step 4: Commit (deploys the site)**
+- [x] **Step 4: Commit (deploys the site)**
 
 ```bash
 git add public/harness/install.sh scripts/sync-install-sh.sh
@@ -357,7 +357,7 @@ git commit -m "feat(harness): serve install.sh from jordimp.net"
 **Files:**
 - Modify: `README.md` (full rewrite)
 
-- [ ] **Step 1: Replace `README.md` with** (≤60 lines; H2 order is part of AC1.6)
+- [x] **Step 1: Replace `README.md` with** (≤60 lines; H2 order is part of AC1.6)
 
 ```markdown
 # Harness Standard
@@ -406,12 +406,12 @@ rm -rf CLAUDE.md AGENTS.md opencode.json .claude .opencode harness \
 ```
 ```
 
-- [ ] **Step 2: Verify the line count and section order**
+- [x] **Step 2: Verify the line count and section order**
 
 Run: `wc -l README.md && grep -n '^## ' README.md`
 Expected: ≤60 lines; sections exactly in the order listed in AC1.6.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add README.md
@@ -425,7 +425,7 @@ Ship only after AC1.1–AC1.8 are green. Not required for the workstream gate.
 **Files:**
 - Create: `package.json`, `bin/init.js`
 
-- [ ] **Step 1: `package.json`**
+- [x] **Step 1: `package.json`**
 
 ```json
 {
@@ -440,7 +440,7 @@ Ship only after AC1.1–AC1.8 are green. Not required for the workstream gate.
 }
 ```
 
-- [ ] **Step 2: `bin/init.js`**
+- [x] **Step 2: `bin/init.js`**
 
 ```js
 #!/usr/bin/env node
@@ -455,16 +455,16 @@ const result = spawnSync('bash', [script, ...args], { stdio: 'inherit' });
 process.exit(result.status ?? 1);
 ```
 
-- [ ] **Step 3: Verify locally** — `npm pack --dry-run` lists `bin/init.js` and `install.sh`; `HARNESS_REPO_URL="$PWD" HARNESS_REF=HEAD node bin/init.js init --tool=opencode --dest "$(mktemp -d)"` exits 0.
+- [x] **Step 3: Verify locally** — `npm pack --dry-run` lists `bin/init.js` and `install.sh`; `HARNESS_REPO_URL="$PWD" HARNESS_REF=HEAD node bin/init.js init --tool=opencode --dest "$(mktemp -d)"` exits 0.
 
-- [ ] **Step 4: Commit** — `git add package.json bin/init.js && git commit -m "feat(npm): @jordimp/harness init entrypoint"` (publish only after the human gate).
+- [x] **Step 4: Commit** — `git add package.json bin/init.js && git commit -m "feat(npm): @jordimp/harness init entrypoint"` (publish only after the human gate).
 
 #### Task 1.6: Tag `v0.1.0`, changelog, gif, issue template
 
 **Files:**
 - Create: `CHANGELOG.md`, `.github/ISSUE_TEMPLATE/stack-not-detected.yml`, `docs/assets/init-demo.gif`
 
-- [ ] **Step 1: `CHANGELOG.md`**
+- [x] **Step 1: `CHANGELOG.md`**
 
 ```markdown
 # Changelog
@@ -479,7 +479,7 @@ First public release.
 - 7 stacks: TypeScript, Node.js, Java, Python, Android, Rust, Generic.
 ```
 
-- [ ] **Step 2: Issue template** `.github/ISSUE_TEMPLATE/stack-not-detected.yml`
+- [x] **Step 2: Issue template** `.github/ISSUE_TEMPLATE/stack-not-detected.yml`
 
 ```yaml
 name: Stack not detected
@@ -519,7 +519,7 @@ body:
       required: false
 ```
 
-- [ ] **Step 3: Record the 12s gif**
+- [x] **Step 3: Record the 12s gif**
 
 ```bash
 # Requires: asciinema + agg (brew install asciinema agg | cargo install --locked agg)
@@ -530,7 +530,7 @@ agg --speed 2.5 --last-frame-duration 2 "$d/init.cast" docs/assets/init-demo.gif
 ```
 Target: `repo empty → init → first spec` visible in ≤12 s. Verify: `du -h docs/assets/init-demo.gif` is < 1 MB.
 
-- [ ] **Step 4: Tag and push**
+- [x] **Step 4: Tag and push**
 
 ```bash
 git add CHANGELOG.md .github/ISSUE_TEMPLATE/stack-not-detected.yml docs/assets/init-demo.gif
@@ -539,7 +539,7 @@ git tag -a v0.1.0 -m "Harness Standard v0.1.0"
 git push origin HEAD --tags
 ```
 
-- [ ] **Step 5: Create the GitHub release**
+- [x] **Step 5: Create the GitHub release**
 
 ```bash
 gh release create v0.1.0 --title "v0.1.0" --notes-file CHANGELOG.md
@@ -549,11 +549,22 @@ gh release create v0.1.0 --title "v0.1.0" --notes-file CHANGELOG.md
 
 The badge "this floor is built with harness-standard" is owned by the `front-desk-positioning` / `showcase` workstream. This plan only fixes the contract those workstreams must consume.
 
-- [ ] **Step 1: Record the contract in `harness-standard/README.md`'s "This website is built with it" section (already added in Task 1.4)** — the badge must link `https://github.com/jordimarsal/harness-standard` and the install string must match `curl -fsSL https://jordimp.net/harness/install.sh | bash -s -- --tool=claude`.
+- [x] **Step 1: Record the contract in `harness-standard/README.md`'s "This website is built with it" section (already added in Task 1.4)** — the badge must link `https://github.com/jordimarsal/harness-standard` and the install string must match `curl -fsSL https://jordimp.net/harness/install.sh | bash -s -- --tool=claude`.
 
-- [ ] **Step 2: Hand off to the site workstream** — no jordimp code change here beyond `public/harness/install.sh` (Task 1.3). The site workstream owns the badge copy, its floor placement and any `content.ts` change.
+- [x] **Step 2: Hand off to the site workstream** — no jordimp code change here beyond `public/harness/install.sh` (Task 1.3). The site workstream owns the badge copy, its floor placement and any `content.ts` change.
 
 ### Verification (Workstream 1, run in harness-standard)
+
+> **WS1 COMPLETE (2026-09-23).** AC scoreboard: AC1.1–AC1.7 **green** (controller-verified
+> end-to-end: the SERVED script at `https://jordimp.net/harness/install.sh` is byte-identical
+> to the v0.1.0 canonical file and installs cleanly into a fresh dir with default
+> `HARNESS_REF=v0.1.0`; HARNESS.md + single `Next:` line verified; tag + release live).
+> **AC1.8 OPEN** — the 12s gif was skipped (`asciinema`/`agg` not installed; remediation
+> commands in Task 1.6 Step 3; additive follow-up, blocks nothing). Follow-ups noted by the
+> final review: CI parity guard for the served copy (plan line ~317 promised a "CI parity
+> guard" no task wires), warning on install.sh's silent ref fallback, `cd`-safe sync helper.
+> Commits: harness-standard `73a5338..1ef33ae` (tag `v0.1.0` at `1ef33ae`, release v0.1.0);
+> jordimp `8636a35..d188933` (deploy run 35883637565 success). Suite: PASS 263 / FAIL 0.
 
 ```bash
 # 1. own test suite
