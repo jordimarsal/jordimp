@@ -35,10 +35,11 @@ reviewer → done`). The in-repo site stays a pure static Astro build; no stack 
 
 - ✅ **F11 front-desk-positioning** — `done`. Merged `e6b37ad`; 240-test gate green.
 - ✅ **F12 showcase-curation** — `done`. Merged `6cbd690`; 240 unit + 108 e2e green.
-- ⏳ **Next: F13 rag-eval-article** — spec at `harness/specs/rag-eval-article/`, plan at
-  `docs/superpowers/plans/2026-09-22-rag-eval-article.md`. Flow: approve spec → implement → review → merge.
-- ⏳ **Then: F14 contact-email** — blocked on **BRAND Task 1** (provision `hello@jordimp.net` on a free
-  tier; options in the F14 design). Fails closed until the mailbox exists.
+- ✅ **F13 rag-eval-article** — `done`. Merged `73aa56f`; 252 unit + 112 e2e green; route matrix
+  21→22 per locale, 65→68 pages; `check-traceability.py --feature rag-eval-article` 17/17.
+- ⏳ **Next: F14 contact-email** — spec at `harness/specs/contact-email/`, plan at
+  `docs/superpowers/plans/2026-09-22-contact-email.md`. Blocked on **BRAND Task 1** (provision
+  `hello@jordimp.net` on a free tier; options in the F14 design). Fails closed until the mailbox exists.
 - ⏳ **External workstreams** — EXT-1/2/3 and BRAND not started
   (`docs/superpowers/plans/2026-09-22-external-public-artifacts.md`, `…-external-brand-hygiene.md`).
 - **Parked environment condition:** `npm run qa:content` / `qa:links` fail only on the LinkedIn URL
@@ -202,7 +203,7 @@ beats but the README lacks the conflict line).
     (or documented subset), `demo.sh` zero → metric in <10 min.
 
 **Week 4 — the article + the new Front Desk live (F13):**
-11. `- [ ]` F13 — approve spec → implement → review → `done`; the same essay becomes EXT-2's
+11. `- [x]` F13 — approve spec → implement → review → `done`; the same essay becomes EXT-2's
     1-page ADR.
 12. `- [ ]` Final sweep: confirm F11/F12/F14 copy is live, `hello@jordimp.net` is everywhere,
     and the home page passes the 90-second criterion.
