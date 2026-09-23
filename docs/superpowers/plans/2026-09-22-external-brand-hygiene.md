@@ -248,7 +248,7 @@ LinkedIn → profile → **Recommendations → Received**. At least one recommen
 
 **Interfaces:** Consumes Task 1 (`hello@jordimp.net`), §0 and Task 2's one-liner. Produces the profile landing page that GitHub search and the site outbound links reach.
 
-- [ ] **Step 1: Ensure the profile repository exists**
+- [x] **Step 1: Ensure the profile repository exists**
 
 Run:
 ```bash
@@ -256,11 +256,11 @@ gh repo view jordimarsal/jordimarsal --json name,visibility 2>/dev/null || echo 
 ```
 If `MISSING`, create it via GitHub → **New repository** → name `jordimarsal`, owner `jordimarsal`, **Public**, initialize with a README. The repo name must exactly equal the username for the README to render on the profile.
 
-> **Checked 2026-09-23:** `MISSING` — the profile repository does not exist yet
-> (`gh repo view jordimarsal/jordimarsal` fails). Creation pending owner's go-ahead
-> (it is a new **public** repo under the personal account).
+> **Done (2026-09-23):** owner gave the go-ahead; created via API (`auto_init`, Public,
+> description = the H1 one-liner). `gh repo view jordimarsal/jordimarsal` →
+> `jordimarsal/jordimarsal private=false default_branch=main`.
 
-- [ ] **Step 2: Replace `README.md` with this exact content**
+- [x] **Step 2: Replace `README.md` with this exact content**
 
 ```markdown
 # One company. One engineer. Specs before code.
@@ -277,7 +277,7 @@ Jordimp & Co. is the working name of one engineer: backend systems, event pipeli
 - Email: [hello@jordimp.net](mailto:hello@jordimp.net)
 ```
 
-- [ ] **Step 3: Verify H1 identity with the site**
+- [x] **Step 3: Verify H1 identity with the site**
 
 The H1 must equal the site H1 from `MILLORES.md` §2 / `front-desk-positioning`: `One company. One engineer. Specs before code.`
 Run:
@@ -291,9 +291,14 @@ Expected once `front-desk-positioning` is live: a match. If it is not yet live (
 > Note: bare `https://jordimp.net` returns the F7 splash redirect with no H1 — use
 > `curl -sL https://jordimp.net` or check `/en/` directly.
 
-- [ ] **Step 4: Verify the rendered profile**
+- [x] **Step 4: Verify the rendered profile**
 
 Open `https://github.com/jordimarsal` logged out. The H1, tagline, and all six links render; `hello@jordimp.net` is a `mailto:` that opens a compose window (Task 1 must be green). Record the URL and visible H1.
+
+> **Verified (2026-09-23):** README committed to `jordimarsal/jordimarsal@main` (commit
+> `c243644`) **byte-exact vs this plan** (`cmp` via the contents API). Rendered profile
+> `https://github.com/jordimarsal` shows the H1 "Specs before code", the `mailto:hello@jordimp.net`
+> link, and the site/harness-standard links (curl, no-cache). Site H1 re-checked green on `/en/`.
 
 ---
 
