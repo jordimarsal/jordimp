@@ -52,7 +52,7 @@
 - Produces: a working `hello@jordimp.net` mailbox/alias that forwards to `jordi.marsal@gmail.com`, with SPF/DKIM where offered.
 - Consumed by: `contact-email` (site swap), Task 3 (LinkedIn), Task 6 (GitHub profile README), Task 8 (repo READMEs).
 
-- [ ] **Step 1: Discover where `jordimp.net` DNS and mail are managed**
+- [x] **Step 1: Discover where `jordimp.net` DNS and mail are managed**
 
 Run:
 ```bash
@@ -61,7 +61,7 @@ dig +short MX jordimp.net
 ```
 Expected: NS records name the provider hosting DNS (registrar or a DNS host); MX may be empty (no mail configured yet). Record the provider name in `harness/progress/current.md`. Then open that provider's control panel (the registrar where `jordimp.net` was bought, or the DNS host named by NS).
 
-- [ ] **Step 2: Create the address — pick the branch the provider supports**
+- [x] **Step 2: Create the address — pick the branch the provider supports**
 
   - **Branch A — registrar offers email forwarding (most common):** open the domain's **Email / Email Forwarding** section → *Add forwarding rule* → local part `hello`, domain `jordimp.net`, destination `jordi.marsal@gmail.com` → Save. The provider writes its own MX records automatically.
   - **Branch B — registrar has no mail: use a free custom-domain mail/forwarding service** (surveyed from `ripienaar/free-for-dev`, Email section, 2026-09-22; no paid plan required):
@@ -71,11 +71,11 @@ Expected: NS records name the provider hosting DNS (registrar or a DNS host); MX
     - **DNSExit** (2 addresses, 100 MB, IMAP/POP3/SMTP) or **KaiMail** (forwarding + DKIM, 300 emails/mo) as fallbacks.
   - Record the chosen provider and its free tier in `harness/progress/current.md` (evidence for `contact-email` R8). Re-check the provider's current free-tier terms before committing.
 
-- [ ] **Step 3: Set MX records (Branch B only; skip if Branch A already did it)**
+- [x] **Step 3: Set MX records (Branch B only; skip if Branch A already did it)**
 
 At the DNS panel for `jordimp.net`, add the MX records exactly as the mail host specifies (host + priority). Do not replace existing non-mail records (keep the GitHub Pages `A`/`CNAME` records for the site).
 
-- [ ] **Step 4: Wait for propagation, then verify MX**
+- [x] **Step 4: Wait for propagation, then verify MX**
 
 Run (after ~15–60 min; up to 24–48 h worst case):
 ```bash
@@ -83,19 +83,29 @@ dig +short MX jordimp.net
 ```
 Expected: the records from Step 2/3 are returned. If empty, wait and re-run; do not proceed to Step 5 until MX resolves.
 
+> **Evidence 2026-09-23:** `dig +short MX jordimp.net` → `mx1.forwardemail.net`, `mx2.forwardemail.net`.
+> Provider: **forwardemail.net** (free custom-domain forwarding), Branch B.
+
 - [ ] **Step 5: Send and receive the test mail (the gate)**
 
 From the personal Gmail, send a message to `hello@jordimp.net`. Expected: it arrives in `jordi.marsal@gmail.com` inbox within a few minutes. Then reply from Gmail and confirm the reply reaches a third address, proving the forward chain.
 
 Evidence to record: timestamp, subject, "arrived: yes".
 
-- [ ] **Step 6: Check authentication records**
+> **Open (2026-09-23):** forwarding is enabled (owner-confirmed) and MX/SPF resolve; the explicit
+> "test message received in Gmail" receipt is still pending the owner's confirmation before F14
+> may merge.
+
+- [x] **Step 6: Check authentication records**
 
 Run:
 ```bash
 dig +short TXT jordimp.net
 ```
 Expected: an SPF record is present if the provider offers one (`v=spf1 …`). If the provider exposes a DKIM key/signature in its mail settings, add the printed DNS `TXT`/`CNAME` records. If the provider offers neither, record that fact; forwarding still passes Step 5.
+
+> **Evidence 2026-09-23:** `TXT` → `"forward-email=jordi.marsal@gmail.com"`; DMARC `_dmarc` →
+> `"v=DMARC1; p=quarantine; adkim=r; aspf=r; …"`.
 
 - [ ] **Step 7: Gates and handoff**
 

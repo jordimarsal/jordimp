@@ -49,7 +49,7 @@ No renderer/`lib` files change: they all read the two `SITE` objects.
 **Interfaces:**
 - Produces: verified deliverability evidence for `hello@jordimp.net`, consumed by the completion gate (R6).
 
-- [ ] **Step 1: Pick a free provider and provision the address**
+- [x] **Step 1: Pick a free provider and provision the address**
 
 Options surveyed from `ripienaar/free-for-dev` (Email section, 2026-09-22) — pick the first
 that fits; no paid plan is required (R8):
@@ -68,7 +68,7 @@ signing if offered. Record the chosen provider + tier in the evidence note (R8).
 > reserved, use the pre-approved fallback `jordi@jordimp.net` (design.md, Discarded
 > alternatives #1).
 
-- [ ] **Step 2: Verify DNS (MX + SPF)**
+- [x] **Step 2: Verify DNS (MX + SPF)**
 
 Run:
 ```bash
@@ -77,9 +77,16 @@ dig TXT jordimp.net +short
 ```
 Expected: the provider's MX host(s) and an SPF `TXT` that authorizes the provider. Paste the observed output into `harness/progress/impl_contact-email.md`.
 
+> **Evidence 2026-09-23 (verified by the leader):** provider **forwardemail.net** (free tier).
+> MX → `mx1.forwardemail.net`, `mx2.forwardemail.net`; SPF `TXT` →
+> `"forward-email=jordi.marsal@gmail.com"`; DMARC → `p=quarantine`. Owner confirmed forwarding is enabled.
+
 - [ ] **Step 3: Prove a message arrives**
 
 From an external account (not the owner's Gmail), send a test message to `hello@jordimp.net`. Confirm it appears in the Gmail inbox (not spam). Record the send time and the receipt in the evidence note.
+
+> **Open (2026-09-23):** awaiting the owner's confirmation that the test message landed in Gmail
+> (R6). MX/SPF/DMARC already verified; forwarding enabled.
 
 - [ ] **Step 4: Gate decision**
 
