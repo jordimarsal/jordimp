@@ -23,6 +23,11 @@ const ADDRESS_PATTERNS = [
 
 const CONTACT_PATTERNS = [...PHONE_PATTERNS, ...ADDRESS_PATTERNS];
 
+const LEGACY_EMAIL_PATTERNS = [{ name: 'legacy-gmail', pattern: /gmail\.com/i }];
+
+const SRC = new URL('../src', import.meta.url).pathname;
+const TESTS = new URL('../tests', import.meta.url).pathname;
+
 const ENTITIES = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&apos;': "'", '&#39;': "'" };
 
 function pageRoutes() {
@@ -76,6 +81,25 @@ function scanForPatterns(files, patterns, label) {
     const text = textContent(readFileSync(file, 'utf8'));
     for (const { name, pattern } of patterns) {
       if (pattern.test(text)) violations.push(`${label} pattern "${name}" matched in ${file}`);
+    }
+  }
+  return violations;
+}
+
+function listTextFiles(dir, extensions) {
+  return readdirSync(dir).flatMap((entry) => {
+    const full = join(dir, entry);
+    if (statSync(full).isDirectory()) return listTextFiles(full, extensions);
+    return extensions.some((extension) => entry.endsWith(extension)) ? [full] : [];
+  });
+}
+
+function scanForbiddenStrings(files, patterns) {
+  const violations = [];
+  for (const file of files) {
+    const text = readFileSync(file, 'utf8');
+    for (const { name, pattern } of patterns) {
+      if (pattern.test(text)) violations.push(`forbidden pattern "${name}" matched in ${file}`);
     }
   }
   return violations;
@@ -211,6 +235,14 @@ async function main() {
   problems.push(...scanForPatterns(files, PHONE_PATTERNS, 'phone'));
   problems.push(...scanForPatterns(files, ADDRESS_PATTERNS, 'address'));
   console.log('phone/address scan: clean (visible text of all HTML files)');
+
+  const sourceFiles = [
+    ...listTextFiles(SRC, ['.ts', '.astro', '.json', '.snap']),
+    ...listTextFiles(TESTS, ['.ts', '.json']),
+  ];
+  problems.push(...scanForbiddenStrings(sourceFiles, LEGACY_EMAIL_PATTERNS));
+  problems.push(...scanForPatterns(files, LEGACY_EMAIL_PATTERNS, 'legacy-email'));
+  console.log(`legacy-email scan: clean (${sourceFiles.length} source/test files + visible text of ${files.length} HTML files)`);
 
   const urls = extractOffHostUrls(files);
   console.log(`live links: checking ${urls.length} off-host URLs from dist HTML:`);
