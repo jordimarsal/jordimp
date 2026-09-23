@@ -56,7 +56,7 @@ describe('personJsonLd()', () => {
     expect(person.name).toBe('Jordi Marçal Poy');
     expect(person.jobTitle).toBe('Senior Backend Engineer');
     expect(person.url).toBe('https://jordimp.net/en/');
-    expect(person.email).toBe('mailto:jordi.marsal@gmail.com');
+    expect(person.email).toBe('mailto:hello@jordimp.net');
   });
 
   it('carries the exact sameAs set of GitHub and LinkedIn', () => {

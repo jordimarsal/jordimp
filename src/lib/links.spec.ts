@@ -19,7 +19,7 @@ describe('isExternalUrl()', () => {
   });
 
   const internalCases = [
-    { name: 'mailto scheme', href: 'mailto:jordi.marsal@gmail.com' },
+    { name: 'mailto scheme', href: 'mailto:hello@jordimp.net' },
     { name: 'tel scheme', href: 'tel:+34600000000' },
     { name: 'root-relative path', href: '/en/cv/' },
     { name: 'bare fragment', href: '#top' },
@@ -42,7 +42,7 @@ describe('externalLinkAttrs()', () => {
   });
 
   it('leaves an internal href without attributes', () => {
-    expect(externalLinkAttrs('mailto:jordi.marsal@gmail.com', ORIGIN)).toEqual({});
+    expect(externalLinkAttrs('mailto:hello@jordimp.net', ORIGIN)).toEqual({});
   });
 
   it('never renders target without the exact rel value or vice versa', () => {

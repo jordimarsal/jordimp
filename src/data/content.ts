@@ -32,13 +32,15 @@ import type {
   KVEntry,
 } from './types';
 
+import { CONTACT_EMAIL } from '../config.ts';
+
 export const SITE: SiteInfo = {
   brand: 'JORDIMP & CO.',
   person: 'Jordi Marçal Poy',
   role: { en: 'Senior Backend Engineer', es: 'Ingeniero Backend Senior', ca: 'Enginyer Backend Sènior' },
   tagline: { en: 'Java · Python · AI/LLM', es: 'Java · Python · IA/LLM', ca: 'Java · Python · IA/LLM' },
   url: 'https://jordimp.net',
-  email: 'jordi.marsal@gmail.com',
+  email: CONTACT_EMAIL,
   github: 'https://github.com/jordimarsal',
   linkedin: 'https://www.linkedin.com/in/jordi-marsal-poy',
   est: '2017',

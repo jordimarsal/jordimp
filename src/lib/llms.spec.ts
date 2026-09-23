@@ -30,7 +30,7 @@ const base: LlmsData = {
   tagline: 'Java · Python · AI/LLM',
   est: '2017',
   city: 'Barcelona',
-  email: 'jordi.marsal@gmail.com',
+  email: 'hello@jordimp.net',
   github: 'https://github.com/jordimarsal',
   linkedin: 'https://www.linkedin.com/in/jordi-marsal-poy',
   article: {
@@ -108,7 +108,7 @@ describe('buildLlmsTxt()', () => {
   it('closes with the contact block and the llms-full.txt pointer', () => {
     const text = buildLlmsTxt(base);
     expect(text).toContain('## Contact');
-    expect(text).toContain('- Email: jordi.marsal@gmail.com');
+    expect(text).toContain('- Email: hello@jordimp.net');
     expect(text).toContain('- [GitHub](https://github.com/jordimarsal)');
     expect(text).toContain('- [LinkedIn](https://www.linkedin.com/in/jordi-marsal-poy)');
     expect(text.trimEnd().endsWith('Full details in llms-full.txt.')).toBe(true);
@@ -125,7 +125,7 @@ describe('buildLlmsFullTxt()', () => {
     expect(lines[0]).toBe('# Jordimp & Co. — full reference');
     expect(lines[2]).toBe('Jordi Marçal Poy — Senior Backend Engineer (Java · Python · AI/LLM).');
     expect(lines[4]).toBe(
-      'Contact: jordi.marsal@gmail.com · [GitHub](https://github.com/jordimarsal) · [LinkedIn](https://www.linkedin.com/in/jordi-marsal-poy)',
+      'Contact: hello@jordimp.net · [GitHub](https://github.com/jordimarsal) · [LinkedIn](https://www.linkedin.com/in/jordi-marsal-poy)',
     );
   });
 
