@@ -1666,18 +1666,21 @@ export const FRONTDESK_PAGE: FrontdeskPageContent = {
   personTitle: { en: 'The person at the desk', es: 'La persona en el mostrador', ca: 'La persona al mostrador' },
   bio: {
     en: [
-      'Behind the desk: Jordi Marçal Poy, software engineer with a Master’s in Data Science and 9+ years building REST APIs and microservices in Java (Spring Boot) and Python — plus the automation, testing and CI/CD tooling around them.',
-      'SOLID, Clean Code and TDD as daily practice: tests first, traceable decisions and two-way code reviews. Working close to the end user, honest processes, and knowledge that flows across the team.',
+      'Behind the desk: Jordi Marçal Poy. One engineer, since 2017 — backend systems, event pipelines, and applied AI you can evaluate.',
+      'Open for a senior backend role, a question about a floor or a repo, or a short spec-first engagement. Not a staffing firm; currently inside a telco platform team.',
+      'You bring the problem in your own words. We pin it in writing before any code. Tests first, I/O at the edges, answers you can audit.',
       'The desk is attended in English, Español or Català — pick a floor, pick a language.',
     ],
     es: [
-      'Detrás del mostrador: Jordi Marçal Poy, ingeniero informático con máster en Ciencia de Datos y más de 9 años construyendo APIs REST y microservicios en Java (Spring Boot) y Python — además del tooling de automatización, testing y CI/CD que los rodea.',
-      'SOLID, Clean Code y TDD como práctica diaria: pruebas primero, decisiones trazables y code reviews bidireccionales. Trabajo cercano al cliente final, procesos honestos y conocimiento que fluye por el equipo.',
+      'Detrás del mostrador: Jordi Marçal Poy. Un ingeniero, desde 2017 — sistemas backend, pipelines de eventos e IA aplicada que puedes evaluar.',
+      'Abierto a un rol backend senior, una pregunta sobre una planta o un repo, o un encargo corto con spec primero. No es una consultora; actualmente dentro de un equipo de plataforma de una telco.',
+      'Traes el problema con tus propias palabras. Lo fijamos por escrito antes de cualquier código. Pruebas primero, I/O en los bordes, respuestas que puedes verificar.',
       'El mostrador se atiende en inglés, español o catalán — elige planta y elige idioma.',
     ],
     ca: [
-      'Darrere el mostrador: Jordi Marçal Poy, enginyer informàtic amb màster en Ciència de Dades i més de 9 anys construint APIs REST i microserveis en Java (Spring Boot) i Python — a més de les eines d’automatització, testing i CI/CD que els envolten.',
-      'SOLID, Clean Code i TDD com a pràctica diària: proves primer, decisions traçables i code reviews bidireccionals. Treball proper al client final, processos honestos i coneixement que flueix per l’equip.',
+      'Darrere el mostrador: Jordi Marçal Poy. Un enginyer, des del 2017 — sistemes backend, pipelines d’esdeveniments i IA aplicada que pots avaluar.',
+      'Obert a un rol backend sènior, una pregunta sobre una planta o un repo, o un encàrrec curt amb spec primer. No és una consultora; actualment dins d’un equip de plataforma de una telco.',
+      'Portes el problema amb les teves pròpies paraules. El fixem per escrit abans de qualsevol codi. Proves primer, I/O a les vores, respostes que pots verificar.',
       'El mostrador s’atén en anglès, espanyol o català — tria planta i tria idioma.',
     ],
   },
