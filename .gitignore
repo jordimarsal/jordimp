@@ -32,7 +32,7 @@ pnpm-debug.log*
 # agent/editor local state
 .superpowers/
 .vscode/
-harness/
+/harness/
 opencode.json
 .opencode/
 spike/
