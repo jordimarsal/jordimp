@@ -75,12 +75,16 @@ function casePagesLine(data: LlmsData): string {
   return `- ${mdLink('Project case pages', `${SITE_URL}/en/projects/<slug>/`)} — one per project, ${data.projects.length} total`;
 }
 
+function articleLink(data: LlmsData, label: string): string {
+  return mdLink(label, `${SITE_URL}/en/${data.article.route}`);
+}
+
 function articleLine(data: LlmsData): string {
-  return `- ${mdLink(`Writing: ${data.article.title}`, `${SITE_URL}/en/${data.article.route}`)} — ${data.article.summary}`;
+  return `- ${articleLink(data, `Writing: ${data.article.title}`)} — ${data.article.summary}`;
 }
 
 function articleSectionLine(data: LlmsData): string {
-  return `- ${mdLink(data.article.title, `${SITE_URL}/en/${data.article.route}`)} — ${data.article.summary}`;
+  return `- ${articleLink(data, data.article.title)} — ${data.article.summary}`;
 }
 
 export function buildLlmsTxt(data: LlmsData): string {
