@@ -81,18 +81,21 @@ Expected: the provider's MX host(s) and an SPF `TXT` that authorizes the provide
 > MX → `mx1.forwardemail.net`, `mx2.forwardemail.net`; SPF `TXT` →
 > `"forward-email=jordi.marsal@gmail.com"`; DMARC → `p=quarantine`. Owner confirmed forwarding is enabled.
 
-- [ ] **Step 3: Prove a message arrives**
+- [x] **Step 3: Prove a message arrives**
 
 From an external account (not the owner's Gmail), send a test message to `hello@jordimp.net`. Confirm it appears in the Gmail inbox (not spam). Record the send time and the receipt in the evidence note.
 
-> **Open (2026-09-23):** awaiting the owner's confirmation that the test message landed in Gmail
-> (R6). MX/SPF/DMARC already verified; forwarding enabled.
+> **Confirmed (2026-09-23):** the owner confirmed at the F14 human gate ("Aprovat + correu rebut")
+> that the forwarded test message landed in the Gmail inbox. Evidence recorded in
+> `harness/progress/impl_contact-email.md`.
 
-- [ ] **Step 4: Gate decision**
+- [x] **Step 4: Gate decision**
 
 If all three steps pass, record `MAILBOX VERIFIED <date>` in the evidence note and proceed. If anything fails, **stop**: report the blocker in `harness/progress/current.md`, leave `hello@jordimp.net` absent from `src/`/`dist/`, and keep the feature `blocked`.
 
-- [ ] **Step 5: Commit the evidence note**
+> `MAILBOX VERIFIED 2026-09-23` recorded; feature moved to `in_progress` on `feature/f14-contact-email`.
+
+- [x] **Step 5: Commit the evidence note**
 
 ```bash
 git add harness/progress/impl_contact-email.md
