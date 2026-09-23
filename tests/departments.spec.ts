@@ -423,4 +423,13 @@ test.describe('department pages (T8)', () => {
       .poll(() => page.evaluate(() => navigator.clipboard.readText()))
       .toBe(SITE.email);
   });
+
+  for (const lang of LOCALES) {
+    test(`front desk publishes the domain address (${lang})`, async ({ page }) => {
+      await page.goto(deptRoute(lang, 'frontdesk'));
+      const emailRow = page.locator('.contact-rows .contact-row').first();
+      await expect(emailRow.locator('.contact-row__v')).toHaveText('hello@jordimp.net');
+      await expect(page.locator('button.copy-btn')).toHaveAttribute('data-copy', 'hello@jordimp.net');
+    });
+  }
 });

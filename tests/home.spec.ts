@@ -57,6 +57,10 @@ async function expectHomeChrome(page: Page, home: string): Promise<void> {
   await expect(page.locator('.deptstrip__item')).toHaveCount(7);
   await expect(page.locator('.footer-desk#desk')).toHaveCount(1);
   await expect(page.locator('.footer-desk .pill[href^="mailto:"]')).toHaveCount(1);
+  await expect(page.locator('.footer-desk .pill[href^="mailto:"]')).toHaveAttribute(
+    'href',
+    'mailto:hello@jordimp.net',
+  );
   await expect(page.locator('.footer-desk .pill[rel="noopener noreferrer"]')).toHaveCount(2);
 
   expect(await page.locator('script[type="application/ld+json"]').count()).toBeGreaterThanOrEqual(2);
