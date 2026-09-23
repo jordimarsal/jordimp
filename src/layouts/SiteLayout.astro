@@ -10,7 +10,7 @@ import { FONT_FACE_CSS } from '../lib/font-face';
 import { UI } from '../data/content';
 import type { NavKey } from '../data/types';
 import type { Locale } from '../lib/i18n';
-import type { BreadcrumbItem } from '../lib/seo';
+import type { ArticleInput, BreadcrumbItem } from '../lib/seo';
 
 export interface Props {
   lang: Locale;
@@ -23,9 +23,10 @@ export interface Props {
   breadcrumbs?: readonly BreadcrumbItem[];
   ogType?: 'website' | 'article';
   articleSection?: string;
+  article?: ArticleInput;
 }
 
-const { lang, title, description, path = '', noindex = false, navKey, noCurrent = false, breadcrumbs, ogType, articleSection } = Astro.props;
+const { lang, title, description, path = '', noindex = false, navKey, noCurrent = false, breadcrumbs, ogType, articleSection, article } = Astro.props;
 ---
 <!doctype html>
 <html lang={lang}>
@@ -38,7 +39,7 @@ const { lang, title, description, path = '', noindex = false, navKey, noCurrent 
     <link rel="preload" as="font" type="font/woff2" href={assetPath('fonts/instrument-sans-var-latin.woff2')} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={assetPath('fonts/space-mono-700-latin.woff2')} crossorigin />
     <style is:inline set:html={FONT_FACE_CSS} />
-    <SEO {lang} {title} {description} {path} {noindex} {breadcrumbs} {ogType} {articleSection} />
+    <SEO {lang} {title} {description} {path} {noindex} {breadcrumbs} {ogType} {articleSection} {article} />
     <Analytics />
   </head>
   <body>

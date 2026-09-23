@@ -1,4 +1,5 @@
 import type {
+  ArticleContent,
   CaseBuildStep,
   CaseUiStrings,
   CvContent,
@@ -963,6 +964,170 @@ export const FOOTER: FooterContent = {
   },
 };
 
+export const ARTICLE: ArticleContent = {
+  floor: 'research',
+  date: '2026-09-22',
+  revision: 'REV A',
+  dateLabel: { en: 'FILED', es: 'REGISTRADO', ca: 'REGISTRAT' },
+  title: {
+    en: 'RAG without an eval gate is a demo.',
+    es: 'Un RAG sin puerta de evals es una demo.',
+    ca: 'Un RAG sense porta d’evals és una demo.',
+  },
+  description: {
+    en: 'Why CodebaseRAG gates retrieval quality in CI: a public golden set, a committed mean recall@5 floor of 0.409, and honest limits — a floor, not SOTA.',
+    es: 'Por qué CodebaseRAG pone un gate de calidad del retrieval en CI: un set golden público, un suelo de recall@5 medio comprometido de 0.409 y límites honestos — un suelo, no SOTA.',
+    ca: 'Per què CodebaseRAG posa un gate de qualitat del retrieval a CI: un set golden públic, un sòl de recall@5 mitjà compromès de 0.409 i límits honests — un sòl, no SOTA.',
+  },
+  lead: {
+    en: 'A retrieval system is a promise. The eval gate is what turns the promise into a claim someone else can check — and break the moment it stops being true.',
+    es: 'Un sistema de retrieval es una promesa. La puerta de evals es lo que convierte esa promesa en una afirmación que otro puede comprobar — y romper en cuanto deja de ser cierta.',
+    ca: 'Un sistema de retrieval és una promesa. La porta d’evals és el que converteix la promesa en una afirmació que algú altre pot comprovar — i trencar tan bon punt deixa de ser certa.',
+  },
+  relatedBody: {
+    en: 'The essay behind CodebaseRAG: why a public golden set and a CI floor of 0.409 matter more than another chatbot demo.',
+    es: 'El ensayo detrás de CodebaseRAG: por qué un set golden público y un suelo de 0.409 en CI importan más que otra demo de chatbot.',
+    ca: 'L’assaig darrere de CodebaseRAG: per què un set golden públic i un sòl de 0.409 a CI importen més que una altra demo de chatbot.',
+  },
+  readLabel: { en: 'READ THE ESSAY', es: 'LEE EL ENSAYO', ca: 'LLEGEIX L’ASSAIG' },
+  sections: [
+    {
+      anchor: 'problem',
+      heading: {
+        en: 'The problem: recall nobody measures',
+        es: 'El problema: un recall que nadie mide',
+        ca: 'El problema: un recall que ningú mesura',
+      },
+      body: {
+        en: [
+          'Most RAG projects ship a demo. You ask a question, the retriever returns five chunks, a model writes a confident paragraph, and everyone nods. Nobody can say whether the right document was in those five chunks — because nobody wrote down what “right” means and nobody measures it. The demo works until a chunking change, a new embedding model or a different vector store quietly moves quality, and the only signal is a vague feeling that answers got worse.',
+          'That is the real failure mode: not hallucination as moral panic, but retrieval that degrades with nobody watching. A demo optimises for the happy path in front of an audience; a system optimises for a number it can regress against. The distance between the two is an eval — and CodebaseRAG exists to close it.',
+        ],
+        es: [
+          'La mayoría de proyectos RAG entregan una demo. Preguntas algo, el retriever devuelve cinco fragmentos, un modelo escribe un párrafo con seguridad y todo el mundo asiente. Nadie puede decir si el documento correcto estaba entre esos cinco fragmentos — porque nadie escribió qué significa «correcto» y nadie lo mide. La demo funciona hasta que un cambio de chunking, un nuevo embedding model u otro vector store mueve la calidad en silencio, y la única señal es una vaga sensación de que las respuestas empeoraron.',
+          'Ese es el verdadero modo de fallo: no la alucinación como pánico moral, sino un retrieval que se degrada sin que nadie mire. Una demo optimiza el camino feliz delante de una audiencia; un sistema optimiza un número contra el que puede regresar. La distancia entre ambos es una eval — y CodebaseRAG existe para cerrarla.',
+        ],
+        ca: [
+          'La majoria de projectes RAG entreguen una demo. Preguntes una cosa, el retriever retorna cinc fragments, un model escriu un paràgraf amb seguretat i tothom hi està d’acord. Ningú pot dir si el document correcte era entre aquests cinc fragments — perquè ningú va escriure què vol dir «correcte» i ningú ho mesura. La demo funciona fins que un canvi de chunking, un nou embedding model o un altre vector store mou la qualitat en silenci, i l’únic senyal és una vaga sensació que les respostes han empitjorat.',
+          'Aquest és el veritable mode de fallada: no l’al·lucinació com a pànic moral, sinó un retrieval que es degrada sense que ningú hi miri. Una demo optimitza el camí feliç davant d’una audiència; un sistema optimitza un número contra el qual pot regressar. La distància entre tots dos és una eval — i CodebaseRAG existeix per tancar-la.',
+        ],
+      },
+    },
+    {
+      anchor: 'golden-set',
+      heading: {
+        en: 'The golden set: turning “right” into forty checkable pairs',
+        es: 'El set golden: convertir lo «correcto» en cuarenta pares verificables',
+        ca: 'El set golden: convertir el «correcte» en quaranta parells verificables',
+      },
+      body: {
+        en: [
+          'An eval is only as honest as its questions. The golden set is a public list of question/answer pairs drawn from the repository itself: a question a developer would actually ask, paired with the answer and where it lives. It holds ≥40 pairs — enough to catch a real regression, small enough that every pair can be reviewed by hand and kept honest.',
+          'You do not need a labelling platform. You need somewhere to write questions down and the discipline to keep them. They live next to the code, so a retriever change and its updated expectations travel in the same review.',
+          'Three entries, paraphrased from the public set, show the shape:',
+          'Which abstraction does the query use case depend on, and why is it not a vector-store type? It depends on a retriever port; adapters implement it, so the core never imports a pgvector or Qdrant class.',
+          'What should CI do when mean recall@5 drops below the committed floor? Fail the build. The floor is a committed number, and moving it is an explicit, ADR-gated decision — not an edit that makes CI green.',
+          'Can the eval run with no network? Yes. Embeddings arrive through a port with two adapters — Ollama locally, Anthropic when hosted — so the same golden set runs offline.',
+          'The examples are not meant to be hard. They are meant to have defensible answers, so a wrong one is a failing test rather than a disagreement.',
+        ],
+        es: [
+          'Una eval es tan honesta como sus preguntas. El set golden es una lista pública de pares pregunta/respuesta extraídos del propio repositorio: una pregunta que un desarrollador haría de verdad, emparejada con la respuesta y con dónde vive. Contiene ≥40 pares — suficientes para detectar una regresión real, lo bastante pocos para revisar cada uno a mano y mantenerlos honestos.',
+          'No necesitas una plataforma de etiquetado. Necesitas un sitio donde escribir las preguntas y la disciplina de mantenerlas. Viven junto al código, así que un cambio en el retriever y sus expectativas actualizadas viajan en la misma revisión.',
+          'Tres entradas, parafraseadas del set público, muestran la forma:',
+          '¿De qué abstracción depende el query use case y por qué no es un tipo del vector store? Depende de un port de retriever; los adapters lo implementan, así que el core nunca importa una clase de pgvector o Qdrant.',
+          '¿Qué debería hacer CI cuando el recall@5 medio cae por debajo del suelo comprometido? Hacer fallar el build. El suelo es un número comprometido, y moverlo es una decisión explícita con gate por ADR — no una edición que pone CI en verde.',
+          '¿Puede la eval ejecutarse sin red? Sí. Los embeddings llegan a través de un port con dos adapters — Ollama en local, Anthropic cuando está alojado — así que el mismo set golden se ejecuta offline.',
+          'Los ejemplos no pretenden ser difíciles. Pretenden tener respuestas defendibles, para que una equivocada sea un test que falla y no una discusión.',
+        ],
+        ca: [
+          'Una eval és tan honesta com les seves preguntes. El set golden és una llista pública de parells pregunta/resposta extrets del mateix repositori: una pregunta que un desenvolupador faria de debò, aparellada amb la resposta i amb on viu. Conté ≥40 parells — prou per detectar una regressió real, i prou pocs per revisar-los tots a mà i mantenir-los honests.',
+          'No necessites una plataforma d’etiquetatge. Necessites un lloc on escriure les preguntes i la disciplina de mantenir-les. Viuen al costat del codi, així que un canvi al retriever i les seves expectatives actualitzades viatgen a la mateixa revisió.',
+          'Tres entrades, parafrasejades del set públic, mostren la forma:',
+          'De quina abstracció depèn el query use case i per què no és un tipus del vector store? Depèn d’un port de retriever; els adapters l’implementen, així que el core no importa mai una classe de pgvector o Qdrant.',
+          'Què hauria de fer CI quan el recall@5 mitjà cau per sota del sòl compromès? Fer fallar el build. El sòl és un número compromès, i moure’l és una decisió explícita amb gate per ADR — no una edició que posa CI en verd.',
+          'Pot l’eval executar-se sense xarxa? Sí. Els embeddings arriben a través d’un port amb dos adapters — Ollama en local, Anthropic quan està allotjat — així que el mateix set golden s’executa offline.',
+          'Els exemples no pretenen ser difícils. Pretenen tenir respostes defensables, perquè una d’equivocada sigui un test que falla i no una discussió.',
+        ],
+      },
+    },
+    {
+      anchor: 'ci-gate',
+      heading: {
+        en: 'The CI gate: what fails, what does not',
+        es: 'La puerta de CI: qué falla y qué no',
+        ca: 'La porta de CI: què falla i què no',
+      },
+      body: {
+        en: [
+          'A gate is only useful if it fails loudly and predictably. This one measures mean recall@5, mean reciprocal rank and nDCG@5 over the golden set, and fails the build when mean recall@5 drops below the committed baseline of 0.409.',
+          'What fails: any change that pushes mean recall@5 under 0.409. That is the entire rule. CI runs the same deterministic eval as a laptop, so a red build points at a retrieval change, not a flaky environment.',
+          'What does not fail matters too. A model change that keeps recall@5 at or above the floor passes even when MRR and nDCG@5 move — the gate guards the metric that was committed to, not every number on the dashboard. A refactor that moves code without moving retrieval passes. And the gate does not judge answer fluency: this is a retrieval eval, and pretending it measures generation quality would be the same dishonesty as having no eval at all.',
+        ],
+        es: [
+          'Una puerta solo es útil si falla alto y de forma predecible. Esta mide el recall@5 medio, la mean reciprocal rank y el nDCG@5 sobre el set golden, y hace fallar el build cuando el recall@5 medio cae por debajo de la baseline comprometida de 0.409.',
+          'Qué falla: cualquier cambio que empuje el recall@5 medio por debajo de 0.409. Esa es toda la regla. CI ejecuta la misma eval determinista que un portátil, así que un build en rojo apunta a un cambio en el retrieval, no a un entorno inestable.',
+          'Qué no falla también importa. Un cambio de modelo que mantiene el recall@5 en el suelo o por encima pasa aunque MRR y nDCG@5 se muevan — la puerta protege la métrica comprometida, no todos los números del panel. Un refactor que mueve código sin mover el retrieval pasa. Y la puerta no juzga la fluidez de las respuestas: esto es una eval de retrieval, y fingir que mide la calidad de generación sería la misma deshonestidad que no tener ninguna eval.',
+        ],
+        ca: [
+          'Una porta només és útil si falla fort i de manera previsible. Aquesta mesura el recall@5 mitjà, la mean reciprocal rank i el nDCG@5 sobre el set golden, i fa fallar el build quan el recall@5 mitjà cau per sota de la baseline compromesa de 0.409.',
+          'Què falla: qualsevol canvi que empenyi el recall@5 mitjà per sota de 0.409. Aquesta és tota la regla. CI executa la mateixa eval determinista que un portàtil, així que un build en vermell apunta a un canvi en el retrieval, no a un entorn inestable.',
+          'Què no falla també importa. Un canvi de model que manté el recall@5 al sòl o per sobre passa encara que MRR i nDCG@5 es moguin — la porta protegeix la mètrica compromesa, no tots els números del tauler. Un refactor que mou codi sense moure el retrieval passa. I la porta no jutja la fluïdesa de les respostes: això és una eval de retrieval, i fer veure que mesura la qualitat de generació seria la mateixa deshonestedat que no tenir cap eval.',
+        ],
+      },
+    },
+    {
+      anchor: 'hexagonal',
+      heading: {
+        en: 'Why hexagonal: swapping Qdrant must not rewrite the core',
+        es: 'Por qué hexagonal: cambiar Qdrant no debe reescribir el core',
+        ca: 'Per què hexagonal: canviar Qdrant no ha de reescriure el core',
+      },
+      body: {
+        en: [
+          'You measure retrieval, so what you measure must not be welded to what you deploy. CodebaseRAG is hexagonal: the query use case depends on ports, and pgvector, Qdrant, Ollama and Anthropic sit behind them as adapters.',
+          'The test is concrete. Swapping Qdrant for pgvector — or running fully local on Ollama — must not rewrite the core. If changing a vector store forces edits across the use cases, the eval is measuring an accident of the storage layer, and every future swap re-opens whether the metrics still mean anything.',
+          'Keeping the core free of frameworks and transports buys more than tidiness: it keeps the eval deterministic, exercised against in-memory or container-backed adapters with no network required. A committed floor is only trustworthy when the code beneath it does not change shape every time the infrastructure does.',
+        ],
+        es: [
+          'Mides el retrieval, así que lo que mides no puede estar soldado a lo que despliegas. CodebaseRAG es hexagonal: el query use case depende de ports, y pgvector, Qdrant, Ollama y Anthropic se sientan detrás como adapters.',
+          'El test es concreto. Cambiar Qdrant por pgvector — o ejecutar totalmente en local con Ollama — no debe reescribir el core. Si cambiar un vector store obliga a editar los use cases, la eval está midiendo un accidente de la capa de almacenamiento, y cada cambio futuro reabre si las métricas siguen significando algo.',
+          'Mantener el core libre de frameworks y transportes aporta más que orden: mantiene la eval determinista, ejercitada contra adapters en memoria o respaldados por contenedores sin necesidad de red. Un suelo comprometido solo es fiable cuando el código que hay debajo no cambia de forma cada vez que cambia la infraestructura.',
+        ],
+        ca: [
+          'Mesures el retrieval, així que allò que mesures no pot estar soldat a allò que desplegues. CodebaseRAG és hexagonal: el query use case depèn de ports, i pgvector, Qdrant, Ollama i Anthropic seuen darrere com a adapters.',
+          'El test és concret. Canviar Qdrant per pgvector — o executar-ho tot en local amb Ollama — no ha de reescriure el core. Si canviar un vector store obliga a editar els use cases, l’eval està mesurant un accident de la capa d’emmagatzematge, i cada canvi futur reobre si les mètriques encara volen dir alguna cosa.',
+          'Mantenir el core lliure de frameworks i transports aporta més que ordre: manté l’eval determinista, exercitada contra adapters en memòria o recolzats per contenidors sense necessitat de xarxa. Un sòl compromès només és fiable quan el codi que hi ha sota no canvia de forma cada vegada que canvia la infraestructura.',
+        ],
+      },
+    },
+    {
+      anchor: 'baseline',
+      heading: {
+        en: 'Current baseline and what it does not claim',
+        es: 'La baseline actual y lo que no afirma',
+        ca: 'La baseline actual i què no afirma',
+      },
+      body: {
+        en: [
+          'The committed baseline is a mean recall@5 of 0.409 (MRR 0.231, nDCG@5 0.277) over a golden set of at least forty pairs. Read it as a floor, not a result. 0.409 is not SOTA and this is not a claim that retrieval is solved. It is the number the project committed to defend, chosen low enough to stay stable and high enough to catch a real drop.',
+          'What the number does not claim: that the golden set is exhaustive, that a green build means good answers, or that the embedding model is the best available. Raising the floor is a recorded decision with a justification, never a vanity metric pasted into a README.',
+          'What it does claim is smaller and more useful: on every change, the repository can tell you whether retrieval got worse, and prove it from a public golden set. That is the line between a RAG demo and a RAG system. A demo shows you an answer; a system lets you disagree with it.',
+        ],
+        es: [
+          'La baseline comprometida es un recall@5 medio de 0.409 (MRR 0.231, nDCG@5 0.277) sobre un set golden de al menos cuarenta pares. Léelo como un suelo, no como un resultado. 0.409 no es SOTA y esto no es una afirmación de que el retrieval esté resuelto. Es el número que el proyecto se comprometió a defender, elegido lo bastante bajo para mantenerse estable y lo bastante alto para detectar una caída real.',
+          'Lo que el número no afirma: que el set golden sea exhaustivo, que un build en verde signifique buenas respuestas, o que el embedding model sea el mejor disponible. Subir el suelo es una decisión registrada con una justificación, nunca una métrica de vanidad pegada en un README.',
+          'Lo que sí afirma es más pequeño y más útil: en cada cambio, el repositorio puede decirte si el retrieval empeoró, y demostrarlo con un set golden público. Esa es la línea entre una demo RAG y un sistema RAG. Una demo te muestra una respuesta; un sistema te deja discrepar de ella.',
+        ],
+        ca: [
+          'La baseline compromesa és un recall@5 mitjà de 0.409 (MRR 0.231, nDCG@5 0.277) sobre un set golden d’almenys quaranta parells. Llegeix-ho com un sòl, no com un resultat. 0.409 no és SOTA i això no és cap afirmació que el retrieval estigui resolt. És el número que el projecte es va comprometre a defensar, triat prou baix per mantenir-se estable i prou alt per detectar una caiguda real.',
+          'Què no afirma el número: que el set golden sigui exhaustiu, que un build en verd signifiqui bones respostes, o que l’embedding model sigui el millor disponible. Apujar el sòl és una decisió registrada amb una justificació, mai una mètrica de vanitat enganxada en un README.',
+          'Què afirma, en canvi, és més petit i més útil: a cada canvi, el repositori et pot dir si el retrieval ha empitjorat, i demostrar-ho amb un set golden públic. Aquesta és la línia entre una demo RAG i un sistema RAG. Una demo et mostra una resposta; un sistema et deixa discrepar-ne.',
+        ],
+      },
+    },
+  ],
+};
+
 export const PAGES: Record<string, PageMeta> = {
   home: {
     route: 'index.html',
@@ -1005,6 +1170,16 @@ export const PAGES: Record<string, PageMeta> = {
       es: 'El dosier impreso: 9+ años de ingeniería backend, pipelines de eventos e IA aplicada. Descarga el PDF en inglés o español.',
       ca: 'El dossier imprès: 9+ anys d’enginyeria backend, pipelines d’esdeveniments i IA aplicada. Descarrega el PDF en anglès o espanyol.',
     },
+  },
+  'article-rag-eval-gate': {
+    route: 'writing/rag-eval-gate.html',
+    nav: 'departments',
+    title: {
+      en: `${ARTICLE.title.en} — Jordimp & Co.`,
+      es: `${ARTICLE.title.es} — Jordimp & Co.`,
+      ca: `${ARTICLE.title.ca} — Jordimp & Co.`,
+    },
+    description: ARTICLE.description,
   },
   research: {
     route: 'departments/research.html',

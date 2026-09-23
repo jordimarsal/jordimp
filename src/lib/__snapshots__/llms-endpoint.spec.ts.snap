@@ -90,6 +90,10 @@ The desk takes three things: senior or staff backend roles, short spec-first eng
 - I/O at the edges; pure, deterministic logic everywhere else.
 - Knowledge sharing and mentoring — the team improves together.
 
+## Writing
+
+- [RAG without an eval gate is a demo.](https://jordimp.net/en/writing/rag-eval-gate/) — Why CodebaseRAG gates retrieval quality in CI: a public golden set, a committed mean recall@5 floor of 0.409, and honest limits — a floor, not SOTA.
+
 ## Pages
 
 - [Home](https://jordimp.net/en/) · [Español](https://jordimp.net/es/) · [Català](https://jordimp.net/ca/) (home, trilingual)

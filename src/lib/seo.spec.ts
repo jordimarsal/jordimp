@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  articleJsonLd,
   breadcrumbJsonLd,
   jsonLdScript,
   ogLocale,
@@ -127,5 +128,50 @@ describe('jsonLdScript()', () => {
   it('escapes line separators U+2028/U+2029', () => {
     const script = jsonLdScript({ name: 'a b c' });
     expect(script).toBe('{"name":"a\\u2028b\\u2029c"}');
+  });
+});
+
+describe('articleJsonLd()', () => {
+  const input = {
+    headline: 'RAG without an eval gate is a demo.',
+    description: 'A description.',
+    path: 'writing/rag-eval-gate/',
+    datePublished: '2026-09-22',
+    section: 'Research & Retrieval',
+    about: 'https://github.com/jordimarsal/codebaserag',
+  };
+
+  it('emits a schema.org Article with the core fields', () => {
+    const article = articleJsonLd('en', input);
+    expect(article['@context']).toBe('https://schema.org');
+    expect(article['@type']).toBe('Article');
+    expect(article.headline).toBe(input.headline);
+    expect(article.description).toBe(input.description);
+    expect(article.inLanguage).toBe('en');
+    expect(article.datePublished).toBe('2026-09-22');
+    expect(article.dateModified).toBe('2026-09-22');
+    expect(article.articleSection).toBe('Research & Retrieval');
+    expect(article.about).toBe('https://github.com/jordimarsal/codebaserag');
+  });
+
+  it('names the site person as author and links the CodebaseRAG repo as about', () => {
+    const article = articleJsonLd('es', input);
+    expect(article.author.name).toBe('Jordi Marçal Poy');
+    expect(article.author['@type']).toBe('Person');
+    expect(article.author.url).toBe('https://jordimp.net/es/');
+    expect(article.author.sameAs).toEqual([
+      'https://github.com/jordimarsal',
+      'https://www.linkedin.com/in/jordi-marsal-poy',
+    ]);
+  });
+
+  it('points mainEntityOfPage and isPartOf at the locale URLs', () => {
+    const article = articleJsonLd('ca', input);
+    expect(article.mainEntityOfPage).toBe('https://jordimp.net/ca/writing/rag-eval-gate/');
+    expect(article.isPartOf).toEqual({
+      '@type': 'WebSite',
+      name: 'JORDIMP & CO.',
+      url: 'https://jordimp.net/',
+    });
   });
 });

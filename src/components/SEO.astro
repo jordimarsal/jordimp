@@ -2,12 +2,14 @@
 import { SITE } from '../config';
 import { LOCALES } from '../lib/i18n';
 import {
+  articleJsonLd,
   breadcrumbJsonLd,
   jsonLdScript,
   ogLocale,
   ogLocaleAlternates,
   personJsonLd,
   siteUrl,
+  type ArticleInput,
   type BreadcrumbItem,
 } from '../lib/seo';
 
@@ -20,9 +22,10 @@ interface Props {
   breadcrumbs?: readonly BreadcrumbItem[];
   ogType?: 'website' | 'article';
   articleSection?: string;
+  article?: ArticleInput;
 }
 
-const { lang, title, description, path = '', noindex = false, breadcrumbs, ogType = 'website', articleSection } = Astro.props;
+const { lang, title, description, path = '', noindex = false, breadcrumbs, ogType = 'website', articleSection, article } = Astro.props;
 const demo = import.meta.env.PUBLIC_DEMO === '1';
 const canonical = siteUrl(lang, path);
 const ogImage = SITE.ogImage;
@@ -32,6 +35,7 @@ const breadcrumb =
   breadcrumbs && breadcrumbs.length > 0
     ? jsonLdScript(breadcrumbJsonLd(lang, breadcrumbs))
     : undefined;
+const articleLd = article ? jsonLdScript(articleJsonLd(lang, article)) : undefined;
 ---
 <title>{title}</title>
 <meta name="description" content={description} />
@@ -61,3 +65,4 @@ const breadcrumb =
 <meta name="twitter:image" content={ogImage} />
 <script is:inline type="application/ld+json" set:html={person} />
 {breadcrumb && <script is:inline type="application/ld+json" set:html={breadcrumb} />}
+{articleLd && <script is:inline type="application/ld+json" set:html={articleLd} />}

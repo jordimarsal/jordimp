@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import {
+  ARTICLE,
   BREADCRUMB_DEPTS,
   BREADCRUMB_HOME,
   DEPTS,
@@ -97,6 +98,10 @@ test.describe('department pages (T8)', () => {
       await expect(github).toHaveAttribute('rel', 'noopener noreferrer');
       await expect(github).toHaveAttribute('aria-label', `${p.name} — ${UI.viewGithub.en}`);
     }
+
+    const essay = page.locator('aside.article-callout a.case');
+    await expect(essay).toHaveAttribute('href', '/en/writing/rag-eval-gate/');
+    await expect(page.locator('aside.article-callout h3')).toHaveText(ARTICLE.title.en);
 
     await expect(page.locator('section .dept-panel__cta a.btn .btn__label')).toHaveText(
       'Back to the building',

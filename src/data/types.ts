@@ -347,3 +347,22 @@ export interface InspectionsPageContent {
   readonly labels: InspectionsCounterLabels;
   readonly kbUnit: string;
 }
+
+export interface ArticleSection {
+  readonly anchor: 'problem' | 'golden-set' | 'ci-gate' | 'hexagonal' | 'baseline';
+  readonly heading: L10n<string>;
+  readonly body: L10n<readonly string[]>;
+}
+
+export interface ArticleContent {
+  readonly floor: DeptKey;
+  readonly date: string;
+  readonly revision: string;
+  readonly dateLabel: L10n<string>;
+  readonly title: L10n<string>;
+  readonly description: L10n<string>;
+  readonly lead: L10n<string>;
+  readonly sections: readonly ArticleSection[];
+  readonly relatedBody: L10n<string>;
+  readonly readLabel: L10n<string>;
+}

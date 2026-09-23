@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  ARTICLE,
   CASE_BUILD,
   CASE_NOTES,
   DEPTS,
@@ -387,11 +388,12 @@ describe('project tiers', () => {
 });
 
 describe('pages data', () => {
-  it('registers home, work, cv, the 6 departments and the 11 project pages', () => {
+  it('registers home, work, cv, the 7 departments, the 11 project pages and the essay', () => {
     const expected = [
       'home',
       'work',
       'cv',
+      'article-rag-eval-gate',
       ...FLOOR_ORDER,
       ...PROJECTS.map((p) => `project-${p.slug}`),
     ];
@@ -547,5 +549,57 @@ describe('people page org roles (R23)', () => {
       es: ['CEO', 'INGENIERO', 'QA', 'SOPORTE'],
       ca: ['CEO', 'ENGINYER', 'QA', 'SUPORT'],
     });
+  });
+});
+
+describe('article data (rag-eval-article)', () => {
+  const EN_TITLE = 'RAG without an eval gate is a demo.';
+  const ANCHORS = ['problem', 'golden-set', 'ci-gate', 'hexagonal', 'baseline'];
+
+  it('pins the exact English title and localized title/description/lead', () => {
+    expect(ARTICLE.title.en).toBe(EN_TITLE);
+    expect(ARTICLE.sections).toHaveLength(5);
+    for (const lang of LOCALES) {
+      expect(ARTICLE.title[lang].trim(), `title.${lang}`).not.toBe('');
+      expect(ARTICLE.description[lang].trim(), `description.${lang}`).not.toBe('');
+      expect(ARTICLE.lead[lang].trim(), `lead.${lang}`).not.toBe('');
+      expect(ARTICLE.dateLabel[lang].trim(), `dateLabel.${lang}`).not.toBe('');
+      expect(ARTICLE.readLabel[lang].trim(), `readLabel.${lang}`).not.toBe('');
+      expect(ARTICLE.relatedBody[lang].trim(), `relatedBody.${lang}`).not.toBe('');
+    }
+  });
+
+  it('defines exactly the five sections in the fixed order with trilingual copy', () => {
+    expect(ARTICLE.sections.map((section) => section.anchor)).toEqual(ANCHORS);
+    for (const section of ARTICLE.sections) {
+      for (const lang of LOCALES) {
+        expect(section.heading[lang].trim(), `${section.anchor}:heading.${lang}`).not.toBe('');
+        expect(section.body[lang].length, `${section.anchor}:body.${lang}`).toBeGreaterThan(0);
+        for (const paragraph of section.body[lang]) {
+          expect(paragraph.trim(), `${section.anchor}:body.${lang}`).not.toBe('');
+        }
+      }
+    }
+  });
+
+  it('keeps the English body between 800 and 1200 words', () => {
+    const words = [ARTICLE.lead.en, ...ARTICLE.sections.flatMap((section) => section.body.en)]
+      .join(' ')
+      .split(/\s+/)
+      .filter(Boolean);
+    expect(words.length).toBeGreaterThanOrEqual(800);
+    expect(words.length).toBeLessThanOrEqual(1200);
+  });
+
+  it('carries the committed floor facts and frames 0.409 honestly', () => {
+    const en = [ARTICLE.lead.en, ...ARTICLE.sections.flatMap((section) => section.body.en)].join('\n');
+    expect(en).toContain('0.409');
+    expect(en).toContain('not SOTA');
+    expect(en).toContain('≥40');
+  });
+
+  it('registers the essay route in PAGES under the departments nav', () => {
+    expect(PAGES['article-rag-eval-gate'].route).toBe('writing/rag-eval-gate.html');
+    expect(PAGES['article-rag-eval-gate'].nav).toBe('departments');
   });
 });

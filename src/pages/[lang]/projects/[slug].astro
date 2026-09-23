@@ -4,6 +4,7 @@ import Breadcrumb from '../../../components/site/Breadcrumb.astro';
 import CaseMotif from '../../../components/site/CaseMotif.astro';
 import { LOCALES, type Locale } from '../../../lib/i18n';
 import {
+  ARTICLE,
   BREADCRUMB_DEPTS,
   BREADCRUMB_HOME,
   CASE_BUILD,
@@ -105,6 +106,15 @@ const trail = [
         {p.stack.map((s) => <span class="chip3">{s}</span>)}
       </div>
     </section>
+    {p.slug === 'codebaserag' && (
+      <aside class="article-callout" aria-labelledby="cb-essay">
+        <h3 id="cb-essay">{ARTICLE.title[lang]}</h3>
+        <p>{ARTICLE.relatedBody[lang]}</p>
+        <a class="case" href={srcPath(lang, dirRoute(PAGES['article-rag-eval-gate'].route))}>
+          {ARTICLE.readLabel[lang]} <span aria-hidden="true">&rarr;</span>
+        </a>
+      </aside>
+    )}
     <div class="case-cta">
       {p.github ? (
         <a class="btn btn--big btn--y" href={p.github} {...repoAttrs}>
