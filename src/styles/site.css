@@ -2072,6 +2072,31 @@ figure.diagram figcaption {
   font-size: 0.95rem;
 }
 
+.article {
+  padding-block: var(--sp-4);
+}
+
+.article__stamp {
+  color: var(--ink2);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.article__lead {
+  font-size: 1.2rem;
+  color: var(--ink2);
+}
+
+.article h2 {
+  margin-top: var(--sp-4);
+  line-height: 1.2;
+}
+
+.article section > p {
+  margin-top: var(--sp-2);
+}
+
 .principles {
   list-style: none;
   display: grid;

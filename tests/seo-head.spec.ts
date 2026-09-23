@@ -59,6 +59,9 @@ const REPRESENTATIVE_ROUTES: ReadonlyArray<{ readonly lang: Locale; readonly rou
   { lang: 'es', route: `projects/${project('codebaserag').slug}/` },
   { lang: 'en', route: 'departments/telemetry/' },
   { lang: 'en', route: 'cv/' },
+  { lang: 'en', route: 'writing/rag-eval-gate/' },
+  { lang: 'es', route: 'writing/rag-eval-gate/' },
+  { lang: 'ca', route: 'writing/rag-eval-gate/' },
 ];
 
 test.describe('SEO head emission on representative routes (T11, R17)', () => {
@@ -103,6 +106,20 @@ test.describe('SEO head emission on representative routes (T11, R17)', () => {
     const head = await readHead(page);
     expect(head.og['og:type']).toBe('article');
     expect(head.og['article:section']).toBe('Research & Retrieval');
+  });
+
+  test('emits Article JSON-LD with the site person and the CodebaseRAG repo on the essay', async ({
+    page,
+  }) => {
+    await page.goto('/en/writing/rag-eval-gate/');
+    const article = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+        .map((script) => JSON.parse(script.textContent ?? '{}'))
+        .find((entry) => entry['@type'] === 'Article'),
+    );
+    expect(article.headline).toBe('RAG without an eval gate is a demo.');
+    expect(article.author.name).toBe('Jordi Marçal Poy');
+    expect(article.about).toBe('https://github.com/jordimarsal/codebaserag');
   });
 
   test('marks non-case pages as website type without article section', async ({ page }) => {
