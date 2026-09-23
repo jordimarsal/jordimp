@@ -28,6 +28,12 @@ export interface LlmsSkill {
   readonly items: readonly string[];
 }
 
+export interface LlmsArticleRef {
+  readonly title: string;
+  readonly summary: string;
+  readonly route: string;
+}
+
 export interface LlmsData {
   readonly person: string;
   readonly role: string;
@@ -42,6 +48,7 @@ export interface LlmsData {
   readonly experience: readonly LlmsExperience[];
   readonly skills: readonly LlmsSkill[];
   readonly principles: readonly string[];
+  readonly article: LlmsArticleRef;
 }
 
 import { SITE } from '../config';
@@ -68,6 +75,14 @@ function casePagesLine(data: LlmsData): string {
   return `- ${mdLink('Project case pages', `${SITE_URL}/en/projects/<slug>/`)} — one per project, ${data.projects.length} total`;
 }
 
+function articleLine(data: LlmsData): string {
+  return `- ${mdLink(`Writing: ${data.article.title}`, `${SITE_URL}/en/${data.article.route}`)} — ${data.article.summary}`;
+}
+
+function articleSectionLine(data: LlmsData): string {
+  return `- ${mdLink(data.article.title, `${SITE_URL}/en/${data.article.route}`)} — ${data.article.summary}`;
+}
+
 export function buildLlmsTxt(data: LlmsData): string {
   return `# Jordimp & Co.
 
@@ -82,6 +97,7 @@ ${departmentsList(data)}
 - ${mdLink('Home', `${SITE_URL}/en/`)} (also ${mdLink('Español', `${SITE_URL}/es/`)}, ${mdLink('Català', `${SITE_URL}/ca/`)})
 - ${mdLink('Projects', `${SITE_URL}/en/projects/`)}
 - ${mdLink('CV', `${SITE_URL}/en/cv/`)}
+${articleLine(data)}
 ${departmentKeyPages(data)}
 ${casePagesLine(data)}
 
@@ -180,6 +196,10 @@ ${skills(data)}
 ## Working principles (Mezzanine)
 
 ${principles(data)}
+
+## Writing
+
+${articleSectionLine(data)}
 
 ## Pages
 

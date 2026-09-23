@@ -33,6 +33,11 @@ const base: LlmsData = {
   email: 'jordi.marsal@gmail.com',
   github: 'https://github.com/jordimarsal',
   linkedin: 'https://www.linkedin.com/in/jordi-marsal-poy',
+  article: {
+    title: 'RAG without an eval gate is a demo.',
+    summary: 'Why a public golden set and a CI floor of 0.409 matter.',
+    route: 'writing/rag-eval-gate/',
+  },
   departments: [
     dept('F3', 'Research & Retrieval', ['codebaserag']),
     dept('F2', 'Transport & Telemetry', ['redis-toolkit']),
@@ -91,6 +96,12 @@ describe('buildLlmsTxt()', () => {
   it('points the case-pages line at directory slugs with the project count', () => {
     expect(buildLlmsTxt(base)).toContain(
       '- [Project case pages](https://jordimp.net/en/projects/<slug>/) — one per project, 2 total',
+    );
+  });
+
+  it('links the essay from the key pages', () => {
+    expect(buildLlmsTxt(base)).toContain(
+      '- [Writing: RAG without an eval gate is a demo.](https://jordimp.net/en/writing/rag-eval-gate/) — Why a public golden set and a CI floor of 0.409 matter.',
     );
   });
 
@@ -192,6 +203,14 @@ describe('buildLlmsFullTxt()', () => {
         .trimEnd()
         .endsWith('This site is static HTML, zero trackers, zero external dependencies beyond linked fonts.'),
     ).toBe(true);
+  });
+
+  it('carries the Writing section with the linked essay', () => {
+    const text = buildLlmsFullTxt(base);
+    expect(text).toContain('## Writing');
+    expect(text).toContain(
+      '- [RAG without an eval gate is a demo.](https://jordimp.net/en/writing/rag-eval-gate/) — Why a public golden set and a CI floor of 0.409 matter.',
+    );
   });
 
   it('is deterministic', () => {
