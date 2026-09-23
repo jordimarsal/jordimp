@@ -119,7 +119,7 @@ git commit -m "chore(contact-email): record hello@jordimp.net mailbox verificati
 **Interfaces:**
 - Produces: `CONTACT_EMAIL: 'hello@jordimp.net'` (from `src/config.ts`); `config.SITE.email` and `content.SITE.email` both equal it. All later tasks consume this value.
 
-- [ ] **Step 1: Write the failing SSOT/value test**
+- [x] **Step 1: Write the failing SSOT/value test**
 
 Create `src/config.spec.ts`:
 ```ts
@@ -139,7 +139,7 @@ describe('contact email single source of truth', () => {
 });
 ```
 
-- [ ] **Step 2: Update the existing hard-coded literals**
+- [x] **Step 2: Update the existing hard-coded literals**
 
 In `src/lib/seo.spec.ts:58`:
 ```ts
@@ -163,12 +163,12 @@ expect(text).toContain('- Email: hello@jordimp.net');
 ```
 In `src/lib/links.spec.ts:22` and `:45`, replace both occurrences of `mailto:jordi.marsal@gmail.com` with `mailto:hello@jordimp.net`.
 
-- [ ] **Step 3: Run the unit tests to verify they fail**
+- [x] **Step 3: Run the unit tests to verify they fail**
 
 Run: `npx vitest run`
 Expected: FAIL — `CONTACT_EMAIL` is not exported / `SITE.email` is still `jordi.marsal@gmail.com`.
 
-- [ ] **Step 4: Implement the single literal**
+- [x] **Step 4: Implement the single literal**
 
 In `src/config.ts`, add the constant and point `SITE.email` at it:
 ```ts
@@ -198,7 +198,7 @@ import { CONTACT_EMAIL } from '../config.ts';
 ```
 (leave the rest of the `SITE: SiteInfo` object unchanged).
 
-- [ ] **Step 5: Run the units and refresh the snapshot**
+- [x] **Step 5: Run the units and refresh the snapshot**
 
 Run: `npx vitest run -u`
 Expected: PASS, including `src/config.spec.ts`; the snapshot file is rewritten.
@@ -206,7 +206,7 @@ Expected: PASS, including `src/config.spec.ts`; the snapshot file is rewritten.
 Run: `git diff src/lib/__snapshots__/llms-endpoint.spec.ts.snap`
 Expected: a single changed line — the `Contact:` line — with `jordi.marsal@gmail.com` → `hello@jordimp.net`; nothing else.
 
-- [ ] **Step 6: Type-check and commit**
+- [x] **Step 6: Type-check and commit**
 
 Run: `npm run check`
 Expected: 0 errors (the `.ts` import resolves; no unused imports).
@@ -228,7 +228,7 @@ git commit -m "feat(contact): source hello@jordimp.net from a single CONTACT_EMA
 - Consumes: `CONTACT_EMAIL` value from Task 1 (rendered text).
 - Produces: R2/R3 behavior coverage in `npm run test:e2e`.
 
-- [ ] **Step 1: Add the footer assertion (R2)**
+- [x] **Step 1: Add the footer assertion (R2)**
 
 In `tests/home.spec.ts`, after line 57 (`await expect(page.locator('.footer-desk .pill[href^="mailto:"]')).toHaveCount(1);`) add:
 ```ts
@@ -239,7 +239,7 @@ In `tests/home.spec.ts`, after line 57 (`await expect(page.locator('.footer-desk
 ```
 `expectHomeChrome` already runs for `/en/`, `/es/`, `/ca/`, so this covers all three locales.
 
-- [ ] **Step 2: Add the front-desk assertions (R3)**
+- [x] **Step 2: Add the front-desk assertions (R3)**
 
 In `tests/departments.spec.ts`, inside the same `test.describe('department pages (T8)')`, add:
 ```ts
@@ -254,12 +254,12 @@ In `tests/departments.spec.ts`, inside the same `test.describe('department pages
 ```
 `LOCALES` and `deptRoute` are already imported/defined in the file (lines 23 and 34).
 
-- [ ] **Step 3: Run the focused e2e tests to verify they pass**
+- [x] **Step 3: Run the focused e2e tests to verify they pass**
 
 Run: `npm run build && npx playwright test tests/home.spec.ts tests/departments.spec.ts`
 Expected: PASS (footer `href` and front-desk row/copy assertions green in en/es/ca).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add tests/home.spec.ts tests/departments.spec.ts
@@ -277,7 +277,7 @@ git commit -m "test(contact): pin hello@jordimp.net on footer and front-desk sur
 - Consumes: the pattern list and the already-defined `readFileSync`, `readdirSync`, `statSync`, `join`, `DIST`.
 - Produces: `npm run qa:content` becomes the R1 oracle over both sources and `dist/`.
 
-- [ ] **Step 1: Add the forbidden-address pattern**
+- [x] **Step 1: Add the forbidden-address pattern**
 
 In `scripts/qa-content.mjs`, after the `CONTACT_PATTERNS` definition (line 24), add:
 ```js
@@ -287,7 +287,7 @@ const SRC = new URL('../src', import.meta.url).pathname;
 const TESTS = new URL('../tests', import.meta.url).pathname;
 ```
 
-- [ ] **Step 2: Add the source walk and raw-text scanner**
+- [x] **Step 2: Add the source walk and raw-text scanner**
 
 After `scanForPatterns` (line 82), add:
 ```js
@@ -311,7 +311,7 @@ function scanForbiddenStrings(files, patterns) {
 }
 ```
 
-- [ ] **Step 3: Wire both scans into `main()`**
+- [x] **Step 3: Wire both scans into `main()`**
 
 In `main()`, after `problems.push(...scanForPatterns(files, ADDRESS_PATTERNS, 'address'));` (line 212), add:
 ```js
@@ -324,7 +324,7 @@ In `main()`, after `problems.push(...scanForPatterns(files, ADDRESS_PATTERNS, 'a
   console.log(`legacy-email scan: clean (${sourceFiles.length} source/test files + visible text of ${files.length} HTML files)`);
 ```
 
-- [ ] **Step 4: Verify green, then prove the scan bites**
+- [x] **Step 4: Verify green, then prove the scan bites**
 
 Run: `npm run build && npm run qa:content`
 Expected: ends with `content QA OK`; the new `legacy-email scan: clean (…)` line is printed.
@@ -332,12 +332,12 @@ Expected: ends with `content QA OK`; the new `legacy-email scan: clean (…)` li
 Temporarily add `gmail.com` to a throwaway line in `src/config.spec.ts`, then run `npm run qa:content`.
 Expected: exits non-zero with `forbidden pattern "legacy-gmail" matched in …/src/config.spec.ts`. Remove the throwaway line.
 
-- [ ] **Step 5: Verify the manual rg is empty**
+- [x] **Step 5: Verify the manual rg is empty**
 
 Run: `rg -n "gmail" src dist`
 Expected: no output (exit code 1). If it matches inside `dist/`, `npm run build` is stale — rebuild.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add scripts/qa-content.mjs
@@ -355,7 +355,7 @@ git commit -m "test(contact): fail qa:content when gmail.com survives in sources
 - Consumes: the built site from Task 1–3.
 - Produces: updated ADR-6 oracle; the acceptance record for the address-only change.
 
-- [ ] **Step 1: Rebuild and distill**
+- [x] **Step 1: Rebuild and distill**
 
 Run:
 ```bash
@@ -364,7 +364,7 @@ node scripts/distill-parity.mjs
 ```
 Expected: `distilled 63 routes into tests/fixtures/parity.json` (route count unchanged from the current 21 routes × 3 locales).
 
-- [ ] **Step 2: Review the diff (address lines only)**
+- [x] **Step 2: Review the diff (address lines only)**
 
 Run: `git diff tests/fixtures/parity.json`
 
@@ -372,7 +372,7 @@ Expected: exactly three changed `mainText` values — the `en`, `es` and `ca` fr
 
 If any other hunk appears, revert with `git checkout -- tests/fixtures/parity.json` and diagnose the copy/structure regression before retrying.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add tests/fixtures/parity.json
@@ -390,12 +390,12 @@ git commit -m "test(contact): regenerate parity oracle for the domain address"
 - Consumes: all prior tasks.
 - Produces: the `done` state and the completion-gate evidence.
 
-- [ ] **Step 1: Run the full harness gate**
+- [x] **Step 1: Run the full harness gate**
 
 Run: `./harness/init.sh`
 Expected: all green — harness file checks, `feature_list.json` validation, and `npx vitest run` passing.
 
-- [ ] **Step 2: Run the remaining project gates**
+- [x] **Step 2: Run the remaining project gates**
 
 Run:
 ```bash
@@ -407,7 +407,7 @@ npm run qa:lighthouse
 ```
 Expected: `astro check` 0 errors; Playwright sweep (65 pages) with zero console errors and parity green; content/link/Lighthouse gates green with untouched thresholds (`lighthouserc.json` not modified).
 
-- [ ] **Step 3: Final forbidden-string sweep**
+- [x] **Step 3: Final forbidden-string sweep**
 
 Run:
 ```bash
@@ -416,7 +416,7 @@ rg -n "hello@jordimp.net" src
 ```
 Expected: the first command matches **only** `scripts/qa-content.mjs` (the scanner pattern); no match under `src/`, `dist/` or `tests/`. The second shows the literal only in `src/config.ts` and the specs that intentionally pin it.
 
-- [ ] **Step 4: Append the traceability table**
+- [x] **Step 4: Append the traceability table**
 
 Append to `harness/progress/impl_contact-email.md`:
 ```markdown
@@ -431,7 +431,7 @@ Append to `harness/progress/impl_contact-email.md`:
 | R7 | src/config.spec.ts | src/config.ts, src/data/content.ts | done |
 ```
 
-- [ ] **Step 5: Completion gate and commit**
+- [x] **Step 5: Completion gate and commit**
 
 Run: `git diff tests/fixtures/parity.json` → restricted to the address lines. Confirm the R6 evidence line is present.
 ```bash
