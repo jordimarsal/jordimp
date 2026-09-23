@@ -36,11 +36,17 @@
 
 **Where it is implemented:** the site-copy implementation of this decision lives in the `front-desk-positioning` feature (Front Desk block and hall CTA). **This plan only records the decision and aligns the LinkedIn / GitHub / email surfaces to it.** Do not edit site copy here; do not create a second business narrative.
 
-- [ ] **Step 1: Confirm the decision is reflected in this plan's copy**
+- [x] **Step 1: Confirm the decision is reflected in this plan's copy**
   Check that the Primary offer, Secondary offer and the "one-person firm" line above are quoted exactly as written and that every later task orients to them.
 
-- [ ] **Step 2: Confirm the site-side owner**
+  > **Confirmed (2026-09-23):** copy quoted verbatim; site-side owner `front-desk-positioning`
+  > shipped (F11 `done`) and live — `/en/` H1 renders "One company. One engineer.
+  > Specs before code." (root `/` is the F7 splash redirect; check with `curl -sL` or `/en/`).
+
+- [x] **Step 2: Confirm the site-side owner**
   State in `harness/progress/current.md`: "Offer decision recorded; site copy implementation owned by `front-desk-positioning`; external surfaces aligned by this plan."
+
+  > **Recorded (2026-09-23):** the statement is in `harness/progress/current.md` (Log).
 
 ---
 
@@ -86,15 +92,15 @@ Expected: the records from Step 2/3 are returned. If empty, wait and re-run; do 
 > **Evidence 2026-09-23:** `dig +short MX jordimp.net` → `mx1.forwardemail.net`, `mx2.forwardemail.net`.
 > Provider: **forwardemail.net** (free custom-domain forwarding), Branch B.
 
-- [ ] **Step 5: Send and receive the test mail (the gate)**
+- [x] **Step 5: Send and receive the test mail (the gate)**
 
 From the personal Gmail, send a message to `hello@jordimp.net`. Expected: it arrives in `jordi.marsal@gmail.com` inbox within a few minutes. Then reply from Gmail and confirm the reply reaches a third address, proving the forward chain.
 
 Evidence to record: timestamp, subject, "arrived: yes".
 
-> **Open (2026-09-23):** forwarding is enabled (owner-confirmed) and MX/SPF resolve; the explicit
-> "test message received in Gmail" receipt is still pending the owner's confirmation before F14
-> may merge.
+> **Confirmed (2026-09-23):** test message received in the Gmail inbox — owner confirmation at
+> the F14 human gate ("Aprovat + correu rebut"); `MAILBOX VERIFIED 2026-09-23` recorded in
+> `harness/progress/impl_contact-email.md`. Forward chain proven by the delivered message.
 
 - [x] **Step 6: Check authentication records**
 
@@ -107,10 +113,13 @@ Expected: an SPF record is present if the provider offers one (`v=spf1 …`). If
 > **Evidence 2026-09-23:** `TXT` → `"forward-email=jordi.marsal@gmail.com"`; DMARC `_dmarc` →
 > `"v=DMARC1; p=quarantine; adkim=r; aspf=r; …"`.
 
-- [ ] **Step 7: Gates and handoff**
+- [x] **Step 7: Gates and handoff**
 
-- [ ] `contact-email` (site swap to `hello@jordimp.net`) is **not merged** until Step 5 is confirmed. Write this gate into `harness/progress/current.md`.
-- [ ] Only after Step 5: `hello@jordimp.net` becomes the contact email used in Task 3 (LinkedIn), Task 6 (GitHub README) and Task 8. Until then, those surfaces keep the existing contact.
+- [x] `contact-email` (site swap to `hello@jordimp.net`) is **not merged** until Step 5 is confirmed. Write this gate into `harness/progress/current.md`.
+  > **Honoured:** the receipt was confirmed at the gate BEFORE any merge — commit order proves
+  > it (evidence `18b74fc` precedes the first `src/` change `7b6c6cb`; F14 merged as `67a26c6`).
+- [x] Only after Step 5: `hello@jordimp.net` becomes the contact email used in Task 3 (LinkedIn), Task 6 (GitHub README) and Task 8. Until then, those surfaces keep the existing contact.
+  > **Handoff active (2026-09-23):** Tasks 2–8 may now use `hello@jordimp.net`.
 
 ---
 
@@ -247,6 +256,10 @@ gh repo view jordimarsal/jordimarsal --json name,visibility 2>/dev/null || echo 
 ```
 If `MISSING`, create it via GitHub → **New repository** → name `jordimarsal`, owner `jordimarsal`, **Public**, initialize with a README. The repo name must exactly equal the username for the README to render on the profile.
 
+> **Checked 2026-09-23:** `MISSING` — the profile repository does not exist yet
+> (`gh repo view jordimarsal/jordimarsal` fails). Creation pending owner's go-ahead
+> (it is a new **public** repo under the personal account).
+
 - [ ] **Step 2: Replace `README.md` with this exact content**
 
 ```markdown
@@ -272,6 +285,11 @@ Run:
 curl -s https://jordimp.net | grep -o 'Specs before code' | head -1
 ```
 Expected once `front-desk-positioning` is live: a match. If it is not yet live (site still says "Walk the floors."), record the mismatch in `harness/progress/current.md` and re-run this check after that feature ships; the profile README is the target copy.
+
+> **Verified 2026-09-23 (green):** `front-desk-positioning` is live and the H1 matches —
+> `<h1>One company. One engineer. <mark>Specs before code.</mark></h1>` on `/en/`.
+> Note: bare `https://jordimp.net` returns the F7 splash redirect with no H1 — use
+> `curl -sL https://jordimp.net` or check `/en/` directly.
 
 - [ ] **Step 4: Verify the rendered profile**
 
@@ -310,20 +328,40 @@ Reload `https://github.com/jordimarsal` logged out. The **Pinned** grid shows ex
 
 **Interfaces:** Consumes the three pinned repos from Task 7. The full README rewrites are owned by the `external-public-artifacts` plan; this task only **verifies the required structure exists** so the pin click does not lose the visitor (`MILLORES.md` §què li treu valor).
 
-- [ ] **Step 1: Check each pinned repo README has the three-part contract**
+- [x] **Step 1: Check each pinned repo README has the three-part contract**
 
 For each of the three repos, open its README on `github.com` and confirm the page states all three:
 1. **Problem** — what breaks without it (one line, e.g. CodebaseRAG: "RAG demos are easy; trustworthy RAG is not").
 2. **Rule pinned by tests** — the promise the tests enforce (e.g. Kafka: "3 consecutive DOWN → exactly 1 alert per episode"; CodebaseRAG: "CI fails if mean recall@5 < 0.409").
 3. **How to reproduce in 10 minutes** — a single documented command (e.g. `make eval`, `./demo.sh`) that a stranger can run from a fresh clone.
 
-- [ ] **Step 2: Record gaps for the sibling plan**
+> **Audit 2026-09-23** (READMEs fetched via `gh api repos/<owner>/<repo>/readme`):
+>
+> | Repo | Problem (1st screen) | Rule pinned by tests | Repro in 10 min |
+> |---|---|---|---|
+> | `codebaserag` | ❌ absent | ✅ "CI gate fails if `mean recall@5` drops below baseline" + baseline table `0.409` (README ~L23-33) | ✅ `uv run coderag eval --store memory` / `docker compose up` |
+> | `kafka-adapter-telemetry` | ❌ absent | ⚠️ present but deep ("3 consecutive DOWN → exactly 1 alert per episode", ~L120/L137 — not first screen) | ✅ `docker compose up -d --wait` + `./demo.sh` (~L41-48) |
+> | `harness-standard` | ❌ absent | ❌ absent | ⚠️ Quick start uses a local path (`/path/to/harness-standard/init.sh`); no fresh-clone one-command install yet (blocked on `external-public-artifacts` Task 1.2 `install.sh`) |
+
+- [x] **Step 2: Record gaps for the sibling plan**
 
 List every missing element per repo. Do **not** rewrite the READMEs here; hand the list to `external-public-artifacts`. If a repo has no reproducible-in-10-minutes command yet, that is a finding, not something to fake.
 
-- [ ] **Step 3: Verify**
+> **Gaps → `external-public-artifacts`:**
+> 1. `codebaserag`: add a one-line **problem** statement to the README top ("RAG demos are easy;
+>    trustworthy RAG is not." — MILLORES wording).
+> 2. `kafka-adapter-telemetry`: add the **problem** line to the top; pull the pinned alert rule
+>    ("3 consecutive DOWN → exactly 1 alert per episode") up into the first screen.
+> 3. `harness-standard`: add **problem** + **rule pinned by tests** lines; ship the fresh-clone
+>    bootstrap (`install.sh`, Task 1.2) and replace the local-path Quick start with
+>    `curl … install.sh | bash`.
+
+- [x] **Step 3: Verify**
 
 For each repo, the README top section shows the problem line and the pinned rule within the first screen; the reproduction command is copy-pasteable. Record each repo URL and what was present/absent.
+
+> **Result:** present/absent recorded in the Step 1 table above (audit date 2026-09-23);
+> re-verify after the sibling plan lands the fixes.
 
 ---
 
