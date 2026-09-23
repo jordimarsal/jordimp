@@ -5,7 +5,7 @@ import { FLOOR_ORDER, PAGES, PROJECTS } from '../src/data/content';
 const LOCALES = ['en', 'es', 'ca'] as const;
 type Locale = (typeof LOCALES)[number];
 
-const STATIC_ROUTES = ['', 'cv', 'projects'];
+const STATIC_ROUTES = ['', 'cv', 'projects', 'writing/rag-eval-gate'];
 const PROJECT_SLUGS = PROJECTS.map((p) => p.slug);
 const DEPT_SLUGS = FLOOR_ORDER.map((key) =>
   PAGES[key].route.replace(/^departments\//, '').replace(/\.html$/, '')
@@ -77,13 +77,13 @@ async function styleOf(page: Page, selector: string, property: string): Promise<
     .evaluate((el, prop) => getComputedStyle(el).getPropertyValue(prop), property);
 }
 
-test.describe('65-page sweep (R27, F10 R16)', () => {
+test.describe('68-page sweep (R27, F10 R16)', () => {
   test('sweep: every built page answers with the expected status and zero console errors', async ({
     page,
   }) => {
     test.setTimeout(300_000);
-    expect(SWEEP_TARGETS).toHaveLength(65);
-    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(65);
+    expect(SWEEP_TARGETS).toHaveLength(68);
+    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(68);
     expect(Object.keys(parity.routes).sort()).toEqual(
       localeRoutes().sort()
     );
@@ -180,7 +180,7 @@ test.describe('golden parity vs the distilled build oracle (R27, ADR-6)', () => 
     test(`parity: every ${locale} page matches the oracle fixture`, async ({ page }) => {
       test.setTimeout(300_000);
       const routes = localeRoutes().filter((route) => route.startsWith(`/${locale}/`));
-      expect(routes).toHaveLength(21);
+      expect(routes).toHaveLength(22);
 
       for (const route of routes) {
         const expected = parity.routes[route];
