@@ -339,9 +339,9 @@ describe('front-desk positioning (F11)', () => {
   });
 
   it('keeps the contact email unchanged in content and config (R13)', () => {
-    expect(SITE.email).toBe('jordi.marsal@gmail.com');
+    expect(SITE.email).toBe('hello@jordimp.net');
     expect(CONFIG_SITE.email).toBe(SITE.email);
-    expect(CONFIG_SITE.email).toBe('jordi.marsal@gmail.com');
+    expect(CONFIG_SITE.email).toBe('hello@jordimp.net');
   });
 });
 

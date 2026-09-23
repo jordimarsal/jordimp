@@ -73,7 +73,7 @@ describe('GET-ready llms.txt content (canonical data)', () => {
   });
 
   it('closes with the contact block', () => {
-    expect(text).toContain('- Email: jordi.marsal@gmail.com');
+    expect(text).toContain('- Email: hello@jordimp.net');
     expect(text).toContain('- [GitHub](https://github.com/jordimarsal)');
     expect(text).toContain('- [LinkedIn](https://www.linkedin.com/in/jordi-marsal-poy)');
     expect(text.trimEnd().endsWith('Full details in llms-full.txt.')).toBe(true);
