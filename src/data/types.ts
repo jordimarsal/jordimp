@@ -228,6 +228,7 @@ export interface TelemetryPageContent {
   readonly workTitle: L10n<string>;
   readonly oncallTitle: L10n<string>;
   readonly oncallBody: L10n<string>;
+  readonly demoTitle: L10n<string>;
 }
 
 export interface ToolingPageContent {
@@ -235,6 +236,8 @@ export interface ToolingPageContent {
   readonly workTitle: L10n<string>;
   readonly noteTitle: L10n<string>;
   readonly noteBody: L10n<string>;
+  readonly installTitle: L10n<string>;
+  readonly installCmd: string;
 }
 
 export interface OperationsPageContent {

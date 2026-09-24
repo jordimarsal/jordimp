@@ -1570,6 +1570,7 @@ export const TELEMETRY_PAGE: TelemetryPageContent = {
     es: 'La regla de alerta está fijada por tests: tres eventos DOWN consecutivos disparan exactamente una alerta por episodio — sin tormentas de pager y sin huecos silenciosos. El carril DLT con reintentos absorbe payloads duplicados o corruptos, así que un productor descontrolado nunca bloquea el pipeline. Y si el dashboard se queda en silencio, tómalo como una señal: el silencio también es telemetría.',
     ca: 'La regla d’alerta està fixada per tests: tres esdeveniments DOWN consecutius disparen exactament una alerta per episodi — sense tempestes de pager ni forats silenciosos. El carril DLT amb reintents absorbeix payloads duplicats o corruptes, així que un productor descontrolat no bloqueja mai el pipeline. I si el dashboard es queda en silenci, pren-ho com un senyal: el silenci també és telemetria.',
   },
+  demoTitle: { en: 'The 45-second demo', es: 'La demo de 45 segundos', ca: 'La demo de 45 segons' },
 };
 
 export const TOOLING_PAGE: ToolingPageContent = {
@@ -1597,6 +1598,8 @@ export const TOOLING_PAGE: ToolingPageContent = {
     es: 'Cada herramienta de esta planta hace una sola cosa y no se mete. El harness estandariza el proceso, no tu código; cada CLI automatiza exactamente un paso aburrido. Pequeño es una característica.',
     ca: 'Cada eina d’aquesta planta fa una sola cosa i no s’entremet. El harness estandarditza el procés, no el teu codi; cada CLI automatitza exactament un pas avorrit. Petit és una característica.',
   },
+  installTitle: { en: '1 cmd install', es: '1 comando instala', ca: '1 comanda instal·la' },
+  installCmd: 'curl -fsSL https://jordimp.net/harness/install.sh | bash -s -- --tool=claude',
 };
 
 export const OPERATIONS_PAGE: OperationsPageContent = {

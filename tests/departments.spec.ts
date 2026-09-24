@@ -127,6 +127,23 @@ test.describe('department pages (T8)', () => {
     await expect(page.locator('aside.oncall h3#tl-oncall')).toHaveText(TELEMETRY_PAGE.oncallTitle.en);
     await expect(page.locator('aside.oncall p')).toHaveText(TELEMETRY_PAGE.oncallBody.en);
 
+    await expect(page.locator('h2#tl-demo')).toHaveText(TELEMETRY_PAGE.demoTitle.en);
+    const demo = page.locator('figure.demofig');
+    const video = demo.locator('video');
+    await expect(video).toHaveAttribute('controls', '');
+    await expect(video).toHaveAttribute('preload', 'none');
+    await expect(video).toHaveAttribute('poster', '/media/kafka-telemetry-poster.jpg');
+    await expect(video).toHaveAttribute('width', '1280');
+    await expect(video).toHaveAttribute('height', '720');
+    await expect(demo.locator('video > source')).toHaveAttribute(
+      'src',
+      'https://github.com/jordimarsal/kafka-adapter-telemetry/releases/download/v0.1.0/dashboard.mp4',
+    );
+    await expect(demo.locator('video > source')).toHaveAttribute('type', 'video/mp4');
+    await expect(demo.locator('figcaption')).toHaveText(
+      '3×DOWN → 1 alert. Personal study of the Open Gateway telemetry problem — not Telefónica code, not production traffic.',
+    );
+
     await expect(page.locator('h2#tl-work')).toHaveText(TELEMETRY_PAGE.workTitle.en);
     await expect(page.locator('section .cards--single article.card')).toHaveCount(
       DEPTS[key].projects.length,
@@ -141,6 +158,17 @@ test.describe('department pages (T8)', () => {
 
     await expect(page.locator('aside.oncall h3#tl-note')).toHaveText(TOOLING_PAGE.noteTitle.en);
     await expect(page.locator('aside.oncall p')).toHaveText(TOOLING_PAGE.noteBody.en);
+
+    await expect(page.locator('h2#tl-install')).toHaveText(TOOLING_PAGE.installTitle.en);
+    await expect(page.locator('pre.cmdbox code')).toHaveText(TOOLING_PAGE.installCmd);
+    const toolingBadge = page.locator('section:has(#tl-install) a.harness-badge');
+    await expect(toolingBadge).toHaveText('Built with harness-standard');
+    await expect(toolingBadge).toHaveAttribute(
+      'href',
+      'https://github.com/jordimarsal/harness-standard',
+    );
+    await expect(toolingBadge).toHaveAttribute('target', '_blank');
+    await expect(toolingBadge).toHaveAttribute('rel', 'noopener noreferrer');
 
     await expect(page.locator('h2#tl-bench')).toHaveText(TOOLING_PAGE.workTitle.en);
     const cards = page.locator('section .cards:not(.cards--single) > article.card');
@@ -360,6 +388,19 @@ test.describe('department pages (T8)', () => {
     const visible = ((await plaque.locator('.ite-plaque__text').textContent()) ?? '').trim();
     expect(visible).toBe(plaqueText('en', parseQuality(qualityJson).ok ? parseQuality(qualityJson).value : null));
     expect(visible).toMatch(/· 2026-\d{2}-\d{2} · /);
+  });
+
+  test('shows the harness badge in the footer next to the colophon', async ({ page }) => {
+    await page.goto('/en/');
+    const badge = page.locator('.footer-desk .colo a.harness-badge');
+    await expect(badge).toHaveCount(1);
+    await expect(badge).toHaveText('Built with harness-standard');
+    await expect(badge).toHaveAttribute(
+      'href',
+      'https://github.com/jordimarsal/harness-standard',
+    );
+    await expect(badge).toHaveAttribute('target', '_blank');
+    await expect(badge).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
   test('renders all 21 department pages across the three locales', async ({ page }) => {

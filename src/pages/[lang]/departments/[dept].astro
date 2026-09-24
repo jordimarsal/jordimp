@@ -131,6 +131,20 @@ const trail = [
           <h3 id="tl-oncall">{TELEMETRY_PAGE.oncallTitle[lang]}</h3>
           <p>{TELEMETRY_PAGE.oncallBody[lang]}</p>
         </aside>
+        <section class="section" aria-labelledby="tl-demo">
+          <h2 id="tl-demo" class="section-title">{TELEMETRY_PAGE.demoTitle[lang]}</h2>
+          <figure class="demofig">
+            <video
+              controls
+              preload="none"
+              poster="/media/kafka-telemetry-poster.jpg"
+              width="1280"
+              height="720">
+              <source src="https://github.com/jordimarsal/kafka-adapter-telemetry/releases/download/v0.1.0/dashboard.mp4" type="video/mp4">
+            </video>
+            <figcaption>3×DOWN → 1 alert. Personal study of the Open Gateway telemetry problem — not Telefónica code, not production traffic.</figcaption>
+          </figure>
+        </section>
         <section class="section" aria-labelledby="tl-work">
           <h2 id="tl-work" class="section-title">{TELEMETRY_PAGE.workTitle[lang]}</h2>
           <div class="cards cards--single">
@@ -147,6 +161,17 @@ const trail = [
           <h3 id="tl-note">{TOOLING_PAGE.noteTitle[lang]}</h3>
           <p>{TOOLING_PAGE.noteBody[lang]}</p>
         </aside>
+        <section class="section" aria-labelledby="tl-install">
+          <h2 id="tl-install" class="section-title">{TOOLING_PAGE.installTitle[lang]}</h2>
+          <pre class="cmdbox"><code>{TOOLING_PAGE.installCmd}</code></pre>
+          <a
+            class="harness-badge"
+            href="https://github.com/jordimarsal/harness-standard"
+            target="_blank"
+            rel="noopener noreferrer">
+            Built with harness-standard
+          </a>
+        </section>
         <section class="section" aria-labelledby="tl-bench">
           <h2 id="tl-bench" class="section-title">{TOOLING_PAGE.workTitle[lang]}</h2>
           <div class="cards">

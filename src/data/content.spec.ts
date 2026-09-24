@@ -20,6 +20,7 @@ import {
   RESEARCH_PAGE,
   SITE,
   SKILLS,
+  TELEMETRY_PAGE,
   TICKER,
   TIER_LABELS,
   TIER_ORDER,
@@ -601,5 +602,17 @@ describe('article data (rag-eval-article)', () => {
   it('registers the essay route in PAGES under the departments nav', () => {
     expect(PAGES['article-rag-eval-gate'].route).toBe('writing/rag-eval-gate.html');
     expect(PAGES['article-rag-eval-gate'].nav).toBe('departments');
+  });
+});
+
+describe('harness promo on F1/F2 (install cmd, demo, badge)', () => {
+  it('ships the literal one-command install on the tooling floor', () => {
+    expect(TOOLING_PAGE.installCmd).toBe(
+      'curl -fsSL https://jordimp.net/harness/install.sh | bash -s -- --tool=claude',
+    );
+    for (const lang of LOCALES) {
+      expect(TOOLING_PAGE.installTitle[lang].trim(), lang).not.toBe('');
+      expect(TELEMETRY_PAGE.demoTitle[lang].trim(), lang).not.toBe('');
+    }
   });
 });
