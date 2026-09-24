@@ -90,11 +90,11 @@ test.describe('SEO head emission on representative routes (T11, R17)', () => {
       expect(head.og['og:url']).toBe(prod(lang, route));
       expect(head.og['og:site_name']).toBe('JORDIMP & CO.');
       expect(head.og['og:locale']).toBe(OG_LOCALE[lang]);
-      expect(head.og['og:image']).toBe('https://jordimp.net/og.png');
+      expect(head.og['og:image']).toBe('https://jordimp.net/og-building.png');
 
       expect(head.twitter['twitter:card']).toBe('summary_large_image');
       expect(head.twitter['twitter:title']).toBe(head.title);
-      expect(head.twitter['twitter:image']).toBe('https://jordimp.net/og.png');
+      expect(head.twitter['twitter:image']).toBe('https://jordimp.net/og-building.png');
 
       expect(head.jsonLdTypes).toContain('Person');
       expect(head.jsonLdTypes).toContain('BreadcrumbList');

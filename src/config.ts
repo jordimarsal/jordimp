@@ -12,5 +12,5 @@ export const SITE = {
   brand: 'JORDIMP & CO.',
   est: '2017',
   city: 'Barcelona',
-  ogImage: 'https://jordimp.net/og.png',
+  ogImage: 'https://jordimp.net/og-building.png',
 } as const;

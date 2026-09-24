@@ -1135,12 +1135,12 @@ export const PAGES: Record<string, PageMeta> = {
     route: 'index.html',
     nav: 'home',
     title: {
-      en: 'Jordimp & Co. — Jordi Marçal Poy, Senior Backend Engineer',
+      en: 'Jordimp & Co. — systems you can audit',
       es: 'Jordimp & Co. — Jordi Marçal Poy, Ingeniero Backend Senior',
       ca: 'Jordimp & Co. — Jordi Marçal Poy, Enginyer Backend Sènior',
     },
     description: {
-      en: 'Jordimp & Co. is the working name of one engineer: backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since 2017. Currently inside a telco platform team. Walk-ins: roles, repos, or a short spec-first engagement.',
+      en: 'One engineer. Backend, event pipelines, applied AI with evals. Est. 2017, Barcelona.',
       es: 'Jordimp & Co. es el nombre de trabajo de un solo ingeniero: sistemas backend, pipelines de eventos e IA aplicada, diseñados, construidos y auditados por el mismo par de manos desde 2017. Ahora, dentro de un equipo de plataforma telco. Entrada libre: roles, repos o un encargo corto con spec primero.',
       ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer: sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des del 2017. Ara, dins d’un equip de plataforma telco. Entrada lliure: rols, repos o un encàrrec curt amb spec primer.',
     },
