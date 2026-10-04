@@ -1,4 +1,4 @@
-import { readdirSync, statSync, writeFileSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { chromium } from '@playwright/test';
@@ -6,6 +6,7 @@ import { LOCALES, FLOOR_ORDER } from '../src/data/content.ts';
 
 const DIST = fileURLToPath(new URL('../dist', import.meta.url));
 const FIXTURE = new URL('../tests/fixtures/parity.json', import.meta.url).pathname;
+const CHECK = process.argv.includes('--check');
 
 const canon = (text) => text.replace(/\s+/g, ' ').trim();
 
@@ -114,5 +115,27 @@ for (const locale of LOCALES) {
 }
 
 await browser.close();
-writeFileSync(FIXTURE, `${JSON.stringify(fixture, null, 2)}\n`);
+const serialized = `${JSON.stringify(fixture, null, 2)}\n`;
+
+if (CHECK) {
+  let existing = null;
+  try {
+    existing = JSON.parse(readFileSync(FIXTURE, 'utf8'));
+  } catch {
+    // unreadable/unparsable fixture counts as maximally stale
+  }
+  const drifted = ['splash', 'notFound', 'routes', 'plates', 'flags'].filter(
+    (section) => JSON.stringify(existing?.[section] ?? null) !== JSON.stringify(fixture[section])
+  );
+  if (drifted.length > 0) {
+    console.error('✗ parity oracle is stale: tests/fixtures/parity.json does not match dist/');
+    console.error(`  drifted sections: ${drifted.join(', ')}`);
+    console.error('  fix: npm run build && npm run distill:parity, then commit the fixture');
+    process.exit(1);
+  }
+  console.log(`parity oracle up to date (${routeEntries.length} routes)`);
+  process.exit(0);
+}
+
+writeFileSync(FIXTURE, serialized);
 console.log(`distilled ${routeEntries.length} routes into tests/fixtures/parity.json`);
