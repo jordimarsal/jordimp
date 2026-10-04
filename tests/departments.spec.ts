@@ -162,7 +162,12 @@ test.describe('department pages (T8)', () => {
     await expect(page.locator('h2#tl-install')).toHaveText(TOOLING_PAGE.installTitle.en);
     await expect(page.locator('pre.cmdbox code')).toHaveText(TOOLING_PAGE.installCmd);
     const toolingBadge = page.locator('section:has(#tl-install) a.harness-badge');
-    await expect(toolingBadge).toHaveText('Built with harness-standard');
+    await expect(toolingBadge.locator('img').first()).toHaveAttribute(
+      'alt',
+      'Built with harness-standard',
+    );
+    await expect(toolingBadge.locator('img').first()).toBeVisible();
+    await expect(toolingBadge.locator('img').nth(1)).toBeHidden();
     await expect(toolingBadge).toHaveAttribute(
       'href',
       'https://github.com/jordimarsal/harness-standard',
@@ -394,7 +399,12 @@ test.describe('department pages (T8)', () => {
     await page.goto('/en/');
     const badge = page.locator('.footer-desk .colo a.harness-badge');
     await expect(badge).toHaveCount(1);
-    await expect(badge).toHaveText('Built with harness-standard');
+    await expect(badge.locator('img').first()).toHaveAttribute(
+      'alt',
+      'Built with harness-standard',
+    );
+    await expect(badge.locator('img').first()).toBeVisible();
+    await expect(badge.locator('img').nth(1)).toBeHidden();
     await expect(badge).toHaveAttribute(
       'href',
       'https://github.com/jordimarsal/harness-standard',

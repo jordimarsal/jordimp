@@ -2735,17 +2735,25 @@ html[data-night='1'] .btn--y {
 
 .harness-badge {
   display: inline-block;
-  font-family: var(--mono);
-  font-variant: small-caps;
-  letter-spacing: 0.08em;
-  font-size: 0.75rem;
-  border: 1px solid currentColor;
-  padding: 0.25rem 0.5rem;
-  text-decoration: none;
-  color: var(--ink2);
+  line-height: 0;
   align-self: center;
+  border-radius: 3px;
+  transition: opacity 0.15s ease;
 }
 
 .harness-badge:hover {
-  color: var(--ink);
+  opacity: 0.85;
+}
+
+.harness-badge img {
+  display: block;
+}
+
+.harness-badge img.harness-badge__night,
+html[data-night='1'] img.harness-badge__day {
+  display: none;
+}
+
+html[data-night='1'] img.harness-badge__night {
+  display: block;
 }
