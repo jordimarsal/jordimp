@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-09-28T09:52:06.168Z",
-  "commit": "2a271d0b68e9daf4a050061d1ee8d8bfc2dffd21",
+  "generatedAt": "2026-10-05T10:30:42.703Z",
+  "commit": "a4df78a6c7673ec427912bf02268e581d86e8d9e",
   "lighthouse": {
     "performance": 1,
     "accessibility": 1,
-    "bestPractices": 1,
+    "bestPractices": 0.96,
     "seo": 1
   },
   "history": [
@@ -32,6 +32,15 @@
         "performance": 1,
         "accessibility": 1,
         "bestPractices": 1,
+        "seo": 1
+      }
+    },
+    {
+      "date": "2026-10-05",
+      "scores": {
+        "performance": 1,
+        "accessibility": 1,
+        "bestPractices": 0.96,
         "seo": 1
       }
     }
