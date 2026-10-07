@@ -108,7 +108,7 @@ const repo = repoStats();
 const generatedAt = new Date().toISOString();
 const commit = execFileSync('git', ['rev-parse', 'HEAD'], {
   encoding: 'utf8',
-  env: { ...process.env, PATH: '/usr/local/bin:/usr/bin:/bin' },
+  env: { PATH: '/usr/local/bin:/usr/bin:/bin' },
 }).trim();
 
 let previousHistory = [];

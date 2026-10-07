@@ -55,6 +55,15 @@ import { SITE } from '../config';
 
 const SITE_URL = SITE.url;
 
+const EN_HOME = `${SITE_URL}/en/`;
+const ES_HOME = `${SITE_URL}/es/`;
+const CA_HOME = `${SITE_URL}/ca/`;
+const PROJECTS_URL = `${SITE_URL}/en/projects/`;
+const CV_URL = `${SITE_URL}/en/cv/`;
+const CASE_SLUG_URL = `${SITE_URL}/en/projects/<slug>/`;
+
+const enUrl = (path: string): string => `${SITE_URL}/en/${path}`;
+
 function mdLink(label: string, url: string): string {
   return `[${label}](${url})`;
 }
@@ -69,19 +78,17 @@ function departmentKeyPages(data: LlmsData): string {
   return data.departments
     .map((dept) => {
       const label = `${dept.code} ${dept.name}`;
-      const url = `${SITE_URL}/en/${dept.route}`;
-      return `- ${mdLink(label, url)}`;
+      return `- ${mdLink(label, enUrl(dept.route))}`;
     })
     .join('\n');
 }
 
 function casePagesLine(data: LlmsData): string {
-  const caseUrl = `${SITE_URL}/en/projects/<slug>/`;
-  return `- ${mdLink('Project case pages', caseUrl)} — one per project, ${data.projects.length} total`;
+  return `- ${mdLink('Project case pages', CASE_SLUG_URL)} — one per project, ${data.projects.length} total`;
 }
 
 function articleLink(data: LlmsData, label: string): string {
-  return mdLink(label, `${SITE_URL}/en/${data.article.route}`);
+  return mdLink(label, enUrl(data.article.route));
 }
 
 function articleLine(data: LlmsData): string {
@@ -94,11 +101,6 @@ function articleSectionLine(data: LlmsData): string {
 }
 
 export function buildLlmsTxt(data: LlmsData): string {
-  const homeUrl = `${SITE_URL}/en/`;
-  const esUrl = `${SITE_URL}/es/`;
-  const caUrl = `${SITE_URL}/ca/`;
-  const projectsUrl = `${SITE_URL}/en/projects/`;
-  const cvUrl = `${SITE_URL}/en/cv/`;
   return `# Jordimp & Co.
 
 > ${data.person} — ${data.role} (${data.tagline}). A one-person engineering firm: backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since ${data.est}. ${data.city}. Business in English, Español or Català.
@@ -109,9 +111,9 @@ ${departmentsList(data)}
 
 ## Key pages
 
-- ${mdLink('Home', homeUrl)} (also ${mdLink('Español', esUrl)}, ${mdLink('Català', caUrl)})
-- ${mdLink('Projects', projectsUrl)}
-- ${mdLink('CV', cvUrl)}
+- ${mdLink('Home', EN_HOME)} (also ${mdLink('Español', ES_HOME)}, ${mdLink('Català', CA_HOME)})
+- ${mdLink('Projects', PROJECTS_URL)}
+- ${mdLink('CV', CV_URL)}
 ${articleLine(data)}
 ${departmentKeyPages(data)}
 ${casePagesLine(data)}
@@ -168,25 +170,19 @@ function principles(data: LlmsData): string {
 function caseExampleLink(data: LlmsData): string {
   const example = data.projects.find((project) => project.slug === 'codebaserag');
   const label = example ? example.name : 'codebaserag';
-  return mdLink(label, `${SITE_URL}/en/projects/codebaserag/`);
+  return mdLink(label, enUrl('projects/codebaserag/'));
 }
 
 function pagesSection(data: LlmsData): string {
-  const homeUrl = `${SITE_URL}/en/`;
-  const esUrl = `${SITE_URL}/es/`;
-  const caUrl = `${SITE_URL}/ca/`;
-  const projectsUrl = `${SITE_URL}/en/projects/`;
-  const cvUrl = `${SITE_URL}/en/cv/`;
-  const caseUrl = `${SITE_URL}/en/projects/<slug>/`;
   return [
-    `- ${mdLink('Home', homeUrl)} · ${mdLink('Español', esUrl)} · ${mdLink('Català', caUrl)} (home, trilingual)`,
-    `- ${mdLink('Projects', projectsUrl)} — all projects with stack filter`,
-    `- ${mdLink('CV', cvUrl)} — CV summary with PDF downloads`,
+    `- ${mdLink('Home', EN_HOME)} · ${mdLink('Español', ES_HOME)} · ${mdLink('Català', CA_HOME)} (home, trilingual)`,
+    `- ${mdLink('Projects', PROJECTS_URL)} — all projects with stack filter`,
+    `- ${mdLink('CV', CV_URL)} — CV summary with PDF downloads`,
     ...data.departments.map((dept) => {
-      const url = `${SITE_URL}/en/${dept.route}`;
+      const url = enUrl(dept.route);
       return `- ${mdLink(deptPageSuffix(dept), url)}`;
     }),
-    `- ${mdLink('Case pages', caseUrl)} — one case page per project (${data.projects.length}), e.g. ${caseExampleLink(data)}`,
+    `- ${mdLink('Case pages', CASE_SLUG_URL)} — one case page per project (${data.projects.length}), e.g. ${caseExampleLink(data)}`,
   ].join('\n');
 }
 

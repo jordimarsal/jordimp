@@ -30,8 +30,8 @@ export function initFilter(): void {
     reset?.setAttribute('aria-pressed', none ? 'true' : 'false');
     let visible = 0;
     cards.forEach((card) => {
-      const stacks = (card.dataset.stack || '').split('|');
-      const show = none || active.some((a) => stacks.includes(a));
+      const stacks = new Set((card.dataset.stack || '').split('|'));
+      const show = none || active.some((a) => stacks.has(a));
       card.hidden = !show;
       if (show) visible += 1;
     });

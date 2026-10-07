@@ -36,11 +36,11 @@ export function initCopy(): void {
         reset();
       };
 
-      const write = navigator.clipboard?.writeText(text);
-      if (write) {
-        write.then(succeed, failHard);
-      } else {
+      const write = navigator.clipboard?.writeText(text) ?? null;
+      if (write === null) {
         failHard();
+      } else {
+        write.then(succeed, failHard);
       }
     });
   });
