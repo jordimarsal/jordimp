@@ -8,8 +8,10 @@ export function shiftLogHTML(lang: Locale): string {
       ? ` <span class="shiftlog__now"><span class="dot dot--live" aria-hidden="true"></span>${esc(OPERATIONS_PAGE.onShift[lang])}</span>`
       : '';
     const role = `<p class="shiftlog__role">${esc(e.role[lang])}</p>`;
-    const points = `<ul class="shiftlog__points">${e.points[lang].map((pt) => `<li>${esc(pt)}</li>`).join('')}</ul>`;
-    const chips = `<div class="chiprow">${e.stack.map((s) => `<span class="chip3">${esc(s)}</span>`).join('')}</div>`;
+    const pointItems = e.points[lang].map((pt) => `<li>${esc(pt)}</li>`).join('');
+    const points = `<ul class="shiftlog__points">${pointItems}</ul>`;
+    const chipItems = e.stack.map((s) => `<span class="chip3">${esc(s)}</span>`).join('');
+    const chips = `<div class="chiprow">${chipItems}</div>`;
     return `<div class="ledger__row">
   <span class="ledger__per mono"><i>${esc(e.period)}</i></span>
   <div class="ledger__body">
@@ -34,7 +36,9 @@ export function ledgerHTML(lang: Locale): string {
 }
 
 export function skillGridHTML(lang: Locale): string {
-  return SKILLS.map(
-    (g) => `<div class="skillcard"><h3>${esc(g.group[lang])}</h3><ul>${g.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>`
-  ).join('\n  ');
+  const cards = SKILLS.map((g) => {
+    const items = g.items.map((i) => `<li>${esc(i)}</li>`).join('');
+    return `<div class="skillcard"><h3>${esc(g.group[lang])}</h3><ul>${items}</ul></div>`;
+  });
+  return cards.join('\n  ');
 }

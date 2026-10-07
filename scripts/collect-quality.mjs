@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 import { CATEGORY_KEYS, mergeHistory } from '../src/lib/quality.ts';
 
@@ -106,7 +106,10 @@ const unit = vitestTotals();
 const e2e = playwrightTotals();
 const repo = repoStats();
 const generatedAt = new Date().toISOString();
-const commit = execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
+const commit = execFileSync('git', ['rev-parse', 'HEAD'], {
+  encoding: 'utf8',
+  env: { ...process.env, PATH: '/usr/local/bin:/usr/bin:/bin' },
+}).trim();
 
 let previousHistory = [];
 if (existsSync(OUT)) {

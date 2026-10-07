@@ -3,12 +3,14 @@ import { LOCALES, type Locale } from './i18n';
 
 export type BreadcrumbItem = { readonly name: string; readonly path: string };
 
+export type OgLocale = 'en_US' | 'es_ES' | 'ca_ES';
+
 export function siteUrl(lang: Locale, path?: string): string {
   return `${SITE.url}/${lang}/${path ?? ''}`;
 }
 
-export function ogLocale(lang: Locale): 'en_US' | 'es_ES' | 'ca_ES' {
-  const ogLocales: Record<Locale, 'en_US' | 'es_ES' | 'ca_ES'> = {
+export function ogLocale(lang: Locale): OgLocale {
+  const ogLocales: Record<Locale, OgLocale> = {
     en: 'en_US',
     es: 'es_ES',
     ca: 'ca_ES',
@@ -16,7 +18,7 @@ export function ogLocale(lang: Locale): 'en_US' | 'es_ES' | 'ca_ES' {
   return ogLocales[lang];
 }
 
-export function ogLocaleAlternates(lang: Locale): Array<'en_US' | 'es_ES' | 'ca_ES'> {
+export function ogLocaleAlternates(lang: Locale): OgLocale[] {
   return LOCALES.filter((locale) => locale !== lang).map(ogLocale);
 }
 
@@ -68,9 +70,9 @@ export function breadcrumbJsonLd(
 
 export function jsonLdScript(value: object): string {
   return JSON.stringify(value)
-    .replaceAll('<', '\\u003c')
-    .replaceAll('\u2028', '\\u2028')
-    .replaceAll('\u2029', '\\u2029');
+    .replaceAll('<', String.raw`\u003c`)
+    .replaceAll('\u2028', String.raw`\u2028`)
+    .replaceAll('\u2029', String.raw`\u2029`);
 }
 
 export interface ArticleInput {

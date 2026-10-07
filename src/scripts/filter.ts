@@ -13,25 +13,25 @@ export function initFilter(): void {
   const syncStatus = (visible: number): void => {
     if (!status) return;
     if (visible === 0) {
-      status.textContent = status.getAttribute('data-empty-label') || '';
-      status.setAttribute('data-empty', 'true');
+      status.textContent = status.dataset.emptyLabel || '';
+      status.dataset.empty = 'true';
       return;
     }
-    const label = visible === 1 ? status.getAttribute('data-one-label') : status.getAttribute('data-count-label');
+    const label = visible === 1 ? status.dataset.oneLabel : status.dataset.countLabel;
     status.textContent = (label || '').replace('{n}', String(visible));
-    status.removeAttribute('data-empty');
+    delete status.dataset.empty;
   };
 
   const apply = (): void => {
     const active = buttons
       .filter((btn) => btn.getAttribute('aria-pressed') === 'true')
-      .map((btn) => btn.getAttribute('data-stack') || '');
+      .map((btn) => btn.dataset.stack || '');
     const none = active.length === 0;
     reset?.setAttribute('aria-pressed', none ? 'true' : 'false');
     let visible = 0;
     cards.forEach((card) => {
-      const stacks = (card.getAttribute('data-stack') || '').split('|');
-      const show = none || active.some((a) => stacks.indexOf(a) !== -1);
+      const stacks = (card.dataset.stack || '').split('|');
+      const show = none || active.some((a) => stacks.includes(a));
       card.hidden = !show;
       if (show) visible += 1;
     });

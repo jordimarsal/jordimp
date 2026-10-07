@@ -7,29 +7,11 @@ export function initCopy(): void {
     if (status) status.textContent = message;
   };
 
-  const fallbackCopy = (text: string): boolean => {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.setAttribute('readonly', '');
-    ta.style.position = 'fixed';
-    ta.style.left = '-9999px';
-    document.body.appendChild(ta);
-    ta.select();
-    let ok = false;
-    try {
-      ok = document.execCommand('copy');
-    } catch {
-      ok = false;
-    }
-    document.body.removeChild(ta);
-    return ok;
-  };
-
   buttons.forEach((btn) => {
     btn.addEventListener('click', () => {
-      const text = btn.getAttribute('data-copy') || '';
-      const done = btn.getAttribute('data-copied') || 'COPIED';
-      const fail = btn.getAttribute('data-fail') || 'COPY FAILED';
+      const text = btn.dataset.copy || '';
+      const done = btn.dataset.copied || 'COPIED';
+      const fail = btn.dataset.fail || 'COPY FAILED';
       const original = btn.textContent || '';
       let timer: ReturnType<typeof setTimeout> | null = null;
 
@@ -54,16 +36,9 @@ export function initCopy(): void {
         reset();
       };
 
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(succeed, () => {
-          if (fallbackCopy(text)) {
-            succeed();
-          } else {
-            failHard();
-          }
-        });
-      } else if (fallbackCopy(text)) {
-        succeed();
+      const write = navigator.clipboard?.writeText(text);
+      if (write) {
+        write.then(succeed, failHard);
       } else {
         failHard();
       }

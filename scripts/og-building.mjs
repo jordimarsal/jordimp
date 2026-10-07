@@ -14,7 +14,9 @@ const page = await browser.newPage({
 });
 await page.goto(BASE);
 await page.waitForTimeout(400);
-await page.evaluate(() => document.documentElement.setAttribute('data-night', '1'));
+await page.evaluate(() => {
+  document.documentElement.dataset.night = '1';
+});
 await page.waitForTimeout(800);
 await page.evaluate(() => {
   const sky = document.querySelector('.sky');

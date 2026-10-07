@@ -87,6 +87,8 @@ function isOffHost(href) {
   return webScheme && !SITE_HOSTS.has(resolved.hostname.toLowerCase());
 }
 
+const byCodePoint = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+
 function extractOffHostUrls(files) {
   const urls = new Set();
   for (const file of files) {
@@ -95,7 +97,7 @@ function extractOffHostUrls(files) {
       if (isOffHost(match[1])) urls.add(match[1]);
     }
   }
-  return [...urls].sort();
+  return [...urls].sort(byCodePoint);
 }
 
 async function checkUrl(url) {

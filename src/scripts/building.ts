@@ -7,7 +7,7 @@ export function initBuilding(): void {
   const building = document.querySelector('.building-stack');
   if (!building) return;
 
-  const reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
   const floors = Array.from(building.querySelectorAll<HTMLElement>('[data-floor]'));
   const panels = Array.from(building.querySelectorAll('.dept-panel'));
 
@@ -47,7 +47,7 @@ export function initBuilding(): void {
 
   floors.forEach((btn) => {
     btn.addEventListener('click', () => {
-      openFloor(btn.getAttribute('data-floor'));
+      openFloor(btn.dataset.floor ?? null);
     });
   });
 

@@ -23,7 +23,9 @@ export const FONT_FILES: readonly FontFile[] = [
   { family: 'Space Mono', weight: '700', file: 'space-mono-700-latin-ext.woff2', unicodeRange: LATIN_EXT_RANGE },
 ];
 
-const fontFace = ({ family, weight, file, unicodeRange }: FontFile): string =>
-  `@font-face{font-family:'${family}';font-style:normal;font-weight:${weight};font-display:swap;src:url('${assetPath(`fonts/${file}`)}') format('woff2');unicode-range:${unicodeRange};}`;
+const fontFace = ({ family, weight, file, unicodeRange }: FontFile): string => {
+  const url = assetPath(`fonts/${file}`);
+  return `@font-face{font-family:'${family}';font-style:normal;font-weight:${weight};font-display:swap;src:url('${url}') format('woff2');unicode-range:${unicodeRange};}`;
+};
 
 export const FONT_FACE_CSS: string = FONT_FILES.map(fontFace).join('\n');

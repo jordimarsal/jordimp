@@ -89,7 +89,7 @@ export function mergeHistory(
   cap: number = HISTORY_CAP,
 ): readonly QualityHistoryEntry[] {
   const merged = previous.filter((e) => e.date !== entry.date).concat(entry);
-  merged.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  merged.sort((a, b) => a.date.localeCompare(b.date));
   return merged.slice(Math.max(0, merged.length - cap));
 }
 
@@ -215,39 +215,52 @@ function parseRepo(raw: unknown): Field<QualityReport['repo']> {
   };
 }
 
+function parseCommit(raw: Record<string, unknown>): Field<string> {
+  if (raw.commit === undefined) return { ok: false, result: missing('commit') };
+  const commit = raw.commit;
+  if (typeof commit !== 'string' || commit.trim() === '') return { ok: false, result: missing('commit') };
+  return { ok: true, value: commit };
+}
+
+function parseHistory(raw: Record<string, unknown>): Field<QualityHistoryEntry[]> {
+  if (raw.history === undefined) return { ok: false, result: missing('history') };
+  if (!Array.isArray(raw.history)) return { ok: false, result: badShape('history') };
+  if (raw.history.length > HISTORY_CAP) return { ok: false, result: badHistory('exceeds-cap') };
+  const history: QualityHistoryEntry[] = [];
+  for (const entry of raw.history) {
+    if (!isRecord(entry)) return { ok: false, result: badShape('history[]') };
+    const date = parseIsoDate(entry, 'date', 'history.date');
+    if (!date.ok) return { ok: false, result: date.result };
+    const scores = parseScores(entry.scores, 'history.scores');
+    if (!scores.ok) return { ok: false, result: scores.result };
+    history.push({ date: date.value, scores: scores.value });
+  }
+  for (let i = 1; i < history.length; i++) {
+    if (history[i - 1].date > history[i].date) return { ok: false, result: badHistory('dates-not-ascending') };
+  }
+  return { ok: true, value: history };
+}
+
 export function parseQuality(raw: unknown): QualityResult {
   if (!isRecord(raw)) return badShape('root');
 
   const generatedAt = parseIsoDate(raw, 'generatedAt', 'generatedAt');
   if (!generatedAt.ok) return generatedAt.result;
 
-  if (raw.commit === undefined) return missing('commit');
-  const commit = raw.commit;
-  if (typeof commit !== 'string' || commit.trim() === '') return missing('commit');
+  const commit = parseCommit(raw);
+  if (!commit.ok) return commit.result;
 
   if (raw.lighthouse === undefined) return missing('lighthouse');
   const lighthouse = parseScores(raw.lighthouse, 'lighthouse');
   if (!lighthouse.ok) return lighthouse.result;
 
-  if (raw.history === undefined) return missing('history');
-  if (!Array.isArray(raw.history)) return badShape('history');
-  if (raw.history.length > HISTORY_CAP) return badHistory('exceeds-cap');
-  const history: QualityHistoryEntry[] = [];
-  for (const entry of raw.history) {
-    if (!isRecord(entry)) return badShape('history[]');
-    const date = parseIsoDate(entry, 'date', 'history.date');
-    if (!date.ok) return date.result;
-    const scores = parseScores(entry.scores, 'history.scores');
-    if (!scores.ok) return scores.result;
-    history.push({ date: date.value, scores: scores.value });
-  }
-  for (let i = 1; i < history.length; i++) {
-    if (history[i - 1].date > history[i].date) return badHistory('dates-not-ascending');
-  }
+  const history = parseHistory(raw);
+  if (!history.ok) return history.result;
 
   if (raw.tests === undefined) return missing('tests');
   const tests = parseTests(raw.tests);
   if (!tests.ok) return tests.result;
+
   if (raw.repo === undefined) return missing('repo');
   const repo = parseRepo(raw.repo);
   if (!repo.ok) return repo.result;
@@ -256,9 +269,9 @@ export function parseQuality(raw: unknown): QualityResult {
     ok: true,
     value: {
       generatedAt: generatedAt.value,
-      commit,
+      commit: commit.value,
       lighthouse: lighthouse.value,
-      history,
+      history: history.value,
       tests: tests.value,
       repo: repo.value,
     },

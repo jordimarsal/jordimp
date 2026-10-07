@@ -1,9 +1,15 @@
 import type { Locale } from './i18n';
 
+function trimTrailingSlashes(value: string): string {
+  let trimmed = value;
+  while (trimmed.endsWith('/')) trimmed = trimmed.slice(0, -1);
+  return trimmed;
+}
+
 function prefixed(path: string): string {
   const base = import.meta.env.BASE_URL;
   if (base === '/' || base === '') return `/${path}`;
-  return `${base.replace(/\/+$/, '')}/${path}`;
+  return `${trimTrailingSlashes(base)}/${path}`;
 }
 
 export function srcPath(lang: Locale, route: string): string {

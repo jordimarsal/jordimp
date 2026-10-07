@@ -67,12 +67,17 @@ function departmentsList(data: LlmsData): string {
 
 function departmentKeyPages(data: LlmsData): string {
   return data.departments
-    .map((dept) => `- ${mdLink(`${dept.code} ${dept.name}`, `${SITE_URL}/en/${dept.route}`)}`)
+    .map((dept) => {
+      const label = `${dept.code} ${dept.name}`;
+      const url = `${SITE_URL}/en/${dept.route}`;
+      return `- ${mdLink(label, url)}`;
+    })
     .join('\n');
 }
 
 function casePagesLine(data: LlmsData): string {
-  return `- ${mdLink('Project case pages', `${SITE_URL}/en/projects/<slug>/`)} — one per project, ${data.projects.length} total`;
+  const caseUrl = `${SITE_URL}/en/projects/<slug>/`;
+  return `- ${mdLink('Project case pages', caseUrl)} — one per project, ${data.projects.length} total`;
 }
 
 function articleLink(data: LlmsData, label: string): string {
@@ -80,7 +85,8 @@ function articleLink(data: LlmsData, label: string): string {
 }
 
 function articleLine(data: LlmsData): string {
-  return `- ${articleLink(data, `Writing: ${data.article.title}`)} — ${data.article.summary}`;
+  const label = `Writing: ${data.article.title}`;
+  return `- ${articleLink(data, label)} — ${data.article.summary}`;
 }
 
 function articleSectionLine(data: LlmsData): string {
@@ -88,6 +94,11 @@ function articleSectionLine(data: LlmsData): string {
 }
 
 export function buildLlmsTxt(data: LlmsData): string {
+  const homeUrl = `${SITE_URL}/en/`;
+  const esUrl = `${SITE_URL}/es/`;
+  const caUrl = `${SITE_URL}/ca/`;
+  const projectsUrl = `${SITE_URL}/en/projects/`;
+  const cvUrl = `${SITE_URL}/en/cv/`;
   return `# Jordimp & Co.
 
 > ${data.person} — ${data.role} (${data.tagline}). A one-person engineering firm: backend systems, event pipelines and applied AI, designed, built and audited by the same pair of hands since ${data.est}. ${data.city}. Business in English, Español or Català.
@@ -98,9 +109,9 @@ ${departmentsList(data)}
 
 ## Key pages
 
-- ${mdLink('Home', `${SITE_URL}/en/`)} (also ${mdLink('Español', `${SITE_URL}/es/`)}, ${mdLink('Català', `${SITE_URL}/ca/`)})
-- ${mdLink('Projects', `${SITE_URL}/en/projects/`)}
-- ${mdLink('CV', `${SITE_URL}/en/cv/`)}
+- ${mdLink('Home', homeUrl)} (also ${mdLink('Español', esUrl)}, ${mdLink('Català', caUrl)})
+- ${mdLink('Projects', projectsUrl)}
+- ${mdLink('CV', cvUrl)}
 ${articleLine(data)}
 ${departmentKeyPages(data)}
 ${casePagesLine(data)}
@@ -122,15 +133,11 @@ function deptPageSuffix(dept: LlmsDept): string {
 }
 
 function deptBlock(dept: LlmsDept): string {
-  const projects =
-    dept.projects.length === 0
-      ? ''
-      : `\nProjects:\n${dept.projects
-          .map(
-            (project) =>
-              `  - ${project.name} (${project.year}): ${project.summary} Stack: ${project.stack.join(', ')}. ${mdLink('repo', project.github)}`,
-          )
-          .join('\n')}`;
+  const projectLines = dept.projects.map((project) => {
+    const stack = project.stack.join(', ');
+    return `  - ${project.name} (${project.year}): ${project.summary} Stack: ${stack}. ${mdLink('repo', project.github)}`;
+  });
+  const projects = dept.projects.length === 0 ? '' : `\nProjects:\n${projectLines.join('\n')}`;
   return `## ${dept.code} — ${dept.name}\n\n${dept.intro}\n${projects}`;
 }
 
@@ -165,12 +172,21 @@ function caseExampleLink(data: LlmsData): string {
 }
 
 function pagesSection(data: LlmsData): string {
+  const homeUrl = `${SITE_URL}/en/`;
+  const esUrl = `${SITE_URL}/es/`;
+  const caUrl = `${SITE_URL}/ca/`;
+  const projectsUrl = `${SITE_URL}/en/projects/`;
+  const cvUrl = `${SITE_URL}/en/cv/`;
+  const caseUrl = `${SITE_URL}/en/projects/<slug>/`;
   return [
-    `- ${mdLink('Home', `${SITE_URL}/en/`)} · ${mdLink('Español', `${SITE_URL}/es/`)} · ${mdLink('Català', `${SITE_URL}/ca/`)} (home, trilingual)`,
-    `- ${mdLink('Projects', `${SITE_URL}/en/projects/`)} — all projects with stack filter`,
-    `- ${mdLink('CV', `${SITE_URL}/en/cv/`)} — CV summary with PDF downloads`,
-    ...data.departments.map((dept) => `- ${mdLink(deptPageSuffix(dept), `${SITE_URL}/en/${dept.route}`)}`),
-    `- ${mdLink('Case pages', `${SITE_URL}/en/projects/<slug>/`)} — one case page per project (${data.projects.length}), e.g. ${caseExampleLink(data)}`,
+    `- ${mdLink('Home', homeUrl)} · ${mdLink('Español', esUrl)} · ${mdLink('Català', caUrl)} (home, trilingual)`,
+    `- ${mdLink('Projects', projectsUrl)} — all projects with stack filter`,
+    `- ${mdLink('CV', cvUrl)} — CV summary with PDF downloads`,
+    ...data.departments.map((dept) => {
+      const url = `${SITE_URL}/en/${dept.route}`;
+      return `- ${mdLink(deptPageSuffix(dept), url)}`;
+    }),
+    `- ${mdLink('Case pages', caseUrl)} — one case page per project (${data.projects.length}), e.g. ${caseExampleLink(data)}`,
   ].join('\n');
 }
 

@@ -301,13 +301,27 @@ export const FLOOR_LABELS: Record<DeptKey, L10n<string>> = {
   frontdesk: { en: '- CONTACT', es: '- CONTACTO', ca: '- CONTACTE' },
 };
 
-const P = (slug: string, name: string, year: string, featured: boolean, tier: Tier, dept: DeptKey, stack: readonly string[], github: string, l10n: ProjectL10n): Project =>
-  ({ slug, name, year, featured, tier, dept, stack, github, ...l10n });
+interface ProjectSeed {
+  readonly slug: string;
+  readonly name: string;
+  readonly year: string;
+  readonly featured: boolean;
+  readonly tier: Tier;
+  readonly dept: DeptKey;
+  readonly stack: readonly string[];
+  readonly github: string;
+}
+
+const P = (seed: ProjectSeed, l10n: ProjectL10n): Project => ({ ...seed, ...l10n });
 
 export const PROJECTS: readonly Project[] = [
-  P('codebaserag', 'CodebaseRAG', '2026', true, 'thesis', 'research',
-    ['Python 3.13', 'FastAPI', 'pgvector', 'Qdrant', 'Ollama', 'Langfuse', 'mypy strict'],
-    'https://github.com/jordimarsal/codebaserag',
+  P(
+    {
+      slug: 'codebaserag', name: 'CodebaseRAG', year: '2026', featured: true,
+      tier: 'thesis', dept: 'research',
+      stack: ['Python 3.13', 'FastAPI', 'pgvector', 'Qdrant', 'Ollama', 'Langfuse', 'mypy strict'],
+      github: 'https://github.com/jordimarsal/codebaserag',
+    },
     {
       blurb: {
         en: 'Hexagonal RAG over your own codebase — eval-gated in CI.',
@@ -346,10 +360,15 @@ export const PROJECTS: readonly Project[] = [
         { value: '≥40', label: { en: 'golden Q/A pairs', es: 'pares Q/A golden', ca: 'parells Q/A golden' } },
         { value: 'strict', label: { en: 'mypy', es: 'mypy', ca: 'mypy' } },
       ],
-    }),
-  P('interview-simulator', 'Interview Simulator', '2026', false, 'satellite', 'research',
-    ['Whisper', 'Local LLM'],
-    'https://github.com/jordimarsal/interview-simulator',
+    },
+  ),
+  P(
+    {
+      slug: 'interview-simulator', name: 'Interview Simulator', year: '2026', featured: false,
+      tier: 'satellite', dept: 'research',
+      stack: ['Whisper', 'Local LLM'],
+      github: 'https://github.com/jordimarsal/interview-simulator',
+    },
     {
       blurb: {
         en: 'A local LLM interviews you by voice; Whisper takes notes.',
@@ -375,10 +394,15 @@ export const PROJECTS: readonly Project[] = [
         { value: '0', label: { en: 'cloud calls', es: 'llamadas a la nube', ca: 'crides al núvol' } },
         { value: '100%', label: { en: 'offline', es: 'offline', ca: 'offline' } },
       ],
-    }),
-  P('bible-text-analysis', 'Bible Text Analysis', '2019', false, 'annex', 'research',
-    ['Python', 'NLTK', 'LDA', 'Jupyter'],
-    'https://github.com/jordimarsal/bible_text_analysis',
+    },
+  ),
+  P(
+    {
+      slug: 'bible-text-analysis', name: 'Bible Text Analysis', year: '2019', featured: false,
+      tier: 'annex', dept: 'research',
+      stack: ['Python', 'NLTK', 'LDA', 'Jupyter'],
+      github: 'https://github.com/jordimarsal/bible_text_analysis',
+    },
     {
       blurb: {
         en: 'NLP over the Bible: LDA topics and sentiment — my Data Science roots.',
@@ -401,10 +425,15 @@ export const PROJECTS: readonly Project[] = [
         ca: ['Un pipeline NLP de punta a punta sobre text cru: scraping, NLTK, temes LDA i anàlisi de sentiment en notebooks.'],
       },
       metrics: [],
-    }),
-  P('kafka-adapter-telemetry', 'Kafka Adapter Telemetry', '2026', true, 'thesis', 'telemetry',
-    ['Java 25', 'Spring Boot 4.1', 'Kafka', 'Oracle', 'Flyway', 'Testcontainers', 'SSE'],
-    'https://github.com/jordimarsal/kafka-adapter-telemetry',
+    },
+  ),
+  P(
+    {
+      slug: 'kafka-adapter-telemetry', name: 'Kafka Adapter Telemetry', year: '2026', featured: true,
+      tier: 'thesis', dept: 'telemetry',
+      stack: ['Java 25', 'Spring Boot 4.1', 'Kafka', 'Oracle', 'Flyway', 'Testcontainers', 'SSE'],
+      github: 'https://github.com/jordimarsal/kafka-adapter-telemetry',
+    },
     {
       blurb: {
         en: 'Event telemetry for ~90 adapters in 4 countries — live over SSE.',
@@ -449,10 +478,15 @@ export const PROJECTS: readonly Project[] = [
         { value: '100%', label: { en: 'idempotent inserts', es: 'inserciones idempotentes', ca: 'insercions idempotents' } },
         { value: '10/10', label: { en: 'SDD tasks done', es: 'tareas SDD hechas', ca: 'tasques SDD fetes' } },
       ],
-    }),
-  P('redis-toolkit', 'Redis Toolkit', '2026', true, 'satellite', 'telemetry',
-    ['Java', 'Javalin', 'Redis', 'Testcontainers'],
-    'https://github.com/jordimarsal/redis-toolkit',
+    },
+  ),
+  P(
+    {
+      slug: 'redis-toolkit', name: 'Redis Toolkit', year: '2026', featured: true,
+      tier: 'satellite', dept: 'telemetry',
+      stack: ['Java', 'Javalin', 'Redis', 'Testcontainers'],
+      github: 'https://github.com/jordimarsal/redis-toolkit',
+    },
     {
       blurb: {
         en: 'Atomic rate-limiting for LLM gateways, honest failure modes.',
@@ -493,10 +527,15 @@ export const PROJECTS: readonly Project[] = [
         { value: '429', label: { en: '+ Retry-After, always', es: '+ Retry-After, siempre', ca: '+ Retry-After, sempre' } },
         { value: '2', label: { en: 'stores, one contract suite', es: 'stores, una suite de contrato', ca: 'stores, una suite de contracte' } },
       ],
-    }),
-  P('product-offers', 'Product Offers API', '2023 - 2026', false, 'annex', 'telemetry',
-    ['Java 17', 'Spring Boot 3.2', 'H2', 'JUnit 5', 'Mockito'],
-    'https://github.com/jordimarsal/product-offers',
+    },
+  ),
+  P(
+    {
+      slug: 'product-offers', name: 'Product Offers API', year: '2023 - 2026', featured: false,
+      tier: 'annex', dept: 'telemetry',
+      stack: ['Java 17', 'Spring Boot 3.2', 'H2', 'JUnit 5', 'Mockito'],
+      github: 'https://github.com/jordimarsal/product-offers',
+    },
     {
       blurb: {
         en: 'Product offers REST API, done the professional way.',
@@ -519,10 +558,15 @@ export const PROJECTS: readonly Project[] = [
         ca: ['La prova tècnica feta de forma professional: suite de tests amb JUnit 5 + Mockito, cobertura amb JaCoCo i comprovacions Spotless integrades a CI.'],
       },
       metrics: [],
-    }),
-  P('harness-standard', 'Harness Standard', '2026', true, 'thesis', 'tooling',
-    ['Agents', 'SDD', 'CLI', 'Conventions'],
-    'https://github.com/jordimarsal/harness-standard',
+    },
+  ),
+  P(
+    {
+      slug: 'harness-standard', name: 'Harness Standard', year: '2026', featured: true,
+      tier: 'thesis', dept: 'tooling',
+      stack: ['Agents', 'SDD', 'CLI', 'Conventions'],
+      github: 'https://github.com/jordimarsal/harness-standard',
+    },
     {
       blurb: {
         en: 'Multi-agent SDD harness: specs, roles and gates in one command.',
@@ -560,10 +604,15 @@ export const PROJECTS: readonly Project[] = [
         { value: '7', label: { en: 'stacks', es: 'stacks', ca: 'stacks' } },
         { value: '1 cmd', label: { en: 'install', es: 'instalación', ca: 'instal·lació' } },
       ],
-    }),
-  P('rustcut', 'Rustcut', '2024 - 2026', false, 'annex', 'tooling',
-    ['Rust', 'Actix-web', 'SQLite'],
-    'https://github.com/jordimarsal/rustcut',
+    },
+  ),
+  P(
+    {
+      slug: 'rustcut', name: 'Rustcut', year: '2024 - 2026', featured: false,
+      tier: 'annex', dept: 'tooling',
+      stack: ['Rust', 'Actix-web', 'SQLite'],
+      github: 'https://github.com/jordimarsal/rustcut',
+    },
     {
       blurb: {
         en: 'A URL shortener in Rust, deliberately minimal.',
@@ -589,10 +638,15 @@ export const PROJECTS: readonly Project[] = [
         { value: '1', label: { en: 'language', es: 'lenguaje', ca: 'llenguatge' } },
         { value: '1', label: { en: 'SQLite file', es: 'fichero SQLite', ca: 'fitxer SQLite' } },
       ],
-    }),
-  P('md-mermaid-pdf', 'MD Mermaid PDF', '2025 - 2026', false, 'satellite', 'tooling',
-    ['Python', 'Markdown', 'Mermaid', 'GitHub Actions'],
-    'https://github.com/jordimarsal/md-mermaid-pdf',
+    },
+  ),
+  P(
+    {
+      slug: 'md-mermaid-pdf', name: 'MD Mermaid PDF', year: '2025 - 2026', featured: false,
+      tier: 'satellite', dept: 'tooling',
+      stack: ['Python', 'Markdown', 'Mermaid', 'GitHub Actions'],
+      github: 'https://github.com/jordimarsal/md-mermaid-pdf',
+    },
     {
       blurb: {
         en: 'Markdown + Mermaid straight to PDF, TDD all the way.',
@@ -615,10 +669,15 @@ export const PROJECTS: readonly Project[] = [
         ca: ['La qualitat com a característica: suite completa amb TDD, tipatge mypy strict i integració contínua a cada push.'],
       },
       metrics: [],
-    }),
-  P('mcp-transparent-png', 'MCP Transparent PNG', '2026', true, 'satellite', 'tooling',
-    ['Python 3.13', 'MCP', 'Pillow', 'GitHub Actions'],
-    'https://github.com/jordimarsal/mcp-transparent-png',
+    },
+  ),
+  P(
+    {
+      slug: 'mcp-transparent-png', name: 'MCP Transparent PNG', year: '2026', featured: true,
+      tier: 'satellite', dept: 'tooling',
+      stack: ['Python 3.13', 'MCP', 'Pillow', 'GitHub Actions'],
+      github: 'https://github.com/jordimarsal/mcp-transparent-png',
+    },
     {
       blurb: {
         en: 'MCP server that makes PNG colors transparent.',
@@ -655,10 +714,15 @@ export const PROJECTS: readonly Project[] = [
       metrics: [
         { value: '3', label: { en: 'transparency modes', es: 'modos de transparencia', ca: 'modes de transparència' } },
       ],
-    }),
-  P('spring-boot-casino', 'Spring Boot Casino', '2020 - 2026', false, 'annex', 'tooling',
-    ['Java', 'Spring Boot', 'Hexagonal Architecture'],
-    'https://github.com/jordimarsal/spring-boot-casino',
+    },
+  ),
+  P(
+    {
+      slug: 'spring-boot-casino', name: 'Spring Boot Casino', year: '2020 - 2026', featured: false,
+      tier: 'annex', dept: 'tooling',
+      stack: ['Java', 'Spring Boot', 'Hexagonal Architecture'],
+      github: 'https://github.com/jordimarsal/spring-boot-casino',
+    },
     {
       blurb: {
         en: 'Casino betting domain, hexagonal in Spring Boot.',
@@ -681,7 +745,8 @@ export const PROJECTS: readonly Project[] = [
         ca: ['Hexagonal per disseny: el domini d’apostes es manté independent del framework mitjançant ports i adaptadors.'],
       },
       metrics: [],
-    }),
+    },
+  ),
 ];
 
 export const TIER_ORDER: readonly Tier[] = ['thesis', 'satellite', 'annex'];

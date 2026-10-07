@@ -47,11 +47,31 @@ function listHtmlFiles(dir) {
   });
 }
 
+function stripTags(html) {
+  let out = '';
+  let cursor = 0;
+  while (cursor < html.length) {
+    const open = html.indexOf('<', cursor);
+    if (open === -1) return out + html.slice(cursor);
+    const close = html.indexOf('>', open + 1);
+    if (close === -1) return out + html.slice(cursor);
+    if (close === open + 1) {
+      out += html.slice(cursor, close);
+      cursor = close;
+      continue;
+    }
+    out += `${html.slice(cursor, open)} `;
+    cursor = close + 1;
+  }
+  return out;
+}
+
 function textContent(html) {
-  return html
-    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<[^>]+>/g, ' ');
+  return stripTags(
+    html
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style[\s\S]*?<\/style>/gi, ' '),
+  );
 }
 
 function decodeEntities(text) {
@@ -59,7 +79,7 @@ function decodeEntities(text) {
 }
 
 function htmlLang(html) {
-  const match = html.match(/<html[^>]*\blang="([a-zA-Z-]+)"/i);
+  const match = html.match(/<html[^>]*\blang="([a-z-]+)"/i);
   return match ? match[1].toLowerCase() : null;
 }
 
@@ -116,6 +136,8 @@ function isOffHost(href) {
   return webScheme && !SITE_HOSTS.has(resolved.hostname.toLowerCase());
 }
 
+const byCodePoint = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+
 function extractOffHostUrls(files) {
   const urls = new Set();
   for (const file of files) {
@@ -124,7 +146,7 @@ function extractOffHostUrls(files) {
       if (isOffHost(match[1])) urls.add(match[1]);
     }
   }
-  return [...urls].sort();
+  return [...urls].sort(byCodePoint);
 }
 
 async function checkUrl(url) {
@@ -231,17 +253,21 @@ async function main() {
   const routes = pageRoutes();
   const files = listHtmlFiles(DIST);
   const problems = census(files, routes);
-  problems.push(...trilingualCompleteness(routes));
-  problems.push(...scanForPatterns(files, PHONE_PATTERNS, 'phone'));
-  problems.push(...scanForPatterns(files, ADDRESS_PATTERNS, 'address'));
+  problems.push(
+    ...trilingualCompleteness(routes),
+    ...scanForPatterns(files, PHONE_PATTERNS, 'phone'),
+    ...scanForPatterns(files, ADDRESS_PATTERNS, 'address'),
+  );
   console.log('phone/address scan: clean (visible text of all HTML files)');
 
   const sourceFiles = [
     ...listTextFiles(SRC, ['.ts', '.astro', '.json', '.snap']),
     ...listTextFiles(TESTS, ['.ts', '.json']),
   ];
-  problems.push(...scanForbiddenStrings(sourceFiles, LEGACY_EMAIL_PATTERNS));
-  problems.push(...scanForPatterns(files, LEGACY_EMAIL_PATTERNS, 'legacy-email'));
+  problems.push(
+    ...scanForbiddenStrings(sourceFiles, LEGACY_EMAIL_PATTERNS),
+    ...scanForPatterns(files, LEGACY_EMAIL_PATTERNS, 'legacy-email'),
+  );
   console.log(`legacy-email scan: clean (${sourceFiles.length} source/test files + visible text of ${files.length} HTML files)`);
 
   const urls = extractOffHostUrls(files);

@@ -4,16 +4,16 @@ export function initTheme(): void {
   const root = document.documentElement;
 
   const sync = (): void => {
-    const night = root.getAttribute('data-night') === '1';
+    const night = root.dataset.night === '1';
     btn.setAttribute('aria-pressed', night ? 'true' : 'false');
   };
 
   btn.addEventListener('click', () => {
-    const night = root.getAttribute('data-night') === '1';
+    const night = root.dataset.night === '1';
     if (night) {
-      root.removeAttribute('data-night');
+      delete root.dataset.night;
     } else {
-      root.setAttribute('data-night', '1');
+      root.dataset.night = '1';
     }
     try {
       localStorage.setItem('jordimp-night', night ? '0' : '1');
@@ -34,9 +34,9 @@ export function initTheme(): void {
       }
       if (stored !== null) return;
       if (event.matches) {
-        root.setAttribute('data-night', '1');
+        root.dataset.night = '1';
       } else {
-        root.removeAttribute('data-night');
+        delete root.dataset.night;
       }
       sync();
     };
