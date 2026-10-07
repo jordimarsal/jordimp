@@ -126,7 +126,7 @@ describe('jsonLdScript()', () => {
   });
 
   it('escapes line separators U+2028/U+2029', () => {
-    const script = jsonLdScript({ name: 'a b c' });
+    const script = jsonLdScript({ name: 'a\u2028b\u2029c' });
     expect(script).toBe('{"name":"a\\u2028b\\u2029c"}');
   });
 });
