@@ -12,6 +12,7 @@
     "check": "astro check",
     "astro": "astro",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:e2e": "npm run build && playwright test && npm run qa:parity",
     "qa:parity": "node scripts/distill-parity.mjs --check",
     "qa:lighthouse": "lhci autorun --config=lighthouserc.json",
@@ -30,6 +31,7 @@
     "@astrojs/check": "^0.9.10",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.63.0",
+    "@vitest/coverage-v8": "^5.0.3",
     "typescript": "^5.9.3",
     "vitest": "^5.0.1"
   },
