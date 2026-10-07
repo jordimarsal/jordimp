@@ -310,6 +310,7 @@ interface ProjectSeed {
   readonly dept: DeptKey;
   readonly stack: readonly string[];
   readonly github: string;
+  readonly qualityUrl?: string;
 }
 
 const P = (seed: ProjectSeed, l10n: ProjectL10n): Project => ({ ...seed, ...l10n });
@@ -433,6 +434,7 @@ export const PROJECTS: readonly Project[] = [
       tier: 'thesis', dept: 'telemetry',
       stack: ['Java 25', 'Spring Boot 4.1', 'Kafka', 'Oracle', 'Flyway', 'Testcontainers', 'SSE'],
       github: 'https://github.com/jordimarsal/kafka-adapter-telemetry',
+      qualityUrl: 'https://jordimarsal.github.io/kafka-adapter-telemetry/quality/',
     },
     {
       blurb: {
@@ -1395,6 +1397,7 @@ export const CASE_UI: CaseUiStrings = {
   fieldNotes: { en: 'Field notes', es: 'Notas de campo', ca: 'Notes de camp' },
   stack: { en: 'STACK', es: 'STACK', ca: 'STACK' },
   visitRepo: { en: 'VISIT THE REPO', es: 'VISITA EL REPO', ca: 'VISITA EL REPO' },
+  qualityReport: { en: 'QUALITY REPORT — SONAR METRICS', es: 'INFORME DE CALIDAD — MÉTRICAS SONAR', ca: 'INFORME DE QUALITAT — MÈTRIQUES SONAR' },
   onRequest: { en: 'SOURCE AVAILABLE ON REQUEST', es: 'CÓDIGO DISPONIBLE BAJO PETICIÓN', ca: 'CODI DISPONIBLE A PETICIÓ' },
   backDept: { en: 'Back to {dept}', es: 'Volver a {dept}', ca: 'Tornar a {dept}' },
   prev: { en: '← PREV', es: '← ANT.', ca: '← ANT.' },

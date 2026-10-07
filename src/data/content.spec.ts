@@ -480,6 +480,16 @@ describe('project()', () => {
   it('throws on unknown slug', () => {
     expect(() => project('nope')).toThrow('unknown project: nope');
   });
+
+  it('links the published quality report for the sonar-gated project', () => {
+    expect(project('kafka-adapter-telemetry').qualityUrl).toBe(
+      'https://jordimarsal.github.io/kafka-adapter-telemetry/quality/',
+    );
+  });
+
+  it('leaves qualityUrl undefined when a project publishes no quality page', () => {
+    expect(project('codebaserag').qualityUrl).toBeUndefined();
+  });
 });
 
 describe('operations notes (F0)', () => {

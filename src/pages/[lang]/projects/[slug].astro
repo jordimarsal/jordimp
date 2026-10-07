@@ -42,6 +42,7 @@ const idx = list.indexOf(p.slug);
 const prev = project(list[(idx - 1 + list.length) % list.length]);
 const next = project(list[(idx + 1) % list.length]);
 const repoAttrs = externalLinkAttrs(p.github, SITE.url);
+const qualityAttrs = p.qualityUrl ? externalLinkAttrs(p.qualityUrl, SITE.url) : null;
 const trail = [
   { name: BREADCRUMB_HOME[lang], path: '' },
   { name: BREADCRUMB_DEPTS[lang], path: '#building' },
@@ -122,6 +123,13 @@ const trail = [
         </a>
       ) : (
         <p class="case-onrequest">{CASE_UI.onRequest[lang]}</p>
+      )}
+      {p.qualityUrl && qualityAttrs && (
+        <p class="case-cta__quality">
+          <a class="case" href={p.qualityUrl} {...qualityAttrs}>
+            {CASE_UI.qualityReport[lang]} <span aria-hidden="true">&#8599;</span>
+          </a>
+        </p>
       )}
     </div>
     <nav class="pager" aria-label={CASE_UI.pagerLabel[lang]}>

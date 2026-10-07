@@ -2602,6 +2602,15 @@ a.contact-row:hover {
   margin-top: clamp(30px, 5vw, 48px);
 }
 
+.case-cta__quality {
+  margin-top: 16px;
+}
+
+.case-cta__quality .case {
+  align-self: auto;
+  display: inline-flex;
+}
+
 .btn--y {
   background: var(--y1);
 }

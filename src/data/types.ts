@@ -84,6 +84,8 @@ export interface Project extends ProjectL10n {
   readonly dept: DeptKey;
   readonly stack: readonly string[];
   readonly github: string;
+  /** Published quality-report page (optional; only for projects that gate on Sonar). */
+  readonly qualityUrl?: string;
 }
 
 export interface ExperienceEntry {
@@ -201,6 +203,7 @@ export interface CaseUiStrings {
   readonly fieldNotes: L10n<string>;
   readonly stack: L10n<string>;
   readonly visitRepo: L10n<string>;
+  readonly qualityReport: L10n<string>;
   readonly onRequest: L10n<string>;
   readonly backDept: L10n<string>;
   readonly prev: L10n<string>;
