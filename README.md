@@ -49,8 +49,17 @@ All workflow actions are SHA-pinned; the pipeline runs with minimal
 | `npm test`              | Unit tests (vitest, colocated `*.spec.ts`)    |
 | `npm run test:e2e`      | Build + Playwright smoke suite                |
 | `npm run qa:lighthouse` | Lighthouse CI gate (local thresholds ≥ 0.95)  |
+| `npm run qa:parity`     | Verify the committed parity oracle is fresh    |
+| `npm run qa:guard`      | Build + verify the oracle (runs on `git push`)  |
 | `npm run qa:content`    | Content QA (no-phone + structure)             |
 | `npm run qa:links`      | External-link check                           |
+
+`npm install` / `npm ci` arms a tracked **pre-push hook** (`.githooks/pre-push` via
+`core.hooksPath`, set by `scripts/install-hooks.mjs`) that runs `npm run qa:guard`.
+Any change to markup or copy moves the distilled fixture, so a forgotten
+`npm run distill:parity` blocks the push instead of turning `main` red on CI. It
+skips itself when `node_modules` is absent; `git push --no-verify` bypasses it for a
+single push (CI still gates the deploy).
 
 ## Layout
 

@@ -1,0 +1,31 @@
+#!/bin/sh
+# Pre-push guard: the committed golden oracle (tests/fixtures/parity.json) must match
+# what the current tree builds to. Armed by `npm ci` / `npm install` through npm's
+# `prepare` lifecycle (scripts/install-hooks.mjs sets core.hooksPath=.githooks).
+#
+# Why it exists: a markup/copy change was pushed without re-distilling the oracle, so
+# `main` went red on CI (deploy QA gate + the weekly Quality audit) instead of failing
+# on the machine that made the change. CI still gates the deploy; this only moves the
+# failure forward to the push.
+#
+# Bypass a single push with `git push --no-verify`.
+set -eu
+
+if [ ! -d node_modules ]; then
+  echo "pre-push: node_modules is missing — skipping the parity guard (run npm ci to arm it)" >&2
+  exit 0
+fi
+
+# Quiet while it passes, verbose when it fails (the build log is the useful part then).
+if output=$(npm run --silent qa:guard 2>&1); then
+  echo "pre-push: parity oracle OK" >&2
+  exit 0
+fi
+
+printf '%s\n' "$output" >&2
+echo "" >&2
+echo "pre-push: BLOCKED — the parity oracle check failed." >&2
+echo "  stale oracle (markup/copy changed): npm run distill:parity, add tests/fixtures/parity.json, commit" >&2
+echo "  missing toolchain:                   npm ci && npx playwright install chromium" >&2
+echo "  push anyway (CI still gates):        git push --no-verify" >&2
+exit 1

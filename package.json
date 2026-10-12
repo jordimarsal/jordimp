@@ -6,6 +6,7 @@
     "node": ">=22.18"
   },
   "scripts": {
+    "prepare": "node scripts/install-hooks.mjs",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
@@ -15,6 +16,7 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "npm run build && playwright test && npm run qa:parity",
     "qa:parity": "node scripts/distill-parity.mjs --check",
+    "qa:guard": "npm run build && npm run qa:parity",
     "qa:lighthouse": "lhci autorun --config=lighthouserc.json",
     "qa:content": "node scripts/qa-content.mjs",
     "qa:links": "node scripts/check-links.mjs",

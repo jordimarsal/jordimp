@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { INSPECTIONS_PAGE } from '../data/content';
 import type { QualityHistoryEntry, QualityReport } from '../data/types';
@@ -323,5 +323,32 @@ describe('quality.yml workflow contract (R13)', () => {
     for (const [, action, pin] of uses) {
       expect(pin, action).toMatch(/^[0-9a-f]{40}$/);
     }
+  });
+
+  it('skips the weekly commit when nothing drifted instead of failing the run', () => {
+    const text = workflow();
+    expect(text).toMatch(/if git diff --cached --quiet; then/);
+    expect(text).toMatch(/nothing to commit/);
+    expect(text.indexOf('git commit')).toBeGreaterThan(text.indexOf('git diff --cached --quiet'));
+  });
+});
+
+describe('parity guard contract (ADR-6)', () => {
+  const repoFile = (path: string): string =>
+    readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8');
+
+  it('checks the oracle before every push through a tracked, executable hook', () => {
+    const { mode } = statSync(new URL('../../.githooks/pre-push', import.meta.url));
+    expect(mode & 0o111, 'git silently ignores a hook without the executable bit').not.toBe(0);
+    const hook = repoFile('.githooks/pre-push');
+    expect(hook).toContain('npm run --silent qa:guard');
+    expect(hook).toContain('git push --no-verify');
+  });
+
+  it('arms the hook on npm install/ci through the prepare lifecycle', () => {
+    const { scripts } = JSON.parse(repoFile('package.json')) as { scripts: Record<string, string> };
+    expect(scripts.prepare).toBe('node scripts/install-hooks.mjs');
+    expect(scripts['qa:guard']).toBe('npm run build && npm run qa:parity');
+    expect(repoFile('scripts/install-hooks.mjs')).toContain("'core.hooksPath', HOOKS_DIR");
   });
 });

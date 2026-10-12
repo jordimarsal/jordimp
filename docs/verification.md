@@ -117,6 +117,7 @@ before a release task can close:
 | E2E | `npx astro build && npx astro preview` then `npx playwright test` | 65-page sweep (21 routes × 3 locales + splash + 404) with zero console errors + parity vs `tests/fixtures/parity.json` + behaviors |
 | Content QA | `npm run qa:content` | Route census matches `src/data` exactly; trilingual titles/descriptions; no phone/address; external links live |
 | Link resolution | `npm run qa:links` | Every internal `href`/`src` in the built HTML resolves to an emitted file; external links live |
+| Parity oracle | `npm run qa:guard` | `dist/` matches the committed ADR-6 oracle (titles, copy, plates, flags). Same check the pre-push hook runs; `npm run test:e2e` covers it too |
 | Lighthouse | `npm run qa:lighthouse` | Category gates in `lighthouserc.json` on the six audited URLs (three locale homes + three inspections pages) |
 
 Content QA scripts derive their route matrix from `src/data/content.ts` — never
@@ -124,7 +125,9 @@ duplicate route lists inside a script or test.
 
 Weekly self-audit (F10): `.github/workflows/quality.yml` (weekly cron + manual
 dispatch, no push trigger — the JSON commit rides the normal deploy) runs the full
-pipeline and commits `src/data/quality.json` via `scripts/collect-quality.mjs`. To
+pipeline and commits `src/data/quality.json` via `scripts/collect-quality.mjs`. The
+commit step is a no-op (exit 0, run stays green) when neither `src/data/quality.json`
+nor `tests/fixtures/parity.json` drifted — an empty week must not fail the audit. To
 verify locally: run the pipeline steps (build, vitest, playwright, `qa:lighthouse`)
 then `node scripts/collect-quality.mjs` — it exits non-zero with a named message and
 writes nothing if any source report is missing. The committed JSON is schema-validated

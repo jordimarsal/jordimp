@@ -89,6 +89,9 @@ Follow the plan's file map (`docs/superpowers/plans/2026-09-16-portfolio-phase0-
   aria-labels). The documented exception: optimizations only expressible in the Astro
   pipeline (e.g. inlining the font CSS) are recorded as a head deviation in the
   feature's design (F9 ADR-3) — body markup stays 1:1.
+  The tracked **pre-push hook** (`.githooks/pre-push`, armed by `npm ci` through
+  `scripts/install-hooks.mjs`) runs `npm run qa:guard`, so a stale fixture blocks the
+  push locally instead of failing the CI gate; `git push --no-verify` bypasses it.
 - **Fonts ship inline.** The 8 `@font-face` declarations live in the `SiteLayout.astro`
   head as one `is:inline set:html` string (`src/lib/font-face.ts`), URLs built via
   `assetPath('fonts/<file>.woff2')` so demo-base builds resolve. `public/fonts/fonts.css`
