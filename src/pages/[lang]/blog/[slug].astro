@@ -1,0 +1,60 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import Breadcrumb from '../../../components/site/Breadcrumb.astro';
+import { LOCALES, type Locale } from '../../../lib/i18n';
+import { BREADCRUMB_HOME, POSTS, PAGES, UI, pageForPost } from '../../../data/content';
+import type { PostContent } from '../../../data/types';
+import { renderPostBlocks } from '../../../lib/post-blocks';
+import { dirRoute } from '../../../lib/paths';
+
+export async function getStaticPaths() {
+  return LOCALES.flatMap((lang) =>
+    POSTS.map((post) => ({ params: { lang, slug: post.slug }, props: { lang, post } })),
+  );
+}
+
+type Props = { lang: Locale; post: PostContent };
+const { lang, post } = Astro.props;
+
+const page = pageForPost(post);
+const route = dirRoute(page.route);
+const datestamp = `${post.dateLabel[lang]} ${post.date} · ${post.revision}`;
+const trail = [
+  { name: BREADCRUMB_HOME[lang], path: '' },
+  { name: UI.nav.blog[lang], path: dirRoute(PAGES.blog.route) },
+  { name: post.title[lang], path: route },
+] as const;
+---
+<SiteLayout
+  lang={lang}
+  title={page.title[lang]}
+  description={page.description[lang]}
+  path={route}
+  navKey="blog"
+  breadcrumbs={trail.slice(1)}
+  ogType="article"
+  articleSection={UI.nav.blog[lang]}
+  article={{
+    headline: post.title[lang],
+    description: post.description[lang],
+    path: route,
+    datePublished: post.date,
+    section: UI.nav.blog[lang],
+    about: post.about,
+  }}
+>
+  <main class="wrap" id="main">
+    <Breadcrumb lang={lang} {trail} />
+    <article class="prose article">
+      <p class="article__stamp mono">{datestamp}</p>
+      <h1 id="page-title">{post.title[lang]}</h1>
+      <p class="article__lead">{post.lead[lang]}</p>
+      {post.sections.map((section) => (
+        <section aria-labelledby={section.anchor}>
+          <h2 id={section.anchor}>{section.heading[lang]}</h2>
+          <Fragment set:html={renderPostBlocks(section.blocks, lang)} />
+        </section>
+      ))}
+    </article>
+  </main>
+</SiteLayout>

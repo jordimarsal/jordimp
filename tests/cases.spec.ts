@@ -1,6 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
 import {
-  ARTICLE,
   BREADCRUMB_DEPTS,
   BREADCRUMB_HOME,
   CASE_BUILD,
@@ -10,6 +9,7 @@ import {
   LOCALES,
   PAGES,
   PROJECTS,
+  post,
   project,
   tierProjects,
 } from '../src/data/content';
@@ -101,8 +101,8 @@ test.describe('case pages (T7)', () => {
       await expect(chips.nth(0)).toHaveText(p.stack[0]);
 
       const essay = page.locator('aside.article-callout a.case');
-      await expect(essay).toHaveAttribute('href', `/${lang}/writing/rag-eval-gate/`);
-      await expect(page.locator('aside.article-callout h3')).toHaveText(ARTICLE.title[lang]);
+      await expect(essay).toHaveAttribute('href', `/${lang}/blog/rag-eval-gate/`);
+      await expect(page.locator('aside.article-callout h3')).toHaveText(post('rag-eval-gate').title[lang]);
 
       const cta = page.locator('.case-cta a.btn--y');
       await expect(cta).toHaveAttribute('href', p.github);

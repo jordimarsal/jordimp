@@ -5,7 +5,15 @@ import { FLOOR_ORDER, PAGES, PROJECTS } from '../src/data/content';
 const LOCALES = ['en', 'es', 'ca'] as const;
 type Locale = (typeof LOCALES)[number];
 
-const STATIC_ROUTES = ['', 'cv', 'projects', 'writing/rag-eval-gate'];
+const STATIC_ROUTES = [
+  '',
+  'cv',
+  'projects',
+  'writing/rag-eval-gate',
+  'blog',
+  'blog/which-local-model-for-coding-agents',
+  'blog/rag-eval-gate',
+];
 const PROJECT_SLUGS = PROJECTS.map((p) => p.slug);
 const DEPT_SLUGS = FLOOR_ORDER.map((key) =>
   PAGES[key].route.replace(/^departments\//, '').replace(/\.html$/, '')
@@ -70,6 +78,32 @@ function holdSplash(page: Page): Promise<void> {
   return page.route(REDIRECT_TARGET, (route) => route.fulfill({ status: 204 }));
 }
 
+// The writing/rag-eval-gate stub meta-refreshes to the blog essay with a 0s delay.
+// Answering that refresh with a 204 makes Chromium discard the navigation and keep the
+// stub document, so the sweep and the parity walk can inspect the stub instead of the
+// page it redirects to. `consumed` resolves once the refresh has hit the hold, letting a
+// caller release it (so later targets reach the real blog route) without racing the
+// pending refresh.
+const STUB_ROUTE = /\/writing\/rag-eval-gate\/$/;
+const STUB_TARGET = /\/blog\/rag-eval-gate\/$/;
+
+interface StubHold {
+  readonly consumed: Promise<void>;
+  readonly release: () => Promise<void>;
+}
+
+async function holdStub(page: Page): Promise<StubHold> {
+  let markConsumed: () => void = () => {};
+  const consumed = new Promise<void>((resolve) => {
+    markConsumed = resolve;
+  });
+  await page.route(STUB_TARGET, (route) => {
+    markConsumed();
+    return route.fulfill({ status: 204 });
+  });
+  return { consumed, release: () => page.unroute(STUB_TARGET) };
+}
+
 async function styleOf(page: Page, selector: string, property: string): Promise<string> {
   return page
     .locator(selector)
@@ -77,13 +111,13 @@ async function styleOf(page: Page, selector: string, property: string): Promise<
     .evaluate((el, prop) => getComputedStyle(el).getPropertyValue(prop), property);
 }
 
-test.describe('68-page sweep (R27, F10 R16)', () => {
+test.describe('77-page sweep (R27, F10 R16, F15 R22)', () => {
   test('sweep: every built page answers with the expected status and zero console errors', async ({
     page,
   }) => {
     test.setTimeout(300_000);
-    expect(SWEEP_TARGETS).toHaveLength(68);
-    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(68);
+    expect(SWEEP_TARGETS).toHaveLength(77);
+    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(77);
     expect(Object.keys(parity.routes).sort()).toEqual(
       localeRoutes().sort()
     );
@@ -97,6 +131,7 @@ test.describe('68-page sweep (R27, F10 R16)', () => {
       const onPageError = (error: Error): void => errors.push(`pageerror: ${error.message}`);
       page.on('console', onConsole);
       page.on('pageerror', onPageError);
+      const stub = STUB_ROUTE.test(target.url) ? await holdStub(page) : null;
       try {
         const response = await page.goto(target.url);
         if (target.url === '/') await page.waitForURL(REDIRECT_TARGET);
@@ -107,6 +142,14 @@ test.describe('68-page sweep (R27, F10 R16)', () => {
       } finally {
         page.off('console', onConsole);
         page.off('pageerror', onPageError);
+      }
+      if (stub) {
+        await stub.consumed;
+        await stub.release();
+      }
+      const staleLinks = await page.locator('a[href$="/writing/rag-eval-gate/"]').count();
+      if (staleLinks > 0) {
+        problems.push(`${target.url}: ${staleLinks} hyperlink(s) target the retired /writing/rag-eval-gate/ route (R20)`);
       }
       if (target.url === UNKNOWN_PATH) {
         const inherent = errors.filter((message) => message === DOCUMENT_404_ERROR);
@@ -180,11 +223,13 @@ test.describe('golden parity vs the distilled build oracle (R27, ADR-6)', () => 
     test(`parity: every ${locale} page matches the oracle fixture`, async ({ page }) => {
       test.setTimeout(300_000);
       const routes = localeRoutes().filter((route) => route.startsWith(`/${locale}/`));
-      expect(routes).toHaveLength(22);
+      expect(routes).toHaveLength(25);
 
       for (const route of routes) {
         const expected = parity.routes[route];
+        const stub = STUB_ROUTE.test(route) ? await holdStub(page) : null;
         await page.goto(route);
+        if (stub) await stub.consumed;
         await expect(page.locator('html'), `${route} lang`).toHaveAttribute('lang', locale);
         expect(await page.title(), `${route} title`).toBe(expected.title);
         await expect(
@@ -194,6 +239,7 @@ test.describe('golden parity vs the distilled build oracle (R27, ADR-6)', () => 
         await expect(page.locator('main h1'), `${route} h1`).toHaveText(expected.h1);
         const mainText = (await page.locator('main').textContent()) ?? '';
         expect(canon(mainText), `${route} main copy`).toBe(canon(expected.mainText));
+        if (stub) await stub.release();
       }
     });
   }

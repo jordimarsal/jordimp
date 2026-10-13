@@ -26,4 +26,16 @@ describe('sitemapFilter()', () => {
     expect(sitemapFilter('https://jordimp.net/en/')).toBe(true);
     expect(sitemapFilter('https://jordimp.net/demo/en/')).toBe(true);
   });
+
+  it('excludes the redirect-stub URL in every locale (R17)', () => {
+    for (const lang of ['en', 'es', 'ca'] as const) {
+      expect(sitemapFilter(`https://jordimp.net/${lang}/writing/rag-eval-gate/`)).toBe(false);
+    }
+  });
+
+  it('keeps the blog index and both post URLs (R17)', () => {
+    expect(sitemapFilter('https://jordimp.net/en/blog/')).toBe(true);
+    expect(sitemapFilter('https://jordimp.net/es/blog/which-local-model-for-coding-agents/')).toBe(true);
+    expect(sitemapFilter('https://jordimp.net/ca/blog/rag-eval-gate/')).toBe(true);
+  });
 });

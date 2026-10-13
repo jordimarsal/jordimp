@@ -1,9 +1,8 @@
 ---
 import SiteLayout from '../../../layouts/SiteLayout.astro';
-import Breadcrumb from '../../../components/site/Breadcrumb.astro';
 import { LOCALES, type Locale } from '../../../lib/i18n';
-import { ARTICLE, BREADCRUMB_HOME, DEPTS, PAGES, project } from '../../../data/content';
-import { dirRoute } from '../../../lib/paths';
+import { BLOG_UI, PAGES, post } from '../../../data/content';
+import { dirRoute, srcPath } from '../../../lib/paths';
 
 export async function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
@@ -12,46 +11,28 @@ export async function getStaticPaths() {
 type Props = { lang: Locale };
 const { lang } = Astro.props;
 
-const route = dirRoute(PAGES['article-rag-eval-gate'].route);
-const deptRoute = dirRoute(PAGES[ARTICLE.floor].route);
-const datestamp = `${ARTICLE.dateLabel[lang]} ${ARTICLE.date} · ${ARTICLE.revision}`;
-const sectionName = DEPTS[ARTICLE.floor].name[lang];
-const trail = [
-  { name: BREADCRUMB_HOME[lang], path: '' },
-  { name: sectionName, path: deptRoute },
-  { name: ARTICLE.title[lang], path: route },
-] as const;
+const page = PAGES['article-rag-eval-gate-redirect'];
+const essay = post('rag-eval-gate');
+const target = dirRoute(PAGES['article-rag-eval-gate'].route);
+const readLabel = essay.readLabel?.[lang] ?? BLOG_UI.rowLabel[lang];
 ---
 <SiteLayout
   lang={lang}
-  title={PAGES['article-rag-eval-gate'].title[lang]}
-  description={PAGES['article-rag-eval-gate'].description[lang]}
-  path={route}
-  navKey="departments"
-  breadcrumbs={trail.slice(1)}
-  ogType="article"
-  articleSection={sectionName}
-  article={{
-    headline: ARTICLE.title[lang],
-    description: ARTICLE.description[lang],
-    path: route,
-    datePublished: ARTICLE.date,
-    section: sectionName,
-    about: project('codebaserag').github,
-  }}
+  title={page.title[lang]}
+  description={page.description[lang]}
+  path={target}
+  navKey="blog"
+  noindex
+  refreshUrl={srcPath(lang, target)}
 >
   <main class="wrap" id="main">
-    <Breadcrumb lang={lang} {trail} />
     <article class="prose article">
-      <p class="article__stamp mono">{datestamp}</p>
-      <h1 id="page-title">{ARTICLE.title[lang]}</h1>
-      <p class="article__lead">{ARTICLE.lead[lang]}</p>
-      {ARTICLE.sections.map((section) => (
-        <section aria-labelledby={`a-${section.anchor}`}>
-          <h2 id={`a-${section.anchor}`}>{section.heading[lang]}</h2>
-          {section.body[lang].map((paragraph) => <p>{paragraph}</p>)}
-        </section>
-      ))}
+      <p class="article__stamp mono">{`${essay.dateLabel[lang]} ${essay.date} · ${essay.revision}`}</p>
+      <h1 id="page-title">{essay.title[lang]}</h1>
+      <p>{BLOG_UI.movedLine[lang]}</p>
+      <a class="case" href={srcPath(lang, target)}>
+        {readLabel} <span aria-hidden="true">&rarr;</span>
+      </a>
     </article>
   </main>
 </SiteLayout>

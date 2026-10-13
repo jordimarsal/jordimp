@@ -2097,6 +2097,84 @@ figure.diagram figcaption {
   margin-top: var(--sp-2);
 }
 
+.article .table-scroll {
+  overflow-x: auto;
+  margin-block: var(--sp-2);
+  border: var(--bd);
+  background: var(--paper2);
+}
+
+.article table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.article th {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 10px 12px;
+  color: var(--ink);
+  background: var(--paper);
+  border-bottom: var(--bd);
+}
+
+.article td {
+  padding: 10px 12px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--meta-line);
+}
+
+.article tbody tr:nth-child(even) {
+  background: var(--rule);
+}
+
+.article tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.article p code,
+.article li code {
+  font-family: var(--mono);
+  font-size: 0.85em;
+  color: var(--ink);
+  background: var(--paper2);
+  border: 2px solid var(--line);
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+.article section ul {
+  margin-top: var(--sp-2);
+}
+
+.blog-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+}
+
+.blog-row {
+  padding: var(--sp-3);
+  border: var(--bd);
+  background: var(--paper2);
+  box-shadow: var(--sh);
+}
+
+.blog-row__title {
+  font-family: var(--disp);
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+  margin-block: var(--sp-1);
+}
+
 .article-callout {
   margin-top: var(--sp-4);
   padding: var(--sp-3);

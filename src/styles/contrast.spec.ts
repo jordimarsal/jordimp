@@ -191,6 +191,10 @@ const AUDITED: readonly AuditedPair[] = [
     bg: '--y1',
     expected: '13.94',
   },
+  { name: 'light table header ink on paper', mode: 'day', fg: '--ink', bg: '--paper', expected: '18.04' },
+  { name: 'night table header ink on paper', mode: 'night', fg: '--ink', bg: '--paper', expected: '15.68' },
+  { name: 'light code ink on paper2', mode: 'day', fg: '--ink', bg: '--paper2', expected: '19.32' },
+  { name: 'night code ink on paper2', mode: 'night', fg: '--ink', bg: '--paper2', expected: '14.37' },
 ];
 
 describe('WCAG contrast math (spike auditContrast port)', () => {
@@ -217,7 +221,7 @@ describe('site.css token palette', () => {
   });
 });
 
-describe('contrast gate (R21, 15 audited pairs day+night)', () => {
+describe('contrast gate (R21, 19 audited pairs day+night)', () => {
   it.each(AUDITED)('keeps $mode $name at AA with the pinned spike ratio', (pair) => {
     const { fg, bg } = resolvePair(pair);
     const ratio = contrast(fg, bg);

@@ -6,7 +6,7 @@ export type DeptKey = 'research' | 'telemetry' | 'tooling' | 'inspections' | 'pe
 
 export type Tier = 'thesis' | 'satellite' | 'annex';
 
-export type NavKey = 'home' | 'work' | 'cv' | 'departments';
+export type NavKey = 'home' | 'work' | 'cv' | 'departments' | 'blog';
 
 export interface SiteInfo {
   readonly brand: string;
@@ -34,6 +34,7 @@ export interface NavLabels {
   readonly departments: L10n<string>;
   readonly work: L10n<string>;
   readonly cv: L10n<string>;
+  readonly blog: L10n<string>;
   readonly contact: L10n<string>;
 }
 
@@ -187,6 +188,8 @@ export interface PageMeta {
   readonly nav: NavKey;
   readonly title: L10n<string>;
   readonly description: L10n<string>;
+  /** Directory route of the canonical target; when set, the page is a noindex redirect stub. */
+  readonly redirect?: string;
 }
 
 export interface PageLabels {
@@ -354,21 +357,32 @@ export interface InspectionsPageContent {
   readonly kbUnit: string;
 }
 
-export interface ArticleSection {
-  readonly anchor: 'problem' | 'golden-set' | 'ci-gate' | 'hexagonal' | 'baseline';
+export type PostBlock =
+  | { readonly kind: 'paragraph'; readonly html: L10n<string> }
+  | { readonly kind: 'list'; readonly items: L10n<readonly string[]> }
+  | { readonly kind: 'subheading'; readonly anchor: string; readonly text: L10n<string> }
+  | {
+      readonly kind: 'table';
+      readonly head: readonly string[];
+      readonly rows: readonly (readonly string[])[];
+    };
+
+export interface PostSection {
+  readonly anchor: string;
   readonly heading: L10n<string>;
-  readonly body: L10n<readonly string[]>;
+  readonly blocks: readonly PostBlock[];
 }
 
-export interface ArticleContent {
-  readonly floor: DeptKey;
+export interface PostContent {
+  readonly slug: string;
   readonly date: string;
   readonly revision: string;
   readonly dateLabel: L10n<string>;
   readonly title: L10n<string>;
   readonly description: L10n<string>;
   readonly lead: L10n<string>;
-  readonly sections: readonly ArticleSection[];
-  readonly relatedBody: L10n<string>;
-  readonly readLabel: L10n<string>;
+  readonly sections: readonly PostSection[];
+  readonly about: string;
+  readonly relatedBody?: L10n<string>;
+  readonly readLabel?: L10n<string>;
 }

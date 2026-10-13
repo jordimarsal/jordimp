@@ -4,7 +4,7 @@ import Breadcrumb from '../../../components/site/Breadcrumb.astro';
 import CaseMotif from '../../../components/site/CaseMotif.astro';
 import { LOCALES, type Locale } from '../../../lib/i18n';
 import {
-  ARTICLE,
+  BLOG_UI,
   BREADCRUMB_DEPTS,
   BREADCRUMB_HOME,
   CASE_BUILD,
@@ -13,6 +13,7 @@ import {
   DEPTS,
   PAGES,
   PROJECTS,
+  post,
   project,
   tierProjects,
 } from '../../../data/content';
@@ -109,10 +110,10 @@ const trail = [
     </section>
     {p.slug === 'codebaserag' && (
       <aside class="article-callout" aria-labelledby="cb-essay">
-        <h3 id="cb-essay">{ARTICLE.title[lang]}</h3>
-        <p>{ARTICLE.relatedBody[lang]}</p>
+        <h3 id="cb-essay">{post('rag-eval-gate').title[lang]}</h3>
+        <p>{post('rag-eval-gate').relatedBody?.[lang] ?? BLOG_UI.rowLabel[lang]}</p>
         <a class="case" href={srcPath(lang, dirRoute(PAGES['article-rag-eval-gate'].route))}>
-          {ARTICLE.readLabel[lang]} <span aria-hidden="true">&rarr;</span>
+          {post('rag-eval-gate').readLabel?.[lang] ?? BLOG_UI.rowLabel[lang]} <span aria-hidden="true">&rarr;</span>
         </a>
       </aside>
     )}

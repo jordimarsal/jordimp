@@ -5,7 +5,7 @@ import {
   type LlmsProjectRef,
 } from '../lib/llms';
 import { dirRoute } from '../lib/paths';
-import { ARTICLE, DEPTS, EXPERIENCE, FLOOR_ORDER, PAGES, PRINCIPLES, PROJECTS, SKILLS, SITE } from '../data/content';
+import { DEPTS, EXPERIENCE, FLOOR_ORDER, PAGES, POSTS, PRINCIPLES, PROJECTS, SKILLS, SITE, pageForPost } from '../data/content';
 
 export const prerender = true;
 
@@ -46,10 +46,14 @@ export function llmsData(): LlmsData {
     })),
     skills: SKILLS.map((group) => ({ group: group.group.en, items: group.items })),
     principles: PRINCIPLES.items.en,
-    article: {
-      title: ARTICLE.title.en,
-      summary: ARTICLE.description.en,
-      route: dirRoute(PAGES['article-rag-eval-gate'].route),
+    blog: {
+      route: dirRoute(PAGES.blog.route),
+      posts: POSTS.map((post) => ({
+        title: post.title.en,
+        summary: post.description.en,
+        date: post.date,
+        route: dirRoute(pageForPost(post).route),
+      })),
     },
   };
 }

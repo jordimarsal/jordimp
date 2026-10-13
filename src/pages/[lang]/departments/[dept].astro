@@ -6,9 +6,9 @@ import DeptCard from '../../../components/site/DeptCard.astro';
 import SecHead from '../../../components/site/SecHead.astro';
 import { LOCALES, type Locale } from '../../../lib/i18n';
 import {
-  ARTICLE,
   BREADCRUMB_DEPTS,
   BREADCRUMB_HOME,
+  BLOG_UI,
   DEPTS,
   FLOOR_ORDER,
   FOOTER,
@@ -22,6 +22,7 @@ import {
   TELEMETRY_PAGE,
   TOOLING_PAGE,
   UI,
+  post,
   project,
 } from '../../../data/content';
 import type { DeptKey, StatEntry } from '../../../data/types';
@@ -54,6 +55,7 @@ const { lang, deptKey } = Astro.props;
 
 const d = DEPTS[deptKey];
 const route = dirRoute(PAGES[deptKey].route);
+const essay = post('rag-eval-gate');
 const quality = parseQuality(qualityJson);
 const qualityReport = quality.ok ? quality.value : null;
 const qualityCats = INSPECTIONS_PAGE.categories[lang];
@@ -105,11 +107,11 @@ const trail = [
     {deptKey === 'research' && (
       <>
         <aside class="article-callout" aria-labelledby="f3-writing">
-          <p class="article-callout__stamp mono">{`${ARTICLE.dateLabel[lang]} ${ARTICLE.date} · ${ARTICLE.revision}`}</p>
-          <h3 id="f3-writing">{ARTICLE.title[lang]}</h3>
-          <p>{ARTICLE.relatedBody[lang]}</p>
+          <p class="article-callout__stamp mono">{`${essay.dateLabel[lang]} ${essay.date} · ${essay.revision}`}</p>
+          <h3 id="f3-writing">{essay.title[lang]}</h3>
+          <p>{essay.relatedBody?.[lang] ?? BLOG_UI.rowLabel[lang]}</p>
           <a class="case" href={srcPath(lang, dirRoute(PAGES['article-rag-eval-gate'].route))}>
-            {ARTICLE.readLabel[lang]} <span aria-hidden="true">&rarr;</span>
+            {essay.readLabel?.[lang] ?? BLOG_UI.rowLabel[lang]} <span aria-hidden="true">&rarr;</span>
           </a>
         </aside>
         <section class="section">

@@ -5,6 +5,7 @@ import { chromium } from '@playwright/test';
 import { LOCALES, FLOOR_ORDER } from '../src/data/content.ts';
 
 const DIST = fileURLToPath(new URL('../dist', import.meta.url));
+const DIST_URL = pathToFileURL(DIST).href;
 const FIXTURE = new URL('../tests/fixtures/parity.json', import.meta.url).pathname;
 const CHECK = process.argv.includes('--check');
 
@@ -24,11 +25,17 @@ function fileToRoute(file) {
 
 async function routeFixture(page, file) {
   await page.goto(pathToFileURL(file).href);
+  const raw = await page.evaluate(() => ({
+    title: document.title,
+    description: document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '',
+    h1: document.querySelector('main h1')?.textContent ?? '',
+    mainText: document.querySelector('main')?.textContent ?? '',
+  }));
   return {
-    title: await page.title(),
-    description: canon((await page.locator('meta[name="description"]').getAttribute('content')) ?? ''),
-    h1: canon((await page.locator('main h1').textContent()) ?? ''),
-    mainText: canon((await page.locator('main').textContent()) ?? ''),
+    title: raw.title,
+    description: canon(raw.description),
+    h1: canon(raw.h1),
+    mainText: canon(raw.mainText),
   };
 }
 
@@ -82,7 +89,15 @@ async function flagsFixture(page, locale) {
 }
 
 const browser = await chromium.launch();
-const page = await browser.newPage();
+const context = await browser.newContext();
+// Pages with a 0s meta refresh (the F15 redirect stubs) navigate to dist-relative paths
+// that do not exist under file://; fulfilling those escape navigations with 204 holds
+// the document so the walk can read the stub head. Dist files themselves pass through.
+await context.route(
+  (url) => url.protocol === 'file:' && !url.href.startsWith(`${DIST_URL}/`),
+  (route) => route.fulfill({ status: 204 }),
+);
+const page = await context.newPage();
 
 const routeEntries = [];
 for (const file of listHtmlFiles(DIST)) {

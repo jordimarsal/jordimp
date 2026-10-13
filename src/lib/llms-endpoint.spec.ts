@@ -79,10 +79,15 @@ describe('GET-ready llms.txt content (canonical data)', () => {
     expect(text.trimEnd().endsWith('Full details in llms-full.txt.')).toBe(true);
   });
 
-  it('links the essay from the key pages', () => {
+  it('links the blog index and both posts from the key pages (R18)', () => {
+    expect(text).toContain('- [Blog](https://jordimp.net/en/blog/)');
     expect(text).toContain(
-      '- [Writing: RAG without an eval gate is a demo.](https://jordimp.net/en/writing/rag-eval-gate/)',
+      '- [Blog: Which local model should a coding agent run? Nine GGUFs, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/)',
     );
+    expect(text).toContain(
+      '- [Blog: RAG without an eval gate is a demo.](https://jordimp.net/en/blog/rag-eval-gate/)',
+    );
+    expect(text).not.toContain('/writing/');
   });
 });
 
@@ -103,18 +108,23 @@ describe('GET-ready llms-full.txt content (canonical data)', () => {
       '## Career ledger (Operations, F0)',
       '## Skills (Mezzanine)',
       '## Working principles (Mezzanine)',
-      '## Writing',
+      '## Blog',
       '## Pages',
     ]) {
       expect(text).toContain(section);
     }
   });
 
-  it('carries the essay through the real content module', () => {
-    expect(text).toContain('## Writing');
-    expect(text).toContain(
-      '- [RAG without an eval gate is a demo.](https://jordimp.net/en/writing/rag-eval-gate/)',
+  it('carries the blog index and both posts through the real content module (R18)', () => {
+    const blog = text.split('## Blog')[1].split('## Pages')[0];
+    expect(blog).toContain('- [Blog](https://jordimp.net/en/blog/)');
+    expect(blog).toContain(
+      '- [Blog: Which local model should a coding agent run? Nine GGUFs, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/)',
     );
+    expect(blog).toContain(
+      '- [Blog: RAG without an eval gate is a demo.](https://jordimp.net/en/blog/rag-eval-gate/)',
+    );
+    expect(blog.indexOf('2026-10-13')).toBeLessThan(blog.indexOf('2026-09-22'));
   });
 
   it('carries the inspections floor through the default Q page suffix', () => {

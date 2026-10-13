@@ -21,6 +21,7 @@ const isCurrent = (key: NavKey): boolean => !noCurrent && current === key;
     <a href={srcPath(lang, '')} aria-current={isCurrent('home') ? 'page' : undefined}>{UI.nav.home[lang]}</a>
     <a href={`${srcPath(lang, '')}#building`} aria-current={isCurrent('departments') ? 'page' : undefined}>{UI.nav.departments[lang]}</a>
     <a href={srcPath(lang, dirRoute(PAGES.work.route))} aria-current={isCurrent('work') ? 'page' : undefined}>{UI.nav.work[lang]}</a>
+    <a href={srcPath(lang, dirRoute(PAGES.blog.route))} aria-current={isCurrent('blog') ? 'page' : undefined}>{UI.nav.blog[lang]}</a>
     <a href={srcPath(lang, dirRoute(PAGES.cv.route))} aria-current={isCurrent('cv') ? 'page' : undefined}>{UI.nav.cv[lang]}</a>
     <a href="#desk">{UI.nav.contact[lang]}</a>
   </nav>

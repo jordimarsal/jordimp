@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  ARTICLE,
+  BLOG_UI,
   CASE_BUILD,
   CASE_NOTES,
   DEPTS,
@@ -16,6 +16,7 @@ import {
   OPERATIONS_PAGE,
   PAGES,
   PEOPLE_PAGE,
+  POSTS,
   PROJECTS,
   RESEARCH_PAGE,
   SITE,
@@ -27,6 +28,8 @@ import {
   TOOLING_PAGE,
   UI,
   WORK,
+  pageForPost,
+  post,
   project,
   tierProjects,
 } from './content';
@@ -389,16 +392,20 @@ describe('project tiers', () => {
 });
 
 describe('pages data', () => {
-  it('registers home, work, cv, the 7 departments, the 11 project pages and the essay', () => {
+  it('registers home, work, cv, the blog trio, the 7 departments and the 11 project pages (R7)', () => {
     const expected = [
       'home',
       'work',
       'cv',
+      'blog',
+      'post-ggufbench',
       'article-rag-eval-gate',
+      'article-rag-eval-gate-redirect',
       ...FLOOR_ORDER,
       ...PROJECTS.map((p) => `project-${p.slug}`),
     ];
     expect(Object.keys(PAGES).sort()).toEqual(expected.sort());
+    expect(Object.keys(PAGES)).toHaveLength(25);
   });
 
   it('gives every page a route and trilingual title and description', () => {
@@ -563,38 +570,106 @@ describe('people page org roles (R23)', () => {
   });
 });
 
-describe('article data (rag-eval-article)', () => {
+describe('blog posts data (F15)', () => {
+  const essay = post('rag-eval-gate');
+  const gguf = post('which-local-model-for-coding-agents');
+
+  it('ships exactly two posts ordered by publication date descending (R9)', () => {
+    expect(POSTS.map((entry) => entry.slug)).toEqual([
+      'which-local-model-for-coding-agents',
+      'rag-eval-gate',
+    ]);
+    expect(POSTS.map((entry) => entry.date)).toEqual(
+      [...POSTS.map((entry) => entry.date)].sort().reverse(),
+    );
+  });
+
+  it('localizes the blog UI labels and pins the navbar Blog label (R8, R9)', () => {
+    expect(UI.nav.blog).toEqual({ en: 'Blog', es: 'Blog', ca: 'Blog' });
+    expect(BLOG_UI.rowLabel).toEqual({
+      en: 'READ THE POST',
+      es: 'LEE LA ENTRADA',
+      ca: 'LLEGEIX L’ENTRADA',
+    });
+  });
+
+  it('gives the ggufbench post trilingual metadata, the measured date and the repo about URL (R10, R14, R15)', () => {
+    expect(gguf.date).toBe('2026-10-13');
+    expect(gguf.revision).toBe('REV A');
+    expect(gguf.about).toBe('https://github.com/jordimarsal/ggufbench');
+    expect(essay.about).toBe('https://github.com/jordimarsal/codebaserag');
+    for (const lang of LOCALES) {
+      expect(gguf.title[lang].trim(), `gguf:title.${lang}`).not.toBe('');
+      expect(gguf.description[lang].trim(), `gguf:description.${lang}`).not.toBe('');
+      expect(gguf.lead[lang].trim(), `gguf:lead.${lang}`).not.toBe('');
+      expect(gguf.dateLabel[lang].trim(), `gguf:dateLabel.${lang}`).not.toBe('');
+    }
+  });
+
+  it('registers the blog index, the post and the essay in PAGES under the blog nav (R1, R2, R3, R7)', () => {
+    expect(PAGES.blog.route).toBe('blog.html');
+    expect(PAGES.blog.nav).toBe('blog');
+    expect(PAGES['post-ggufbench'].route).toBe('blog/which-local-model-for-coding-agents.html');
+    expect(PAGES['post-ggufbench'].nav).toBe('blog');
+    expect(PAGES['article-rag-eval-gate'].route).toBe('blog/rag-eval-gate.html');
+    expect(PAGES['article-rag-eval-gate'].nav).toBe('blog');
+    expect(pageForPost(gguf).route).toBe('blog/which-local-model-for-coding-agents.html');
+    expect(pageForPost(essay).route).toBe('blog/rag-eval-gate.html');
+  });
+
+  it('points every redirect stub at a registered PAGES route (R6, R7)', () => {
+    for (const page of Object.values(PAGES)) {
+      if (page.redirect === undefined) continue;
+      expect(
+        Object.values(PAGES).some((target) => target.route === page.redirect),
+        `${page.route} → ${page.redirect}`,
+      ).toBe(true);
+    }
+    expect(PAGES['article-rag-eval-gate-redirect'].route).toBe('writing/rag-eval-gate.html');
+    expect(PAGES['article-rag-eval-gate-redirect'].redirect).toBe('blog/rag-eval-gate.html');
+  });
+});
+
+describe('essay data (F15 migration, R4)', () => {
+  const essay = post('rag-eval-gate');
   const EN_TITLE = 'RAG without an eval gate is a demo.';
   const ANCHORS = ['problem', 'golden-set', 'ci-gate', 'hexagonal', 'baseline'];
 
   it('pins the exact English title and localized title/description/lead', () => {
-    expect(ARTICLE.title.en).toBe(EN_TITLE);
-    expect(ARTICLE.sections).toHaveLength(5);
+    expect(essay.title.en).toBe(EN_TITLE);
+    expect(essay.sections).toHaveLength(5);
     for (const lang of LOCALES) {
-      expect(ARTICLE.title[lang].trim(), `title.${lang}`).not.toBe('');
-      expect(ARTICLE.description[lang].trim(), `description.${lang}`).not.toBe('');
-      expect(ARTICLE.lead[lang].trim(), `lead.${lang}`).not.toBe('');
-      expect(ARTICLE.dateLabel[lang].trim(), `dateLabel.${lang}`).not.toBe('');
-      expect(ARTICLE.readLabel[lang].trim(), `readLabel.${lang}`).not.toBe('');
-      expect(ARTICLE.relatedBody[lang].trim(), `relatedBody.${lang}`).not.toBe('');
+      expect(essay.title[lang].trim(), `title.${lang}`).not.toBe('');
+      expect(essay.description[lang].trim(), `description.${lang}`).not.toBe('');
+      expect(essay.lead[lang].trim(), `lead.${lang}`).not.toBe('');
+      expect(essay.dateLabel[lang].trim(), `dateLabel.${lang}`).not.toBe('');
+      expect(essay.readLabel?.[lang].trim(), `readLabel.${lang}`).not.toBe('');
+      expect(essay.relatedBody?.[lang].trim(), `relatedBody.${lang}`).not.toBe('');
     }
   });
 
-  it('defines exactly the five sections in the fixed order with trilingual copy', () => {
-    expect(ARTICLE.sections.map((section) => section.anchor)).toEqual(ANCHORS);
-    for (const section of ARTICLE.sections) {
+  it('defines exactly the five sections in the fixed order with trilingual paragraphs', () => {
+    expect(essay.sections.map((section) => section.anchor)).toEqual(ANCHORS);
+    for (const section of essay.sections) {
       for (const lang of LOCALES) {
         expect(section.heading[lang].trim(), `${section.anchor}:heading.${lang}`).not.toBe('');
-        expect(section.body[lang].length, `${section.anchor}:body.${lang}`).toBeGreaterThan(0);
-        for (const paragraph of section.body[lang]) {
-          expect(paragraph.trim(), `${section.anchor}:body.${lang}`).not.toBe('');
+        const paragraphs = section.blocks.filter((block) => block.kind === 'paragraph');
+        expect(paragraphs.length, `${section.anchor}:blocks.${lang}`).toBeGreaterThan(0);
+        for (const block of paragraphs) {
+          if (block.kind !== 'paragraph') continue;
+          expect(block.html[lang].trim(), `${section.anchor}:body.${lang}`).not.toBe('');
         }
       }
     }
   });
 
   it('keeps the English body between 800 and 1200 words', () => {
-    const words = [ARTICLE.lead.en, ...ARTICLE.sections.flatMap((section) => section.body.en)]
+    const words = [
+      essay.lead.en,
+      ...essay.sections.flatMap((section) =>
+        section.blocks.map((block) => (block.kind === 'paragraph' ? block.html.en : '')),
+      ),
+    ]
       .join(' ')
       .split(/\s+/)
       .filter(Boolean);
@@ -602,16 +677,98 @@ describe('article data (rag-eval-article)', () => {
     expect(words.length).toBeLessThanOrEqual(1200);
   });
 
-  it('carries the committed floor facts and frames 0.409 honestly', () => {
-    const en = [ARTICLE.lead.en, ...ARTICLE.sections.flatMap((section) => section.body.en)].join('\n');
+  it('carries the committed floor facts, the datestamp and frames 0.409 honestly', () => {
+    const en = [
+      essay.lead.en,
+      ...essay.sections.flatMap((section) =>
+        section.blocks.map((block) => (block.kind === 'paragraph' ? block.html.en : '')),
+      ),
+    ].join('\n');
     expect(en).toContain('0.409');
     expect(en).toContain('not SOTA');
     expect(en).toContain('≥40');
+    expect(essay.date).toBe('2026-09-22');
+    expect(essay.revision).toBe('REV A');
+  });
+});
+
+describe('ggufbench post data (F15, fact boundary R13)', () => {
+  const gguf = post('which-local-model-for-coding-agents');
+
+  const proseOf = (lang: 'en' | 'es' | 'ca'): string =>
+    [
+      gguf.lead[lang],
+      ...gguf.sections.flatMap((section) =>
+        section.blocks.map((block) => (block.kind === 'paragraph' ? block.html[lang] : '')),
+      ),
+    ].join('\n');
+
+  const numerals = (text: string): string[] =>
+    [...text.matchAll(/\d+(?:\.\d+)?/g)].map((match) => match[0]);
+
+  const outboundUrls = (lang: 'en' | 'es' | 'ca'): readonly string[] =>
+    [...proseOf(lang).matchAll(/https?:\/\/[^\s<"']+/g)].map((match) => match[0]).sort();
+
+  it('pins the exact English h1 (R13)', () => {
+    expect(gguf.title.en).toBe(
+      'Which local model should a coding agent run? Nine GGUFs, one harness, receipts',
+    );
   });
 
-  it('registers the essay route in PAGES under the departments nav', () => {
-    expect(PAGES['article-rag-eval-gate'].route).toBe('writing/rag-eval-gate.html');
-    expect(PAGES['article-rag-eval-gate'].nav).toBe('departments');
+  it('carries the scoreboard as a typed table with the source header and the four measured rows (R12)', () => {
+    const tables = gguf.sections.flatMap((section) => section.blocks).filter((block) => block.kind === 'table');
+    expect(tables).toHaveLength(1);
+    const table = tables[0];
+    if (table.kind !== 'table') return;
+    expect(table.head).toEqual(['model', 'tools', 'code', 'agent', 'speed', 'global']);
+    expect(table.rows).toEqual([
+      ['gemma-4-26b-a4b-it q5_k_xl', '92%', '91%', '93%', '32ms', '0.84'],
+      ['qwen36-35b-distill mxfp4_moe', '92%', '80%', '82%', '17ms', '0.84'],
+      ['qwen3.8-27b turbo q4_k_s', '92%', '84%', '96%', '45ms', '0.81'],
+      ['strata iq3_xxs', '86%', '88%', '96%', '50ms', '0.80'],
+    ]);
+  });
+
+  it('keeps only source-writeup figures in the English body (fact boundary)', () => {
+    const en = proseOf('en');
+    for (const fact of [
+      'temperature 0.2',
+      'top-p 0.95',
+      'seed 42',
+      'q8_0',
+      'seeds 42, 43 and 44',
+      '0.84 ±1',
+      '16 tool tasks',
+      '60 code tasks',
+      '42 multi-step agent tasks',
+      '32K context',
+      '2026-10-13',
+      '60-task code bank on 11 models',
+      '0 of 660 runs',
+      'excluded 14',
+      '40 to 665 ms',
+      '253 extra output tokens',
+      '84% to 100%',
+    ]) {
+      expect(en, fact).toContain(fact);
+    }
+    expect(en).not.toContain('0.48');
+    expect(en).not.toContain('RTX 4090');
+  });
+
+  it('carries exactly the EN numeric multiset in the ES and CA bodies (R13)', () => {
+    expect(numerals(proseOf('es'))).toEqual(numerals(proseOf('en')));
+    expect(numerals(proseOf('ca'))).toEqual(numerals(proseOf('en')));
+  });
+
+  it('carries exactly the EN outbound URLs in the ES and CA bodies (R13)', () => {
+    expect(outboundUrls('en')).toEqual([
+      'https://github.com/jordimarsal/ggufbench',
+      'https://github.com/jordimarsal/ggufbench',
+      'https://jordimarsal.github.io/ggufbench/',
+    ]);
+    expect(outboundUrls('es')).toEqual(outboundUrls('en'));
+    expect(outboundUrls('ca')).toEqual(outboundUrls('en'));
   });
 });
 

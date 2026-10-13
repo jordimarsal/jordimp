@@ -33,10 +33,22 @@ const base: LlmsData = {
   email: 'hello@jordimp.net',
   github: 'https://github.com/jordimarsal',
   linkedin: 'https://www.linkedin.com/in/jordi-marsal-poy',
-  article: {
-    title: 'RAG without an eval gate is a demo.',
-    summary: 'Why a public golden set and a CI floor of 0.409 matter.',
-    route: 'writing/rag-eval-gate/',
+  blog: {
+    route: 'blog/',
+    posts: [
+      {
+        title: 'Which local model should a coding agent run? Nine GGUFs, one harness, receipts',
+        summary: 'Nine GGUFs, one harness, four dimensions and the receipts of every call.',
+        date: '2026-10-13',
+        route: 'blog/which-local-model-for-coding-agents/',
+      },
+      {
+        title: 'RAG without an eval gate is a demo.',
+        summary: 'Why a public golden set and a CI floor of 0.409 matter.',
+        date: '2026-09-22',
+        route: 'blog/rag-eval-gate/',
+      },
+    ],
   },
   departments: [
     dept('F3', 'Research & Retrieval', ['codebaserag']),
@@ -99,9 +111,14 @@ describe('buildLlmsTxt()', () => {
     );
   });
 
-  it('links the essay from the key pages', () => {
-    expect(buildLlmsTxt(base)).toContain(
-      '- [Writing: RAG without an eval gate is a demo.](https://jordimp.net/en/writing/rag-eval-gate/) — Why a public golden set and a CI floor of 0.409 matter.',
+  it('links the blog index and both posts from the key pages (R18)', () => {
+    const text = buildLlmsTxt(base);
+    expect(text).toContain('- [Blog](https://jordimp.net/en/blog/)');
+    expect(text).toContain(
+      '- [Blog: Which local model should a coding agent run? Nine GGUFs, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/) — Nine GGUFs, one harness, four dimensions and the receipts of every call. (2026-10-13)',
+    );
+    expect(text).toContain(
+      '- [Blog: RAG without an eval gate is a demo.](https://jordimp.net/en/blog/rag-eval-gate/) — Why a public golden set and a CI floor of 0.409 matter. (2026-09-22)',
     );
   });
 
@@ -205,11 +222,16 @@ describe('buildLlmsFullTxt()', () => {
     ).toBe(true);
   });
 
-  it('carries the Writing section with the linked essay', () => {
+  it('carries the Blog section with the index and both linked posts (R18)', () => {
     const text = buildLlmsFullTxt(base);
-    expect(text).toContain('## Writing');
+    expect(text).toContain('## Blog');
+    expect(text).not.toContain('## Writing');
+    expect(text.split('## Blog')[1]).toContain('- [Blog](https://jordimp.net/en/blog/)');
     expect(text).toContain(
-      '- [RAG without an eval gate is a demo.](https://jordimp.net/en/writing/rag-eval-gate/) — Why a public golden set and a CI floor of 0.409 matter.',
+      '- [Blog: Which local model should a coding agent run? Nine GGUFs, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/) — Nine GGUFs, one harness, four dimensions and the receipts of every call. (2026-10-13)',
+    );
+    expect(text).toContain(
+      '- [Blog: RAG without an eval gate is a demo.](https://jordimp.net/en/blog/rag-eval-gate/) — Why a public golden set and a CI floor of 0.409 matter. (2026-09-22)',
     );
   });
 

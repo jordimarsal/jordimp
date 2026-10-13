@@ -90,9 +90,11 @@ The desk takes three things: senior or staff backend roles, short spec-first eng
 - I/O at the edges; pure, deterministic logic everywhere else.
 - Knowledge sharing and mentoring — the team improves together.
 
-## Writing
+## Blog
 
-- [RAG without an eval gate is a demo.](https://jordimp.net/en/writing/rag-eval-gate/) — Why CodebaseRAG gates retrieval quality in CI: a public golden set, a committed mean recall@5 floor of 0.409, and honest limits — a floor, not SOTA.
+- [Blog](https://jordimp.net/en/blog/)
+- [Blog: Which local model should a coding agent run? Nine GGUFs, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/) — Which GGUF should a coding agent load? Nine models, one llama.cpp harness, four dimensions — tools, code, agent and speed — measured on two RTX 5080s, with the receipts of every call. (2026-10-13)
+- [Blog: RAG without an eval gate is a demo.](https://jordimp.net/en/blog/rag-eval-gate/) — Why CodebaseRAG gates retrieval quality in CI: a public golden set, a committed mean recall@5 floor of 0.409, and honest limits — a floor, not SOTA. (2026-09-22)
 
 ## Pages
 

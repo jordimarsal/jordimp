@@ -1,0 +1,49 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import Breadcrumb from '../../../components/site/Breadcrumb.astro';
+import { LOCALES, type Locale } from '../../../lib/i18n';
+import { BLOG_UI, BREADCRUMB_HOME, PAGES, POSTS, UI, pageForPost } from '../../../data/content';
+import { dirRoute, srcPath } from '../../../lib/paths';
+
+export async function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+type Props = { lang: Locale };
+const { lang } = Astro.props;
+
+const route = dirRoute(PAGES.blog.route);
+const trail = [
+  { name: BREADCRUMB_HOME[lang], path: '' },
+  { name: UI.nav.blog[lang], path: route },
+] as const;
+---
+<SiteLayout
+  lang={lang}
+  title={PAGES.blog.title[lang]}
+  description={PAGES.blog.description[lang]}
+  path={route}
+  navKey="blog"
+  breadcrumbs={trail.slice(1)}
+>
+  <main class="wrap" id="main">
+    <Breadcrumb lang={lang} {trail} />
+    <article class="prose article blog-index">
+      <h1 id="page-title">{UI.nav.blog[lang]}</h1>
+      <ul class="blog-list">
+        {POSTS.map((post) => (
+          <li class="blog-row">
+            <p class="article__stamp mono">{`${post.dateLabel[lang]} ${post.date} · ${post.revision}`}</p>
+            <h2 class="blog-row__title">
+              <a href={srcPath(lang, dirRoute(pageForPost(post).route))}>{post.title[lang]}</a>
+            </h2>
+            <p class="article__lead">{post.lead[lang]}</p>
+            <a class="case" href={srcPath(lang, dirRoute(pageForPost(post).route))}>
+              {BLOG_UI.rowLabel[lang]} <span aria-hidden="true">&rarr;</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </article>
+  </main>
+</SiteLayout>

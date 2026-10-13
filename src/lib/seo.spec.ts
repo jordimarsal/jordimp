@@ -135,7 +135,7 @@ describe('articleJsonLd()', () => {
   const input = {
     headline: 'RAG without an eval gate is a demo.',
     description: 'A description.',
-    path: 'writing/rag-eval-gate/',
+    path: 'blog/rag-eval-gate/',
     datePublished: '2026-09-22',
     section: 'Research & Retrieval',
     about: 'https://github.com/jordimarsal/codebaserag',
@@ -167,7 +167,7 @@ describe('articleJsonLd()', () => {
 
   it('points mainEntityOfPage and isPartOf at the locale URLs', () => {
     const article = articleJsonLd('ca', input);
-    expect(article.mainEntityOfPage).toBe('https://jordimp.net/ca/writing/rag-eval-gate/');
+    expect(article.mainEntityOfPage).toBe('https://jordimp.net/ca/blog/rag-eval-gate/');
     expect(article.isPartOf).toEqual({
       '@type': 'WebSite',
       name: 'JORDIMP & CO.',

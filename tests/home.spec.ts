@@ -176,3 +176,30 @@ test.describe('home ITE plaque (F10 R10, R12)', () => {
     });
   }
 });
+
+test.describe('blog navbar entry (F15 R8)', () => {
+  for (const home of HOMES) {
+    test(`renders the Blog link between Projects and CV at ${home}`, async ({ page }) => {
+      await page.goto(home);
+      const lang = home.replace(/\//g, '');
+      const labels = await page.locator('.navbar__links a').allTextContents();
+      expect(labels.indexOf(UI.nav.blog[lang])).toBe(labels.indexOf(UI.nav.work[lang]) + 1);
+      expect(labels.indexOf(UI.nav.cv[lang])).toBe(labels.indexOf(UI.nav.blog[lang]) + 1);
+      await expect(page.locator(`.navbar__links a[href="${home}blog/"]`)).toHaveText(
+        UI.nav.blog[lang],
+      );
+    });
+
+    test(`marks the Blog link as the current page on blog routes at ${home}`, async ({ page }) => {
+      await page.goto(`${home}blog/`);
+      await expect(page.locator(`.navbar__links a[href="${home}blog/"]`)).toHaveAttribute(
+        'aria-current',
+        'page',
+      );
+      await expect(page.locator(`.navbar__links a[href="${home}"]`)).not.toHaveAttribute(
+        'aria-current',
+        'page',
+      );
+    });
+  }
+});

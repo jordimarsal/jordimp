@@ -28,9 +28,10 @@ export interface LlmsSkill {
   readonly items: readonly string[];
 }
 
-export interface LlmsArticleRef {
+export interface LlmsPostRef {
   readonly title: string;
   readonly summary: string;
+  readonly date: string;
   readonly route: string;
 }
 
@@ -48,7 +49,7 @@ export interface LlmsData {
   readonly experience: readonly LlmsExperience[];
   readonly skills: readonly LlmsSkill[];
   readonly principles: readonly string[];
-  readonly article: LlmsArticleRef;
+  readonly blog: { readonly route: string; readonly posts: readonly LlmsPostRef[] };
 }
 
 import { SITE } from '../config';
@@ -87,17 +88,18 @@ function casePagesLine(data: LlmsData): string {
   return `- ${mdLink('Project case pages', CASE_SLUG_URL)} — one per project, ${data.projects.length} total`;
 }
 
-function articleLink(data: LlmsData, label: string): string {
-  return mdLink(label, enUrl(data.article.route));
+function blogIndexLine(data: LlmsData): string {
+  return `- ${mdLink('Blog', enUrl(data.blog.route))}`;
 }
 
-function articleLine(data: LlmsData): string {
-  const label = `Writing: ${data.article.title}`;
-  return `- ${articleLink(data, label)} — ${data.article.summary}`;
+function postLines(data: LlmsData): string {
+  return data.blog.posts
+    .map((post) => `- ${mdLink(`Blog: ${post.title}`, enUrl(post.route))} — ${post.summary} (${post.date})`)
+    .join('\n');
 }
 
-function articleSectionLine(data: LlmsData): string {
-  return `- ${articleLink(data, data.article.title)} — ${data.article.summary}`;
+function blogSection(data: LlmsData): string {
+  return [blogIndexLine(data), postLines(data)].join('\n');
 }
 
 export function buildLlmsTxt(data: LlmsData): string {
@@ -114,7 +116,7 @@ ${departmentsList(data)}
 - ${mdLink('Home', EN_HOME)} (also ${mdLink('Español', ES_HOME)}, ${mdLink('Català', CA_HOME)})
 - ${mdLink('Projects', PROJECTS_URL)}
 - ${mdLink('CV', CV_URL)}
-${articleLine(data)}
+${blogSection(data)}
 ${departmentKeyPages(data)}
 ${casePagesLine(data)}
 
@@ -213,9 +215,9 @@ ${skills(data)}
 
 ${principles(data)}
 
-## Writing
+## Blog
 
-${articleSectionLine(data)}
+${blogSection(data)}
 
 ## Pages
 

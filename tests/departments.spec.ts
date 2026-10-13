@@ -1,7 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import {
-  ARTICLE,
   BREADCRUMB_DEPTS,
   BREADCRUMB_HOME,
   DEPTS,
@@ -19,6 +18,7 @@ import {
   TELEMETRY_PAGE,
   TOOLING_PAGE,
   UI,
+  post,
   project,
 } from '../src/data/content';
 import { LOCALES, type Locale } from '../src/lib/i18n';
@@ -100,8 +100,8 @@ test.describe('department pages (T8)', () => {
     }
 
     const essay = page.locator('aside.article-callout a.case');
-    await expect(essay).toHaveAttribute('href', '/en/writing/rag-eval-gate/');
-    await expect(page.locator('aside.article-callout h3')).toHaveText(ARTICLE.title.en);
+    await expect(essay).toHaveAttribute('href', '/en/blog/rag-eval-gate/');
+    await expect(page.locator('aside.article-callout h3')).toHaveText(post('rag-eval-gate').title.en);
 
     await expect(page.locator('section .dept-panel__cta a.btn .btn__label')).toHaveText(
       'Back to the building',
