@@ -586,10 +586,10 @@ export const PROJECTS: readonly Project[] = [
   ),
   P(
     {
-      slug: 'harness-standard', name: 'Harness Standard', year: '2026', featured: true,
+      slug: 'harness-standard', name: 'Harness', year: '2026', featured: true,
       tier: 'thesis', dept: 'tooling',
       stack: ['Agents', 'SDD', 'CLI', 'Conventions'],
-      github: 'https://github.com/jordimarsal/harness-standard',
+      github: 'https://github.com/jordimarsal/harness',
     },
     {
       blurb: {
@@ -1603,9 +1603,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'F1 · Eines i Plataforma — Jordimp & Co.',
     },
     description: {
-      en: 'The workshop floor: harness-standard, md-mermaid-pdf and mcp-transparent-png — deliberately small tools, production standards.',
-      es: 'El taller: harness-standard, md-mermaid-pdf y mcp-transparent-png — herramientas deliberadamente pequeñas, estándares de producción.',
-      ca: 'El taller: harness-standard, md-mermaid-pdf i mcp-transparent-png — eines deliberadament petites, estàndards de producció.',
+      en: 'The workshop floor: harness, md-mermaid-pdf and mcp-transparent-png — deliberately small tools, production standards.',
+      es: 'El taller: harness, md-mermaid-pdf y mcp-transparent-png — herramientas deliberadamente pequeñas, estándares de producción.',
+      ca: 'El taller: harness, md-mermaid-pdf i mcp-transparent-png — eines deliberadament petites, estàndards de producció.',
     },
   },
   operations: {

@@ -541,7 +541,7 @@ describe('curated floor copy', () => {
         negative: ['Product Offers API'],
       },
       tooling: {
-        positive: ['harness-standard', 'md-mermaid-pdf', 'mcp-transparent-png'],
+        positive: ['harness', 'md-mermaid-pdf', 'mcp-transparent-png'],
         negative: ['Rustcut', 'Spring Boot Casino'],
       },
     };

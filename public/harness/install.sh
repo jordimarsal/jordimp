@@ -1,17 +1,30 @@
 #!/usr/bin/env bash
-# install.sh — remote bootstrap for Harness Standard.
+# install.sh — remote bootstrap for Harness (formerly harness-standard).
 #
 # Usage:
 #   curl -fsSL https://jordimp.net/harness/install.sh | bash -s -- --tool=claude
-#   bash install.sh [--tool=claude|opencode] [--dest DIR] [--ref REF] [--force]
-#                   [--modules=m1,m2] [--audit-level=basic|standard|strict]
+#   bash install.sh [--tool=claude|opencode] [--dest DIR] [--ref REF|latest] [--force] [--update]
+#                   [--hybrid|--workflow=full|hybrid] [--gauntlet] [--modules=m1,m2] [--audit-level=basic|standard|strict]
+#                   [--modules=m1,m2] [--audit-level=basic|standard|strict] [--backup[=DIR]] [--no-uv]
 #
-# Env: HARNESS_REPO_URL (default https://github.com/jordimarsal/harness-standard.git)
-#      HARNESS_REF      (default v0.1.0)
+# --no-uv: python installs use uv by default; this flag keeps python3/pytest
+# commands even when uv is on PATH.
+#
+# --update refreshes an installed harness, reusing its stored tool/modules/audit
+# level; without --ref it fetches the newest v* tag (fresh installs stay pinned
+# to the default REF).
+#
+# --backup moves files the install would overwrite (e.g. an existing AGENTS.md)
+# to harness/backup/<UTC>/ instead of aborting; nothing is ever deleted.
+#
+# Env: HARNESS_REPO_URL (default https://github.com/jordimarsal/harness.git)
+#      HARNESS_REF      (default v0.5.0)
 set -euo pipefail
 
-REPO_URL="${HARNESS_REPO_URL:-https://github.com/jordimarsal/harness-standard.git}"
-REF="${HARNESS_REF:-v0.1.0}"
+REPO_URL="${HARNESS_REPO_URL:-https://github.com/jordimarsal/harness.git}"
+REF="${HARNESS_REF:-v0.8.1}"
+REF_GIVEN=0
+UPDATE=0
 DEST="."
 TOOL=""
 PASSTHRU=()
@@ -22,12 +35,18 @@ while [ $# -gt 0 ]; do
     --tool)          shift; TOOL="${1:-}" ;;
     --dest=*)        DEST="${1#*=}" ;;
     --dest)          shift; DEST="${1:-}" ;;
-    --ref=*)         REF="${1#*=}" ;;
-    --ref)           shift; REF="${1:-}" ;;
+    --ref=*)         REF="${1#*=}"; REF_GIVEN=1 ;;
+    --ref)           shift; REF="${1:-}"; REF_GIVEN=1 ;;
     --force)         PASSTHRU+=(--force) ;;
+    --update)        UPDATE=1; PASSTHRU+=(--update) ;;
+    --hybrid)        PASSTHRU+=(--hybrid) ;;
+    --gauntlet)      PASSTHRU+=(--gauntlet) ;;
+    --workflow=*)    PASSTHRU+=("$1") ;;
+    --no-uv)         PASSTHRU+=(--no-uv) ;;
+    --backup|--backup=*) PASSTHRU+=("$1") ;;
     --modules=*|--audit-level=*) PASSTHRU+=("$1") ;;
     -h|--help)
-      echo "Usage: install.sh [--tool=claude|opencode] [--dest DIR] [--ref REF] [--force] [--modules=...] [--audit-level=...]"
+      echo "Usage: install.sh [--tool=claude|opencode] [--dest DIR] [--ref REF|latest] [--force] [--update] [--modules=...] [--audit-level=...] [--backup[=DIR]] [--hybrid|--workflow=full|hybrid] [--gauntlet] [--no-uv]"
       exit 0 ;;
     *) echo "install.sh: unknown argument: $1" >&2; exit 1 ;;
   esac
@@ -41,18 +60,30 @@ esac
 
 command -v git >/dev/null 2>&1 || { echo "install.sh: git is required" >&2; exit 1; }
 
+# --update defaults to the newest tag; fresh installs stay pinned to REF.
+if [ "$UPDATE" -eq 1 ] && [ "$REF_GIVEN" -eq 0 ] && [ -z "${HARNESS_REF:-}" ]; then
+  REF="latest"
+fi
+if [ "$REF" = "latest" ]; then
+  RESOLVED="$(git ls-remote --tags --refs "$REPO_URL" 'v*' 2>/dev/null | sed 's|.*refs/tags/||' | sort -V | tail -n 1)"
+  [ -n "$RESOLVED" ] || { echo "install.sh: no v* tags found in $REPO_URL — pass --ref explicitly." >&2; exit 1; }
+  REF="$RESOLVED"
+fi
+
 mkdir -p "$DEST"
 DEST_ABS="$(cd "$DEST" && pwd)"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-echo "Fetching harness-standard ($REF)..."
-if ! git clone --depth 1 --branch "$REF" --quiet "$REPO_URL" "$TMP/harness-standard" 2>/dev/null; then
-  git clone --depth 1 --quiet "$REPO_URL" "$TMP/harness-standard"
+echo "Fetching harness ($REF)..."
+if ! git clone --depth 1 --branch "$REF" --quiet "$REPO_URL" "$TMP/harness"; then
+  echo "install.sh: unable to resolve ref '$REF' in $REPO_URL" >&2
+  echo "install.sh: refusing to fall back to the default branch; pass a valid --ref." >&2
+  exit 1
 fi
 
 ARGS=()
 [ -n "$TOOL" ] && ARGS+=(--tool="$TOOL")
 ARGS+=("${PASSTHRU[@]+"${PASSTHRU[@]}"}")
 
-( cd "$DEST_ABS" && bash "$TMP/harness-standard/init.sh" "${ARGS[@]+"${ARGS[@]}"}" )
+( cd "$DEST_ABS" && bash "$TMP/harness/init.sh" "${ARGS[@]+"${ARGS[@]}"}" )

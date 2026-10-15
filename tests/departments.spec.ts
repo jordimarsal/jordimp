@@ -165,13 +165,13 @@ test.describe('department pages (T8)', () => {
     const toolingBadge = page.locator('section:has(#tl-install) a.harness-badge');
     await expect(toolingBadge.locator('img').first()).toHaveAttribute(
       'alt',
-      'Built with harness-standard',
+      'Built with harness',
     );
     await expect(toolingBadge.locator('img').first()).toBeVisible();
     await expect(toolingBadge.locator('img').nth(1)).toBeHidden();
     await expect(toolingBadge).toHaveAttribute(
       'href',
-      'https://github.com/jordimarsal/harness-standard',
+      'https://github.com/jordimarsal/harness',
     );
     await expect(toolingBadge).toHaveAttribute('target', '_blank');
     await expect(toolingBadge).toHaveAttribute('rel', 'noopener noreferrer');
@@ -419,13 +419,13 @@ test.describe('department pages (T8)', () => {
     await expect(badge).toHaveCount(1);
     await expect(badge.locator('img').first()).toHaveAttribute(
       'alt',
-      'Built with harness-standard',
+      'Built with harness',
     );
     await expect(badge.locator('img').first()).toBeVisible();
     await expect(badge.locator('img').nth(1)).toBeHidden();
     await expect(badge).toHaveAttribute(
       'href',
-      'https://github.com/jordimarsal/harness-standard',
+      'https://github.com/jordimarsal/harness',
     );
     await expect(badge).toHaveAttribute('target', '_blank');
     await expect(badge).toHaveAttribute('rel', 'noopener noreferrer');
