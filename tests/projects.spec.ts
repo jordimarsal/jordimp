@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { PROJECTS, TIER_ORDER, tierProjects, WORK } from '../src/data/content';
+import { PROJECTS, TIER_LABELS, TIER_ORDER, tierProjects, UI, WORK } from '../src/data/content';
 import type { Locale } from '../src/lib/i18n';
 
 const ROUTES = ['/en/projects/', '/es/projects/', '/ca/projects/'] as const;
@@ -110,8 +110,21 @@ test.describe('projects index page (T6)', () => {
       await expect(page.locator('main > p.prose')).not.toBeEmpty();
       await expect(page.locator('main > p.prose')).toHaveText(WORK.intro[expected.lang]);
 
+      const tierNav = page.locator('nav.tier-nav');
+      await expect(tierNav).toHaveAttribute('aria-label', UI.tierNav[expected.lang]);
+      const tierLinks = tierNav.locator('a');
+      await expect(tierLinks).toHaveCount(3);
+      for (let i = 0; i < TIER_ORDER.length; i++) {
+        const tier = TIER_ORDER[i];
+        await expect(tierLinks.nth(i)).toHaveAttribute('href', `#tier-${tier}`);
+        await expect(tierLinks.nth(i)).toHaveText(TIER_LABELS[tier][expected.lang]);
+        await expect(
+          page.locator(`section.cards--tier[data-tier="${tier}"] h2.tier-head`),
+        ).toHaveAttribute('id', `tier-${tier}`);
+      }
+
       const details = page.locator('details.filter-wrap[data-filter-wrap]');
-      await expect(details).toHaveAttribute('open', '');
+      await expect(details).not.toHaveAttribute('open');
       await expect(details.locator('summary')).toHaveText(expected.summary);
       const chips = page.locator('.filter-chips');
       await expect(chips).toHaveAttribute('role', 'group');
@@ -152,6 +165,13 @@ test.describe('projects index page (T6)', () => {
         await expect(repo).toHaveAttribute('rel', 'noopener noreferrer');
         await expect(repo).toContainText(expected.github);
         await expect(repo).toHaveAttribute('aria-label', `${ordered[i].name} — ${expected.github}`);
+        const outcome = ordered[i].outcome;
+        const outcomeLine = cards.nth(i).locator('.card__outcome');
+        if (outcome) {
+          await expect(outcomeLine).toHaveText(outcome[expected.lang]);
+        } else {
+          await expect(outcomeLine).toHaveCount(0);
+        }
       }
 
       await expect(page.locator('.footer-desk#desk')).toHaveCount(1);
@@ -169,22 +189,24 @@ test.describe('projects index page (T6)', () => {
     });
   }
 
-  test('auto-opens the filter above 760px and keeps it collapsed at 390px', async ({ page }) => {
+  test('keeps the filter collapsed at every viewport width (F16 R29)', async ({ page }) => {
     await page.goto('/en/projects/');
-    await expect(page.locator('details.filter-wrap')).toHaveAttribute('open', '');
+    await expect(page.locator('details.filter-wrap')).not.toHaveAttribute('open');
+    await expect(page.locator('details.filter-wrap summary')).toBeVisible();
 
-    const mobile = await page.context().browser()!.newContext({
-      viewport: { width: 390, height: 844 },
-    });
-    const mobilePage = await mobile.newPage();
-    await mobilePage.goto('/en/projects/');
-    await expect(mobilePage.locator('details.filter-wrap')).not.toHaveAttribute('open');
-    await expect(mobilePage.locator('details.filter-wrap summary')).toBeVisible();
-    await mobile.close();
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(page.locator('details.filter-wrap')).not.toHaveAttribute('open');
+    await expect(page.locator('details.filter-wrap summary')).toBeVisible();
   });
+
+  async function openFilter(page: import('@playwright/test').Page): Promise<void> {
+    await page.locator('details.filter-wrap summary').click();
+    await expect(page.locator('.filter-chips button[data-stack]').first()).toBeVisible();
+  }
 
   test('filters by a single stack with the one-count label (en)', async ({ page }) => {
     await page.goto('/en/projects/');
+    await openFilter(page);
     const annexCards = page.locator('section[data-tier="annex"] article.card');
     const shown = page.locator('section.cards--tier article.card:not([hidden])');
     const status = page.locator('#filter-status');
@@ -203,6 +225,7 @@ test.describe('projects index page (T6)', () => {
 
   test('hides tier groups whose cards all filter out (en)', async ({ page }) => {
     await page.goto('/en/projects/');
+    await openFilter(page);
     const thesis = page.locator('section.cards--tier[data-tier="thesis"]');
     const satellite = page.locator('section.cards--tier[data-tier="satellite"]');
     const annex = page.locator('section.cards--tier[data-tier="annex"]');
@@ -216,6 +239,7 @@ test.describe('projects index page (T6)', () => {
 
   test('OR-matches a multi-select union and resets (en)', async ({ page }) => {
     await page.goto('/en/projects/');
+    await openFilter(page);
     const satelliteCards = page.locator('section[data-tier="satellite"] article.card');
     const annexCards = page.locator('section[data-tier="annex"] article.card');
     const shown = page.locator('section.cards--tier article.card:not([hidden])');
@@ -275,6 +299,7 @@ test.describe('projects index page (T6)', () => {
 
   test('announces localized counts in es', async ({ page }) => {
     await page.goto('/es/projects/');
+    await openFilter(page);
     const shown = page.locator('section.cards--tier article.card:not([hidden])');
     const status = page.locator('#filter-status');
     const es = EXPECTED['/es/projects/'];

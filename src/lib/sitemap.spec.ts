@@ -33,6 +33,18 @@ describe('sitemapFilter()', () => {
     }
   });
 
+  it('excludes the contact stub URL in every locale (F16 R6)', () => {
+    for (const lang of ['en', 'es', 'ca'] as const) {
+      expect(sitemapFilter(`https://jordimp.net/${lang}/contact/`)).toBe(false);
+    }
+  });
+
+  it('keeps the contact redirect target indexed (F16 R6)', () => {
+    for (const lang of ['en', 'es', 'ca'] as const) {
+      expect(sitemapFilter(`https://jordimp.net/${lang}/departments/front-desk/`)).toBe(true);
+    }
+  });
+
   it('keeps the blog index and both post URLs (R17)', () => {
     expect(sitemapFilter('https://jordimp.net/en/blog/')).toBe(true);
     expect(sitemapFilter('https://jordimp.net/es/blog/which-local-model-for-coding-agents/')).toBe(true);

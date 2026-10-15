@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { floorPlateLabel } from '../src/lib/building-svg';
 import { parseQuality, plaqueText } from '../src/lib/quality';
-import { FEATURED, HOME, UI, project } from '../src/data/content';
+import { FEATURED, FOOTER, HOME, SITE, UI, project } from '../src/data/content';
 
 const qualityJson: unknown = JSON.parse(
   readFileSync(new URL('../src/data/quality.json', import.meta.url), 'utf8'),
@@ -42,6 +42,44 @@ async function expectHomeChrome(page: Page, home: string): Promise<void> {
   await expect(page.locator('.meta-row span')).toHaveCount(5);
   await expect(page.locator('.hint')).toContainText(/CLICK A FLOOR|PULSA UNA PLANTA|PITJA UNA PLANTA/);
   await expect(page.locator('.ticker .ticker__inner span')).toHaveCount(2);
+
+  const contactLink = page.locator(
+    `.navbar__links a[href="${home}departments/front-desk/"]`,
+  );
+  await expect(contactLink).toHaveCount(1);
+  await expect(contactLink).toHaveText(UI.nav.contact[lang]);
+  await expect(contactLink).not.toHaveAttribute('aria-current');
+
+  await expect(page.locator('.hero-cta .pill')).toHaveCount(4);
+  await expect(page.locator('.hero-cta .pill[href="mailto:hello@jordimp.net"]')).toHaveText(
+    FOOTER.email[lang],
+  );
+  await expect(page.locator('.hero-cta .pill', { hasText: FOOTER.github[lang] })).toHaveAttribute(
+    'href',
+    SITE.github,
+  );
+  await expect(page.locator('.hero-cta .pill', { hasText: FOOTER.github[lang] })).toHaveAttribute(
+    'target',
+    '_blank',
+  );
+  await expect(page.locator('.hero-cta .pill', { hasText: FOOTER.github[lang] })).toHaveAttribute(
+    'rel',
+    'noopener noreferrer',
+  );
+  await expect(page.locator('.hero-cta .pill', { hasText: FOOTER.linkedin[lang] })).toHaveAttribute(
+    'href',
+    SITE.linkedin,
+  );
+  await expect(
+    page.locator('.hero-cta .pill', { hasText: FOOTER.linkedin[lang] }),
+  ).toHaveAttribute('target', '_blank');
+  await expect(
+    page.locator('.hero-cta .pill', { hasText: FOOTER.linkedin[lang] }),
+  ).toHaveAttribute('rel', 'noopener noreferrer');
+  await expect(page.locator(`.hero-cta .pill[href="${home}cv/"]`)).toHaveText(UI.nav.cv[lang]);
+
+  await expect(page.locator('.floor-hint')).toBeVisible();
+  await expect(page.locator('.floor-hint')).toHaveText(UI.floorHint[lang]);
 
   await expect(page.locator('.floor-btn')).toHaveCount(7);
   await expect(page.locator('.dept-panel')).toHaveCount(7);
@@ -142,6 +180,19 @@ test.describe('home building page (T4)', () => {
       }
     });
 
+    test(`renders the outcome line on featured cards only at ${home} (F16 R26, R27)`, async ({ page }) => {
+      await page.goto(home);
+      const lang = home.replace(/\//g, '') as 'en' | 'es' | 'ca';
+      const outcomes = page.locator('section:has(#featured-title) article.card .card__outcome');
+      await expect(outcomes).toHaveCount(3);
+      for (let i = 0; i < FEATURED.length; i++) {
+        const outcome = project(FEATURED[i]).outcome;
+        if (!outcome) throw new Error(`missing outcome on ${FEATURED[i]}`);
+        await expect(outcomes.nth(i)).toHaveText(outcome[lang]);
+      }
+      await expect(page.locator('.dept-panel .card__outcome')).toHaveCount(0);
+    });
+
     test(`positions the hero copy at ${home}`, async ({ page }) => {
       await page.goto(home);
       const lang = home.replace(/\//g, '') as 'en' | 'es' | 'ca';
@@ -202,4 +253,41 @@ test.describe('blog navbar entry (F15 R8)', () => {
       );
     });
   }
+});
+
+test.describe('building affordance and tap targets at 375×667 (F16 R14, R17, R18)', () => {
+  test.use({ viewport: { width: 375, height: 667 } });
+
+  test('presents the pointer cursor on every floor button (R14)', async ({ page }) => {
+    await page.goto('/en/');
+    const cursors = await page
+      .locator('.floor-btn')
+      .evaluateAll((buttons) => buttons.map((btn) => getComputedStyle(btn).cursor));
+    expect(cursors).toEqual(Array(7).fill('pointer'));
+  });
+
+  test('renders 44px tap targets for the seven floor buttons and the ITE plaque (R17)', async ({
+    page,
+  }) => {
+    await page.goto('/en/');
+    for (let i = 0; i < 7; i++) {
+      const box = await page.locator('.floor-btn').nth(i).boundingBox();
+      if (!box) throw new Error(`floor button ${i} not rendered`);
+      expect(box.width, `floor button ${i} width`).toBeGreaterThanOrEqual(44);
+      expect(box.height, `floor button ${i} height`).toBeGreaterThanOrEqual(44);
+    }
+    const plaque = await page.locator('a.ite-plaque').boundingBox();
+    if (!plaque) throw new Error('ITE plaque not rendered');
+    expect(plaque.width).toBeGreaterThanOrEqual(44);
+    expect(plaque.height).toBeGreaterThanOrEqual(44);
+  });
+
+  test('introduces no horizontal page scroll on the building (R18)', async ({ page }) => {
+    await page.goto('/en/');
+    const widths = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+    expect(widths.scrollWidth).toBe(widths.clientWidth);
+  });
 });

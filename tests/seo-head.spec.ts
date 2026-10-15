@@ -182,6 +182,35 @@ test.describe('SEO head emission on representative routes (T11, R17)', () => {
     await expect(fallback).toContainText('LEE EL ENSAYO');
   });
 
+  for (const lang of ['en', 'ca'] as const) {
+    test(`keeps /${lang}/contact/ alive as a noindex redirect stub to the front desk (F16 R2, R3)`, async ({
+      page,
+    }) => {
+      await page.route(`/${lang}/departments/front-desk/`, (route) =>
+        route.fulfill({ status: 204 }),
+      );
+      await page.goto(`/${lang}/contact/`);
+      const head = await readHead(page);
+      expect(head.noindex).toBe(true);
+      expect(head.canonical).toBe(prod(lang, 'departments/front-desk/'));
+      const refresh = page.locator('meta[http-equiv="refresh"]');
+      await expect(refresh).toHaveCount(1);
+      await expect(refresh).toHaveAttribute(
+        'content',
+        `0; url=/${lang}/departments/front-desk/`,
+      );
+      expect(head.hreflang).toEqual([
+        { hreflang: 'en', href: prod('en', 'departments/front-desk/') },
+        { hreflang: 'es', href: prod('es', 'departments/front-desk/') },
+        { hreflang: 'ca', href: prod('ca', 'departments/front-desk/') },
+        { hreflang: 'x-default', href: prod('en', 'departments/front-desk/') },
+      ]);
+      const fallback = page.locator(`main a[href="/${lang}/departments/front-desk/"]`);
+      await expect(fallback).toHaveCount(1);
+      await expect(fallback).toBeVisible();
+    });
+  }
+
   test('marks non-case pages as website type without article section', async ({ page }) => {
     await page.goto('/en/departments/telemetry/');
     const head = await readHead(page);

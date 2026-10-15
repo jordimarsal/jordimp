@@ -261,4 +261,10 @@ describe('link invariants (both builders)', () => {
       }
     }
   });
+
+  it('never links a /contact/ URL — the stub is a noindex alias (F16 R8)', () => {
+    for (const [name, build] of builders) {
+      expect(build(base), name).not.toContain('/contact/');
+    }
+  });
 });

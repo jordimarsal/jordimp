@@ -185,6 +185,26 @@ test.describe('case pages (T7)', () => {
     }
   });
 
+  test('renders the Impact section only on case pages that define an outcome (F16 R25)', async ({
+    page,
+  }) => {
+    for (const lang of LOCALES) {
+      for (const p of PROJECTS) {
+        await page.goto(caseRoute(lang, p.slug));
+        const impactHead = page.locator('h2#cs-impact');
+        const impactBody = page.locator('.case-impact');
+        const outcome = p.outcome;
+        if (outcome) {
+          await expect(impactHead, `${lang}/${p.slug}`).toHaveText(CASE_UI.impact[lang]);
+          await expect(impactBody, `${lang}/${p.slug}`).toHaveText(outcome[lang]);
+        } else {
+          await expect(impactHead, `${lang}/${p.slug}`).toHaveCount(0);
+          await expect(impactBody, `${lang}/${p.slug}`).toHaveCount(0);
+        }
+      }
+    }
+  });
+
   test('every case page responds 200 and opens its repo in a new tab', async ({ request }) => {
     for (const lang of LOCALES) {
       for (const p of PROJECTS) {

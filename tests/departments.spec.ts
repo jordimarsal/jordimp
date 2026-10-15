@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import {
   BREADCRUMB_DEPTS,
   BREADCRUMB_HOME,
+  CV,
   DEPTS,
   EXPERIENCE,
   FLOOR_ORDER,
@@ -292,7 +293,7 @@ test.describe('department pages (T8)', () => {
     const rows = page.locator('.contact-rows .contact-row');
     await expect(rows).toHaveCount(3);
     const emailRow = rows.nth(0);
-    await expect(emailRow).not.toHaveAttribute('href');
+    await expect(emailRow).toHaveAttribute('href', 'mailto:hello@jordimp.net');
     await expect(emailRow.locator('.contact-row__k')).toHaveText('EMAIL');
     await expect(emailRow.locator('.contact-row__v')).toHaveText(SITE.email);
     const copy = emailRow.locator('button.copy-btn');
@@ -317,6 +318,23 @@ test.describe('department pages (T8)', () => {
     const status = page.locator('#copy-status');
     await expect(status).toHaveAttribute('role', 'status');
     await expect(status).toHaveAttribute('aria-live', 'polite');
+
+    const shelf = page.locator('.fd-shelf');
+    await expect(shelf.locator('.floor-hint')).toHaveText(FRONTDESK_PAGE.shelfLine.en);
+    const downloads = page.locator('main a.btn--big[download]');
+    await expect(downloads).toHaveCount(2);
+    await expect(downloads.nth(0)).toHaveAttribute('href', `/cv/${CV.files.en}`);
+    await expect(downloads.nth(0).locator('.btn__label')).toHaveText(CV.buttons.enLabel);
+    await expect(downloads.nth(1)).toHaveAttribute('href', `/cv/${CV.files.es}`);
+    await expect(downloads.nth(1).locator('.btn__label')).toHaveText(CV.buttons.esLabel);
+    await expect(page.locator('main a[download]')).toHaveCount(2);
+    const shelfHrefs = await page.locator('main a[download]').evaluateAll((links) =>
+      links.map((a) => a.getAttribute('href') ?? ''),
+    );
+    for (const href of shelfHrefs) {
+      expect(href, 'no Catalan PDF may appear on the shelf (R20)').not.toMatch(/CA\.pdf$/i);
+      expect([`/cv/${CV.files.en}`, `/cv/${CV.files.es}`], href).toContain(href);
+    }
 
     const steps = page.locator('ol.steps > li');
     await expect(steps).toHaveCount(FRONTDESK_PAGE.how.en.length);

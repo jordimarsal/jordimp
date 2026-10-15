@@ -9,6 +9,7 @@ const STATIC_ROUTES = [
   '',
   'cv',
   'projects',
+  'contact',
   'writing/rag-eval-gate',
   'blog',
   'blog/which-local-model-for-coding-agents',
@@ -78,14 +79,14 @@ function holdSplash(page: Page): Promise<void> {
   return page.route(REDIRECT_TARGET, (route) => route.fulfill({ status: 204 }));
 }
 
-// The writing/rag-eval-gate stub meta-refreshes to the blog essay with a 0s delay.
-// Answering that refresh with a 204 makes Chromium discard the navigation and keep the
+// The writing/rag-eval-gate and contact stubs meta-refresh to their canonical pages with a
+// 0s delay. Answering that refresh with a 204 makes Chromium discard the navigation and keep the
 // stub document, so the sweep and the parity walk can inspect the stub instead of the
 // page it redirects to. `consumed` resolves once the refresh has hit the hold, letting a
-// caller release it (so later targets reach the real blog route) without racing the
+// caller release it (so later targets reach the real route) without racing the
 // pending refresh.
-const STUB_ROUTE = /\/writing\/rag-eval-gate\/$/;
-const STUB_TARGET = /\/blog\/rag-eval-gate\/$/;
+const STUB_ROUTE = /\/(writing\/rag-eval-gate|contact)\/$/;
+const STUB_TARGET = /\/(blog\/rag-eval-gate|departments\/front-desk)\/$/;
 
 interface StubHold {
   readonly consumed: Promise<void>;
@@ -111,13 +112,13 @@ async function styleOf(page: Page, selector: string, property: string): Promise<
     .evaluate((el, prop) => getComputedStyle(el).getPropertyValue(prop), property);
 }
 
-test.describe('77-page sweep (R27, F10 R16, F15 R22)', () => {
+test.describe('80-page sweep (R27, F10 R16, F15 R22, F16 R31)', () => {
   test('sweep: every built page answers with the expected status and zero console errors', async ({
     page,
   }) => {
     test.setTimeout(300_000);
-    expect(SWEEP_TARGETS).toHaveLength(77);
-    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(77);
+    expect(SWEEP_TARGETS).toHaveLength(80);
+    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(80);
     expect(Object.keys(parity.routes).sort()).toEqual(
       localeRoutes().sort()
     );
@@ -223,7 +224,7 @@ test.describe('golden parity vs the distilled build oracle (R27, ADR-6)', () => 
     test(`parity: every ${locale} page matches the oracle fixture`, async ({ page }) => {
       test.setTimeout(300_000);
       const routes = localeRoutes().filter((route) => route.startsWith(`/${locale}/`));
-      expect(routes).toHaveLength(25);
+      expect(routes).toHaveLength(26);
 
       for (const route of routes) {
         const expected = parity.routes[route];

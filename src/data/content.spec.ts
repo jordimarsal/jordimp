@@ -3,6 +3,7 @@ import {
   BLOG_UI,
   CASE_BUILD,
   CASE_NOTES,
+  CASE_UI,
   DEPTS,
   EXPERIENCE,
   FEATURED,
@@ -392,7 +393,7 @@ describe('project tiers', () => {
 });
 
 describe('pages data', () => {
-  it('registers home, work, cv, the blog trio, the 7 departments and the 11 project pages (R7)', () => {
+  it('registers home, work, cv, the blog trio, contact, the 7 departments and the 11 project pages (R7, F16 R5)', () => {
     const expected = [
       'home',
       'work',
@@ -401,11 +402,12 @@ describe('pages data', () => {
       'post-ggufbench',
       'article-rag-eval-gate',
       'article-rag-eval-gate-redirect',
+      'contact',
       ...FLOOR_ORDER,
       ...PROJECTS.map((p) => `project-${p.slug}`),
     ];
     expect(Object.keys(PAGES).sort()).toEqual(expected.sort());
-    expect(Object.keys(PAGES)).toHaveLength(25);
+    expect(Object.keys(PAGES)).toHaveLength(26);
   });
 
   it('gives every page a route and trilingual title and description', () => {
@@ -627,6 +629,106 @@ describe('blog posts data (F15)', () => {
     }
     expect(PAGES['article-rag-eval-gate-redirect'].route).toBe('writing/rag-eval-gate.html');
     expect(PAGES['article-rag-eval-gate-redirect'].redirect).toBe('blog/rag-eval-gate.html');
+    expect(PAGES.contact.redirect).toBe('departments/front-desk.html');
+  });
+});
+
+describe('contact page data (F16 R1, R2, R5)', () => {
+  it('registers the trilingual contact stub redirecting to the same front-desk route', () => {
+    expect(PAGES.contact.route).toBe('contact.html');
+    expect(PAGES.contact.nav).toBe('departments');
+    expect(PAGES.contact.redirect).toBe('departments/front-desk.html');
+    expect(PAGES.frontdesk.route).toBe(PAGES.contact.redirect);
+    for (const lang of LOCALES) {
+      expect(PAGES.contact.title[lang]).toBe(PAGES.frontdesk.title[lang]);
+      expect(PAGES.contact.description[lang]).toBe(PAGES.frontdesk.description[lang]);
+      expect(PAGES.contact.title[lang].trim()).not.toBe('');
+      expect(PAGES.contact.description[lang].trim()).not.toBe('');
+    }
+  });
+});
+
+describe('ux-review strings (F16 R13, R19, R25, R28)', () => {
+  it('localizes the building affordance hint in three locales (R13)', () => {
+    expect(UI.floorHint).toEqual({
+      en: 'EACH FLOOR IS A DOOR — CLICK ONE TO STEP IN',
+      es: 'CADA PLANTA ES UNA PUERTA — PULSA UNA PARA ENTRAR',
+      ca: 'CADA PLANTA ÉS UNA PORTA — PITJA UNA PER ENTRAR',
+    });
+  });
+
+  it('localizes the projects tier-nav label in three locales (R28)', () => {
+    expect(UI.tierNav).toEqual({
+      en: 'THE THREE TIERS',
+      es: 'LOS TRES NIVELES',
+      ca: 'ELS TRES NIVELLS',
+    });
+  });
+
+  it('localizes the case-page Impact label in three locales (R25)', () => {
+    expect(CASE_UI.impact).toEqual({ en: 'Impact', es: 'Impacto', ca: 'Impacte' });
+  });
+
+  it('localizes the front-desk shelf line and never mentions a Catalan PDF (R19, R20)', () => {
+    expect(FRONTDESK_PAGE.shelfLine).toEqual({
+      en: 'THE PRINTED EDITION IS ON THE SHELF — TAKE THE PDF IN ENGLISH OR SPANISH.',
+      es: 'LA EDICIÓN IMPRESA ESTÁ EN LA BALDA — LLÉVATE EL PDF EN INGLÉS O ESPAÑOL.',
+      ca: 'L’EDICIÓ IMPRESA ÉS A LA PRESTATGERIA — EMPORTA’T EL PDF EN ANGLÈS O ESPAÑOL.',
+    });
+    for (const lang of LOCALES) {
+      expect(FRONTDESK_PAGE.shelfLine[lang]).toMatch(/PDF/);
+      expect(FRONTDESK_PAGE.shelfLine[lang]).not.toMatch(/catal/i);
+    }
+  });
+});
+
+describe('project outcome copy (F16 R23, R24)', () => {
+  const THESIS_SLUGS = ['codebaserag', 'kafka-adapter-telemetry', 'harness-standard'];
+
+  const numerals = (text: string): string[] => [...text.matchAll(/\d+(?:\.\d+)?/g)].map((m) => m[0]);
+
+  const ownNumerals = (slug: string, lang: 'en' | 'es' | 'ca'): string[] =>
+    numerals(
+      [
+        project(slug).summary[lang],
+        project(slug).problem[lang],
+        ...project(slug).highlights[lang],
+      ].join('\n'),
+    );
+
+  it('defines an outcome on exactly the three thesis projects (R23)', () => {
+    const withOutcome = PROJECTS.filter((p) => p.outcome !== undefined).map((p) => p.slug);
+    expect([...withOutcome].sort()).toEqual([...THESIS_SLUGS].sort());
+  });
+
+  it('keeps every outcome trilingual and non-empty (R23)', () => {
+    for (const slug of THESIS_SLUGS) {
+      for (const lang of LOCALES) {
+        expect(project(slug).outcome?.[lang].trim(), `${slug}:${lang}`).not.toBe('');
+      }
+    }
+  });
+
+  it('introduces no numeral absent from the project’s own copy, per locale (R24)', () => {
+    for (const slug of THESIS_SLUGS) {
+      for (const lang of LOCALES) {
+        const outcome = project(slug).outcome?.[lang] ?? '';
+        const own = ownNumerals(slug, lang);
+        for (const token of numerals(outcome)) {
+          expect(own, `${slug}:${lang} introduces ${token}`).toContain(token);
+        }
+      }
+    }
+  });
+
+  it('carries the kafka telemetry facts in its own copy before reuse (fact boundary)', () => {
+    for (const lang of LOCALES) {
+      expect(ownNumerals('kafka-adapter-telemetry', lang)).toContain('90');
+      expect(ownNumerals('kafka-adapter-telemetry', lang)).toContain('4');
+      expect(numerals(project('kafka-adapter-telemetry').outcome?.[lang] ?? '').sort()).toEqual(
+        ['4', '90'],
+      );
+    }
   });
 });
 
