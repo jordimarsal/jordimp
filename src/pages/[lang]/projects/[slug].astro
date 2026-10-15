@@ -102,6 +102,12 @@ const trail = [
         </ul>
       </section>
     )}
+    {p.outcome && (
+      <section class="section" aria-labelledby="cs-impact">
+        <h2 id="cs-impact" class="section-title">{CASE_UI.impact[lang]}</h2>
+        <p class="prose case-impact">{p.outcome[lang]}</p>
+      </section>
+    )}
     <section class="section" aria-labelledby="cs-stack">
       <h2 id="cs-stack" class="case-label">{CASE_UI.stack[lang]}</h2>
       <div class="chiprow">

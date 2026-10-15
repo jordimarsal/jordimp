@@ -19,6 +19,7 @@ const dept = DEPTS[p.dept];
   <div class="card__top"><span class="chip2">{dept.code}</span><span class="year">{p.year}</span></div>
   <h3>{p.name}</h3>
   <p class="card__sum">{sum}</p>
+  {!mini && p.outcome && <p class="card__outcome">{p.outcome[lang]}</p>}
   {metrics.length > 0 && (
     <div class="metrics">
       {metrics.map((metric) => (

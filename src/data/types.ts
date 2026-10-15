@@ -43,6 +43,7 @@ export interface UiStrings {
   readonly nav: NavLabels;
   readonly themeToggle: L10n<string>;
   readonly buildingHint: L10n<string>;
+  readonly floorHint: L10n<string>;
   readonly enterDept: L10n<string>;
   readonly enterDeptArrow: string;
   readonly close: L10n<string>;
@@ -50,6 +51,7 @@ export interface UiStrings {
   readonly openPanel: L10n<string>;
   readonly estLabel: L10n<string>;
   readonly scrollHint: L10n<string>;
+  readonly tierNav: L10n<string>;
 }
 
 export interface Dept {
@@ -74,6 +76,8 @@ export interface ProjectL10n {
   readonly problem: L10n<string>;
   readonly highlights: L10n<readonly string[]>;
   readonly metrics: readonly Metric[];
+  /** 1–2 sentence business-impact line; thesis projects only (optional on purpose). */
+  readonly outcome?: L10n<string>;
 }
 
 export interface Project extends ProjectL10n {
@@ -203,6 +207,7 @@ export interface CaseUiStrings {
   readonly brief: L10n<string>;
   readonly built: L10n<string>;
   readonly metrics: L10n<string>;
+  readonly impact: L10n<string>;
   readonly fieldNotes: L10n<string>;
   readonly stack: L10n<string>;
   readonly visitRepo: L10n<string>;
@@ -284,6 +289,7 @@ export interface FrontdeskPageContent {
   readonly copy: L10n<string>;
   readonly copied: L10n<string>;
   readonly copyFail: L10n<string>;
+  readonly shelfLine: L10n<string>;
   readonly howTitle: L10n<string>;
   readonly how: L10n<readonly KVEntry[]>;
   readonly colophonTitle: L10n<string>;

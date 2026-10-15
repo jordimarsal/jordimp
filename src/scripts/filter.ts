@@ -1,10 +1,6 @@
 export function initFilter(): void {
   const filter = document.querySelector('.filter-chips');
   if (!filter) return;
-  const wrap = filter.closest('details');
-  if (wrap && window.innerWidth > 760) {
-    wrap.setAttribute('open', '');
-  }
   const cards = Array.from(document.querySelectorAll<HTMLElement>('.card[data-stack]'));
   const buttons = Array.from(filter.querySelectorAll<HTMLElement>('button[data-stack]'));
   const reset = filter.querySelector<HTMLElement>('button[data-reset]');

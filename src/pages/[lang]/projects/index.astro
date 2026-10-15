@@ -4,7 +4,7 @@ import Breadcrumb from '../../../components/site/Breadcrumb.astro';
 import SecHead from '../../../components/site/SecHead.astro';
 import ProjectCard from '../../../components/site/ProjectCard.astro';
 import { LOCALES, type Locale } from '../../../lib/i18n';
-import { BREADCRUMB_HOME, PAGES, PROJECTS, TIER_LABELS, TIER_ORDER, WORK, tierProjects } from '../../../data/content';
+import { BREADCRUMB_HOME, PAGES, PROJECTS, TIER_LABELS, TIER_ORDER, UI, WORK, tierProjects } from '../../../data/content';
 import { dirRoute } from '../../../lib/paths';
 
 export async function getStaticPaths() {
@@ -34,6 +34,11 @@ const trail = [
     <Breadcrumb lang={lang} {trail} />
     <SecHead num={WORK.head.num} title={WORK.head.title[lang]} sub={WORK.head.sub[lang]} id="page-title" asH1 />
     <p class="prose">{WORK.intro[lang]}</p>
+    <nav class="tier-nav" aria-label={UI.tierNav[lang]}>
+      {TIER_ORDER.map((tier) => (
+        <a href={`#tier-${tier}`}>{TIER_LABELS[tier][lang]}</a>
+      ))}
+    </nav>
     <details class="filter-wrap" data-filter-wrap>
       <summary>{filterSummary}</summary>
       <div class="filter-chips" role="group" aria-label={filterSummary}>

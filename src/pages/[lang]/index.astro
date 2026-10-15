@@ -10,6 +10,7 @@ import {
   BREADCRUMB_HOME,
   FLOOR_ORDER,
   FEATURED,
+  FOOTER,
   HOME,
   PAGES,
   SITE,
@@ -18,6 +19,8 @@ import {
 } from '../../data/content';
 import qualityJson from '../../data/quality.json';
 import { parseQuality } from '../../lib/quality';
+import { dirRoute, srcPath } from '../../lib/paths';
+import { externalLinkAttrs } from '../../lib/links';
 
 export async function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
@@ -28,6 +31,10 @@ const { lang } = Astro.props;
 
 const quality = parseQuality(qualityJson);
 const report = quality.ok ? quality.value : null;
+
+const githubAttrs = externalLinkAttrs(SITE.github, SITE.url);
+const linkedinAttrs = externalLinkAttrs(SITE.linkedin, SITE.url);
+const cvRoute = srcPath(lang, dirRoute(PAGES.cv.route));
 
 const BUILDING_HEAD: Record<Locale, { title: string; sub: string }> = {
   en: { title: 'The Building', sub: 'FLOORS · 1 PAIR OF HANDS' },
@@ -53,6 +60,12 @@ const featured = FEATURED.map((slug) => project(slug));
       <div class="meta-row" aria-label={SITE.brand}>
         {HOME.metaChips[lang].map((chip) => <span>{chip}</span>)}
       </div>
+      <div class="hero-cta">
+        <a class="pill" href={`mailto:${SITE.email}`}>{FOOTER.email[lang]}</a>
+        <a class="pill" href={SITE.github} {...githubAttrs}>{FOOTER.github[lang]}</a>
+        <a class="pill" href={SITE.linkedin} {...linkedinAttrs}>{FOOTER.linkedin[lang]}</a>
+        <a class="pill" href={cvRoute}>{UI.nav.cv[lang]}</a>
+      </div>
       <p class="hint"><span class="arr" aria-hidden="true">&darr;</span> {UI.buildingHint[lang]}</p>
     </section>
     <Ticker lang={lang} />
@@ -63,6 +76,7 @@ const featured = FEATURED.map((slug) => project(slug));
         sub={`${FLOOR_ORDER.length} ${BUILDING_HEAD[lang].sub}`}
         id="building-title"
       />
+      <p class="floor-hint">{UI.floorHint[lang]}</p>
       <Building lang={lang} report={report} />
     </section>
     <section aria-labelledby="featured-title">

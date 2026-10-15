@@ -80,6 +80,11 @@ export const UI: UiStrings = {
     es: 'PULSA UNA PLANTA — LAS PUERTAS SE ABREN EN SITIO',
     ca: 'PITJA UNA PLANTA — LES PORTES S’OBREN AL SEU LLOC',
   },
+  floorHint: {
+    en: 'EACH FLOOR IS A DOOR — CLICK ONE TO STEP IN',
+    es: 'CADA PLANTA ES UNA PUERTA — PULSA UNA PARA ENTRAR',
+    ca: 'CADA PLANTA ÉS UNA PORTA — PITJA UNA PER ENTRAR',
+  },
   enterDept: {
     en: 'Enter the department', es: 'Entrar al departamento', ca: 'Entra al departament',
   },
@@ -92,6 +97,11 @@ export const UI: UiStrings = {
     en: 'SCROLL SIDEWAYS TO WALK THE STREET',
     es: 'DESLIZA LATERALMENTE PARA RECORRER LA CALLE',
     ca: 'LLISCA LATERALMENT PER RECORRER EL CARRER',
+  },
+  tierNav: {
+    en: 'THE THREE TIERS',
+    es: 'LOS TRES NIVELES',
+    ca: 'ELS TRES NIVELLS',
   },
 };
 
@@ -363,6 +373,11 @@ export const PROJECTS: readonly Project[] = [
         { value: '≥40', label: { en: 'golden Q/A pairs', es: 'pares Q/A golden', ca: 'parells Q/A golden' } },
         { value: 'strict', label: { en: 'mypy', es: 'mypy', ca: 'mypy' } },
       ],
+      outcome: {
+        en: 'The result is an eval gate that blocks retrieval regressions before merge: quality is a CI-checked claim with a committed floor, not a demo vibe.',
+        es: 'El resultado es un gate de evals que bloquea las regresiones de retrieval antes del merge: la calidad es una afirmación verificada en CI con un suelo comprometido, no una demo.',
+        ca: 'El resultat és un gate d’evals que bloqueja les regressions de retrieval abans del merge: la qualitat és una afirmació verificada a CI amb un sòl compromès, no una demo.',
+      },
     },
   ),
   P(
@@ -482,6 +497,11 @@ export const PROJECTS: readonly Project[] = [
         { value: '100%', label: { en: 'idempotent inserts', es: 'inserciones idempotentes', ca: 'insercions idempotents' } },
         { value: '10/10', label: { en: 'SDD tasks done', es: 'tareas SDD hechas', ca: 'tasques SDD fetes' } },
       ],
+      outcome: {
+        en: 'The result is operational visibility across ~90 adapters in 4 countries: who is DOWN, since when, and exactly one alert per episode — no pager storms, no silent gaps.',
+        es: 'El resultado es visibilidad operativa sobre ~90 adaptadores en 4 países: quién está DOWN, desde cuándo y exactamente una alerta por episodio — sin tormentas de pager ni huecos silenciosos.',
+        ca: 'El resultat és visibilitat operativa sobre ~90 adaptadors a 4 països: qui està DOWN, des de quan i exactament una alerta per episodi — sense tempestes de pager ni forats silenciosos.',
+      },
     },
   ),
   P(
@@ -608,6 +628,11 @@ export const PROJECTS: readonly Project[] = [
         { value: '7', label: { en: 'stacks', es: 'stacks', ca: 'stacks' } },
         { value: '1 cmd', label: { en: 'install', es: 'instalación', ca: 'instal·lació' } },
       ],
+      outcome: {
+        en: 'The payoff is repeatable agent work: specs, roles and gates installed in one command, on any stack — this portfolio is built through them.',
+        es: 'La recompensa es trabajo de agente repetible: specs, roles y gates instalados en un comando, en cualquier stack — este portfolio se construye con ellos.',
+        ca: 'La recompensa és treball d’agent repetible: specs, rols i gates instal·lats en una comanda, en qualsevol stack — aquest portfolio es construeix amb ells.',
+      },
     },
   ),
   P(
@@ -1457,6 +1482,18 @@ export const post = (slug: string): PostContent => {
   return found;
 };
 
+const FRONTDESK_TITLE: L10n<string> = {
+  en: 'B · Front Desk — Jordimp & Co.',
+  es: 'B · Recepción — Jordimp & Co.',
+  ca: 'B · Recepció — Jordimp & Co.',
+};
+
+const FRONTDESK_DESCRIPTION: L10n<string> = {
+  en: 'Walk-ins welcome: senior or staff backend roles, short spec-first engagements, and questions about a floor or a repo — no tracking, no funnel. Jordimp & Co. is how the work is done, not a staffing firm.',
+  es: 'Entrada libre: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo — sin tracking, sin funnel. Jordimp & Co. es como se hace el trabajo, no una consultora de personal.',
+  ca: 'Entrada lliure: rols backend sènior o staff, encàrrecs curts amb spec primer i preguntes sobre una planta o un repo — sense tracking, sense funnel. Jordimp & Co. és com es fa la feina, no una consultora de personal.',
+};
+
 export const PAGES: Record<string, PageMeta> = {
   home: {
     route: 'index.html',
@@ -1602,16 +1639,15 @@ export const PAGES: Record<string, PageMeta> = {
   frontdesk: {
     route: 'departments/front-desk.html',
     nav: 'departments',
-    title: {
-      en: 'B · Front Desk — Jordimp & Co.',
-      es: 'B · Recepción — Jordimp & Co.',
-      ca: 'B · Recepció — Jordimp & Co.',
-    },
-    description: {
-      en: 'Walk-ins welcome: senior or staff backend roles, short spec-first engagements, and questions about a floor or a repo — no tracking, no funnel. Jordimp & Co. is how the work is done, not a staffing firm.',
-      es: 'Entrada libre: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo — sin tracking, sin funnel. Jordimp & Co. es como se hace el trabajo, no una consultora de personal.',
-      ca: 'Entrada lliure: rols backend sènior o staff, encàrrecs curts amb spec primer i preguntes sobre una planta o un repo — sense tracking, sense funnel. Jordimp & Co. és com es fa la feina, no una consultora de personal.',
-    },
+    title: FRONTDESK_TITLE,
+    description: FRONTDESK_DESCRIPTION,
+  },
+  contact: {
+    route: 'contact.html',
+    nav: 'departments',
+    title: FRONTDESK_TITLE,
+    description: FRONTDESK_DESCRIPTION,
+    redirect: 'departments/front-desk.html',
   },
   inspections: {
     route: 'departments/inspections.html',
@@ -1680,6 +1716,7 @@ export const CASE_UI: CaseUiStrings = {
   brief: { en: 'The brief', es: 'El encargo', ca: 'L’encàrrec' },
   built: { en: 'What was built', es: 'Qué se construyó', ca: 'Què es va construir' },
   metrics: { en: 'Metrics', es: 'Métricas', ca: 'Mètriques' },
+  impact: { en: 'Impact', es: 'Impacto', ca: 'Impacte' },
   fieldNotes: { en: 'Field notes', es: 'Notas de campo', ca: 'Notes de camp' },
   stack: { en: 'STACK', es: 'STACK', ca: 'STACK' },
   visitRepo: { en: 'VISIT THE REPO', es: 'VISITA EL REPO', ca: 'VISITA EL REPO' },
@@ -2050,6 +2087,11 @@ export const FRONTDESK_PAGE: FrontdeskPageContent = {
   copy: { en: 'Copy', es: 'Copiar', ca: 'Copia' },
   copied: { en: 'COPIED ✓', es: 'COPIADO ✓', ca: 'COPIAT ✓' },
   copyFail: { en: 'COPY BLOCKED — SELECT THE ADDRESS BY HAND', es: 'COPIA BLOQUEADA — SELECCIONA LA DIRECCIÓN A MANO', ca: 'CÒPIA BLOQUEJADA — SELECCIONA L’ADREÇA A MÀ' },
+  shelfLine: {
+    en: 'THE PRINTED EDITION IS ON THE SHELF — TAKE THE PDF IN ENGLISH OR SPANISH.',
+    es: 'LA EDICIÓN IMPRESA ESTÁ EN LA BALDA — LLÉVATE EL PDF EN INGLÉS O ESPAÑOL.',
+    ca: 'L’EDICIÓ IMPRESA ÉS A LA PRESTATGERIA — EMPORTA’T EL PDF EN ANGLÈS O ESPAÑOL.',
+  },
   howTitle: { en: 'How we work with you', es: 'Cómo trabajamos contigo', ca: 'Com treballem amb tu' },
   how: {
     en: [

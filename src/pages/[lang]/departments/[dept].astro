@@ -9,6 +9,7 @@ import {
   BREADCRUMB_DEPTS,
   BREADCRUMB_HOME,
   BLOG_UI,
+  CV,
   DEPTS,
   FLOOR_ORDER,
   FOOTER,
@@ -26,7 +27,7 @@ import {
   project,
 } from '../../../data/content';
 import type { DeptKey, StatEntry } from '../../../data/types';
-import { dirRoute, srcPath } from '../../../lib/paths';
+import { assetPath, dirRoute, srcPath } from '../../../lib/paths';
 import { externalLinkAttrs } from '../../../lib/links';
 import { SITE } from '../../../config';
 import { coverageMap, orgChart, telemetryDiagrams } from '../../../lib/dept-svg';
@@ -268,7 +269,7 @@ const trail = [
         <section class="section" aria-labelledby="fd-contact">
           <h2 id="fd-contact" class="section-title">{FRONTDESK_PAGE.contactTitle[lang]}</h2>
           <div class="contact-rows">
-            <div class="contact-row">
+            <a class="contact-row" href={`mailto:${SITE.email}`}>
               <span class="contact-row__k mono">{FOOTER.email[lang]}</span>
               <span class="contact-row__v">{SITE.email}</span>
               <button
@@ -279,7 +280,7 @@ const trail = [
                 data-fail={FRONTDESK_PAGE.copyFail[lang]}
                 aria-label={`${FRONTDESK_PAGE.copy[lang]}: ${SITE.email}`}
               >{FRONTDESK_PAGE.copy[lang]}</button>
-            </div>
+            </a>
             <a class="contact-row" href={SITE.github} {...githubAttrs}>
               <span class="contact-row__k mono">{FOOTER.github[lang]}</span>
               <span class="contact-row__v">github.com/jordimarsal</span>
@@ -290,6 +291,17 @@ const trail = [
               <span class="contact-row__v">linkedin.com/in/jordi-marsal-poy</span>
               <span class="contact-row__go" aria-hidden="true">&#8599;</span>
             </a>
+          </div>
+          <div class="fd-shelf">
+            <p class="floor-hint">{FRONTDESK_PAGE.shelfLine[lang]}</p>
+            <div class="cv-actions">
+              <a class="btn btn--big" href={assetPath(`cv/${CV.files.en}`)} download>
+                <span class="btn__label">{CV.buttons.enLabel}</span><span aria-hidden="true">&darr;</span>
+              </a>
+              <a class="btn btn--big" href={assetPath(`cv/${CV.files.es}`)} download>
+                <span class="btn__label">{CV.buttons.esLabel}</span><span aria-hidden="true">&darr;</span>
+              </a>
+            </div>
           </div>
           <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
         </section>

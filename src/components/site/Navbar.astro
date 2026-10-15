@@ -23,7 +23,7 @@ const isCurrent = (key: NavKey): boolean => !noCurrent && current === key;
     <a href={srcPath(lang, dirRoute(PAGES.work.route))} aria-current={isCurrent('work') ? 'page' : undefined}>{UI.nav.work[lang]}</a>
     <a href={srcPath(lang, dirRoute(PAGES.blog.route))} aria-current={isCurrent('blog') ? 'page' : undefined}>{UI.nav.blog[lang]}</a>
     <a href={srcPath(lang, dirRoute(PAGES.cv.route))} aria-current={isCurrent('cv') ? 'page' : undefined}>{UI.nav.cv[lang]}</a>
-    <a href="#desk">{UI.nav.contact[lang]}</a>
+    <a href={srcPath(lang, dirRoute(PAGES.frontdesk.route))}>{UI.nav.contact[lang]}</a>
   </nav>
   <div class="navbar__lang" role="group" aria-label={`${L.en.name} / ${L.es.name} / ${L.ca.name}`}>
     {LOCALES.map((locale) => (

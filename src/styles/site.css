@@ -353,6 +353,22 @@ html[data-night='1'] h1 mark {
   gap: 10px;
 }
 
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.floor-hint {
+  margin: 18px 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--ink2);
+}
+
 .hint .arr {
   display: inline-block;
   background: var(--y1);
@@ -677,6 +693,7 @@ html[data-night='1'] .win {
   width: 100%;
   padding: 0;
   position: relative;
+  cursor: pointer;
 }
 
 .b-plategroup {
@@ -967,6 +984,31 @@ html[data-night='1'] .win {
   margin: 0;
 }
 
+.tier-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 20px 0 6px;
+}
+
+.tier-nav a {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 3px solid var(--y1);
+  padding-bottom: 2px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tier-nav a:hover {
+  background: var(--y1);
+}
+
 .cards--tier + .cards--tier {
   margin-top: 32px;
 }
@@ -1064,6 +1106,15 @@ html[data-night='1'] .win {
   font-size: 0.92rem;
   color: var(--ink2);
   max-width: 46ch;
+}
+
+.card__outcome {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--ink);
+  max-width: 52ch;
+  border-left: 4px solid var(--y1);
+  padding-left: 12px;
 }
 
 .metrics {
@@ -1237,9 +1288,11 @@ html[data-night='1'] .win {
   align-items: center;
   gap: 12px;
   width: min(360px, 60%);
+  min-height: 44px;
   margin: 14px 30px 18px auto;
   text-decoration: none;
   color: var(--ink);
+  cursor: pointer;
 }
 
 .ite-plaque__svg {
@@ -1626,6 +1679,16 @@ html[data-night='1'] .win {
   grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
   gap: 14px;
   margin: 30px 0 8px;
+}
+
+.case-impact {
+  border-left: 4px solid var(--y1);
+  padding-left: 14px;
+  font-weight: 700;
+}
+
+.fd-shelf {
+  margin-top: 26px;
 }
 
 .stats .stat {
