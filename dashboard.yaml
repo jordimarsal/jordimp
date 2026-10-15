@@ -1,0 +1,4 @@
+# atalaia: accions del dashboard (allowlist)
+port: 4321
+start: npm run dev
+stop: fuser -k 4321/tcp
