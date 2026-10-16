@@ -1,14 +1,14 @@
 # jordimp.net
 
-Personal portfolio site (EN/ES/CA) for Jordi Marçal Poy — senior backend engineer
-(Java · Python · AI/LLM). Built with [Astro](https://astro.build) 7, styled in the
-human-validated **Jordimp & Co.** redesign — an interactive building whose six
-floors are the services (research & retrieval, transport & telemetry, tooling,
-people, operations, front desk) — trilingual (EN/ES/CA), night mode included,
-**live at [https://jordimp.net](https://jordimp.net)**
-(GitHub Pages, custom domain, auto TLS).
+Personal portfolio site for Jordi Marçal Poy — senior backend engineer
+(Java · Python · AI/LLM). Built with [Astro](https://astro.build) 7 and styled
+in the human-validated **Jordimp & Co.** redesign: an interactive building
+whose six floors are the services (research & retrieval, transport & telemetry,
+tooling, people, operations, front desk). Night mode included —
+**live at [jordimp.net](https://jordimp.net)** (GitHub Pages, custom domain,
+auto TLS).
 
-## Status — v0.2.0
+## Status — v0.2.0 (18/18 features shipped)
 
 | Feature | Scope | State |
 |---|---|---|
@@ -16,16 +16,27 @@ people, operations, front desk) — trilingual (EN/ES/CA), night mode included,
 | F2 site-pages | home, experience, skills, about, footer, 404, CV + print | ✅ done |
 | F3 seo-analytics | full SEO, JSON-LD, robots/sitemap, llms.txt, GoatCounter (opt-in) | ✅ done |
 | F4 deploy | GitHub Pages workflow, jordimp.net custom domain | ✅ done |
-| F6 site-polish | external links `target=_blank` + `noopener noreferrer`, favicon set | ✅ done |
 | F5 qa-gate | Playwright suite, Lighthouse CI gate, content QA, release | ✅ done |
-| F7 astro-redesign | Jordimp & Co. redesign ported 1:1 from the validated spike: building home, projects + 11 case pages, 6 department pages, CV, 404 art, splash root redirect, night mode | ✅ done (supersedes the v0.1.0 home and the `experience`/`about`/`skills` slugs, which now 404) |
+| F6 site-polish | external links `target=_blank` + `noopener noreferrer`, favicon set | ✅ done |
+| F7 astro-redesign | Jordimp & Co. redesign: building home, case pages, department pages, CV, 404 art, night mode | ✅ done |
+| F8 llms-txt-spec-compliance | llms.txt / llms-full.txt per the spec | ✅ done |
+| F9 lighthouse-polish | Lighthouse polish pass | ✅ done |
+| F10 quality-wall | quality wall: 80-page sweep, dated metrics | ✅ done |
+| F11 front-desk-positioning | front desk (contact) positioning | ✅ done |
+| F12 showcase-curation | project showcase curation (tiers, departments) | ✅ done |
+| F13 rag-eval-article | article: RAG evaluation gate | ✅ done |
+| F14 contact-email | contact email surface | ✅ done |
+| F15 blog | blog section (EN/ES/CA) | ✅ done |
+| F16 ux-review | UX fixes from the Oct 2026 review (contact routes, CTA, tap targets) | ✅ done |
+| F17 harness-skills-highlight | harness entry lists its 6 standalone skills | ✅ done |
+| F18 dept-panel-cta-first | department CTA above cards, filled; calmer panel cards | ✅ done |
 
 ## CI/CD — QA-gated deploys
 
 Every push to `main` runs the QA pipeline in `.github/workflows/`; **deploys only
 happen if all three jobs pass** (`deploy.needs: qa`):
 
-- **e2e** — Playwright suite: 62-page sweep (splash, 404, 60 locale routes) with
+- **e2e** — Playwright suite: 80-page sweep (splash, 404, 78 locale routes) with
   zero console errors + golden parity fixtures (titles, copy, plates, flags),
   interaction/behavior specs, < 120 s
 - **content** — census + trilingual QA against `src/data`, no-phone scan,
@@ -39,20 +50,20 @@ All workflow actions are SHA-pinned; the pipeline runs with minimal
 
 ## Commands
 
-| Command                 | Action                                        |
-| :---------------------- | :-------------------------------------------- |
-| `npm install`           | Install dependencies                          |
-| `npm run dev`           | Start local dev server                        |
-| `npm run build`         | Build the production site                     |
-| `npm run preview`       | Preview the production build                  |
-| `npm run check`         | Run `astro check` diagnostics                 |
-| `npm test`              | Unit tests (vitest, colocated `*.spec.ts`)    |
-| `npm run test:e2e`      | Build + Playwright smoke suite                |
-| `npm run qa:lighthouse` | Lighthouse CI gate (local thresholds ≥ 0.95)  |
-| `npm run qa:parity`     | Verify the committed parity oracle is fresh    |
-| `npm run qa:guard`      | Build + verify the oracle (runs on `git push`)  |
-| `npm run qa:content`    | Content QA (no-phone + structure)             |
-| `npm run qa:links`      | External-link check                           |
+| Command                 | Action                                       |
+| :---------------------- | :------------------------------------------- |
+| `npm install`           | Install dependencies                         |
+| `npm run dev`           | Start local dev server                       |
+| `npm run build`         | Build the production site                    |
+| `npm run preview`       | Preview the production build                 |
+| `npm run check`         | Run `astro check` diagnostics                |
+| `npm test`              | Unit tests (vitest, colocated `*.spec.ts`)   |
+| `npm run test:e2e`      | Build + Playwright smoke suite               |
+| `npm run qa:lighthouse` | Lighthouse CI gate (local thresholds ≥ 0.95) |
+| `npm run qa:parity`     | Verify the committed parity oracle is fresh  |
+| `npm run qa:guard`      | Build + verify the oracle (runs on `git push`) |
+| `npm run qa:content`    | Content QA (no-phone + structure)            |
+| `npm run qa:links`      | External-link check                          |
 
 `npm install` / `npm ci` arms a tracked **pre-push hook** (`.githooks/pre-push` via
 `core.hooksPath`, set by `scripts/install-hooks.mjs`) that runs `npm run qa:guard`.
@@ -71,9 +82,12 @@ single push (CI still gates the deploy).
 - `docs/` — architecture, conventions, SDD process, verification, deploy checklist
 
 **Process note:** built with Spec-Driven Development (leader / spec-author /
-implementer / reviewer, human approval gates). The SDD harness
-(`harness/`, `.opencode/`) is local-only and intentionally not tracked in this
-public repository.
+implementer / reviewer, human approval gates). The SDD harness (`harness/`,
+`.opencode/`) is local-only and intentionally not tracked in this public
+repository — the harness itself is public at
+[github.com/jordimarsal/harness](https://github.com/jordimarsal/harness), and
+its process ships as six standalone skills
+(`npx skills add jordimarsal/harness`).
 
 ## Conventions
 
