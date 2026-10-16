@@ -612,19 +612,19 @@ export const PROJECTS: readonly Project[] = [
           '7 stacks covered (Java/Spring, Python, Node/TS, Rust, and more) with per-stack conventions.',
           'Single-command install; conventions template includes SonarQube/code-quality rules.',
           'Born from daily use across personal projects — this portfolio is built with it.',
-          'Its process ships as six standalone skills, installable with `npx skills add jordimarsal/harness`.',
+          'Its process ships as six standalone skills, installable with npx skills add jordimarsal/harness.',
         ],
         es: [
           '7 stacks cubiertos (Java/Spring, Python, Node/TS, Rust y más) con convenciones por stack.',
           'Instalación con un solo comando; la plantilla de convenciones incluye reglas de SonarQube/calidad de código.',
           'Nacido del uso diario en proyectos personales — este portfolio está construido con él.',
-          'Su proceso se distribuye como seis skills independientes, instalables con `npx skills add jordimarsal/harness`.',
+          'Su proceso se distribuye como seis skills independientes, instalables con npx skills add jordimarsal/harness.',
         ],
         ca: [
           '7 stacks coberts (Java/Spring, Python, Node/TS, Rust i més) amb convencions per stack.',
           'Instal·lació amb una sola comanda; la plantilla de convencions inclou regles de SonarQube/qualitat de codi.',
           'Nascut de l’ús diari en projectes personals — aquest portfolio està construït amb ell.',
-          'El seu procés es distribueix com a sis skills independents, instal·lables amb `npx skills add jordimarsal/harness`.',
+          'El seu procés es distribueix com a sis skills independents, instal·lables amb npx skills add jordimarsal/harness.',
         ],
       },
       metrics: [
