@@ -30,7 +30,7 @@ Projects:
 The workshop floor: a multi-agent SDD harness, CLIs that do one thing well, and tooling kept intentionally small. Everything it needs, nothing it doesn’t.
 
 Projects:
-  - Harness (2026): A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command. Stack: Agents, SDD, CLI, Conventions. [repo](https://github.com/jordimarsal/harness)
+  - Harness (2026): A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command. Its process also ships as six standalone skills (npx skills add jordimarsal/harness). Stack: Agents, SDD, CLI, Conventions. [repo](https://github.com/jordimarsal/harness)
   - MD Mermaid PDF (2025 - 2026): CLI that renders Markdown with Mermaid diagrams straight to PDF, engineered with TDD, mypy strict and CI. Stack: Python, Markdown, Mermaid, GitHub Actions. [repo](https://github.com/jordimarsal/md-mermaid-pdf)
   - MCP Transparent PNG (2026): MCP (Model Context Protocol) server that makes PNG colors transparent (alpha channel) with rgb/auto/greenscreen modes. Stack: Python 3.13, MCP, Pillow, GitHub Actions. [repo](https://github.com/jordimarsal/mcp-transparent-png)
 
@@ -62,7 +62,7 @@ The desk takes three things: senior or staff backend roles, short spec-first eng
 - Kafka Adapter Telemetry (2026): Event-driven adapter telemetry: a Kafka gateway + hub pipeline with idempotent Oracle persistence, per-adapter health tracking, alerting, and a live SSE mission-control dashboard. [repo](https://github.com/jordimarsal/kafka-adapter-telemetry)
 - Redis Toolkit (2026): Rate-limiting toolkit for LLM gateways: atomic token-bucket quotas, pluggable stores, honest failure modes — with a Javalin gateway demo exposing an OpenAI-style endpoint. [repo](https://github.com/jordimarsal/redis-toolkit)
 - Product Offers API (2023 - 2026): Technical assessment: a product offers REST API — price inquiries by date, product and brand, served with Spring Boot. [repo](https://github.com/jordimarsal/product-offers)
-- Harness (2026): A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command. [repo](https://github.com/jordimarsal/harness)
+- Harness (2026): A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command. Its process also ships as six standalone skills (npx skills add jordimarsal/harness). [repo](https://github.com/jordimarsal/harness)
 - Rustcut (2024 - 2026): Tiny URL shortener in Rust: a deliberately minimalist REST API on Actix-web with SQLite storage. [repo](https://github.com/jordimarsal/rustcut)
 - MD Mermaid PDF (2025 - 2026): CLI that renders Markdown with Mermaid diagrams straight to PDF, engineered with TDD, mypy strict and CI. [repo](https://github.com/jordimarsal/md-mermaid-pdf)
 - MCP Transparent PNG (2026): MCP (Model Context Protocol) server that makes PNG colors transparent (alpha channel) with rgb/auto/greenscreen modes. [repo](https://github.com/jordimarsal/mcp-transparent-png)
