@@ -1,0 +1,38 @@
+---
+import { splitCmdLine } from '../../lib/cmd-code';
+import type { Locale } from '../../lib/i18n';
+
+interface Props {
+  text: string;
+  lang: Locale;
+}
+const { text, lang } = Astro.props;
+const seg = splitCmdLine(text);
+const LABELS = {
+  en: 'Copy install command',
+  es: 'Copiar el comando de instalación',
+  ca: 'Copia la comanda d’instal·lació',
+} as const;
+---
+
+{
+  seg ? (
+    <>
+      {seg.before}
+      <code class="cmd-copy">
+        {seg.cmd}
+        <button
+          class="cmd-copy__btn"
+          type="button"
+          data-copy={seg.cmd}
+          aria-label={LABELS[lang]}
+        >
+          ⧉
+        </button>
+      </code>
+      {seg.after}
+    </>
+  ) : (
+    <>{text}</>
+  )
+}

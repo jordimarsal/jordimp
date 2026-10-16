@@ -20,6 +20,7 @@ import {
 import type { Project } from '../../../data/types';
 import { dirRoute, srcPath } from '../../../lib/paths';
 import { externalLinkAttrs } from '../../../lib/links';
+import CmdLine from '../../../components/site/CmdLine.astro';
 import { SITE } from '../../../config';
 
 export async function getStaticPaths() {
@@ -79,7 +80,7 @@ const trail = [
       <h2 id="cs-built" class="section-title">{CASE_UI.built[lang]}</h2>
       <ol class="buildlog">
         {buildSteps.map((step) => (
-          <li><span class="n" aria-hidden="true">{step.n}</span><p>{step.text}</p></li>
+          <li><span class="n" aria-hidden="true">{step.n}</span><p><CmdLine text={step.text} lang={lang} /></p></li>
         ))}
       </ol>
     </section>

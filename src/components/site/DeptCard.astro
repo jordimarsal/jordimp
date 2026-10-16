@@ -5,6 +5,7 @@ import type { Project } from '../../data/types';
 import { srcPath } from '../../lib/paths';
 import { externalLinkAttrs } from '../../lib/links';
 import { SITE } from '../../config';
+import CmdLine from './CmdLine.astro';
 
 export interface Props {
   lang: Locale;
@@ -22,7 +23,7 @@ const caseHref = srcPath(lang, `projects/${p.slug}/`);
   <div class="prose">
     <p><b>{PAGE_LABELS.problem[lang]}.</b> {p.problem[lang]}</p>
     <p><b>{PAGE_LABELS.highlights[lang]}</b></p>
-    <ul>{p.highlights[lang].map((h) => <li>{h}</li>)}</ul>
+    <ul>{p.highlights[lang].map((h) => <li><CmdLine text={h} lang={lang} /></li>)}</ul>
   </div>
   {p.metrics.length > 0 && (
     <div class="metrics">

@@ -2440,6 +2440,43 @@ a.contact-row:hover {
   box-shadow: 4px 4px 0 var(--shc);
 }
 
+/* F19 — copyable install command inside highlight lines. */
+.cmd-copy {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--paper2);
+  border: 2px solid var(--line);
+  padding: 1px 6px;
+  position: relative;
+  white-space: nowrap;
+}
+
+.cmd-copy__btn {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  border: 2px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1;
+  padding: 3px 5px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.cmd-copy:hover .cmd-copy__btn,
+.cmd-copy:focus-within .cmd-copy__btn {
+  opacity: 1;
+}
+
+.cmd-copy__btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--shc);
+}
+
 .copy-btn:active {
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 var(--shc);
