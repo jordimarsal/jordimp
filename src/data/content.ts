@@ -593,14 +593,14 @@ export const PROJECTS: readonly Project[] = [
     },
     {
       blurb: {
-        en: 'Multi-agent SDD harness: specs, roles and gates in one command.',
-        es: 'Harness multi-agente SDD: specs, roles y gates en un comando.',
-        ca: 'Harness multi-agent SDD: specs, rols i gates en una comanda.',
+        en: 'Multi-agent SDD harness: specs, roles and gates in one command. Ships as six standalone skills.',
+        es: 'Harness multi-agente SDD: specs, roles y gates en un comando. Se distribuye como seis skills independientes.',
+        ca: 'Harness multi-agent SDD: specs, rols i gates en una comanda. Es distribueix com a sis skills independents.',
       },
       summary: {
-        en: 'A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command.',
-        es: 'Un harness multi-agente estandarizado para Claude Code y OpenCode: roles de Spec-Driven Development (Leader, Spec Author, Implementer, Reviewer) instalados en cualquier proyecto con un solo comando.',
-        ca: 'Un harness multi-agent estandarditzat per a Claude Code i OpenCode: rols de Spec-Driven Development (Leader, Spec Author, Implementer, Reviewer) instal·lats a qualsevol projecte amb una sola comanda.',
+        en: 'A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command. Its process also ships as six standalone skills (npx skills add jordimarsal/harness).',
+        es: 'Un harness multi-agente estandarizado para Claude Code y OpenCode: roles de Spec-Driven Development (Leader, Spec Author, Implementer, Reviewer) instalados en cualquier proyecto con un solo comando. Su proceso también se distribuye como seis skills independientes (npx skills add jordimarsal/harness).',
+        ca: 'Un harness multi-agent estandarditzat per a Claude Code i OpenCode: rols de Spec-Driven Development (Leader, Spec Author, Implementer, Reviewer) instal·lats a qualsevol projecte amb una sola comanda. El seu procés també es distribueix com a sis skills independents (npx skills add jordimarsal/harness).',
       },
       problem: {
         en: 'Coding agents work well in the small and drift in the large. Teams need one repeatable process — specs, roles, gates — independent of stack.',
