@@ -8,28 +8,13 @@ tooling, people, operations, front desk). Night mode included —
 **live at [jordimp.net](https://jordimp.net)** (GitHub Pages, custom domain,
 auto TLS).
 
-## Status — v0.2.0 (18/18 features shipped)
+## Status
 
-| Feature | Scope | State |
-|---|---|---|
-| F1 front-foundation | Astro scaffold, i18n, typed content, projects pages | ✅ done |
-| F2 site-pages | home, experience, skills, about, footer, 404, CV + print | ✅ done |
-| F3 seo-analytics | full SEO, JSON-LD, robots/sitemap, llms.txt, GoatCounter (opt-in) | ✅ done |
-| F4 deploy | GitHub Pages workflow, jordimp.net custom domain | ✅ done |
-| F5 qa-gate | Playwright suite, Lighthouse CI gate, content QA, release | ✅ done |
-| F6 site-polish | external links `target=_blank` + `noopener noreferrer`, favicon set | ✅ done |
-| F7 astro-redesign | Jordimp & Co. redesign: building home, case pages, department pages, CV, 404 art, night mode | ✅ done |
-| F8 llms-txt-spec-compliance | llms.txt / llms-full.txt per the spec | ✅ done |
-| F9 lighthouse-polish | Lighthouse polish pass | ✅ done |
-| F10 quality-wall | quality wall: 80-page sweep, dated metrics | ✅ done |
-| F11 front-desk-positioning | front desk (contact) positioning | ✅ done |
-| F12 showcase-curation | project showcase curation (tiers, departments) | ✅ done |
-| F13 rag-eval-article | article: RAG evaluation gate | ✅ done |
-| F14 contact-email | contact email surface | ✅ done |
-| F15 blog | blog section (EN/ES/CA) | ✅ done |
-| F16 ux-review | UX fixes from the Oct 2026 review (contact routes, CTA, tap targets) | ✅ done |
-| F17 harness-skills-highlight | harness entry lists its 6 standalone skills | ✅ done |
-| F18 dept-panel-cta-first | department CTA above cards, filled; calmer panel cards | ✅ done |
+**v0.3.0 — 19/19 planned features shipped** (F1–F19, ledger in the git history):
+Astro scaffold + trilingual typed content, SEO / llms.txt / analytics, GitHub
+Pages deploy, QA gates (Playwright · Lighthouse CI · parity oracle), the
+**Jordimp & Co.** building redesign, blog, contact desk, and the harness
+skills highlight.
 
 ## CI/CD — QA-gated deploys
 
