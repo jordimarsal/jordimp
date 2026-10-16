@@ -43,6 +43,16 @@ const pills =
         <button class="dept-panel__close" type="button" data-close-panel aria-controls={`dept-panel-${deptKey}`}>&times; {UI.close[lang]}</button>
       </div>
       <p class="dept-line">{d.line[lang]}</p>
+      <div class="dept-panel__cta">
+        <a class="btn" href={srcPath(lang, dirRoute(PAGES[d.page].route))}>
+          <span class="btn__label">{UI.enterDept[lang]}</span><span aria-hidden="true">{UI.enterDeptArrow}</span>
+        </a>
+        {deptKey === 'operations' && (
+          <a class="btn" href={srcPath(lang, dirRoute(PAGES.cv.route))}>
+            <span class="btn__label">{UI.nav.cv[lang]}</span><span aria-hidden="true">{UI.enterDeptArrow}</span>
+          </a>
+        )}
+      </div>
       {body === 'cards' && (
         <div class="cards">
           {d.projects.map((slug) => (
@@ -82,16 +92,6 @@ const pills =
           ))}
         </div>
       )}
-      <div class="dept-panel__cta">
-        <a class="btn" href={srcPath(lang, dirRoute(PAGES[d.page].route))}>
-          <span class="btn__label">{UI.enterDept[lang]}</span><span aria-hidden="true">{UI.enterDeptArrow}</span>
-        </a>
-        {deptKey === 'operations' && (
-          <a class="btn" href={srcPath(lang, dirRoute(PAGES.cv.route))}>
-            <span class="btn__label">{UI.nav.cv[lang]}</span><span aria-hidden="true">{UI.enterDeptArrow}</span>
-          </a>
-        )}
-      </div>
     </div>
   </div>
 </div>

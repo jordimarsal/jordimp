@@ -1192,7 +1192,44 @@ html[data-night='1'] .win {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
-  margin-top: 20px;
+  margin: 2px 0 16px;
+}
+
+/* F18 — CTA filled at rest: filled = actionable, sweep reserved out. */
+.dept-panel__cta .btn {
+  background: var(--y1);
+}
+
+.dept-panel__cta .btn::before {
+  display: none;
+}
+
+/* F18 — cards inside panels calm down: no yellow sweep, subtler hover,
+   smaller footprint. Hover/focus keeps a visible (quieter) affordance. */
+.dept-panel .card {
+  padding: 12px 12px;
+  gap: 8px;
+}
+
+.dept-panel .card .card__sum {
+  font-size: 0.88rem;
+}
+
+.dept-panel .card::before,
+.dept-panel .card:hover::before,
+.dept-panel .card:focus-within::before {
+  display: none;
+}
+
+.dept-panel .card:hover,
+.dept-panel .card:focus-within {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--shc);
+}
+
+.dept-panel .card:hover .card__sum,
+.dept-panel .card:focus-within .card__sum {
+  color: var(--ink2);
 }
 
 .btn {
