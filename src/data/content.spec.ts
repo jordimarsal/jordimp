@@ -885,3 +885,35 @@ describe('harness promo on F1/F2 (install cmd, demo, badge)', () => {
     }
   });
 });
+
+describe('harness entry ships standalone skills (F17)', () => {
+  const SKILLS_CMD = 'npx skills add jordimarsal/harness';
+
+  it('lists a skills highlight with the install command in every language (R1)', () => {
+    for (const lang of LOCALES) {
+      const withCmd = project('harness-standard').highlights[lang].filter((line) =>
+        line.includes(SKILLS_CMD),
+      );
+      expect(withCmd.length, `highlights.${lang}`).toBeGreaterThan(0);
+    }
+  });
+
+  it('keeps the claim boundary: no registry-publication claims (R4)', () => {
+    for (const lang of LOCALES) {
+      for (const line of project('harness-standard').highlights[lang]) {
+        if (line.includes(SKILLS_CMD)) {
+          expect(line, `highlights.${lang}`).not.toMatch(/anthropic/i);
+          expect(line, `highlights.${lang}`).not.toMatch(/registry/i);
+        }
+      }
+    }
+  });
+
+  it('adds a 6-skills metric with the same label word in every language (R2)', () => {
+    const metric = project('harness-standard').metrics.find((m) => m.value === '6');
+    expect(metric, 'metrics: 6').toBeDefined();
+    for (const lang of LOCALES) {
+      expect(metric?.label[lang], `metric.label.${lang}`).toBe('skills');
+    }
+  });
+});
