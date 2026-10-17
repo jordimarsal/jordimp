@@ -315,6 +315,17 @@ test.describe('department pages (T8)', () => {
       'linkedin.com/in/jordi-marsal-poy',
     );
 
+    const ctas = page.locator('main .hero-cta .pill');
+    await expect(ctas).toHaveCount(4);
+    await expect(ctas.nth(0)).toHaveAttribute('href', 'mailto:hello@jordimp.net');
+    await expect(ctas.nth(0)).toHaveText('EMAIL');
+    await expect(ctas.nth(1)).toHaveAttribute('href', SITE.github);
+    await expect(ctas.nth(1)).toHaveText('GITHUB');
+    await expect(ctas.nth(2)).toHaveAttribute('href', SITE.linkedin);
+    await expect(ctas.nth(2)).toHaveText('LINKEDIN');
+    await expect(ctas.nth(3)).toHaveAttribute('href', '/en/cv/');
+    await expect(ctas.nth(3)).toHaveText('CV');
+
     const status = page.locator('#copy-status');
     await expect(status).toHaveAttribute('role', 'status');
     await expect(status).toHaveAttribute('aria-live', 'polite');

@@ -137,6 +137,7 @@ export interface WorkContent {
   readonly intro: L10n<string>;
   readonly filterAll: L10n<string>;
   readonly filterSummary: L10n<string>;
+  readonly filterSearch: L10n<string>;
   readonly countLabel: L10n<string>;
   readonly countOne: L10n<string>;
   readonly emptyLabel: L10n<string>;

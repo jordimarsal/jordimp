@@ -41,6 +41,13 @@ const trail = [
     </nav>
     <details class="filter-wrap" data-filter-wrap>
       <summary>{filterSummary}</summary>
+      <input
+        class="filter-search"
+        type="search"
+        data-filter-search
+        placeholder={WORK.filterSearch[lang]}
+        aria-label={WORK.filterSearch[lang]}
+      />
       <div class="filter-chips" role="group" aria-label={filterSummary}>
         <button type="button" data-reset aria-pressed="true">{WORK.filterAll[lang]}</button>
         {stacks.map((s) => (

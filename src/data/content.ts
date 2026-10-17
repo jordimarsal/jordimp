@@ -966,6 +966,7 @@ export const WORK: WorkContent = {
   },
   filterAll: { en: 'All', es: 'Todos', ca: 'Tots' },
   filterSummary: { en: 'FILTER BY STACK ({n})', es: 'FILTRA POR STACK ({n})', ca: 'FILTRA PER STACK ({n})' },
+  filterSearch: { en: 'TYPE TO FILTER…', es: 'ESCRIBE PARA FILTRAR…', ca: 'ESCRIU PER FILTRAR…' },
   countLabel: { en: '{n} PROJECTS ON SHOW', es: '{n} PROYECTOS A LA VISTA', ca: '{n} PROJECTES A LA VISTA' },
   countOne: { en: '1 PROJECT ON SHOW', es: '1 PROYECTO A LA VISTA', ca: '1 PROJECTE A LA VISTA' },
   emptyLabel: {

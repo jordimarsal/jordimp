@@ -4,6 +4,7 @@ export function initFilter(): void {
   const cards = Array.from(document.querySelectorAll<HTMLElement>('.card[data-stack]'));
   const buttons = Array.from(filter.querySelectorAll<HTMLElement>('button[data-stack]'));
   const reset = filter.querySelector<HTMLElement>('button[data-reset]');
+  const search = document.querySelector<HTMLInputElement>('[data-filter-search]');
   const status = document.getElementById('filter-status');
 
   const syncStatus = (visible: number): void => {
@@ -52,6 +53,14 @@ export function initFilter(): void {
       btn.setAttribute('aria-pressed', 'false');
     });
     apply();
+  });
+
+  search?.addEventListener('input', () => {
+    const query = search.value.trim().toLowerCase();
+    buttons.forEach((btn) => {
+      const match = query === '' || (btn.dataset.stack || '').toLowerCase().includes(query);
+      btn.hidden = !match;
+    });
   });
 
   apply();

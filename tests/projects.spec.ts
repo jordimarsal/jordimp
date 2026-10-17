@@ -199,6 +199,27 @@ test.describe('projects index page (T6)', () => {
     await expect(page.locator('details.filter-wrap summary')).toBeVisible();
   });
 
+  test('quick search narrows the stack chips and restores them (maintenance)', async ({ page }) => {
+    await page.goto('/en/projects/');
+    await openFilter(page);
+    const search = page.locator('input[data-filter-search]');
+    await expect(search).toHaveCount(1);
+    await expect(search).toHaveAttribute('placeholder', 'TYPE TO FILTER…');
+    const visible = page.locator('.filter-chips button[data-stack]:not([hidden])');
+    await expect(visible).toHaveCount(UNIQUE_STACKS);
+
+    await search.fill('kafka');
+    const texts = await visible.allTextContents();
+    expect(texts.length).toBeGreaterThan(0);
+    expect(texts.length).toBeLessThan(UNIQUE_STACKS);
+    for (const text of texts) {
+      expect(text.toLowerCase()).toContain('kafka');
+    }
+
+    await search.fill('');
+    await expect(visible).toHaveCount(UNIQUE_STACKS);
+  });
+
   async function openFilter(page: import('@playwright/test').Page): Promise<void> {
     await page.locator('details.filter-wrap summary').click();
     await expect(page.locator('.filter-chips button[data-stack]').first()).toBeVisible();

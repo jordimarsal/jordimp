@@ -290,4 +290,22 @@ test.describe('building affordance and tap targets at 375×667 (F16 R14, R17, R1
     }));
     expect(widths.scrollWidth).toBe(widths.clientWidth);
   });
+
+  test('balances the hero CTA as a 2×2 grid on mobile, flex row on desktop (maintenance)', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await page.goto('/en/');
+    const display = () =>
+      page.locator('.hero-cta').evaluate((el) => getComputedStyle(el).display);
+
+    expect(await display()).toBe('flex');
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    expect(await display()).toBe('grid');
+    const columns = await page
+      .locator('.hero-cta')
+      .evaluate((el) => getComputedStyle(el).gridTemplateColumns);
+    expect(columns.split(' ')).toHaveLength(2);
+  });
 });
