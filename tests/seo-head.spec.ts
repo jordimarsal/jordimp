@@ -139,7 +139,7 @@ test.describe('SEO head emission on representative routes (T11, R17)', () => {
         .find((entry) => entry['@type'] === 'Article'),
     );
     expect(article.headline).toBe(
-      'Which local model should a coding agent run? Nine GGUFs, one harness, receipts',
+      'Which local model should a coding agent run? Six GGUFs and a Strata engine, one harness, receipts',
     );
     expect(article.author.name).toBe('Jordi Marçal Poy');
     expect(article.datePublished).toBe('2026-10-13');
@@ -151,20 +151,21 @@ test.describe('SEO head emission on representative routes (T11, R17)', () => {
   }) => {
     await page.goto('/en/blog/which-local-model-for-coding-agents/');
     await expect(page.locator('main h1')).toHaveText(
-      'Which local model should a coding agent run? Nine GGUFs, one harness, receipts',
+      'Which local model should a coding agent run? Six GGUFs and a Strata engine, one harness, receipts',
     );
-    await expect(page.locator('p.article__stamp.mono')).toHaveText('FILED 2026-10-13 · REV A');
+    await expect(page.locator('p.article__stamp.mono')).toHaveText('FILED 2026-10-13 · REV B');
     const header = page.locator('.table-scroll thead th');
     await expect(header).toHaveText([
       'model',
+      'think',
       'tools',
       'code',
       'agent',
       'speed',
       'global',
     ]);
-    await expect(page.locator('.table-scroll tbody tr')).toHaveCount(4);
-    await expect(page.locator('.table-scroll tbody tr').first()).toContainText('gemma-4-26b-a4b-it q5_k_xl');
+    await expect(page.locator('.table-scroll tbody tr')).toHaveCount(10);
+    await expect(page.locator('.table-scroll tbody tr').first()).toContainText('minicpm-v-4.7-35b-a3b q4_k_m');
   });
 
   test('keeps the old essay URL alive as a noindex redirect stub (R5, R6)', async ({ page }) => {

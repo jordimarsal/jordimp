@@ -37,8 +37,8 @@ const base: LlmsData = {
     route: 'blog/',
     posts: [
       {
-        title: 'Which local model should a coding agent run? Nine GGUFs, one harness, receipts',
-        summary: 'Nine GGUFs, one harness, four dimensions and the receipts of every call.',
+        title: 'Which local model should a coding agent run? Six GGUFs and a Strata engine, one harness, receipts',
+        summary: 'Six GGUFs, a Strata engine, one harness, four dimensions and the receipts of every call.',
         date: '2026-10-13',
         route: 'blog/which-local-model-for-coding-agents/',
       },
@@ -115,7 +115,7 @@ describe('buildLlmsTxt()', () => {
     const text = buildLlmsTxt(base);
     expect(text).toContain('- [Blog](https://jordimp.net/en/blog/)');
     expect(text).toContain(
-      '- [Blog: Which local model should a coding agent run? Nine GGUFs, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/) — Nine GGUFs, one harness, four dimensions and the receipts of every call. (2026-10-13)',
+      '- [Blog: Which local model should a coding agent run? Six GGUFs and a Strata engine, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/) — Six GGUFs, a Strata engine, one harness, four dimensions and the receipts of every call. (2026-10-13)',
     );
     expect(text).toContain(
       '- [Blog: RAG without an eval gate is a demo.](https://jordimp.net/en/blog/rag-eval-gate/) — Why a public golden set and a CI floor of 0.409 matter. (2026-09-22)',
@@ -228,7 +228,7 @@ describe('buildLlmsFullTxt()', () => {
     expect(text).not.toContain('## Writing');
     expect(text.split('## Blog')[1]).toContain('- [Blog](https://jordimp.net/en/blog/)');
     expect(text).toContain(
-      '- [Blog: Which local model should a coding agent run? Nine GGUFs, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/) — Nine GGUFs, one harness, four dimensions and the receipts of every call. (2026-10-13)',
+      '- [Blog: Which local model should a coding agent run? Six GGUFs and a Strata engine, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/) — Six GGUFs, a Strata engine, one harness, four dimensions and the receipts of every call. (2026-10-13)',
     );
     expect(text).toContain(
       '- [Blog: RAG without an eval gate is a demo.](https://jordimp.net/en/blog/rag-eval-gate/) — Why a public golden set and a CI floor of 0.409 matter. (2026-09-22)',

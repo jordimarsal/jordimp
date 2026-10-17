@@ -597,7 +597,7 @@ describe('blog posts data (F15)', () => {
 
   it('gives the ggufbench post trilingual metadata, the measured date and the repo about URL (R10, R14, R15)', () => {
     expect(gguf.date).toBe('2026-10-13');
-    expect(gguf.revision).toBe('REV A');
+    expect(gguf.revision).toBe('REV B');
     expect(gguf.about).toBe('https://github.com/jordimarsal/ggufbench');
     expect(essay.about).toBe('https://github.com/jordimarsal/codebaserag');
     for (const lang of LOCALES) {
@@ -813,21 +813,27 @@ describe('ggufbench post data (F15, fact boundary R13)', () => {
 
   it('pins the exact English h1 (R13)', () => {
     expect(gguf.title.en).toBe(
-      'Which local model should a coding agent run? Nine GGUFs, one harness, receipts',
+      'Which local model should a coding agent run? Six GGUFs and a Strata engine, one harness, receipts',
     );
   });
 
-  it('carries the scoreboard as a typed table with the source header and the four measured rows (R12)', () => {
+  it('carries the scoreboard as a typed table with the source header and the ten measured rows (R12)', () => {
     const tables = gguf.sections.flatMap((section) => section.blocks).filter((block) => block.kind === 'table');
     expect(tables).toHaveLength(1);
     const table = tables[0];
     if (table.kind !== 'table') return;
-    expect(table.head).toEqual(['model', 'tools', 'code', 'agent', 'speed', 'global']);
+    expect(table.head).toEqual(['model', 'think', 'tools', 'code', 'agent', 'speed', 'global']);
     expect(table.rows).toEqual([
-      ['gemma-4-26b-a4b-it q5_k_xl', '92%', '91%', '93%', '32ms', '0.84'],
-      ['qwen36-35b-distill mxfp4_moe', '92%', '80%', '82%', '17ms', '0.84'],
-      ['qwen3.8-27b turbo q4_k_s', '92%', '84%', '96%', '45ms', '0.81'],
-      ['strata iq3_xxs', '86%', '88%', '96%', '50ms', '0.80'],
+      ['minicpm-v-4.7-35b-a3b q4_k_m', 'on', '100% ±0', '82% ±4 (8 excl.)', '89% ±0', '23ms', '0.85 ±1'],
+      ['minicpm-v-4.7-35b-a3b q4_k_m', 'off ★', '100% ±0', '83% ±1 (2 excl.)', '90% ±2', '26ms', '0.85 ±0'],
+      ['qwen36-35b-distill-mxfp4_moe', 'off ★', '94% ±0', '74% ±3', '92% ±2', '19ms', '0.84 ±1'],
+      ['qwen3.8-27b-ud-q3_k_xl', 'off', '100% ±0', '79% ±4', '90% ±1', '36ms', '0.82 ±1'],
+      ['ornith-1.5-35b-a3b-apex-mtp-quality', 'off ★', '100% ±0', '75% ±2', '92% ±1', '32ms', '0.82 ±1'],
+      ['qwen3.8-27b-heretic-q4_k_m', 'off ★', '100% ±0', '86% ±2', '92% ±2', '85ms', '0.81 ±1'],
+      ['qwen3.8-27b-ud-q3_k_xl', 'on', '94% ±0', '93% ±1 (1 excl.)', '96% ±1', '629ms', '0.80 ±0'],
+      ['gemma-4-26b-a4b-it-ud-q5_k_xl', 'off ★', '89% ±0', '86% ±1', '87% ±2', '33ms', '0.80 ±0'],
+      ['strata-iq3_xxs (strata engine)', 'off ★', '91% ±6', '85% ±1', '92% ±1', '45ms', '0.80 ±1'],
+      ['qwen3.8-27b-heretic-q4_k_m', 'on', '94% ±0', '90% ±2', '97% ±1', '1060ms', '0.80 ±0'],
     ]);
   });
 
@@ -836,21 +842,24 @@ describe('ggufbench post data (F15, fact boundary R13)', () => {
     for (const fact of [
       'temperature 0.2',
       'top-p 0.95',
+      'top-k 40',
+      'min-p 0.05',
       'seed 42',
       'q8_0',
       'seeds 42, 43 and 44',
-      '0.84 ±1',
-      '16 tool tasks',
-      '60 code tasks',
-      '42 multi-step agent tasks',
-      '32K context',
-      '2026-10-13',
-      '60-task code bank on 11 models',
-      '0 of 660 runs',
-      'excluded 14',
-      '40 to 665 ms',
-      '253 extra output tokens',
-      '84% to 100%',
+      '0.85 ±1',
+      '18 tool tasks',
+      '72 code tasks',
+      '72 multi-step agent tasks',
+      '32K output budget',
+      '2026-10-14/15',
+      '1512 code runs',
+      'OFF excludes 6 and ON excludes 101',
+      '280–1060 ms',
+      '19–85 ms',
+      '79% to 93%',
+      '91% and 100%',
+      '47% and 87%',
     ]) {
       expect(en, fact).toContain(fact);
     }
