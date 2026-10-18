@@ -54,8 +54,9 @@ question ──────► │ chunking · retrieval (threshold) · prompt �
 ## Corpus
 
 `corpus/manifest.yaml` is the single source of what the assistant may answer
-from: the three public CV documents plus READMEs/ADRs of showcased repos
-(~210 chunks at 900 chars / 150 overlap, heading-scoped).
+from: the three public CV documents, READMEs/ADRs of showcased repos, its own
+README and the concierge's self-description (~229 chunks at 900 chars / 150
+overlap, heading-scoped — and headings are part of the embedded text).
 
 `scripts/sync-corpus.sh` re-vendors the files from the workspace **and redacts
 contact data** (email/phone → `[contact: jordimp.net]`). Private material

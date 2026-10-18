@@ -61,6 +61,18 @@ def test_chunk_hash_is_stable_and_content_sensitive() -> None:
     assert len(first.sha256) == 64
 
 
+def test_embed_text_includes_the_heading_for_retrieval() -> None:
+    chunk = chunk_markdown(
+        "s.md", "S", "# Models\n\nQwen and nomic.", max_chars=100, overlap_chars=10
+    )[0]
+    assert chunk.embed_text() == "Models\nQwen and nomic."
+
+
+def test_embed_text_without_heading_is_the_body() -> None:
+    chunk = chunk_markdown("s.md", "S", "plain body", max_chars=100, overlap_chars=10)[0]
+    assert chunk.embed_text() == "plain body"
+
+
 @pytest.mark.parametrize(
     ("max_chars", "overlap_chars"),
     [(0, 0), (-1, 0), (100, 100), (100, 150), (100, -1)],

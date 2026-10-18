@@ -57,7 +57,7 @@ def ingest(
     embedder = build_embedder(settings)
     doc_prefix = settings.embed_doc_prefix
     try:
-        vectors = embedder.embed([f"{doc_prefix}{chunk.text}" for chunk in chunks])
+        vectors = embedder.embed([f"{doc_prefix}{chunk.embed_text()}" for chunk in chunks])
     except UpstreamError as exc:
         typer.echo(f"embedding failed: {exc}", err=True)
         raise typer.Exit(code=1) from exc
@@ -165,7 +165,7 @@ def eval_gate(
     doc_prefix = settings.embed_doc_prefix
     query_prefix = settings.embed_query_prefix
     try:
-        vectors = embedder.embed([f"{doc_prefix}{chunk.text}" for chunk in chunks])
+        vectors = embedder.embed([f"{doc_prefix}{chunk.embed_text()}" for chunk in chunks])
         query_vectors = embedder.embed([f"{query_prefix}{query}" for query in queries])
     except UpstreamError as exc:
         typer.echo(f"embedding failed: {exc}", err=True)

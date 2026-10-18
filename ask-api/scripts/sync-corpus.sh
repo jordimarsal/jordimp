@@ -40,4 +40,12 @@ done
 copy "$PROJECTS/redis-toolkit/README.md"            repos/redis-toolkit.md
 copy "$PROJECTS/harness/README.md"                  repos/harness.md
 copy "$PROJECTS/interview-simulator/README.md"      repos/interview-simulator.md
+copy "$ASK_DIR/README.md"                           repos/ask-api.md
+mkdir -p "$DEST/about"
+cp "$ASK_DIR/corpus-src/porter.md" "$DEST/about/porter.md"
+sed -i -E \
+  -e 's/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/[contact: jordimp.net]/g' \
+  -e 's/(\+?34[ ]?)?[67][0-9]{2}[ ]?[0-9]{3}[ ]?[0-9]{3}/[contact: jordimp.net]/g' \
+  "$DEST/about/porter.md"
+echo "  about/porter.md"
 echo "Corpus synced to corpus/files"

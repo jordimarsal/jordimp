@@ -19,6 +19,7 @@ RUN useradd --uid 10001 --create-home asker \
     && chown -R asker:asker /app
 
 COPY --chown=asker:asker corpus ./corpus
+COPY --chown=asker:asker evals ./evals
 COPY --chown=asker:asker deploy/entrypoint.sh ./deploy/entrypoint.sh
 USER asker
 

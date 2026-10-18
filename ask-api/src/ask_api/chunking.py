@@ -16,6 +16,16 @@ class Chunk:
     text: str
     sha256: str
 
+    def embed_text(self) -> str:
+        """The text to embed: heading first (it scopes the body), then the body.
+
+        Headings never reach the vector unless included here — without them,
+        retrieval loses the section context.
+        """
+        if self.heading:
+            return f"{self.heading}\n{self.text}"
+        return self.text
+
 
 def chunk_markdown(
     source: str, title: str, text: str, *, max_chars: int, overlap_chars: int
