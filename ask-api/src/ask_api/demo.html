@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ask-api · jordimp.net</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, sans-serif; background: #0d1117; color: #e6edf3;
+         max-width: 42rem; margin: 0 auto; padding: 1.25rem; }
+  h1 { font-size: 1.15rem; margin: 0 0 .4rem; }
+  code { color: #8b949e; }
+  .muted { color: #8b949e; font-size: .85rem; }
+  textarea { width: 100%; font: inherit; background: #161b22; color: inherit;
+             border: 1px solid #30363d; border-radius: 8px; padding: .6rem; min-height: 4.5rem; }
+  select, button { font: inherit; padding: .5rem .85rem; border-radius: 8px;
+                   border: 1px solid #30363d; background: #161b22; color: inherit; }
+  button { cursor: pointer; }
+  #answer { white-space: pre-wrap; line-height: 1.55; margin-top: 1.1rem; }
+  .cite { color: #8b949e; font-size: .85rem; margin: .35rem 0 0; }
+  .no { color: #f0b429; margin-top: .6rem; }
+  .err { color: #f85149; margin-top: .6rem; }
+  footer { margin-top: 2rem; }
+</style>
+</head>
+<body>
+<h1>Ask about Jordi's profile</h1>
+<p class="muted">Answers are grounded in the public CV &amp; portfolio and must cite
+their sources. When something is not in the corpus, it says so — it never invents.</p>
+<form id="f">
+  <textarea id="q" maxlength="500" placeholder="e.g. What is CodebaseRAG? / ¿Qué es Redis Toolkit?"></textarea>
+  <p>
+    <select id="lang" aria-label="Language">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="ca">Català</option>
+    </select>
+    <button type="submit">Ask</button>
+  </p>
+</form>
+<div id="out" aria-live="polite"></div>
+<footer class="muted">API: <code>POST /api/ask</code> · <code>/api/health</code> · answers ≤500 chars, rate limited.</footer>
+<script>
+const form = document.getElementById('f');
+const out = document.getElementById('out');
+const node = (tag, className, text) => {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  el.textContent = text;
+  return el;
+};
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const question = document.getElementById('q').value.trim();
+  const lang = document.getElementById('lang').value;
+  if (!question) return;
+  out.replaceChildren(node('p', 'muted', '…'));
+  try {
+    const response = await fetch('/api/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, lang }),
+    });
+    const body = await response.json();
+    if (body.answer === undefined) {
+      out.replaceChildren(node('p', 'err', (body.title || 'Error') + ' — ' + (body.detail || '')));
+      return;
+    }
+    const parts = [node('div', '', ''), node('div', 'answer', body.answer)];
+    parts[0].id = 'answer';
+    out.replaceChildren(...parts.slice(1));
+    if (body.covered === false) {
+      out.append(node('p', 'no', 'Not covered by the available profile.'));
+    }
+    for (const citation of body.citations || []) {
+      out.append(node('p', 'cite', '↳ ' + citation.title + ' · ' + citation.heading + ' (' + citation.source + ')'));
+    }
+  } catch {
+    out.replaceChildren(node('p', 'err', 'Request failed — try again.'));
+  }
+});
+</script>
+</body>
+</html>

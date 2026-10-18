@@ -60,7 +60,18 @@ def test_root_descriptor(make_settings) -> None:
     body = client.get("/").json()
     assert body["name"] == "ask-api"
     assert "/api/ask" in body["endpoints"]
+    assert "/demo" in body["endpoints"]
     assert body["site"] == "https://jordimp.net"
+
+
+def test_demo_page_is_served_html(make_settings) -> None:
+    client, *_ = build_app(make_settings)
+    response = client.get("/demo")
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/html")
+    assert "/api/ask" in response.text
+    assert "<form" in response.text
+    assert 'id="lang"' in response.text
 
 
 def test_covered_answer_shape(make_settings) -> None:

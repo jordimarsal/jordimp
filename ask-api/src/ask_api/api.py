@@ -4,6 +4,7 @@ import logging
 import time
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -182,9 +183,15 @@ def create_app(settings: Settings, deps: Deps | None = None) -> FastAPI:
         return {
             "name": "ask-api",
             "version": __version__,
-            "endpoints": ["/api/ask", "/api/health"],
+            "endpoints": ["/api/ask", "/api/health", "/demo"],
             "site": "https://jordimp.net",
         }
+
+    @app.get("/demo", include_in_schema=False)
+    def demo() -> Response:
+        """Minimal browser UI so the API is demoable from any phone."""
+        page = (Path(__file__).with_name("demo.html")).read_text(encoding="utf-8")
+        return Response(content=page, media_type="text/html")
 
     @app.get("/api/health")
     def health() -> dict[str, Any]:
