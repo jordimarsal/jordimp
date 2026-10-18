@@ -1,13 +1,16 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   articleJsonLd,
   breadcrumbJsonLd,
+  googleSiteVerification,
   jsonLdScript,
   ogLocale,
   ogLocaleAlternates,
   personJsonLd,
   siteUrl,
 } from './seo';
+import { SITE } from '../config';
 import { LOCALES } from './i18n';
 
 describe('siteUrl()', () => {
@@ -45,6 +48,67 @@ describe('ogLocaleAlternates()', () => {
       expect(alternates).toHaveLength(2);
       expect(alternates).not.toContain(ogLocale(lang));
     }
+  });
+});
+
+describe('googleSiteVerification()', () => {
+  it('returns undefined for an absent value (F20 R11)', () => {
+    expect(googleSiteVerification(undefined)).toBeUndefined();
+  });
+
+  it('returns undefined for empty and whitespace-only values (F20 R11)', () => {
+    expect(googleSiteVerification('')).toBeUndefined();
+    expect(googleSiteVerification('   ')).toBeUndefined();
+    expect(googleSiteVerification('\t\n')).toBeUndefined();
+  });
+
+  it('trims a padded non-blank token (F20 R12)', () => {
+    expect(googleSiteVerification('  tok\n')).toBe('tok');
+  });
+
+  it('passes a real-shaped token through unchanged (F20 R12)', () => {
+    expect(googleSiteVerification('9yXk3QzLmNpR7tVb2wGsD1fHjE0aUoCi')).toBe(
+      '9yXk3QzLmNpR7tVb2wGsD1fHjE0aUoCi',
+    );
+  });
+});
+
+describe('SEO.astro GSC emission (F20 R11, R12)', () => {
+  const SEO_ASTRO = readFileSync(new URL('../components/SEO.astro', import.meta.url), 'utf8');
+
+  it('computes gsc from the SITE config field through the pure helper', () => {
+    expect(SEO_ASTRO).toContain(
+      'const gsc = googleSiteVerification(SITE.googleSiteVerification);',
+    );
+  });
+
+  it('emits exactly one conditional meta tag next to the robots line', () => {
+    expect(SEO_ASTRO).toContain('{gsc && <meta name="google-site-verification" content={gsc} />}');
+    expect(SEO_ASTRO.match(/google-site-verification/g)).toHaveLength(1);
+  });
+});
+
+describe('docs/gsc-checklist.md workstreams (F20 R13)', () => {
+  const CHECKLIST = readFileSync(new URL('../../docs/gsc-checklist.md', import.meta.url), 'utf8');
+
+  it('documents the meta-tag ownership mechanism and the URL-prefix property', () => {
+    expect(CHECKLIST).toContain('google-site-verification');
+    expect(CHECKLIST).toContain('URL-prefix');
+  });
+
+  it('documents the DNS TXT domain-property alternative', () => {
+    expect(CHECKLIST).toContain('Domain property');
+    expect(CHECKLIST).toContain('TXT');
+  });
+
+  it('pins the sitemap-index.xml submission endpoint', () => {
+    expect(CHECKLIST).toContain('https://jordimp.net/sitemap-index.xml');
+  });
+
+  it('covers hreflang monitoring and points at the recording file', () => {
+    expect(CHECKLIST).toContain('hreflang');
+    expect(CHECKLIST).toContain('Recording');
+    expect(CHECKLIST).toContain('harness/progress/impl_lang-seo-visibility.md');
   });
 });
 

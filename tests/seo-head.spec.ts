@@ -1,4 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
+import { SITE } from '../src/config';
+import { googleSiteVerification } from '../src/lib/seo';
 import { PAGES, project } from '../src/data/content';
 import type { Locale } from '../src/data/types';
 
@@ -66,6 +68,23 @@ const REPRESENTATIVE_ROUTES: ReadonlyArray<{ readonly lang: Locale; readonly rou
   { lang: 'es', route: 'blog/rag-eval-gate/' },
   { lang: 'ca', route: 'blog/rag-eval-gate/' },
 ];
+
+test.describe('Google Search Console verification meta (F20 R11, R12)', () => {
+  const expectedGsc = googleSiteVerification(SITE.googleSiteVerification);
+
+  test('mirrors SITE.googleSiteVerification on the representative routes', async ({ page }) => {
+    for (const { lang, route } of REPRESENTATIVE_ROUTES) {
+      await page.goto(`/${lang}/${route}`);
+      const gsc = page.locator('meta[name="google-site-verification"]');
+      if (expectedGsc === undefined) {
+        expect(await gsc.count(), `/${lang}/${route}`).toBe(0);
+      } else {
+        expect(await gsc.count(), `/${lang}/${route}`).toBe(1);
+        await expect(gsc).toHaveAttribute('content', expectedGsc);
+      }
+    }
+  });
+});
 
 test.describe('SEO head emission on representative routes (T11, R17)', () => {
   for (const { lang, route } of REPRESENTATIVE_ROUTES) {

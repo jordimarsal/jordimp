@@ -12,3 +12,9 @@ describe('contact email single source of truth', () => {
     expect(CONTENT_SITE.email).toBe(CONTACT_EMAIL);
   });
 });
+
+describe('Google Search Console verification field (F20 R10)', () => {
+  it('exists on SITE as a string the emission helper can trim', () => {
+    expect(typeof CONFIG_SITE.googleSiteVerification).toBe('string');
+  });
+});

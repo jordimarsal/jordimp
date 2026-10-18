@@ -61,8 +61,21 @@ export interface Dept {
   readonly name: L10n<string>;
   readonly line: L10n<string>;
   readonly intro: L10n<string>;
+  readonly plain: L10n<string>;
   readonly projects: readonly string[];
   readonly page: DeptKey;
+}
+
+export interface FloorGuide {
+  readonly label: L10n<string>;
+  readonly line: L10n<string>;
+}
+
+export interface PlainCard {
+  readonly title: L10n<string>;
+  readonly body: L10n<string>;
+  readonly cta: L10n<string>;
+  readonly dept: DeptKey;
 }
 
 export interface Metric {
@@ -128,6 +141,9 @@ export interface HomeContent {
   readonly h1: L10n<string>;
   readonly stand: L10n<string>;
   readonly metaChips: L10n<readonly string[]>;
+  readonly floorGuide: FloorGuide;
+  readonly plainHead: SecHead;
+  readonly plainCards: readonly PlainCard[];
   readonly featuredHead: SecHead;
   readonly deptsHead: SecHead;
 }

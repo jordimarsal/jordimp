@@ -35,7 +35,7 @@ import {
   tierProjects,
 } from './content';
 import { SITE as CONFIG_SITE } from '../config';
-import type { Tier } from './types';
+import type { DeptKey, Tier } from './types';
 
 const PROJECT_COUNT = 11;
 const FEATURED_COUNT = 3;
@@ -924,5 +924,158 @@ describe('harness entry ships standalone skills (F17)', () => {
     for (const lang of LOCALES) {
       expect(metric?.label[lang], `metric.label.${lang}`).toBe('skills');
     }
+  });
+});
+
+describe('plain-language clarity (F21)', () => {
+  const BANNED_TERMS = [
+    'RAG',
+    'SSE',
+    'eval-gated',
+    'eval gate',
+    'eval',
+    'LLM',
+    'GGUF',
+    'MCP',
+    'CLI',
+    'API',
+    'SDK',
+    'MVP',
+    'SDD',
+    'TDD',
+    'SOLID',
+    'CI',
+    'retrieval',
+    'recall',
+    'embeddings',
+    'vector',
+    'hexagonal',
+    'golden set',
+    'Q/A',
+    'pipeline',
+  ] as const;
+
+  const bannedIn = (text: string): string[] =>
+    BANNED_TERMS.filter((term) =>
+      new RegExp(`\\b${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(text),
+    );
+
+  const PLAIN_BLOCKS = (): readonly string[] => [
+    ...LOCALES.map((lang) => HOME.floorGuide.label[lang]),
+    ...LOCALES.map((lang) => HOME.floorGuide.line[lang]),
+    ...HOME.plainCards.flatMap((card) =>
+      LOCALES.flatMap((lang) => [card.title[lang], card.body[lang], card.cta[lang]]),
+    ),
+    ...FLOOR_ORDER.flatMap((key) => LOCALES.map((lang) => DEPTS[key].plain[lang])),
+  ];
+
+  it('heads the metaphor guide with the exact trilingual label and line (R4)', () => {
+    expect(HOME.floorGuide.label.en).toBe('FIRST VISIT? THE BUILDING, IN PLAIN WORDS');
+    expect(HOME.floorGuide.line.en).toBe(
+      'This building is one engineer’s practice: every floor is a kind of work he does. Walk in — the doors are open and everything inside can be checked.',
+    );
+    expect(HOME.floorGuide.label.es).toBe('¿PRIMERA VISITA? EL EDIFICIO, EN PALABRAS SENCILLAS');
+    expect(HOME.floorGuide.label.ca).toBe('PRIMERA VISITA? L’EDIFICI, EN PARAULES SENCILLES');
+    expect(HOME.floorGuide.line.es).toBe(
+      'Este edificio es el trabajo de un solo ingeniero: cada planta es un tipo de trabajo que hace. Entra — las puertas están abiertas y todo lo de dentro se puede comprobar.',
+    );
+    expect(HOME.floorGuide.line.ca).toBe(
+      'Aquest edifici és la feina d’un sol enginyer: cada planta és un tipus de treball que fa. Entra — les portes són obertes i tot el que hi ha a dins es pot comprovar.',
+    );
+  });
+
+  it('heads the outcomes section 02 with the exact trilingual head (R1, R4)', () => {
+    expect(HOME.plainHead.num).toBe('02');
+    expect(HOME.plainHead.title.en).toBe('What this means for you');
+    expect(HOME.plainHead.sub.en).toBe('THE SAME WORK, IN PLAIN WORDS');
+    expect(HOME.plainHead.title.es).toBe('Lo que esto significa para ti');
+    expect(HOME.plainHead.sub.es).toBe('EL MISMO TRABAJO, EN PALABRAS SENCILLAS');
+    expect(HOME.plainHead.title.ca).toBe('Què significa això per a tu');
+    expect(HOME.plainHead.sub.ca).toBe('EL MATEIX TREBALL, EN PARAULES SENCILLES');
+  });
+
+  it('pins the three outcome cards in the fixed order with their floors (R2)', () => {
+    expect(HOME.plainCards.map((card) => card.dept)).toEqual(['research', 'telemetry', 'tooling']);
+  });
+
+  it('pins the exact EN card copy verbatim from the design table (R4)', () => {
+    expect(HOME.plainCards.map((card) => card.title.en)).toEqual([
+      'AI answers you can check',
+      'Systems that say when they break',
+      'A written plan before the first line of code',
+    ]);
+    expect(HOME.plainCards.map((card) => card.body.en)).toEqual([
+      'I build AI features that answer with evidence: a fixed set of questions proves the answers are right before launch — and keeps proving it after every change.',
+      'I connect the systems a business runs on so information moves on its own — and when a piece goes down, the alert says which piece and since when. No silent failures.',
+      'Every job starts as a short document you can read and approve: what gets built, how it is proven to work, and when it is done. Then the code follows the plan.',
+    ]);
+    expect(HOME.plainCards.map((card) => card.cta.en)).toEqual([
+      'Visit the Research floor',
+      'Visit the Telemetry floor',
+      'Visit the Tooling floor',
+    ]);
+  });
+
+  it('keeps every new field non-empty in es and ca (R4)', () => {
+    for (const lang of ['es', 'ca'] as const) {
+      expect(HOME.floorGuide.label[lang].trim(), `floorGuide.label.${lang}`).not.toBe('');
+      expect(HOME.floorGuide.line[lang].trim(), `floorGuide.line.${lang}`).not.toBe('');
+      expect(HOME.plainHead.title[lang].trim(), `plainHead.title.${lang}`).not.toBe('');
+      expect(HOME.plainHead.sub[lang].trim(), `plainHead.sub.${lang}`).not.toBe('');
+      for (const card of HOME.plainCards) {
+        expect(card.title[lang].trim(), `${card.dept}:title.${lang}`).not.toBe('');
+        expect(card.body[lang].trim(), `${card.dept}:body.${lang}`).not.toBe('');
+        expect(card.cta[lang].trim(), `${card.dept}:cta.${lang}`).not.toBe('');
+      }
+    }
+  });
+
+  it('defines the plain line for all seven floors in every locale, EN verbatim (R7)', () => {
+    const EN_PLAIN: Record<DeptKey, string> = {
+      research:
+        'AI features that show their work: the answers are checked against a fixed set of questions before anything reaches a customer.',
+      telemetry:
+        'The plumbing that moves data between a company’s systems — built so that when a piece fails, you are told which piece and since when, instead of finding out from a customer.',
+      tooling:
+        'Small tools and written plans: the work is agreed on paper before the first line of code, so you always know what is being built and why.',
+      inspections:
+        'The certificates on the wall: speed, accessibility and quality scores, dated and signed, so nothing here runs on faith.',
+      people:
+        'The house rules: tests before features, plain names, no hidden tricks — one engineer whose work is easy to audit.',
+      operations:
+        'The career ledger: every job since 2017, what shipped and what it was built with — one history, no rewrites.',
+      frontdesk:
+        'Where you start: describe what you need in your own words and get a straight answer about whether we can help.',
+    };
+    for (const key of FLOOR_ORDER) {
+      expect(DEPTS[key].plain.en, `${key}:plain.en`).toBe(EN_PLAIN[key]);
+      for (const lang of ['es', 'ca'] as const) {
+        expect(DEPTS[key].plain[lang].trim(), `${key}:plain.${lang}`).not.toBe('');
+      }
+    }
+  });
+
+  it('renumbers the home sections 01-04 after the insert (R5)', () => {
+    expect(HOME.featuredHead.num).toBe('03');
+    expect(HOME.deptsHead.num).toBe('04');
+  });
+
+  it('keeps the new plain blocks free of banned jargon in all three locales (R9)', () => {
+    for (const text of PLAIN_BLOCKS()) {
+      expect(bannedIn(text), text).toEqual([]);
+    }
+  });
+
+  it('lets the scan catch what it claims to catch (R9 sanity)', () => {
+    expect(bannedIn('The RAG hexagonal eval gate')).toEqual([
+      'RAG',
+      'eval gate',
+      'eval',
+      'hexagonal',
+    ]);
+    expect(bannedIn('eval-gated pipeline')).toEqual(['eval-gated', 'eval', 'pipeline']);
+    expect(bannedIn('EVALUATE the answers')).toEqual([]);
+    expect(bannedIn('CERTIFICAT')).toEqual([]);
+    expect(bannedIn('AI answers')).toEqual([]);
   });
 });

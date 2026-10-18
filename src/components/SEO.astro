@@ -4,6 +4,7 @@ import { LOCALES } from '../lib/i18n';
 import {
   articleJsonLd,
   breadcrumbJsonLd,
+  googleSiteVerification,
   jsonLdScript,
   ogLocale,
   ogLocaleAlternates,
@@ -28,6 +29,7 @@ interface Props {
 
 const { lang, title, description, path = '', noindex = false, refreshUrl, breadcrumbs, ogType = 'website', articleSection, article } = Astro.props;
 const demo = import.meta.env.PUBLIC_DEMO === '1';
+const gsc = googleSiteVerification(SITE.googleSiteVerification);
 const canonical = siteUrl(lang, path);
 const ogImage = SITE.ogImage;
 const alternates = LOCALES.map((locale) => ({ hreflang: locale, href: siteUrl(locale, path) }));
@@ -42,6 +44,7 @@ const articleLd = article ? jsonLdScript(articleJsonLd(lang, article)) : undefin
 <meta name="description" content={description} />
 {(noindex || demo) && <meta name="robots" content="noindex" />}
 {refreshUrl && <meta http-equiv="refresh" content={`0; url=${refreshUrl}`} />}
+{gsc && <meta name="google-site-verification" content={gsc} />}
 <link rel="canonical" href={canonical} />
 {alternates.map((alternate) => (
   <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />

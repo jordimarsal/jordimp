@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { floorPlateLabel } from '../src/lib/building-svg';
 import { parseQuality, plaqueText } from '../src/lib/quality';
-import { FEATURED, FOOTER, HOME, SITE, UI, project } from '../src/data/content';
+import { DEPTS, FEATURED, FLOOR_ORDER, FOOTER, HOME, SITE, UI, project } from '../src/data/content';
 
 const qualityJson: unknown = JSON.parse(
   readFileSync(new URL('../src/data/quality.json', import.meta.url), 'utf8'),
@@ -39,7 +39,8 @@ async function expectHomeChrome(page: Page, home: string): Promise<void> {
   await expect(page.locator('.navbar [data-night-toggle]')).toHaveCount(1);
 
   await expect(page.locator('h1 mark')).toHaveCount(1);
-  await expect(page.locator('.meta-row span')).toHaveCount(5);
+  await expect(page.locator('.meta-row span')).toHaveCount(4);
+  expect(await page.locator('.meta-row').textContent()).not.toContain('EN / ES / CA');
   await expect(page.locator('.hint')).toContainText(/CLICK A FLOOR|PULSA UNA PLANTA|PITJA UNA PLANTA/);
   await expect(page.locator('.ticker .ticker__inner span')).toHaveCount(2);
 
@@ -255,6 +256,62 @@ test.describe('blog navbar entry (F15 R8)', () => {
   }
 });
 
+test.describe('navbar language switcher affordance (F20 R2, R4)', () => {
+  for (const home of HOMES) {
+    test(`presents the pointer cursor on all three locale links at ${home} (R2)`, async ({
+      page,
+    }) => {
+      await page.goto(home);
+      const cursors = await page
+        .locator('.navbar__lang a')
+        .evaluateAll((links) => links.map((link) => getComputedStyle(link).cursor));
+      expect(cursors).toEqual(Array(3).fill('pointer'));
+    });
+
+    test(`marks only the current locale with the dot glyph at ${home} (R4)`, async ({ page }) => {
+      await page.goto(home);
+      const links = await page.locator('.navbar__lang a').evaluateAll((nodes) =>
+        nodes.map((link) => ({
+          current: link.getAttribute('aria-current') === 'true',
+          marker: getComputedStyle(link, '::before').content,
+        })),
+      );
+      expect(links).toHaveLength(3);
+      const current = links.filter((link) => link.current);
+      expect(current).toHaveLength(1);
+      expect(current[0]?.marker.replace(/["']/g, '')).toBe('● ');
+      for (const link of links.filter((candidate) => !candidate.current)) {
+        expect(link.marker).toBe('none');
+      }
+    });
+  }
+});
+
+test.describe('navbar switcher tap targets at 375×667 (F20 R5)', () => {
+  test.use({ viewport: { width: 375, height: 667 } });
+
+  for (const home of HOMES) {
+    test(`renders 44px tap targets for the three locale links at ${home}`, async ({ page }) => {
+      await page.goto(home);
+      for (let i = 0; i < 3; i++) {
+        const box = await page.locator('.navbar__lang a').nth(i).boundingBox();
+        if (!box) throw new Error(`locale link ${i} not rendered`);
+        expect(box.width, `locale link ${i} width`).toBeGreaterThanOrEqual(44);
+        expect(box.height, `locale link ${i} height`).toBeGreaterThanOrEqual(44);
+      }
+    });
+  }
+
+  test('introduces no horizontal page scroll on the home (maintenance)', async ({ page }) => {
+    await page.goto('/en/');
+    const widths = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+    expect(widths.scrollWidth).toBe(widths.clientWidth);
+  });
+});
+
 test.describe('building affordance and tap targets at 375×667 (F16 R14, R17, R18)', () => {
   test.use({ viewport: { width: 375, height: 667 } });
 
@@ -308,4 +365,134 @@ test.describe('building affordance and tap targets at 375×667 (F16 R14, R17, R1
       .evaluate((el) => getComputedStyle(el).gridTemplateColumns);
     expect(columns.split(' ')).toHaveLength(2);
   });
+});
+
+test.describe('plain clarity (F21 plain-language section and floor guide)', () => {
+  for (const home of HOMES) {
+    const lang = home.replace(/\//g, '') as 'en' | 'es' | 'ca';
+
+    test(`places the plain section between building and featured at ${home} (R1)`, async ({
+      page,
+    }) => {
+      await page.goto(home);
+      const labelled = await page
+        .locator('main > section')
+        .evaluateAll((sections) => sections.map((s) => s.getAttribute('aria-labelledby')));
+      const building = labelled.indexOf('building-title');
+      const plain = labelled.indexOf('plain-title');
+      const featured = labelled.indexOf('featured-title');
+      expect(plain, 'plain section directly after building').toBe(building + 1);
+      expect(featured, 'featured section directly after plain').toBe(plain + 1);
+      await expect(page.locator('section:has(#plain-title)')).toBeVisible();
+    });
+
+    test(`numbers the home sections 01-04 in DOM order at ${home} (R5)`, async ({ page }) => {
+      await page.goto(home);
+      const nums = await page.locator('main .sec-head__num').allTextContents();
+      expect(nums).toEqual(['01', '02', '03', '04']);
+    });
+
+    test(`renders exactly three outcome cards with per-locale copy and floor links at ${home} (R2, R3)`, async ({
+      page,
+    }) => {
+      await page.goto(home);
+      const cards = page.locator('.plain-cards article.plain-card');
+      await expect(cards).toHaveCount(HOME.plainCards.length);
+      for (let i = 0; i < HOME.plainCards.length; i++) {
+        const card = HOME.plainCards[i];
+        const loc = cards.nth(i);
+        await expect(loc.locator('h3')).toHaveCount(1);
+        await expect(loc.locator('p')).toHaveCount(1);
+        await expect(loc.locator('a')).toHaveCount(1);
+        await expect(loc.locator('img, ul, ol, .metrics, span')).toHaveCount(0);
+        await expect(loc.locator('h3')).toHaveText(card.title[lang]);
+        await expect(loc.locator('a')).toHaveText(`${card.cta[lang]} →`);
+        await expect(loc.locator('a')).toHaveAttribute(
+          'href',
+          `${home}departments/${DEPTS[card.dept].page}/`,
+        );
+      }
+    });
+
+    test(`renders the floor guide inside the building, after the hint, in floor order at ${home} (R6, R7)`, async ({
+      page,
+    }) => {
+      await page.goto(home);
+      const guide = page.locator('#floorguide');
+      await expect(guide).toBeVisible();
+      await expect(page.locator('section:has(#building-title) #floorguide')).toHaveCount(1);
+      const position = await page.locator('section:has(#building-title)').evaluate((section) => {
+        const hint = section.querySelector('.floor-hint');
+        const guideNode = section.querySelector('#floorguide');
+        const building = section.querySelector('#building');
+        return Boolean(
+          hint &&
+            guideNode &&
+            building &&
+            hint.nextElementSibling === guideNode &&
+            guideNode.nextElementSibling === building,
+        );
+      });
+      expect(position, 'guide directly after .floor-hint and before <Building>').toBe(true);
+      await expect(guide.locator('.floorguide__label')).toHaveText(HOME.floorGuide.label[lang]);
+      await expect(guide.locator('.floorguide__line')).toHaveText(HOME.floorGuide.line[lang]);
+      const rows = guide.locator('.floorguide__list li');
+      await expect(rows).toHaveCount(FLOOR_ORDER.length);
+      for (let i = 0; i < FLOOR_ORDER.length; i++) {
+        const dept = DEPTS[FLOOR_ORDER[i]];
+        await expect(rows.nth(i).locator('.floorguide__code')).toHaveText(dept.code);
+        await expect(rows.nth(i).locator('.floorguide__name')).toHaveText(dept.name[lang]);
+        await expect(rows.nth(i).locator('.floorguide__plain')).toHaveText(dept.plain[lang]);
+      }
+    });
+
+    test(`keeps the floor guide and floor plates non-interactive as shipped at ${home} (R8)`, async ({
+      page,
+    }) => {
+      await page.goto(home);
+      await expect(page.locator('#floorguide a')).toHaveCount(0);
+      await expect(page.locator('#floorguide button')).toHaveCount(0);
+      await expect(page.locator('#floorguide script')).toHaveCount(0);
+      await expect(page.locator('#floorguide form, #floorguide input')).toHaveCount(0);
+      for (const key of FLOOR_KEYS) {
+        await expect(page.locator(`.floor-btn#dept-${key}`)).toHaveAttribute(
+          'aria-label',
+          floorPlateLabel(lang, key),
+        );
+      }
+    });
+  }
+
+  test('derives the guide rows from FLOOR_ORDER and DEPTS in the page source (R7)', () => {
+    const source = readFileSync(new URL('../src/pages/[lang]/index.astro', import.meta.url), 'utf8');
+    const start = source.indexOf('id="floorguide"');
+    const end = source.indexOf('<Building', start);
+    expect(start, 'floorguide block present').toBeGreaterThan(-1);
+    expect(end, 'building render follows the guide').toBeGreaterThan(start);
+    const guideBlock = source.slice(start, end);
+    expect(guideBlock).toContain('FLOOR_ORDER.map((key)');
+    expect(guideBlock).toContain('DEPTS[key].code');
+    expect(guideBlock).toContain('DEPTS[key].name[lang]');
+    expect(guideBlock).toContain('DEPTS[key].plain[lang]');
+  });
+});
+
+test.describe('plain clarity layout guard at 375×667 (F21 R12)', () => {
+  test.use({ viewport: { width: 375, height: 667 } });
+
+  for (const home of HOMES) {
+    test(`keeps the guide and cards inside the viewport at ${home} (R12)`, async ({ page }) => {
+      await page.goto(home);
+      for (const selector of ['#floorguide', '.plain-cards']) {
+        await page.locator(selector).scrollIntoViewIfNeeded();
+        const widths = await page.evaluate(() => ({
+          scrollWidth: document.documentElement.scrollWidth,
+          clientWidth: document.documentElement.clientWidth,
+        }));
+        expect(widths.scrollWidth, `${selector} introduces no horizontal scroll`).toBe(
+          widths.clientWidth,
+        );
+      }
+    });
+  }
 });

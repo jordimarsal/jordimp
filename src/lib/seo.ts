@@ -22,6 +22,12 @@ export function ogLocaleAlternates(lang: Locale): OgLocale[] {
   return LOCALES.filter((locale) => locale !== lang).map(ogLocale);
 }
 
+export function googleSiteVerification(raw?: string): string | undefined {
+  const trimmed = raw?.trim();
+  if (!trimmed) return undefined;
+  return trimmed;
+}
+
 export function personJsonLd(lang: Locale): {
   readonly '@context': 'https://schema.org';
   readonly '@type': 'Person';

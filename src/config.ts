@@ -13,4 +13,5 @@ export const SITE = {
   est: '2017',
   city: 'Barcelona',
   ogImage: 'https://jordimp.net/og-building.png',
+  googleSiteVerification: '',
 } as const;

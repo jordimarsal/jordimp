@@ -8,6 +8,7 @@ import ProjectCard from '../../components/site/ProjectCard.astro';
 import { LOCALES, type Locale } from '../../lib/i18n';
 import {
   BREADCRUMB_HOME,
+  DEPTS,
   FLOOR_ORDER,
   FEATURED,
   FOOTER,
@@ -77,7 +78,40 @@ const featured = FEATURED.map((slug) => project(slug));
         id="building-title"
       />
       <p class="floor-hint">{UI.floorHint[lang]}</p>
+      <div class="floorguide" id="floorguide">
+        <p class="floorguide__label">{HOME.floorGuide.label[lang]}</p>
+        <p class="floorguide__line">{HOME.floorGuide.line[lang]}</p>
+        <ul class="floorguide__list">
+          {FLOOR_ORDER.map((key) => (
+            <li>
+              <span class="floorguide__code">{DEPTS[key].code}</span>
+              <span class="floorguide__name">{DEPTS[key].name[lang]}</span>
+              <span class="floorguide__plain">{DEPTS[key].plain[lang]}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
       <Building lang={lang} report={report} />
+    </section>
+    <section aria-labelledby="plain-title">
+      <SecHead
+        num={HOME.plainHead.num}
+        title={HOME.plainHead.title[lang]}
+        sub={HOME.plainHead.sub[lang]}
+        id="plain-title"
+      />
+      <div class="plain-cards">
+        {HOME.plainCards.map((card) => (
+          <article class="plain-card">
+            <h3>{card.title[lang]}</h3>
+            <p>{card.body[lang]}</p>
+            <a
+              class="plain-card__cta"
+              href={srcPath(lang, dirRoute(PAGES[DEPTS[card.dept].page].route))}
+            >{card.cta[lang]} →</a>
+          </article>
+        ))}
+      </div>
     </section>
     <section aria-labelledby="featured-title">
       <SecHead

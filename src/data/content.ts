@@ -128,17 +128,98 @@ export const HOME: HomeContent = {
     ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer: sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des del <b>2017</b>. Ara, dins d’un equip de plataforma telco. Entrada lliure: rols, repos, o un encàrrec curt amb spec primer.',
   },
   metaChips: {
-    en: ['EST. 2017', 'BARCELONA', 'EN / ES / CA', '11 OPEN REPOS', '1 ENGINEER'],
-    es: ['DESDE 2017', 'BARCELONA', 'EN / ES / CA', '11 REPOS ABIERTOS', '1 INGENIERO'],
-    ca: ['DES DE 2017', 'BARCELONA', 'EN / ES / CA', '11 REPOS OBERTS', '1 ENGINYER'],
+    en: ['EST. 2017', 'BARCELONA', '11 OPEN REPOS', '1 ENGINEER'],
+    es: ['DESDE 2017', 'BARCELONA', '11 REPOS ABIERTOS', '1 INGENIERO'],
+    ca: ['DES DE 2017', 'BARCELONA', '11 REPOS OBERTS', '1 ENGINYER'],
   },
-  featuredHead: {
+  floorGuide: {
+    label: {
+      en: 'FIRST VISIT? THE BUILDING, IN PLAIN WORDS',
+      es: '¿PRIMERA VISITA? EL EDIFICIO, EN PALABRAS SENCILLAS',
+      ca: 'PRIMERA VISITA? L’EDIFICI, EN PARAULES SENCILLES',
+    },
+    line: {
+      en: 'This building is one engineer’s practice: every floor is a kind of work he does. Walk in — the doors are open and everything inside can be checked.',
+      es: 'Este edificio es el trabajo de un solo ingeniero: cada planta es un tipo de trabajo que hace. Entra — las puertas están abiertas y todo lo de dentro se puede comprobar.',
+      ca: 'Aquest edifici és la feina d’un sol enginyer: cada planta és un tipus de treball que fa. Entra — les portes són obertes i tot el que hi ha a dins es pot comprovar.',
+    },
+  },
+  plainHead: {
     num: '02',
+    title: {
+      en: 'What this means for you',
+      es: 'Lo que esto significa para ti',
+      ca: 'Què significa això per a tu',
+    },
+    sub: {
+      en: 'THE SAME WORK, IN PLAIN WORDS',
+      es: 'EL MISMO TRABAJO, EN PALABRAS SENCILLAS',
+      ca: 'EL MATEIX TREBALL, EN PARAULES SENCILLES',
+    },
+  },
+  plainCards: [
+    {
+      dept: 'research',
+      title: {
+        en: 'AI answers you can check',
+        es: 'Respuestas de IA que puedes comprobar',
+        ca: 'Respostes d’IA que pots comprovar',
+      },
+      body: {
+        en: 'I build AI features that answer with evidence: a fixed set of questions proves the answers are right before launch — and keeps proving it after every change.',
+        es: 'Construyo funciones de IA que responden con pruebas: un conjunto fijo de preguntas demuestra que las respuestas son correctas antes del lanzamiento — y sigue demostrándolo después de cada cambio.',
+        ca: 'Construeixo funcions d’IA que responen amb proves: un conjunt fix de preguntes demostra que les respostes són correctes abans de l’estrena — i continua demostrant-ho després de cada canvi.',
+      },
+      cta: {
+        en: 'Visit the Research floor',
+        es: 'Visita la planta de Investigación',
+        ca: 'Visita la planta de Recerca',
+      },
+    },
+    {
+      dept: 'telemetry',
+      title: {
+        en: 'Systems that say when they break',
+        es: 'Sistemas que avisan cuando se rompen',
+        ca: 'Sistemes que avisen quan es trenquen',
+      },
+      body: {
+        en: 'I connect the systems a business runs on so information moves on its own — and when a piece goes down, the alert says which piece and since when. No silent failures.',
+        es: 'Conecto los sistemas con los que funciona un negocio para que la información se mueva sola — y cuando una pieza se cae, el aviso dice qué pieza y desde cuándo. Sin fallos silenciosos.',
+        ca: 'Connecto els sistemes amb què funciona un negoci perquè la informació es mogui sola — i quan una peça cau, l’avis diu quina peça i des de quan. Sense fallades silencioses.',
+      },
+      cta: {
+        en: 'Visit the Telemetry floor',
+        es: 'Visita la planta de Telemetría',
+        ca: 'Visita la planta de Telemetria',
+      },
+    },
+    {
+      dept: 'tooling',
+      title: {
+        en: 'A written plan before the first line of code',
+        es: 'Un plan por escrito antes de la primera línea de código',
+        ca: 'Un pla per escrit abans de la primera línia de codi',
+      },
+      body: {
+        en: 'Every job starts as a short document you can read and approve: what gets built, how it is proven to work, and when it is done. Then the code follows the plan.',
+        es: 'Cada trabajo empieza como un documento corto que puedes leer y aprobar: qué se construye, cómo se demuestra que funciona y cuándo está terminado. Luego el código sigue el plan.',
+        ca: 'Cada feina comença com un document curt que pots llegir i aprovar: què es construeix, com es demostra que funciona i quan està acabat. Després el codi segueix el pla.',
+      },
+      cta: {
+        en: 'Visit the Tooling floor',
+        es: 'Visita la planta de Herramientas',
+        ca: 'Visita la planta d’Eines',
+      },
+    },
+  ],
+  featuredHead: {
+    num: '03',
     title: { en: 'Featured work', es: 'Trabajo destacado', ca: 'Treball destacat' },
     sub: { en: '3 OF 11 — THE REST IS DOWNSTAIRS', es: '3 DE 11 — EL RESTO ABAJO', ca: '3 DE 11 — LA RESTA A BAIX' },
   },
   deptsHead: {
-    num: '03',
+    num: '04',
     title: { en: 'Departments', es: 'Departamentos', ca: 'Departaments' },
     sub: { en: '7 FLOORS · 1 PAIR OF HANDS', es: '7 PLANTAS · 1 PAR DE MANOS', ca: '7 PLANTES · 1 PARELL DE MANS' },
   },
@@ -164,6 +245,11 @@ export const DEPTS: Record<DeptKey, Dept> = {
       es: 'La planta más alta entrega IA como infraestructura: núcleos deterministas, sets golden de Q/A y evals con gate en CI. Si un modelo no se puede medir, no se entrega.',
       ca: 'La planta de dalt lliura IA com a infraestructura: nuclis deterministes, sets golden de Q/A i evals amb gate a CI. Si un model no es pot mesurar, no es lliura.',
     },
+    plain: {
+      en: 'AI features that show their work: the answers are checked against a fixed set of questions before anything reaches a customer.',
+      es: 'Funciones de IA que enseñan su trabajo: las respuestas se comprueban contra un conjunto fijo de preguntas antes de llegar a un cliente.',
+      ca: 'Funcions d’IA que ensenyen la seva feina: les respostes es comproven contra un conjunt fix de preguntes abans d’arribar a un client.',
+    },
     projects: ['codebaserag', 'interview-simulator'],
     page: 'research',
   },
@@ -185,6 +271,11 @@ export const DEPTS: Record<DeptKey, Dept> = {
       en: 'Event pipelines, rate limits and health tracking with honest failure modes. When a dependency goes down, callers know exactly where they stand. Personal study of the Open Gateway telemetry problem. Not Telefónica code. Not production traffic.',
       es: 'Pipelines de eventos, rate limits y salud de servicios con modos de fallo honestos. Cuando una dependencia se cae, el que llama sabe exactamente dónde está. Estudio personal del problema de telemetría de Open Gateway. No es código de Telefónica. No es tráfico de producción.',
       ca: 'Pipelines d’esdeveniments, rate limits i salut de serveis amb modes de fallada honests. Quan una dependència cau, qui crida sap exactament on és. Estudi personal del problema de telemetria d’Open Gateway. No és codi de Telefónica. No és trànsit de producció.',
+    },
+    plain: {
+      en: 'The plumbing that moves data between a company’s systems — built so that when a piece fails, you are told which piece and since when, instead of finding out from a customer.',
+      es: 'La tubería que mueve datos entre los sistemas de una empresa — construida para que, cuando una pieza falla, te digan qué pieza y desde cuándo, en lugar de enterarte por un cliente.',
+      ca: 'La canonada que mou dades entre els sistemes d’una empresa — construïda per tal que, quan una peça falla, et diguin quina peça i des de quan, en lloc d’enterar-te per un client.',
     },
     projects: ['kafka-adapter-telemetry', 'redis-toolkit'],
     page: 'telemetry',
@@ -208,6 +299,11 @@ export const DEPTS: Record<DeptKey, Dept> = {
       es: 'El taller: un harness multi-agente SDD, CLIs que hacen una cosa bien y herramientas deliberadamente pequeñas. Lo que necesita, nada más.',
       ca: 'El taller: un harness multi-agent SDD, CLIs que fan una cosa bé i eines deliberadament petites. El que necessita, res més.',
     },
+    plain: {
+      en: 'Small tools and written plans: the work is agreed on paper before the first line of code, so you always know what is being built and why.',
+      es: 'Herramientas pequeñas y planes por escrito: el trabajo se acuerda sobre el papel antes de la primera línea de código, así siempre sabes qué se construye y por qué.',
+      ca: 'Eines petites i plans per escrit: la feina es posa d’acord sobre el paper abans de la primera línia de codi, així sempre saps què es construeix i per què.',
+    },
     projects: ['harness-standard', 'md-mermaid-pdf', 'mcp-transparent-png'],
     page: 'tooling',
   },
@@ -229,6 +325,11 @@ export const DEPTS: Record<DeptKey, Dept> = {
       en: 'The inspection floor keeps the quality wall: Lighthouse gauges, test counters, bundle weight and dependency census — audited on a schedule, dated, and hung at the entrance as the ITE plaque. Static-first: the certificate shows the last audit, never a broken promise.',
       es: 'La planta de inspección guarda el muro de calidad: indicadores Lighthouse, contadores de tests, peso del bundle y censo de dependencias — auditados por calendario, fechados y colgados en la entrada como la placa ITE. Static-first: el certificado muestra la última auditoría, nunca una promesa rota.',
       ca: 'La planta d’inspecció guarda el mur de qualitat: indicadors Lighthouse, comptadors de tests, pes del bundle i cens de dependències — auditats per calendari, datats i penjats a l’entrada com la placa ITE. Static-first: el certificat mostra l’última auditoria, mai una promesa trencada.',
+    },
+    plain: {
+      en: 'The certificates on the wall: speed, accessibility and quality scores, dated and signed, so nothing here runs on faith.',
+      es: 'Los certificados en la pared: puntuaciones de velocidad, accesibilidad y calidad, fechadas y firmadas, para que aquí nada funcione a base de fe.',
+      ca: 'Els certificats al mur: puntuacions de velocitat, accessibilitat i qualitat, datades i signades, perquè aquí res funcioni a base de fe.',
     },
     projects: [],
     page: 'inspections',
@@ -252,6 +353,11 @@ export const DEPTS: Record<DeptKey, Dept> = {
       es: 'El entresuelo guarda las reglas de la casa: SOLID, Clean Code y TDD como práctica diaria, I/O en los bordes y conocimiento que fluye por el equipo.',
       ca: 'L’entresòl guarda les regles de la casa: SOLID, Clean Code i TDD com a pràctica diària, I/O a les vores i coneixement que flueix per l’equip.',
     },
+    plain: {
+      en: 'The house rules: tests before features, plain names, no hidden tricks — one engineer whose work is easy to audit.',
+      es: 'Las reglas de la casa: pruebas antes que funciones, nombres claros, trucos escondidos no — un ingeniero cuyo trabajo es fácil de auditar.',
+      ca: 'Les regles de la casa: proves abans que funcions, noms clars, trucs amagats no — un enginyer la feina del qual és fàcil d’auditar.',
+    },
     projects: [],
     page: 'people',
   },
@@ -274,6 +380,11 @@ export const DEPTS: Record<DeptKey, Dept> = {
       es: 'La planta baja guarda el registro: cada proyecto desde 2017, qué se entregó y con qué se construyó. Un historial, cuatro capítulos, cero reescrituras.',
       ca: 'La planta baixa guarda el registre: cada projecte des del 2017, què es va lliurar i amb què es va construir. Un historial, quatre capítols, zero reescriptures.',
     },
+    plain: {
+      en: 'The career ledger: every job since 2017, what shipped and what it was built with — one history, no rewrites.',
+      es: 'El historial profesional: cada trabajo desde 2017, qué se entregó y con qué se construyó — una historia, sin reescrituras.',
+      ca: 'L’historial professional: cada feina des del 2017, què es va lliurar i amb què es va construir — una història, sense reescriptures.',
+    },
     projects: [],
     page: 'operations',
   },
@@ -295,6 +406,11 @@ export const DEPTS: Record<DeptKey, Dept> = {
       en: 'The desk takes three things: senior or staff backend roles, short spec-first engagements, and questions about a floor or a repo. Bring the problem in your own words — if it can’t be written down, it doesn’t start.',
       es: 'El mostrador acepta tres cosas: roles backend senior o staff, encargos cortos con spec primero y preguntas sobre una planta o un repo. Trae el problema con tus palabras — si no se puede escribir, no se empieza.',
       ca: 'El mostrador accepta tres coses: rols backend sènior o staff, encàrrecs curts amb spec primer i preguntes sobre una planta o un repo. Porta el problema amb les teves paraules — si no es pot escriure, no comença.',
+    },
+    plain: {
+      en: 'Where you start: describe what you need in your own words and get a straight answer about whether we can help.',
+      es: 'Donde se empieza: describe qué necesitas con tus palabras y recibe una respuesta directa sobre si podemos ayudarte.',
+      ca: 'On es comença: descriu què necessites amb les teves paraules i rep una resposta directa sobre si et podem ajudar.',
     },
     projects: [],
     page: 'frontdesk',
