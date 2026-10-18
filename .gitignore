@@ -29,6 +29,15 @@ pnpm-debug.log*
 .idea/
 .harness-wekan.env
 
+# ask-api (Python service)
+ask-api/.venv/
+ask-api/data/
+ask-api/.pytest_cache/
+ask-api/.mypy_cache/
+ask-api/.ruff_cache/
+ask-api/**/__pycache__/
+ask-api/deploy/.env
+
 # agent/editor local state
 .superpowers/
 .vscode/

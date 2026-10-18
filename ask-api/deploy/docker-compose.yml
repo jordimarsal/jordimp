@@ -1,0 +1,71 @@
+name: ask-api
+
+services:
+  ask-embed:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda@sha256:b4e561932a1dd460ec2f9d2875ad0d9535cbfd3d2d6a48bdb3c9d50804088bff
+    command: >
+      -m /models/${EMBED_MODEL_FILE}
+      --embeddings --pooling mean
+      --ctx-size 2048 --n-gpu-layers 99
+      --host 0.0.0.0 --port 8080
+    volumes:
+      - ${LLAMA_MODELS_DIR}:/models:ro
+    environment:
+      NVIDIA_VISIBLE_DEVICES: "1"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["1"]
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  ask-gen:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda@sha256:b4e561932a1dd460ec2f9d2875ad0d9535cbfd3d2d6a48bdb3c9d50804088bff
+    command: >
+      -m /models/${GEN_MODEL_FILE}
+      --ctx-size 4096 --n-gpu-layers 99
+      --host 0.0.0.0 --port 8080
+    volumes:
+      - ${LLAMA_MODELS_DIR}:/models:ro
+    environment:
+      NVIDIA_VISIBLE_DEVICES: "1"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["1"]
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  ask-api:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: ask-api:local
+    environment:
+      ASK_EMBED_URL: http://ask-embed:8080
+      ASK_GEN_URL: http://ask-gen:8080
+      ASK_THRESHOLD: "0.60"
+      ASK_EMBED_QUERY_PREFIX: "search_query: "
+      ASK_EMBED_DOC_PREFIX: "search_document:"
+    volumes:
+      - ask_data:/app/data
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      - ask-embed
+      - ask-gen
+    restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared@sha256:a15a3b50b8dabd57ac2090e9484c0247dba9dfa1f0df4d298d4317f9d69eb2d5
+    command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
+    depends_on:
+      - ask-api
+    restart: unless-stopped
+
+volumes:
+  ask_data:

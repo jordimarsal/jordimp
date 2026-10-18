@@ -81,7 +81,12 @@ conventional commits · `Result<T, E>` for expected failures / problem+json at
 HTTP boundaries (services) · contact data only from `src/config.ts` — never a
 phone number or street address. Details in `docs/conventions.md`.
 
-## Later plans
+## Services
 
-`status-api` (Java 25 / Spring Boot 4.1, live SSE dashboard) and `ask-api`
-(Python / FastAPI, RAG over the CV with a local mini-LLM via llama.cpp).
+`ask-api` — **live at [api.jordimp.net](https://api.jordimp.net)** (Python 3.13 /
+FastAPI, RAG over the public CV corpus with local models: nomic embeddings +
+Qwen3-4B via llama.cpp on a homelab GPU, served through a Cloudflare Tunnel).
+Grounded answers with mandatory citations, honest not-covered path in EN/ES/CA,
+rate limiting, problem+json. Source: [`ask-api/`](ask-api/) · runbook:
+[`ask-api/deploy/README.md`](ask-api/deploy/README.md). `status-api`
+(Java 25 / Spring Boot 4.1, live SSE dashboard) is next.

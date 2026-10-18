@@ -1,0 +1,57 @@
+# Retrieval eval gate — the committed quality floor for ask-api.
+# Every question must retrieve its expected source within top-k;
+# off-corpus questions must stay below the configured threshold.
+# Run: ASK_EMBED_BACKEND=hash uv run ask-api eval --golden evals/golden.yaml
+floor: 0.70      # committed floor for the deterministic (hash) CI gate — regression detection;
+                 # measured baseline 0.75 (lexical embedder: no semantic paraphrase, no ES↔EN)
+floor_real: 0.85 # floor with real nomic embeddings + task prefixes; measured 0.917 (11/12)
+questions:
+  # English
+  - q: "How many years of experience does Jordi have?"
+    expect:
+      - files/cv/CV_26.md
+      - files/cv/CV_26_ATS.md
+      - files/cv/CV_python_2026.md
+  - q: "What is CodebaseRAG and how is retrieval quality gated?"
+    expect: files/repos/codebaserag.md
+  - q: "Where did Jordi work between 2020 and 2022?"
+    expect:
+      - files/cv/CV_26.md
+      - files/cv/CV_26_ATS.md
+      - files/cv/CV_python_2026.md
+  - q: "Which ADR records the Result vs exceptions decision in Kafka Adapter Telemetry?"
+    expect:
+      - files/repos/kafka-adr-0002-result-vs-exceptions.md
+      - files/repos/kafka-adapter-telemetry.md
+  - q: "What roles does the Harness define for spec driven development?"
+    expect: files/repos/harness.md
+  - q: "Which database does the Kafka telemetry hub use and how is persistence made idempotent?"
+    expect: files/repos/kafka-adapter-telemetry.md
+  # Spanish
+  - q: "¿Qué experiencia tiene Jordi con Open Gateway en Telefónica?"
+    expect:
+      - files/cv/CV_26.md
+      - files/cv/CV_26_ATS.md
+      - files/cv/CV_python_2026.md
+  - q: "¿Para qué sirve Redis Toolkit?"
+    expect: files/repos/redis-toolkit.md
+  - q: "¿Qué decide el ADR 0003 sobre la escritura de alertas?"
+    expect: files/repos/kafka-adr-0003-alert-dual-write-vs-outbox.md
+  - q: "¿Qué máster cursó Jordi?"
+    expect:
+      - files/cv/CV_26.md
+      - files/cv/CV_26_ATS.md
+  # Catalan
+  - q: "Què és l'Interview Simulator?"
+    expect: files/repos/interview-simulator.md
+  - q: "Quines eines CLI va construir en Jordi per operar els adaptadors d'Open Gateway?"
+    expect:
+      - files/cv/CV_26.md
+      - files/cv/CV_26_ATS.md
+off_corpus:
+  - q: "What is the capital of France?"
+    lang: en
+  - q: "How do I bake sourdough bread at home?"
+    lang: en
+  - q: "Quin és el preu de l'habitatge a Sabadell?"
+    lang: ca

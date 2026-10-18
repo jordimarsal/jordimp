@@ -149,3 +149,36 @@ curl -s https://jordimp.net/en/ | grep -F 'rel="canonical" href="https://jordimp
 Paste every command output above into `harness/progress/impl_deploy.md`
 (sections R2/R3 trigger observations and R15–R18 suite). That file is the
 traceability evidence for the completion gate.
+
+## 2026-10-18 — api.jordimp.net: pivot a Cloudflare Tunnel (CGNAT)
+
+**Trobada:** WAN del router `10.75.216.54` (privada 10/8) vs pública `46.6.37.218`
+→ CGNAT de XTRA. El port-forward 80/443 no és viable.
+
+**Pla actiu:** Cloudflare Tunnel — `cloudflared` (sortint) dins el compose de
+`ask-api` → `api.jordimp.net` (proxied) → `http://ask-api:8000`. Sense ports
+oberts, TLS al núvol de CF, Caddy fora de l'equació.
+
+**Checklist de migració DNS (GoDaddy → Cloudflare):**
+
+- [ ] Compte Cloudflare (Free) + *Add site* `jordimp.net`
+- [ ] Replicar registres ABANS del canvi de NS (font: dig sobre ns11.domaincontrol.com, 2026-10-18):
+  - A `@` → 185.199.108.153 / 109.153 / 110.153 / 111.153 (GitHub Pages, DNS only)
+  - CNAME `www` → jordimarsal.github.io (DNS only)
+  - MX `@` prio 0 → mx1.forwardemail.net i mx2.forwardemail.net (mai proxar)
+  - TXT `@` → `forward-email=jordi.marsal@gmail.com`
+  - TXT `_github-pages-challenge-jordimarsal` → `10038bfa27655933f2706bdc32b099`
+- [ ] Canviar NS a GoDaddy als 2 de Cloudflare (només amb tot replicat)
+- [ ] Zero Trust → Tunnel `jordimp-homelab` → token a `ask-api/deploy/.env`
+- [ ] Public hostname: `api.jordimp.net` → `HTTP://ask-api:8000`
+- [ ] `dig api.jordimp.net` retorna IPs de CF + `scripts/verify-public.sh` PASS
+
+**Verificació local prèvia (2026-10-18, T22):** e2e real en verd — ingest nomic
+210 chunks, eval recall 0.917 (floor 0.85), off-corpus honest 3/3, rotonda
+en/es/ca amb cites + negació honesta en ca. Serveis de prova: llama-server
+nomic `:8080` + Qwen3-4B-Instruct-2507 `:8081` (GPU 1, binari del host).
+
+**Verificació pública final (2026-10-18, T23):** `scripts/verify-public.sh` PASS
+— DNS (104.21.42.171 / 172.67.163.180, edge CF) · health ok 210 chunks · ask
+real cobert amb cita (179 ms) · check-host.net 2/3 nodes (Sofia, Maribor, LA)
+HTTP 200 · informe: https://check-host.net/check-report/51d58c64kca7

@@ -1,0 +1,369 @@
+# redis-toolkit
+
+[![CI](https://github.com/jordimarsal/redis-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/jordimarsal/redis-toolkit/actions/workflows/ci.yml)
+[![Quality Gate](docs/images/badge-quality-gate.svg)](https://jordimarsal.github.io/redis-toolkit/)
+[![Coverage](docs/images/badge-coverage.svg)](https://jordimarsal.github.io/redis-toolkit/)
+[![Code Smells](docs/images/badge-code-smells.svg)](https://jordimarsal.github.io/redis-toolkit/)
+
+**A rate-limiting toolkit for LLM gateways.** It ships a small, dependency-free Java domain that
+enforces per-client quotas with atomic token-bucket accounting, plus a runnable Javalin gateway
+demo that exposes an OpenAI-style `POST /v1/completions` endpoint guarded by standard
+`X-RateLimit-*` headers and a correct `429 + Retry-After`.
+
+The goal is not another production API gateway. It is a focused study in how to keep a
+rate limiter **correct under concurrency**, **pluggable across storage backends**, and
+**predictable on failure** — expressed as clean hexagonal boundaries, deterministic tests, and
+honest trade-off notes.
+
+## Quality
+
+Analyzed with SonarQube behind a custom quality gate ("Viatgecio Way") — current
+metrics, per-module coverage and the raw `redis-report.json` live on the
+[quality page](https://jordimarsal.github.io/redis-toolkit/), published on GitHub
+Pages. The badges above are static SVGs rendered from the latest scan report; the
+Sonar server itself is LAN-only, so dynamic badges would not resolve outside the
+homelab. After each scan, refresh the published assets with:
+
+```bash
+python3 scripts/sonar-quality.py   # reads ../redis-report.json, renders page + badges
+```
+
+---
+
+## Why this exists
+
+LLM front-ends share a common hazard: inference is expensive, so unbounded traffic turns into a
+denial-of-service against your own wallet and latency budget almost instantly. Most solutions are
+either heavyweight frameworks you don't want inside a tight review loop, or ad-hoc counters that
+race when two replicas serve the same client at once.
+
+This project sits deliberately between those extremes. It answers three questions concretely:
+
+1. **How do we count fairly?** A token bucket keyed per client, where each decision is computed
+   atomically — never a network read-modify-write that can slip a token past the limit.
+2. **What happens when the counter breaks?** On Redis failure the store degrades gracefully to a
+   local fallback instead of mass-quarantining every client with a `5xx`, while loudly flagging
+   the condition through metrics.
+3. **Can I trust it without reading the source?** Every behaviour is pinned by a contract suite
+   shared between the in-memory and Redis implementations, plus concurrency and parity tests.
+
+If any of those matter to you, keep reading. If not, the Quickstart below gets you a working
+gateway in under a minute.
+
+---
+
+## Quickstart
+
+**Prerequisites:** JDK 25, Maven 3.9+. Docker is only needed for the compose demo.
+
+### 1. Run the gateway on plain JVM
+
+```bash
+mvn -q -pl gateway-demo -am package -DskipTests
+java -jar gateway-demo/target/gateway-demo-0.1.0-SNAPSHOT.jar
+```
+
+The gateway listens on <http://localhost:8080>. With no `REDIS_HOST` configured, quotas live in
+memory (single instance), so this works out of the box:
+
+```bash
+curl -si -X POST localhost:8080/v1/completions \
+  -H 'Content-Type: application/json' \
+  -d '{"model":"stub","prompt":"hello"}'
+```
+
+Under the limit you get **HTTP 200** plus `X-RateLimit-Limit / Remaining / Reset` headers and a
+completion body. Once your quota is exhausted you get **HTTP 429** plus `Retry-After`.
+
+### 2. Run with Redis via Docker Compose
+
+```bash
+docker compose up --build      # redis + gateway on :8080
+bash scripts/smoke-compose.sh  # end-to-end smoke test; exit 0 = pass
+```
+
+Optional real inference through a local llama.cpp server (expects `models/model.gguf`):
+
+```bash
+BACKEND=llama docker compose --profile llama up --build
+```
+
+---
+
+## Usage & configuration
+
+| Env var          | Default    | Meaning                                                        |
+|------------------|------------|----------------------------------------------------------------|
+| `GATEWAY_PORT`   | `8080`     | HTTP port (first CLI argument wins)                            |
+| `REDIS_HOST`     | unset      | Redis backend host; unset → in-memory store                   |
+| `REDIS_PORT`     | `6379`     | Redis port                                                     |
+| `REDIS_USER`     | unset      | Redis ACL user for `AUTH`; leave unset on plain Redis         |
+| `REDIS_PASSWORD` | unset      | Redis password for `AUTH`; must match the server's `requirepass` / ACL rule |
+| `LIMIT_PER_MINUTE` | `60`     | Token-bucket capacity per client key                         |
+| `BACKEND`        | `stub`     | Inference backend: `stub` or `llama`                          |
+| `LLM_BASE_URL`   | —          | Required when `BACKEND=llama`. Must be an absolute `https://` URL with a host (plaintext is rejected) |
+| `LLM_TRUSTSTORE` | unset      | Path to a PKCS12/JKS keystore holding the CA that signed the llama-server certificate; unset → Java's default trust store. Set but missing/unreadable → fail-fast at startup |
+| `RATELIMIT_CLIENT_ID` | unset    | Header name whose value becomes the quota identity instead of the source IP. **Only set this if the header is injected by a trusted authentication layer** — otherwise clients can rotate it to bypass limits |
+| `RATELIMIT_KEY_PREFIX` | `gateway-demo` | Redis key prefix for bucket state. Keep identical across replicas so they share one global budget |
+
+### Endpoints
+
+- **`POST /v1/completions`** — the guarded route. The request body is size-capped (raw body ≤ 8 KiB,
+  prompt ≤ 4096 chars), quota-checked, and then forwarded to the inference backend. Oversized requests
+  are rejected with `413 payload_too_large` before any quota is consumed. An empty body is accepted as a
+  demo convenience (it maps to a default stub request so you can smoke-test without crafting JSON); treat
+  that as a courtesy, not a contract — real clients should always send a JSON body.
+- **`GET /metrics`** — Prometheus text exposition (`ratelimit_decisions_total`,
+  `ratelimit_store_failures_total`, `ratelimit_degraded`, …).
+
+### Response headers
+
+On every decision the mapper renders standard rate-limit headers:
+
+```
+X-RateLimit-Limit: <limit>
+X-RateLimit-Remaining: <remaining>
+X-RateLimit-Reset: <seconds until next token; 0 while allowed>   # not an epoch timestamp
+Retry-After: <seconds>      # only when positive (HTTP 429)
+```
+
+### Testing the rate limit
+
+The client key is derived from the request IP, so every call from the same host shares one budget.
+With no `REDIS_HOST` configured the store is in-memory and single-instance; with `REDIS_HOST` set,
+all replicas sharing the same `RATELIMIT_KEY_PREFIX` count against one global budget.
+
+Client identifiers are capped at 128 characters and may not contain control characters; violations
+are rejected with `400 invalid_client_id` before any quota is consumed.
+
+Under the limit you get `200` plus `X-RateLimit-Limit / Remaining / Reset`:
+
+```bash
+curl -si -X POST localhost:8080/v1/completions \
+  -H 'Content-Type: application/json' \
+  -d '{"model":"stub","prompt":"hello"}'
+# HTTP/1.1 200 OK
+# X-RateLimit-Limit: 60
+# X-RateLimit-Remaining: 59
+```
+
+Exhaust the quota (default `LIMIT_PER_MINUTE=60`) to observe the transition to `429 + Retry-After`.
+It stops at the first denial:
+
+```bash
+for i in $(seq 1 65); do
+  code=$(curl -s -o /dev/null -w "%{http_code}" -X POST localhost:8080/v1/completions \
+    -H 'Content-Type: application/json' -d "{\"model\":\"stub\",\"prompt\":\"p-$i\"}")
+  [ "$code" = "429" ] && { echo "429 on request #$i"; break; }
+done
+# 429 Too Many Requests · X-RateLimit-Remaining: 0 · Retry-After: <seconds>
+```
+
+The budget refills automatically as the token bucket refills over time, or restart by redeploying
+the gateway. The same behaviour is automated end-to-end in [`scripts/smoke-compose.sh`](scripts/smoke-compose.sh),
+which asserts a `200` followed by a `429` with a valid `Retry-After`.
+
+### Security notes
+
+This project is a study, not a hardened product. Two known exposure points must be understood before
+running it anywhere but a trusted network:
+
+- **Unauthenticated inference endpoint (by design).** The gateway binds all interfaces (`0.0.0.0`) and
+  the compose file publishes `8080` without TLS or authentication. Anyone who can reach the port can
+  consume LLM inference; the only cost control is the per-client rate limit. Before exposing it beyond
+  a trusted network, put an authenticating reverse proxy (API key / OAuth + TLS) in front and stop
+  publishing the raw port — do not rely on the rate limit as a security boundary.
+- **Quota identity via client-controlled header.** When `RATELIMIT_CLIENT_ID` is set, the quota
+  identity comes from an HTTP header that any caller can set or rotate, so clients can impersonate
+  other identities or bypass limits by rotating values. Only enable this if a trusted authentication
+  layer injects the header *and* strips untrusted incoming values. Otherwise leave it unset so the
+  identity falls back to the source IP. Note that IP keys behind NAT/CGNAT are shared: many users
+  behind one egress IP share a single budget and can exhaust each other's allowance.
+- **Backend trust is explicit.** The llama backend requires an `https://` URL; pin the signing CA with
+  `LLM_TRUSTSTORE` instead of relying on the platform trust store.
+- **Redis is authenticated in the compose stack** (`requirepass`, overridable through the
+  `REDIS_PASSWORD` environment variable). If you run your own Redis, keep AUTH enabled and point the
+  gateway at it with `REDIS_USER` / `REDIS_PASSWORD`.
+- **`GET /metrics` is restricted to loopback peers.** It rejects requests carrying proxy headers
+  (`X-Forwarded-For`, `X-Real-Ip`) so a same-host reverse proxy cannot open it. Consequence: scraping
+  metrics from outside the container/host network — including through the published port, where traffic
+  does not always arrive as loopback — will get `403`. Scrape it from inside the host (sidecar,
+  `docker exec`, or a node exporter on the gateway box) instead.
+
+---
+
+## Architecture
+
+A hexagonal layout in a Maven multi-module reactor. **All arrows point inward**: `ratelimit-core`
+depends on the JDK alone, so infrastructure can never leak into the domain.
+
+| Module           | Role                                                                 | Depends on     |
+|------------------|----------------------------------------------------------------------|----------------|
+| `ratelimit-core` | Domain value objects, ports (`Clock`, `QuotaStore`), `RateLimiterService` use case | JDK only       |
+| `ratelimit-infra`| `RedisQuotaStore` (Jedis + atomic Lua token bucket), `InMemoryQuotaStore`, resilience wrapper | core          |
+| `ratelimit-api`  | HTTP-facing DTOs, `KeyExtractor`, `RateLimitRegistry`, decision→response mapper | core (+infra) |
+| `gateway-demo`   | Javalin entrypoint, inference backends (`StubBackend`, `LlamaServerBackend`) | api (+infra)  |
+| `jobqueue-core`  | Job-queue domain (`JobId`, `Payload`, `Priority`), ports (`QueueStore`), use cases (`WorkerLoop`) | JDK only       |
+| `jobqueue-infra` | `RedisQueueStore` (streams + consumer groups) and `InMemoryQueueStore` behind one shared contract    | core          |
+
+**Request flow.** `KeyExtractor` builds the client key → the registry resolves the
+`RateLimitSpec` → `evaluateAndConsume(key, spec, now)` runs atomically inside the store → the
+mapper renders either headers or a `429`. When Redis fails, `ResilientQuotaStore` falls back to
+the local store and reports it through metrics instead of dropping traffic silently. That fallback
+is fail-open by design: during an outage each instance serves from its own fresh in-memory buckets,
+so the effective limit relaxes to roughly N×spec until Redis recovers (`ratelimit_degraded=1`).
+Prefer rejecting all traffic while the shared store is down? Wire `FailurePolicy.FAIL_CLOSED`
+instead (responses become `503 store_unavailable`).
+
+The token bucket also clamps caller-supplied timestamps to the Redis server clock inside the Lua
+script, so replicas with skewed system clocks cannot over-refill tokens beyond real time.
+
+```
+HTTP request
+   │  KeyExtractor(dimension, value) ──> QuotaKey
+   │  RateLimitRegistry.lookup(spec)
+   ▼
+RateLimiterService.evaluate(key, spec)  --injects-->  Clock.now()
+   ▼
+QuotaStore.evaluateAndConsume(key, spec, now)
+   │  no REDIS_HOST        → InMemoryQuotaStore
+   │  REDIS_HOST present   → ResilientQuotaStore(DEGRADED_LOCAL)
+   │                           primary   = RedisQuotaStore (Jedis + atomic Lua)
+   │                           fallback  = InMemoryQuotaStore (+ failure metric/degraded flag)
+   ▼
+Decision(allowed, remaining, limit, retryAfter, reason)
+   ▼
+Mapper → ApiResponse<T> + X-RateLimit-* / Retry-After
+   ▼
+HTTP response — allowed: body from InferenceBackend; denied: 429
+ ```
+
+### Job queue semantics
+
+The `jobqueue-*` modules implement a fan-out work queue over Redis streams: every submitted job is
+delivered **once per consumer group**. Within a group delivery is at-least-once — unacknowledged jobs
+are reclaimed and redelivered, acknowledged ones are never redelivered. Groups are independent, so N
+groups each receive every job across all their claims. An optional dedup key makes submission
+idempotent for a TTL window, and delayed jobs promote atomically into the priority stream at their
+run time.
+
+Time is always obtained through the injected `Clock`, so unit tests are fully deterministic. See
+[`docs/architecture.md`](docs/architecture.md) for the full quality standards and discarded
+alternatives.
+
+#### Running the demo
+
+`jobqueue-infra` ships a runnable that exercises the whole path — submit mixed priorities plus an
+idempotent pair and a delayed job, promote it, then drain with the real `WorkerLoop`. Build the
+classpath once (Jedis included) and run it offline or live:
+
+```bash
+mvn -q -pl jobqueue-infra dependency:build-classpath -Dmdep.outputFile=/tmp/jq_cp.txt
+```
+
+```bash
+# Offline, on any JDK 25+ (uses the in-memory store):
+java -cp "$(cat /tmp/jq_cp.txt):jobqueue-infra/target/classes:jobqueue-core/target/classes" \
+  net.jordimp.redistoolkit.jobqueue.infra.demo.JobQueueDemo
+
+# Against the same Redis as the compose stack (service `redis`, password `redis-dev-password`):
+REDIS_HOST=redis REDIS_PASSWORD=redis-dev-password java -cp "$(cat /tmp/jq_cp.txt):jobqueue-infra/target/classes:jobqueue-core/target/classes" \
+  net.jordimp.redistoolkit.jobqueue.infra.demo.JobQueueDemo
+```
+
+The output is deterministic and ends with the delivery order plus metrics:
+
+```
+processed 5 job(s), in priority order:
+  - high-priority-job
+  - normal-job
+  - idempotent-work
+  - delayed-job
+  - low-priority-job
+delivered=5 failed=0
+pending unacked=0
+```
+
+> **Connection.** The demo talks to Redis over an **unencrypted TCP socket** (no TLS) — acceptable on the local compose network where Redis lives behind `requirepass`, but point `REDIS_HOST`/`REDIS_PASSWORD` at a TLS-enabled Redis (with client-certificate verification if required) when running it elsewhere.
+
+---
+
+## Testing & verification
+
+The suite is organised around a **shared contract**: both stores must satisfy the same
+`QuotaStore` contract test, so behavioural differences between them are treated as bugs.
+
+| Concern                     | Where it lives                                             |
+|-----------------------------|------------------------------------------------------------|
+| Value-object behaviour      | domain VOs: validation, refill, header rendering           |
+| Store parity                | shared `QuotaStoreContractTest` against each store          |
+| Job queue parity            | shared `JobQueueE2EContract` through `WorkerLoop`: InMemory + Redis (Testcontainers) |
+| Concurrency                 | 100 parallel requests admit exactly the configured limit    |
+| Multi-replica accounting    | several keys sharing one budget exhaust it only once        |
+| Redis integration           | Testcontainers Redis with the atomic Lua script             |
+| Gateway wiring              | Javalin routes, mapper, shutdown, metrics                    |
+
+Verify with `mvn test`: every module must compile and all tests must pass before shipping.
+
+---
+
+## Benchmark
+
+Sequential single-client load against `POST /v1/completions` with `LIMIT_PER_MINUTE=10000`
+(in-memory store, stub backend). These are directional numbers from one laptop-class machine and
+are **not** an SLA:
+
+| n     | result                                                                 |
+|-------|------------------------------------------------------------------------|
+| 100   | `ok=100 failed=0 mean_ms=1.31 p95_ms=2.73 p99_ms=3.59 rps=762.4`       |
+| 500   | `ok=500 failed=0 mean_ms=0.85 p95_ms=2.01 p99_ms=3.72 rps=1179.1`      |
+
+Reproduce: start the gateway (see Quickstart), then run the built-in runner:
+
+```bash
+java -cp gateway-demo/target/gateway-demo-0.1.0-SNAPSHOT.jar \
+  net.jordimp.redistoolkit.gateway.bench.BenchmarkRunner http://localhost:8080 500
+# ok=500 failed=0 mean_ms=... p95_ms=... p99_ms=... rps=...
+```
+
+Requests that hit the limit count as `failed`; raise `LIMIT_PER_MINUTE` for headroom.
+
+---
+
+## Trade-offs & design decisions
+
+- **Token bucket over sliding window.** Smooth burst handling and a trivially atomic single-key
+  Lua update; sliding window needs more state and complicates the script.
+- **Atomic Lua `EVAL` over app-level locking.** A read-modify-write across the network races under
+  concurrency/replicas; a single server-side script removes the race.
+- **Fail-open (`DEGRADED_LOCAL`) over fail-closed.** On store failure traffic is served from the
+  local fallback and flagged via metrics rather than dropped — availability beats strict global
+  accuracy in this demo's threat model.
+- **Synchronous Jedis over Lettuce.** One blocking call per decision maps cleanly onto the atomic
+  script; the async model buys nothing at this scale.
+- **Single IP-dimension key.** `KeyExtractor` keys by client IP; API-key / tenant dimensions are
+  reserved for later features.
+- **Demo-grade scope.** No auth, TLS, or multi-route policies yet — but the module boundaries
+  keep those additions cheap.
+
+Full details and discarded alternatives live in
+[`docs/architecture.md`](docs/architecture.md).
+
+---
+
+## Project conventions
+
+This repo was built with the
+[harness](https://github.com/jordimarsal/harness) harness: Spec Driven Development
+with a human approval gate before any code, and every requirement `R<n>` backed by at least one
+passing test.
+
+---
+
+## License
+
+Released under the [MIT License](LICENSE) — © 2026 Jordi Marsal.
+
+You are free to use, copy, modify, and redistribute this software, provided the
+original copyright and license notice are included in all copies. See
+[`LICENSE`](LICENSE) for the full text.

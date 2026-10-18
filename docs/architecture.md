@@ -92,11 +92,19 @@ probes (adapters, virtual threads, 1s timeout)
   ──▶ StatusController ──▶ REST JSON + SSE stream (heartbeat 15s, debounce ≥2s)
 ```
 
-**ask-api (Phase 3)**
+**ask-api (Phase 3 — served via Cloudflare Tunnel, CGNAT-safe)**
 ```
-corpus (CV, READMEs, ADRs) ──ingest──▶ chunks ──▶ vector store (sqlite-vec)
-question ──▶ Retriever ──▶ ScoredChunks ──▶ Generator (llama.cpp) ──▶ CitationPolicy
-  ──▶ Result<Answer, AskError> ──▶ DTO + status code (+ rate limiter at the edge)
+corpus (CV, READMEs, ADRs; contact-redacted, vendored) ──ingest──▶ chunks
+  (heading-scoped, 900/150) ──▶ "search_document: " prefix ──▶ nomic v1.5
+  (llama.cpp, GPU) ──▶ sqlite-vec (cosine, atomic tmp+replace rebuild)
+question ──▶ "search_query: " prefix ──▶ embed ──▶ top-4 + threshold 0.60
+  ──▶ context-only prompt (citations mandatory) ──▶ Qwen3-4B-Instruct (GPU)
+  ──▶ CitationPolicy (fallback-echo guard) ──▶ Result[Answer, AskError]
+  ──▶ problem+json at the edge
+off-corpus ⇒ honest not-covered copy (en/es/ca): double gate = threshold +
+  citation policy; serving = compose (ask-embed, ask-gen, ask-api, cloudflared)
+eval gate (evals/golden.yaml): recall 0.917 real (floor 0.85) · 0.833 hash-CI
+  (floor 0.70) · off-corpus honest 3/3
 ```
 
 Failure translation is one-way and edge-only: an adapter maps a low-level error
