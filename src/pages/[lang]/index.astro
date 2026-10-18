@@ -2,6 +2,7 @@
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import Ticker from '../../components/site/Ticker.astro';
 import SecHead from '../../components/site/SecHead.astro';
+import Porter from '../../components/site/Porter.astro';
 import Building from '../../components/site/Building.astro';
 import DeptStrip from '../../components/site/DeptStrip.astro';
 import ProjectCard from '../../components/site/ProjectCard.astro';
@@ -69,6 +70,7 @@ const featured = FEATURED.map((slug) => project(slug));
       </div>
       <p class="hint"><span class="arr" aria-hidden="true">&darr;</span> {UI.buildingHint[lang]}</p>
     </section>
+    <Porter lang={lang} />
     <Ticker lang={lang} />
     <section aria-labelledby="building-title">
       <SecHead

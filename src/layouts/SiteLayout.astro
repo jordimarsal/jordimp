@@ -56,12 +56,14 @@ const { lang, title, description, path = '', noindex = false, refreshUrl, navKey
   import { initBuilding } from '../scripts/building';
   import { initFilter } from '../scripts/filter';
   import { initCopy } from '../scripts/copy';
+  import { initPorter } from '../scripts/porter';
 
   const boot = (): void => {
     initTheme();
     initBuilding();
     initFilter();
     initCopy();
+    initPorter();
   };
 
   if (document.readyState === 'loading') {

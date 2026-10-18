@@ -1,0 +1,47 @@
+---
+import { HOME } from '../../data/content';
+import type { Locale } from '../../lib/i18n';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const t = HOME.porter;
+---
+
+<section class="porter" aria-labelledby="porter-title">
+  <div class="porter__desk">
+    <p class="kicker">{t.kicker[lang]}</p>
+    <h2 class="porter__title" id="porter-title" set:html={t.title[lang]} />
+    <p class="porter__stand">{t.stand[lang]}</p>
+    <form
+      class="porter__form"
+      data-porter-endpoint="https://api.jordimp.net/api/ask"
+      data-thinking={t.thinking[lang]}
+      data-not-covered={t.notCovered[lang]}
+      data-error={t.error[lang]}
+      data-sources={t.sources[lang]}
+    >
+      <label class="porter__label" for="porter-q">{t.label[lang]}</label>
+      <div class="porter__row">
+        <input
+          class="porter__input"
+          id="porter-q"
+          name="q"
+          type="text"
+          maxlength="500"
+          autocomplete="off"
+          placeholder={t.placeholder[lang]}
+        />
+        <button class="porter__bell" type="submit">🔔 {t.bell[lang]}</button>
+      </div>
+      <div class="porter__examples">
+        {t.examples.map((example) => (
+          <button class="porter__ex" type="button">{example.q[lang]}</button>
+        ))}
+      </div>
+    </form>
+    <div class="porter__out" aria-live="polite"></div>
+    <p class="porter__foot">{t.footnote[lang]}</p>
+  </div>
+</section>

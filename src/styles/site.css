@@ -3131,3 +3131,206 @@ html[data-night='1'] img.harness-badge__day {
 html[data-night='1'] img.harness-badge__night {
   display: block;
 }
+
+/* ─── Porter — the concierge (ask the building) ─────────────── */
+.porter {
+  margin-top: var(--sp-6);
+}
+
+.porter__desk {
+  background: var(--paper2);
+  border: var(--bd);
+  box-shadow: var(--sh-lg);
+  padding: clamp(20px, 4vw, 40px);
+}
+
+.porter__desk .kicker {
+  margin-bottom: 18px;
+}
+
+.porter__title {
+  font-family: var(--disp);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 4.5vw, 2.6rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  margin-bottom: 12px;
+}
+
+.porter__title mark {
+  background: linear-gradient(180deg, transparent 12%, var(--y2) 12% 92%, transparent 92%);
+  color: inherit;
+  padding: 0 0.06em;
+}
+
+.porter__stand {
+  color: var(--ink2);
+  max-width: 62ch;
+}
+
+.porter__form {
+  margin-top: 22px;
+}
+
+.porter__label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--ink2);
+  margin-bottom: 8px;
+}
+
+.porter__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.porter__input {
+  flex: 1 1 260px;
+  font: inherit;
+  background: var(--paper);
+  color: var(--ink);
+  border: var(--bd);
+  padding: 12px 14px;
+}
+
+.porter__input::placeholder {
+  color: var(--meta-line);
+}
+
+.porter__bell {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  border: 3px solid var(--line);
+  background: var(--y1);
+  color: #0c0b0a;
+  padding: 13px 20px;
+  box-shadow: 6px 6px 0 var(--shc);
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s, color 0.15s;
+}
+
+.porter__bell:hover {
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--shc);
+}
+
+.porter__bell:active {
+  transform: translate(1px, 1px);
+  box-shadow: 3px 3px 0 var(--shc);
+}
+
+.porter__bell[disabled] {
+  opacity: 0.55;
+  cursor: progress;
+  transform: none;
+  box-shadow: 6px 6px 0 var(--shc);
+}
+
+.porter__examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.porter__ex {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  border: 2px solid var(--line);
+  background: transparent;
+  color: var(--ink2);
+  padding: 6px 10px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.porter__ex:hover {
+  background: var(--y2);
+  color: #0c0b0a;
+}
+
+.porter__out {
+  margin-top: 18px;
+}
+
+.porter__out:empty {
+  margin-top: 0;
+}
+
+.porter__thinking {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--ink2);
+}
+
+.porter__thinking::after {
+  content: '▍';
+  margin-left: 4px;
+  animation: porter-blink 1s steps(2, start) infinite;
+}
+
+@keyframes porter-blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+.porter__answer {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  max-width: 70ch;
+}
+
+.porter__no {
+  display: inline-block;
+  background: var(--lite);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  padding: 8px 12px;
+  font-size: 0.95rem;
+}
+
+.porter__sources {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--ink2);
+  margin-top: 14px;
+}
+
+.porter__cite {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--ink2);
+  border-bottom: 3px solid var(--y3);
+  display: inline-block;
+  margin: 6px 12px 0 0;
+}
+
+.porter__err {
+  display: inline-block;
+  color: var(--ink);
+  background: var(--y2);
+  border: 2px solid var(--line);
+  padding: 8px 12px;
+  font-size: 0.95rem;
+}
+
+.porter__foot {
+  margin-top: 20px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--meta-line);
+}

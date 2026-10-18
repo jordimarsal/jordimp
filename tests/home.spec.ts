@@ -37,6 +37,8 @@ async function expectHomeChrome(page: Page, home: string): Promise<void> {
   await expect(page.locator(`.navbar__links a[href="${home}"]`)).toHaveAttribute('aria-current', 'page');
   await expect(page.locator('.navbar__lang a[aria-current="true"]')).toHaveAttribute('href', home);
   await expect(page.locator('.navbar [data-night-toggle]')).toHaveCount(1);
+  await expect(page.locator('.porter__desk')).toHaveCount(1);
+  await expect(page.locator('#porter-title')).toBeVisible();
 
   await expect(page.locator('h1 mark')).toHaveCount(1);
   await expect(page.locator('.meta-row span')).toHaveCount(4);
@@ -495,4 +497,80 @@ test.describe('plain clarity layout guard at 375×667 (F21 R12)', () => {
       }
     });
   }
+});
+
+test.describe('porter — the concierge', () => {
+  const mockAnswer = {
+    answer: 'Jordi has 9+ years of experience as a Senior Backend Engineer [1].',
+    citations: [{ source: 'files/cv/CV_26.md', title: 'CV 2026', heading: 'Perfil' }],
+    lang: 'en',
+    covered: true,
+    latency_ms: 200,
+  };
+
+  test('rings the bell and renders a cited answer', async ({ page }) => {
+    await page.route('**/api/ask', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockAnswer),
+      }),
+    );
+    await page.goto('/en/');
+    await page.locator('.porter__input').fill('How many years of experience does Jordi have?');
+    await page.locator('.porter__bell').click();
+    await expect(page.locator('.porter__answer')).toContainText('9+ years of experience');
+    await expect(page.locator('.porter__sources')).toContainText('ON FILE');
+    await expect(page.locator('.porter__cite').first()).toContainText('CV 2026');
+    await expect(page.locator('.porter__no')).toHaveCount(0);
+  });
+
+  test('shows the not-on-record notice when covered is false', async ({ page }) => {
+    await page.route('**/api/ask', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ ...mockAnswer, answer: 'Eso no consta.', covered: false, citations: [] }),
+      }),
+    );
+    await page.goto('/es/');
+    await page.locator('.porter__input').fill('¿Cuál es el café de Jordi?');
+    await page.locator('.porter__bell').click();
+    await expect(page.locator('.porter__no')).toBeVisible();
+    await expect(page.locator('.porter__cite')).toHaveCount(0);
+  });
+
+  test('shows the porter-unavailable notice when the API fails', async ({ page }) => {
+    await page.route('**/api/ask', (route) => route.abort('connectionrefused'));
+    await page.goto('/ca/');
+    await page.locator('.porter__input').fill('Què és CodebaseRAG?');
+    await page.locator('.porter__bell').click();
+    await expect(page.locator('.porter__err')).toBeVisible();
+  });
+
+  test('example chips fill the input', async ({ page }) => {
+    await page.goto('/en/');
+    const examples = page.locator('.porter__ex');
+    await expect(examples).toHaveCount(3);
+    const chosen = await examples.nth(2).textContent();
+    await examples.nth(2).click();
+    await expect(page.locator('.porter__input')).toHaveValue((chosen ?? '').trim());
+  });
+
+  test('sends the page locale and the typed question', async ({ page }) => {
+    const requests: { question?: string; lang?: string }[] = [];
+    await page.route('**/api/ask', async (route) => {
+      requests.push(JSON.parse(route.request().postData() || '{}'));
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockAnswer),
+      });
+    });
+    await page.goto('/es/');
+    await page.locator('.porter__input').fill('¿Qué es CodebaseRAG?');
+    await page.locator('.porter__bell').click();
+    await expect(page.locator('.porter__answer')).toBeVisible();
+    expect(requests[0]).toEqual({ question: '¿Qué es CodebaseRAG?', lang: 'es' });
+  });
 });

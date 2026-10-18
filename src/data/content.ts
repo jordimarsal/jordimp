@@ -223,6 +223,62 @@ export const HOME: HomeContent = {
     title: { en: 'Departments', es: 'Departamentos', ca: 'Departaments' },
     sub: { en: '7 FLOORS · 1 PAIR OF HANDS', es: '7 PLANTAS · 1 PAR DE MANOS', ca: '7 PLANTES · 1 PARELL DE MANS' },
   },
+  porter: {
+    kicker: {
+      en: 'THE CONCIERGE · KNOWS EVERY FLOOR',
+      es: 'EL CONSERJE · CONOCE TODAS LAS PLANTAS',
+      ca: 'EL PORTER · ES SAP TOTES LES PLANTES',
+    },
+    title: {
+      en: 'Ask <mark>the concierge</mark>',
+      es: 'Pregunta <mark>al conserje</mark>',
+      ca: 'Pregunta <mark>al porter</mark>',
+    },
+    stand: {
+      en: 'Ring the bell and ask anything about Jordi’s work. The concierge answers from the public CV and repos, citations on file — and what is not on record, he says so.',
+      es: 'Toca el timbre y pregunta lo que quieras sobre el trabajo de Jordi. El conserje responde desde el CV público y los repos, con citas en el registro — y lo que no consta, lo dice.',
+      ca: 'Trona el timbre i pregunta el que vulguis sobre la feina d’en Jordi. El porter respon des del CV públic i els repos, amb cites a l’arxiu — i el que no consta, ho diu.',
+    },
+    label: { en: 'Your question', es: 'Tu pregunta', ca: 'La teva pregunta' },
+    placeholder: {
+      en: 'e.g. Who built the Kafka telemetry hub?',
+      es: 'p. ej. ¿Quién construyó el hub de telemetría de Kafka?',
+      ca: 'p. ex. Qui va construir el hub de telemetria de Kafka?',
+    },
+    bell: { en: 'RING THE BELL', es: 'TOCA EL TIMBRE', ca: 'TRONA EL TIMBRE' },
+    thinking: {
+      en: 'The concierge checks the ledger',
+      es: 'El conserje consulta el registro',
+      ca: 'El porter consulta el registre',
+    },
+    notCovered: {
+      en: 'Not on record. The concierge only answers from the public CV and repos — ring again with something else.',
+      es: 'No consta. El conserje solo responde desde el CV público y los repos — vuelve a tocar el timbre con otra cosa.',
+      ca: 'No consta. El porter només respon des del CV públic i els repos — torna a trona el timbre amb una altra cosa.',
+    },
+    error: {
+      en: 'The concierge is not at the desk right now — try again in a moment.',
+      es: 'El conserje no está en la portería ahora mismo — prueba en un momento.',
+      ca: 'El porter no és a la portería ara mateix — prova en un moment.',
+    },
+    sources: { en: 'ON FILE', es: 'EN EL REGISTRO', ca: 'A L’ARXIU' },
+    examples: [
+      { q: { en: 'What is CodebaseRAG?', es: '¿Qué es CodebaseRAG?', ca: 'Què és CodebaseRAG?' } },
+      {
+        q: {
+          en: 'Experience at Telefónica Open Gateway?',
+          es: '¿Experiencia en Open Gateway en Telefónica?',
+          ca: 'Experiència a Open Gateway a Telefónica?',
+        },
+      },
+      { q: { en: 'What is Jordi’s coffee order?', es: '¿Cuál es el café de Jordi?', ca: 'Quin cafè pren en Jordi?' } },
+    ],
+    footnote: {
+      en: 'ASK-API · LOCAL MODELS ON THE HOMELAB · CITED OR SILENT',
+      es: 'ASK-API · MODELOS LOCALES EN EL HOMELAB · CITA O CALLA',
+      ca: 'ASK-API · MODELS LOCALS AL HOMELAB · CITA O CALLA',
+    },
+  },
 };
 
 export const DEPTS: Record<DeptKey, Dept> = {

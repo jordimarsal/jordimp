@@ -9,14 +9,14 @@ export default defineConfig({
   timeout: 30_000,
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
-    baseURL: 'http://localhost:4321',
+    baseURL: 'http://127.0.0.1:4321',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     ...devices['Desktop Chrome'],
   },
   webServer: {
-    command: 'npm run preview',
-    url: 'http://localhost:4321',
+    command: 'npm run preview -- --host 127.0.0.1',
+    url: 'http://127.0.0.1:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 30_000,
   },

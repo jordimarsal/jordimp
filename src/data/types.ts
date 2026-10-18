@@ -142,10 +142,26 @@ export interface HomeContent {
   readonly stand: L10n<string>;
   readonly metaChips: L10n<readonly string[]>;
   readonly floorGuide: FloorGuide;
+  readonly porter: PorterContent;
   readonly plainHead: SecHead;
   readonly plainCards: readonly PlainCard[];
   readonly featuredHead: SecHead;
   readonly deptsHead: SecHead;
+}
+
+export interface PorterContent {
+  readonly kicker: L10n<string>;
+  readonly title: L10n<string>;
+  readonly stand: L10n<string>;
+  readonly label: L10n<string>;
+  readonly placeholder: L10n<string>;
+  readonly bell: L10n<string>;
+  readonly thinking: L10n<string>;
+  readonly notCovered: L10n<string>;
+  readonly error: L10n<string>;
+  readonly sources: L10n<string>;
+  readonly examples: readonly { readonly q: L10n<string> }[];
+  readonly footnote: L10n<string>;
 }
 
 export interface WorkContent {
