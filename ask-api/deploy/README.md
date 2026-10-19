@@ -77,9 +77,12 @@ docker compose -f deploy/docker-compose.yml build ask-api   # once — the app i
 scripts/gen_bench_run.sh qwen3-1.7b Qwen3-1.7B-Q4_K_M.gguf  # → evals/bench/*.json
 ```
 
-Reference (2026-10-19): Qwen3-4B-2507 Q4_K_M 21/21 · Qwen3-1.7B Q4_K_M 19/21 ·
-LFM2.5-1.2B 15/21 (leaks off-corpus) · gemma-3-1b 3/21. Swap for real =
-`GEN_MODEL_FILE` in `deploy/.env` + `docker compose up -d --build ask-gen`.
+Reference (2026-10-19, per-language prompts — the golden carries `lang:` keys):
+Qwen3-4B-2507 Q4_K_M 21/21 p50 641ms (baseline, in prod) · Qwen3-1.7B Q4_K_M
+19/21 · Q3_K_M 17/21 · LFM2.5-1.2B 15/21 (leaks off-corpus) · granite-4.0-1b
+8/21 (leaks) · gemma-3-1b 3/21 · salamandra-2b-instruct 0/21 (never cites).
+Verdict: keep the 4B; the 1.7B needs a citation-format fine-tune to qualify.
+Swap for real = `GEN_MODEL_FILE` in `deploy/.env` + `docker compose up -d --build ask-gen`.
 
 ## Rotate the tunnel token
 

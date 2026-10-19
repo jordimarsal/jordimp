@@ -29,7 +29,7 @@ NET="${BENCH_NETWORK:-ask-api_default}"
 APP_IMG="${ASK_API_IMAGE:-ask-api:local}"
 ASK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-mkdir -p "$ASK_DIR/$OUT_DIR"
+mkdir -p "$OUT_DIR"
 docker rm -f bench-gen >/dev/null 2>&1 || true
 
 docker run -d --name bench-gen --network "$NET" --gpus "\"device=$GPU\"" \
@@ -57,7 +57,8 @@ fi
 
 docker run --rm --network "$NET" \
   -v "$ASK_DIR/scripts/gen_bench.py":/app/scripts/gen_bench.py:ro \
-  -v "$ASK_DIR/$OUT_DIR":/work/out \
+  -v "$ASK_DIR/evals/golden.yaml":/app/evals/golden.yaml:ro \
+  -v "$OUT_DIR":/work/out \
   -e ASK_EMBED_URL=http://ask-embed:8080 \
   -e ASK_GEN_URL=http://bench-gen:8080 \
   -e ASK_EMBED_QUERY_PREFIX='search_query: ' \

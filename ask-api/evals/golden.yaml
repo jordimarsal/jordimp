@@ -9,79 +9,100 @@ floor_real: 0.90 # floor with real nomic embeddings + task prefixes + heading-em
 questions:
   # English
   - q: "How many years of experience does Jordi have?"
+    lang: en
     expect:
       - files/cv/CV_26.md
       - files/cv/CV_26_ATS.md
       - files/cv/CV_python_2026.md
   - q: "What is CodebaseRAG and how is retrieval quality gated?"
+    lang: en
     expect: files/repos/codebaserag.md
   - q: "Where did Jordi work between 2020 and 2022?"
+    lang: en
     expect:
       - files/cv/CV_26.md
       - files/cv/CV_26_ATS.md
       - files/cv/CV_python_2026.md
   - q: "Which ADR records the Result vs exceptions decision in Kafka Adapter Telemetry?"
+    lang: en
     expect:
       - files/repos/kafka-adr-0002-result-vs-exceptions.md
       - files/repos/kafka-adapter-telemetry.md
   - q: "What roles does the Harness define for spec driven development?"
+    lang: en
     expect: files/repos/harness.md
   - q: "Which database does the Kafka telemetry hub use and how is persistence made idempotent?"
+    lang: en
     expect: files/repos/kafka-adapter-telemetry.md
   # Spanish
   - q: "¿Qué experiencia tiene Jordi con Open Gateway en Telefónica?"
+    lang: es
     expect:
       - files/cv/CV_26.md
       - files/cv/CV_26_ATS.md
       - files/cv/CV_python_2026.md
   - q: "¿Para qué sirve Redis Toolkit?"
+    lang: es
     expect: files/repos/redis-toolkit.md
   - q: "¿Qué decide el ADR 0003 sobre la escritura de alertas?"
+    lang: es
     expect: files/repos/kafka-adr-0003-alert-dual-write-vs-outbox.md
   - q: "¿Qué máster cursó Jordi?"
+    lang: es
     expect:
       - files/cv/CV_26.md
       - files/cv/CV_26_ATS.md
   # Catalan
   - q: "Què és l'Interview Simulator?"
+    lang: ca
     expect: files/repos/interview-simulator.md
   - q: "Quines eines CLI va construir en Jordi per operar els adaptadors d'Open Gateway?"
+    lang: ca
     expect:
       - files/cv/CV_26.md
       - files/cv/CV_26_ATS.md
   # The porter itself (meta)
   - q: "Do you have a name?"
+    lang: en
     expect: files/about/porter.md
   - q: "How was ask-api built?"
+    lang: en
     expect:
       - files/repos/ask-api.md
       - files/about/porter.md
   - q: "Does the concierge use codebaserag?"
+    lang: en
     expect:
       - files/about/porter.md
   - q: "Ha treballat amb RabbitMQ o Kafka?"
+    lang: ca
     expect:
       - files/cv/CV_26.md
       - files/cv/CV_26_ATS.md
       - files/repos/kafka-adapter-telemetry.md
   - q: "¿Ha trabajado Jordi con RabbitMQ?"
+    lang: es
     expect:
       - files/cv/CV_26.md
       - files/cv/CV_26_ATS.md
       - files/cv/CV_python_2026.md
   # The building (floors, roof, attic, basement — F23 follow-up 3)
   - q: "What is on the roof of the Jordimp & Co building?"
+    lang: en
     expect:
       - files/about/edifici.md
       - files/about/porter.md
   - q: "¿Qué poema recitas si te pregunto por el sótano?"
+    lang: es
     expect:
       - files/about/edifici.md
   - q: "Què hi ha a les golfes de l'edifici?"
+    lang: ca
     expect:
       - files/about/edifici.md
       - files/about/porter.md
   - q: "El porter sap totes les plantes de l'edifici?"
+    lang: ca
     expect:
       - files/about/edifici.md
       - files/about/porter.md
