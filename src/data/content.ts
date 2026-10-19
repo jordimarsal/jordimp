@@ -1494,13 +1494,13 @@ export const POSTS: readonly PostContent[] = [
         },
         blocks: paragraphBlocks({
           en: [
-            'The fine-tuned model is on Hugging Face with the dataset and the pipeline: jordimarsal/Qwen3.5-2B-porter-GGUF. The training and merge scripts live in the ask-api/finetune directory of the jordimp repo, next to the eval gate they had to pass. And the concierge is downstairs, by the door — ring the bell and ask it anything. Now you know how its brain was chosen.',
+            'The fine-tuned model is on <a href="https://huggingface.co/jordimarsal/Qwen3.5-2B-porter-GGUF">Hugging Face</a>, with the dataset and the pipeline. The training and merge scripts live in the <a href="https://github.com/jordimarsal/jordimp/tree/main/ask-api/finetune">ask-api/finetune directory</a> of the jordimp repo, next to the eval gate they had to pass. And the concierge is downstairs, by the door — ring the bell and ask it anything. Now you know how its brain was chosen.',
           ],
           es: [
-            'El modelo afinado está en Hugging Face con el dataset y el pipeline: jordimarsal/Qwen3.5-2B-porter-GGUF. Los scripts de entrenamiento y merge viven en el directorio ask-api/finetune del repo jordimp, al lado de la puerta de evals que tuvieron que pasar. Y el conserje está abajo, junto a la puerta — toca el timbre y pregúntale lo que quieras. Ahora sabes cómo se eligió su cerebro.',
+            'El modelo afinado está en <a href="https://huggingface.co/jordimarsal/Qwen3.5-2B-porter-GGUF">Hugging Face</a>, con el dataset y el pipeline. Los scripts de entrenamiento y merge viven en el <a href="https://github.com/jordimarsal/jordimp/tree/main/ask-api/finetune">directorio ask-api/finetune</a> del repo jordimp, al lado de la puerta de evals que tuvieron que pasar. Y el conserje está abajo, junto a la puerta — toca el timbre y pregúntale lo que quieras. Ahora sabes cómo se eligió su cerebro.',
           ],
           ca: [
-            'El model afinat és a Hugging Face amb el dataset i el pipeline: jordimarsal/Qwen3.5-2B-porter-GGUF. Els scripts d’entrenament i merge viuen al directori ask-api/finetune del repo jordimp, al costat de la porta d’evals que van haver de passar. I elporter és a baix, vora la porta — trona el timbre i pregunta-li el que vulguis. Ara ja saps com es va triar el seu cervell.',
+            'El model afinat és a <a href="https://huggingface.co/jordimarsal/Qwen3.5-2B-porter-GGUF">Hugging Face</a>, amb el dataset i el pipeline. Els scripts d’entrenament i merge viuen al <a href="https://github.com/jordimarsal/jordimp/tree/main/ask-api/finetune">directori ask-api/finetune</a> del repo jordimp, al costat de la porta d’evals que van haver de passar. I el porter és a baix, vora la porta — trona el timbre i pregunta-li el que vulguis. Ara ja saps com es va triar el seu cervell.',
           ],
         }),
       },
