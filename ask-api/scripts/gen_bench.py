@@ -25,7 +25,7 @@ from ask_api.adapters.sqlite_vec import SqliteVecIndex
 from ask_api.cli import _chunk_corpus
 from ask_api.config import Settings
 from ask_api.corpus import IndexMeta
-from ask_api.result import Err, Ok
+from ask_api.result import Ok
 
 
 def main() -> None:
@@ -90,7 +90,7 @@ def main() -> None:
     print(json.dumps(summary, ensure_ascii=False, indent=1))
 
 
-def build_service(settings: Settings, embedder: object, index: object) -> object:  # noqa: ANN001
+def build_service(settings: Settings, embedder: object, index: object) -> object:
     from ask_api.service import AnswerService
 
     return AnswerService(
@@ -103,7 +103,7 @@ def build_service(settings: Settings, embedder: object, index: object) -> object
     )
 
 
-def ask(service: object, question: str, lang: str, off_corpus: bool) -> dict[str, object]:  # noqa: ANN001
+def ask(service: object, question: str, lang: str, off_corpus: bool) -> dict[str, object]:
     outcome = service.answer(question, lang)  # type: ignore[attr-defined]
     if isinstance(outcome, Ok):
         answer = outcome.value
