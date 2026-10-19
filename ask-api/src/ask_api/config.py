@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     gen_timeout_s: float = 30.0
 
     threshold: float = 0.55
-    top_k: int = 4
+    top_k: int = 6  # calibrated: compound questions (two topics, several sources) need the room
     chunk_chars: int = 900
     chunk_overlap: int = 150
     max_question_chars: int = 500

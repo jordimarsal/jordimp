@@ -51,6 +51,7 @@ November 2020 – May 2022
 Zitro Laboratory (online gaming / casinos) · zitrogames.com
 
 - Maintained and evolved the Java betting-engine server, Backoffice and real-money casino integrations.
+- Implemented async messaging between services with RabbitMQ.
 - Implemented Apple Sign-In server-to-server; integrated historical data into AWS Snowflake + Cassandra; integrated OneSignal for commercial targeting.
 - Performed architecture analysis for new features and wrote operational scripts in Python and Bash.
 

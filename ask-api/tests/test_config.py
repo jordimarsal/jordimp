@@ -6,7 +6,7 @@ def test_defaults_match_the_design() -> None:
     assert settings.embed_backend == "llama"
     assert settings.gen_backend == "llama"
     assert settings.threshold == 0.55
-    assert settings.top_k == 4
+    assert settings.top_k == 6
     assert settings.max_question_chars == 500
     assert settings.max_output_tokens == 320
     assert settings.cors_origin_list == ["https://jordimp.net", "https://www.jordimp.net"]

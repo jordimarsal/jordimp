@@ -49,6 +49,7 @@ services:
       ASK_EMBED_URL: http://ask-embed:8080
       ASK_GEN_URL: http://ask-gen:8080
       ASK_THRESHOLD: "0.55"
+      ASK_TOP_K: "6"
       ASK_EMBED_QUERY_PREFIX: "search_query: "
       ASK_EMBED_DOC_PREFIX: "search_document:"
     volumes:

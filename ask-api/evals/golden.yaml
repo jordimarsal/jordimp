@@ -59,6 +59,16 @@ questions:
   - q: "Does the concierge use codebaserag?"
     expect:
       - files/about/porter.md
+  - q: "Ha treballat amb RabbitMQ o Kafka?"
+    expect:
+      - files/cv/CV_26.md
+      - files/cv/CV_26_ATS.md
+      - files/repos/kafka-adapter-telemetry.md
+  - q: "¿Ha trabajado Jordi con RabbitMQ?"
+    expect:
+      - files/cv/CV_26.md
+      - files/cv/CV_26_ATS.md
+      - files/cv/CV_python_2026.md
 off_corpus:
   - q: "What is the capital of France?"
     lang: en

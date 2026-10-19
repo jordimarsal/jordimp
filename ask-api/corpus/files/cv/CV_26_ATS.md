@@ -54,6 +54,7 @@ Java, Spring Boot, Node.js, TypeScript, JavaScript, Python, Play Framework, sbt,
 
 - Mantuve y evolucioné backend Java para motor de apuestas y Backoffice.
 - Desarrollé nuevas funcionalidades e integraciones para casinos online con dinero real.
+- Implementé mensajería asíncrona entre servicios con RabbitMQ.
 - Implementé Apple Sign-In server-to-server.
 - Integré historización de datos en AWS Snowflake y Cassandra.
 - Integré OneSignal para segmentación y comunicación con usuarios objetivo.
