@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-10-12T13:36:40.507Z",
-  "commit": "c450bb1a1fa06ee0081d2d28787b6fc126fa5fd3",
+  "generatedAt": "2026-10-19T08:57:56.072Z",
+  "commit": "a0fdbea9de73b176c31a5504bb21ad490385f6d7",
   "lighthouse": {
     "performance": 1,
-    "accessibility": 1,
-    "bestPractices": 0.96,
+    "accessibility": 0.96,
+    "bestPractices": 1,
     "seo": 1
   },
   "history": [
@@ -52,21 +52,30 @@
         "bestPractices": 0.96,
         "seo": 1
       }
+    },
+    {
+      "date": "2026-10-19",
+      "scores": {
+        "performance": 1,
+        "accessibility": 0.96,
+        "bestPractices": 1,
+        "seo": 1
+      }
     }
   ],
   "tests": {
     "unit": {
-      "total": 257,
-      "passed": 257
+      "total": 333,
+      "passed": 333
     },
     "e2e": {
-      "total": 116,
-      "passed": 116
+      "total": 174,
+      "passed": 174
     }
   },
   "repo": {
     "pagesGenerated": 80,
-    "bundleKb": 36,
+    "bundleKb": 50,
     "deps": {
       "prod": 2,
       "dev": 6
