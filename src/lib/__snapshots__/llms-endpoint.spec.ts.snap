@@ -93,6 +93,7 @@ The desk takes three things: senior or staff backend roles, short spec-first eng
 ## Blog
 
 - [Blog](https://jordimp.net/en/blog/)
+- [Blog: Sixteen models, one gate: how the concierge got its brain](https://jordimp.net/en/blog/sixteen-models-one-gate/) — The concierge needed a smaller brain with the same contract. Sixteen candidates benched against the production gate, a hall of shame for fabricated citations, and one LoRA fine-tune that ships 21/21 at half the memory. (2026-10-19)
 - [Blog: Which local model should a coding agent run? Six GGUFs and a Strata engine, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/) — Which GGUF should a coding agent load? Six models under llama.cpp plus one under the Strata engine, one harness, four dimensions — tools, code, agent and speed — measured on two RTX 5080s, with the receipts of every call. (2026-10-13)
 - [Blog: RAG without an eval gate is a demo.](https://jordimp.net/en/blog/rag-eval-gate/) — Why CodebaseRAG gates retrieval quality in CI: a public golden set, a committed mean recall@5 floor of 0.409, and honest limits — a floor, not SOTA. (2026-09-22)
 

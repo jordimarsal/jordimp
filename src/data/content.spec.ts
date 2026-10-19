@@ -400,6 +400,7 @@ describe('pages data', () => {
       'cv',
       'blog',
       'post-ggufbench',
+      'post-porter-brain',
       'article-rag-eval-gate',
       'article-rag-eval-gate-redirect',
       'contact',
@@ -407,7 +408,7 @@ describe('pages data', () => {
       ...PROJECTS.map((p) => `project-${p.slug}`),
     ];
     expect(Object.keys(PAGES).sort()).toEqual(expected.sort());
-    expect(Object.keys(PAGES)).toHaveLength(26);
+    expect(Object.keys(PAGES)).toHaveLength(27);
   });
 
   it('gives every page a route and trilingual title and description', () => {
@@ -576,8 +577,9 @@ describe('blog posts data (F15)', () => {
   const essay = post('rag-eval-gate');
   const gguf = post('which-local-model-for-coding-agents');
 
-  it('ships exactly two posts ordered by publication date descending (R9)', () => {
+  it('ships exactly three posts ordered by publication date descending (R9)', () => {
     expect(POSTS.map((entry) => entry.slug)).toEqual([
+      'sixteen-models-one-gate',
       'which-local-model-for-coding-agents',
       'rag-eval-gate',
     ]);
