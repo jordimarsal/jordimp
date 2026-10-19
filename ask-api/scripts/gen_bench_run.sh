@@ -21,7 +21,7 @@ set -euo pipefail
 
 LABEL="$1"; MODEL="$2"; shift 2
 
-IMG="ghcr.io/ggml-org/llama.cpp:server-cuda@sha256:b4e561932a1dd460ec2f9d2875ad0d9535cbfd3d2d6a48bdb3c9d50804088bff"
+IMG="${BENCH_LLAMA_IMG:-ghcr.io/ggml-org/llama.cpp:server-cuda@sha256:b4e561932a1dd460ec2f9d2875ad0d9535cbfd3d2d6a48bdb3c9d50804088bff}"
 GGUF_DIR="${BENCH_GGUF_DIR:-/home/jordi/ia/llama/models}"
 OUT_DIR="${BENCH_OUT_DIR:-evals/bench}"
 GPU="${BENCH_GPU:-0}"
