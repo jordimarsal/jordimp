@@ -65,6 +65,22 @@ scripts/eval.sh
 docker compose exec ask-api ask-api eval
 ```
 
+## Test a candidate generation model
+
+`scripts/gen_bench_run.sh` A/B-benches a candidate GGUF **without touching
+prod**: boots it on GPU 0, runs the golden + off-corpus battery through the
+real pipeline (nomic + prefixes + citation policy), writes JSON with
+covered / refused / honest / latency, and answers for side-by-side reading.
+
+```bash
+docker compose -f deploy/docker-compose.yml build ask-api   # once — the app image
+scripts/gen_bench_run.sh qwen3-1.7b Qwen3-1.7B-Q4_K_M.gguf  # → evals/bench/*.json
+```
+
+Reference (2026-10-19): Qwen3-4B-2507 Q4_K_M 21/21 · Qwen3-1.7B Q4_K_M 19/21 ·
+LFM2.5-1.2B 15/21 (leaks off-corpus) · gemma-3-1b 3/21. Swap for real =
+`GEN_MODEL_FILE` in `deploy/.env` + `docker compose up -d --build ask-gen`.
+
 ## Rotate the tunnel token
 
 Zero Trust → Networks → Tunnels → `jordimp-homelab` → **Rotate token** → paste
