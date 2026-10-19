@@ -25,7 +25,8 @@ def main() -> None:
     ap.add_argument("--lr", type=float, default=7e-5)
     args = ap.parse_args()
 
-    rows = [json.loads(line) for line in args.data.read_text(encoding="utf-8").splitlines() if line.strip()]
+    lines = args.data.read_text(encoding="utf-8").splitlines()
+    rows = [json.loads(line) for line in lines if line.strip()]
     print(f"examples: {len(rows)}")
 
     tokenizer = AutoTokenizer.from_pretrained(args.base)
@@ -57,7 +58,15 @@ def main() -> None:
         lora_dropout=0.05,
         bias="none",
         task_type="CAUSAL_LM",
-        target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
+        target_modules=[
+            "q_proj",
+            "k_proj",
+            "v_proj",
+            "o_proj",
+            "gate_proj",
+            "up_proj",
+            "down_proj",
+        ],
     )
 
     config = SFTConfig(

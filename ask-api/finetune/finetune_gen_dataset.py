@@ -14,15 +14,15 @@ import json
 import random
 import re
 import tempfile
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import yaml
 
 from ask_api.adapters.factory import build_embedder
 from ask_api.adapters.sqlite_vec import SqliteVecIndex
-from ask_api.cli import _chunk_corpus
 from ask_api.citation import enforce, not_covered_text
+from ask_api.cli import _chunk_corpus
 from ask_api.config import Settings
 from ask_api.corpus import IndexMeta
 from ask_api.prompt import build_prompt
@@ -99,7 +99,7 @@ def main() -> None:
             vectors,
             IndexMeta(
                 corpus_sha256="gen",
-                built_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                built_at=datetime.now(UTC).isoformat(timespec="seconds"),
                 model="gen",
                 dim=settings.embed_dim,
                 chunks=len(chunks),
@@ -135,7 +135,10 @@ def main() -> None:
                     "experience plus a specific project, or two projects together)."
                 )
             else:
-                task = f"Write ONE natural visitor question in {lang} answerable from the documents above."
+                task = (
+                    f"Write ONE natural visitor question in {lang} answerable from "
+                    "the documents above."
+                )
             raw = teacher_call(
                 settings.gen_url,
                 QUESTION_SYS,
