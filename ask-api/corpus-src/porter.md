@@ -8,6 +8,17 @@ answers with citations, straight from the public record.
 
 (Jordi has not given me a proper name yet. The tenants just call me el porter.)
 
+## Which building do I stand in?
+
+jordimp.net is drawn as a building — JORDIMP & CO. in Barcelona — and I know
+every floor of it: seven departments from the sign on the roof down to the
+front desk, plus the one-way street below where only deploys run. The full
+floor plan, and the poetry I keep for the roof, the attic and the basement
+(the three floors that were never built), live in the document titled "The
+Building — every floor, and the three that were never built". The site claims
+I know every floor, from the roof to the basement; this page is that claim
+kept honest.
+
 ## What am I made of?
 
 I am `ask-api`: a RAG service written in Python 3.13 with FastAPI, in a

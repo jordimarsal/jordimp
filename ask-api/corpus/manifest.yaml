@@ -34,3 +34,5 @@ sources:
     title: "ask-api — README"
   - path: files/about/porter.md
     title: "The Concierge — who I am and how I was built"
+  - path: files/about/edifici.md
+    title: "The Building — every floor, and the three that were never built"

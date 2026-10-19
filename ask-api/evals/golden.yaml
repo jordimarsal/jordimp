@@ -69,6 +69,22 @@ questions:
       - files/cv/CV_26.md
       - files/cv/CV_26_ATS.md
       - files/cv/CV_python_2026.md
+  # The building (floors, roof, attic, basement — F23 follow-up 3)
+  - q: "What is on the roof of the Jordimp & Co building?"
+    expect:
+      - files/about/edifici.md
+      - files/about/porter.md
+  - q: "¿Qué poema recitas si te pregunto por el sótano?"
+    expect:
+      - files/about/edifici.md
+  - q: "Què hi ha a les golfes de l'edifici?"
+    expect:
+      - files/about/edifici.md
+      - files/about/porter.md
+  - q: "El porter sap totes les plantes de l'edifici?"
+    expect:
+      - files/about/edifici.md
+      - files/about/porter.md
 off_corpus:
   - q: "What is the capital of France?"
     lang: en
