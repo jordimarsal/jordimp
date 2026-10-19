@@ -3,25 +3,26 @@
 Personal portfolio site for Jordi Marçal Poy — senior backend engineer
 (Java · Python · AI/LLM). Built with [Astro](https://astro.build) 7 and styled
 in the human-validated **Jordimp & Co.** redesign: an interactive building
-whose six floors are the services (research & retrieval, transport & telemetry,
-tooling, people, operations, front desk). Night mode included —
-**live at [jordimp.net](https://jordimp.net)** (GitHub Pages, custom domain,
-auto TLS).
+whose seven floors are the departments (research & retrieval, transport &
+telemetry, tooling, inspections, people, operations, front desk). Night mode
+included — **live at [jordimp.net](https://jordimp.net)** (GitHub Pages, custom
+domain, auto TLS).
 
 ## Status
 
-**v0.3.0 — 19/19 planned features shipped** (F1–F19, ledger in the git history):
-Astro scaffold + trilingual typed content, SEO / llms.txt / analytics, GitHub
-Pages deploy, QA gates (Playwright · Lighthouse CI · parity oracle), the
-**Jordimp & Co.** building redesign, blog, contact desk, and the harness
-skills highlight.
+**v0.3.0 — 23/24 planned features shipped** (F1–F23; F24 spec'd and queued,
+ledger in the git history): Astro scaffold + trilingual typed content, SEO /
+llms.txt / analytics, GitHub Pages deploy, QA gates (Playwright · Lighthouse
+CI · parity oracle), the **Jordimp & Co.** building redesign, blog, contact
+desk, the harness skills highlight, and the **ask-api concierge in
+production** — running its own fine-tuned 2B gen model (see Services).
 
 ## CI/CD — QA-gated deploys
 
 Every push to `main` runs the QA pipeline in `.github/workflows/`; **deploys only
 happen if all three jobs pass** (`deploy.needs: qa`):
 
-- **e2e** — Playwright suite: 80-page sweep (splash, 404, 78 locale routes) with
+- **e2e** — Playwright suite: 83-page sweep (splash, 404, 81 locale routes) with
   zero console errors + golden parity fixtures (titles, copy, plates, flags),
   interaction/behavior specs, < 120 s
 - **content** — census + trilingual QA against `src/data`, no-phone scan,
@@ -85,8 +86,13 @@ phone number or street address. Details in `docs/conventions.md`.
 
 `ask-api` — **live at [api.jordimp.net](https://api.jordimp.net)** (Python 3.13 /
 FastAPI, RAG over the public CV corpus with local models: nomic embeddings +
-Qwen3-4B via llama.cpp on a homelab GPU, served through a Cloudflare Tunnel).
-Grounded answers with mandatory citations, honest not-covered path in EN/ES/CA,
-rate limiting, problem+json. Source: [`ask-api/`](ask-api/) · runbook:
+`porter-qwen3.5-2b-ft` via llama.cpp on a homelab GPU, served through a
+Cloudflare Tunnel). The gen model is a LoRA fine-tune of Qwen3.5-2B trained on
+the service's own citation gate — after a 16-model sweep where nothing smaller
+held the contract ([post](https://jordimp.net/en/blog/sixteen-models-one-gate/) ·
+[model on Hugging Face](https://huggingface.co/jordimarsal/Qwen3.5-2B-porter-GGUF)):
+grounded answers with mandatory citations, honest not-covered path in EN/ES/CA,
+rate limiting, problem+json. Source: [`ask-api/`](ask-api/) · fine-tune
+pipeline: [`ask-api/finetune/`](ask-api/finetune/) · runbook:
 [`ask-api/deploy/README.md`](ask-api/deploy/README.md). `status-api`
 (Java 25 / Spring Boot 4.1, live SSE dashboard) is next.
