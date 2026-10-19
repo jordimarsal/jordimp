@@ -35,15 +35,15 @@ import {
   tierProjects,
 } from './content';
 import { SITE as CONFIG_SITE } from '../config';
-import type { DeptKey, Tier } from './types';
+import type { DeptKey, Locale, Tier } from './types';
 
-const PROJECT_COUNT = 11;
+const PROJECT_COUNT = 12;
 const FEATURED_COUNT = 3;
 const DEPT_COUNT = 7;
 const EXPERIENCE_COUNT = 4;
 
 describe('projects data', () => {
-  it('ships exactly 11 projects with unique slugs', () => {
+  it('ships exactly 12 projects with unique slugs', () => {
     expect(PROJECTS).toHaveLength(PROJECT_COUNT);
     expect(new Set(PROJECTS.map((p) => p.slug)).size).toBe(PROJECT_COUNT);
   });
@@ -103,7 +103,12 @@ describe('departments data', () => {
   it('curates the three card floors to their strong pieces', () => {
     expect(DEPTS.research.projects).toEqual(['codebaserag', 'interview-simulator']);
     expect(DEPTS.telemetry.projects).toEqual(['kafka-adapter-telemetry', 'redis-toolkit']);
-    expect(DEPTS.tooling.projects).toEqual(['harness-standard', 'md-mermaid-pdf', 'mcp-transparent-png']);
+    expect(DEPTS.tooling.projects).toEqual([
+      'harness-standard',
+      'ggufbench',
+      'md-mermaid-pdf',
+      'mcp-transparent-png',
+    ]);
   });
 
   it('covers all seven departments in FLOOR_LABELS with trilingual labels', () => {
@@ -364,6 +369,7 @@ const TIER_MAP: Record<string, Tier> = {
   codebaserag: 'thesis', 'kafka-adapter-telemetry': 'thesis', 'harness-standard': 'thesis',
   'redis-toolkit': 'satellite', 'interview-simulator': 'satellite',
   'md-mermaid-pdf': 'satellite', 'mcp-transparent-png': 'satellite',
+  ggufbench: 'satellite',
   'bible-text-analysis': 'annex', 'product-offers': 'annex',
   'spring-boot-casino': 'annex', rustcut: 'annex',
 };
@@ -377,9 +383,10 @@ describe('project tiers', () => {
     expect(tierProjects('thesis').map((p) => p.slug)).toEqual([...FEATURED]);
   });
 
-  it('partitions the 11 projects 3 / 4 / 4 in tier order', () => {
+  it('partitions the 12 projects 3 / 5 / 4 in tier order', () => {
     expect(TIER_ORDER).toEqual(['thesis', 'satellite', 'annex']);
-    expect(TIER_ORDER.map((t) => tierProjects(t).length)).toEqual([3, 4, 4]);
+    expect(TIER_ORDER.map((t) => tierProjects(t).length)).toEqual([3, 5, 4]);
+    expect(tierProjects('satellite').at(-1)?.slug).toBe('ggufbench');
     expect(TIER_LABELS).toEqual({
       thesis: { en: 'Thesis', es: 'Tesis', ca: 'Tesi' },
       satellite: { en: 'Satellites', es: 'Satélites', ca: 'Satèl·lits' },
@@ -392,8 +399,166 @@ describe('project tiers', () => {
   });
 });
 
+describe('ggufbench entry (F24)', () => {
+  it('appends ggufbench as the 12th project in PROJECTS order (R1)', () => {
+    expect(PROJECTS.map((p) => p.slug)).toEqual([
+      'codebaserag',
+      'interview-simulator',
+      'bible-text-analysis',
+      'kafka-adapter-telemetry',
+      'redis-toolkit',
+      'product-offers',
+      'harness-standard',
+      'rustcut',
+      'md-mermaid-pdf',
+      'mcp-transparent-png',
+      'spring-boot-casino',
+      'ggufbench',
+    ]);
+  });
+
+  it('seeds ggufbench with the fixed repo metadata (R2)', () => {
+    const p = project('ggufbench');
+    expect(p.name).toBe('ggufbench');
+    expect(p.year).toBe('2026');
+    expect(p.featured).toBe(false);
+    expect(p.tier).toBe('satellite');
+    expect(p.dept).toBe('tooling');
+    expect(p.github).toBe('https://github.com/jordimarsal/ggufbench');
+  });
+
+  it('ships the four-item ggufbench stack (R7)', () => {
+    expect(project('ggufbench').stack).toEqual(['Python', 'GGUF', 'llama.cpp', 'GitHub Actions']);
+  });
+
+  it('carries exactly three README metrics with trilingual labels (R5)', () => {
+    expect(project('ggufbench').metrics).toEqual([
+      {
+        value: '0.85',
+        label: {
+          en: 'best global score — minicpm-v-4.7-35b-a3b q4_k_m, thinking off',
+          es: 'mejor puntuación global — minicpm-v-4.7-35b-a3b q4_k_m, thinking off',
+          ca: 'millor puntuació global — minicpm-v-4.7-35b-a3b q4_k_m, thinking off',
+        },
+      },
+      {
+        value: '3',
+        label: {
+          en: 'runs per task — seeds 42/43/44',
+          es: 'ejecuciones por tarea — semillas 42/43/44',
+          ca: 'execucions per tasca — llavors 42/43/44',
+        },
+      },
+      {
+        value: '100%',
+        label: {
+          en: 'local — no cloud, no APIs',
+          es: 'local — sin nube ni APIs',
+          ca: 'local — sense núvol ni APIs',
+        },
+      },
+    ]);
+  });
+
+  it('defines no outcome so ggufbench stays a satellite case (R6)', () => {
+    expect(project('ggufbench').outcome).toBeUndefined();
+  });
+});
+
+describe('ggufbench copy (F24)', () => {
+  const ggufbench = project('ggufbench');
+
+  const prose = (lang: Locale): string[] => [
+    ggufbench.blurb[lang],
+    ggufbench.summary[lang],
+    ggufbench.problem[lang],
+    ...ggufbench.highlights[lang],
+    ...ggufbench.metrics.map((metric) => metric.label[lang]),
+  ];
+
+  it('pins the exact trilingual blurb, summary and problem (R3)', () => {
+    expect(ggufbench.blurb).toEqual({
+      en: 'Agentic benchmark for local GGUF models — speed, tools, code, agent. One harness, receipts included.',
+      es: 'Benchmark agéntico para modelos GGUF locales — velocidad, herramientas, código, agente. Un harness, recibos incluidos.',
+      ca: 'Benchmark agèntic per a models GGUF locals — velocitat, eines, codi, agent. Un harness, rebuts inclosos.',
+    });
+    expect(ggufbench.summary).toEqual({
+      en: 'An agentic benchmark for local GGUF models: prompt speed, tool-calling, code generation and multi-step agent work graded under one identical harness, with the raw receipts of every call — 100% local, no cloud, no APIs.',
+      es: 'Un benchmark agéntico para modelos GGUF locales: velocidad de prompt, tool-calling, generación de código y trabajo agéntico multi-paso, medidos bajo un mismo harness y con los recibos en bruto de cada llamada — 100% local, sin nube ni APIs.',
+      ca: 'Un benchmark agèntic per a models GGUF locals: velocitat de prompt, tool-calling, generació de codi i treball agèntic multi-pas, mesurats sota un mateix harness i amb els rebuts en brut de cada crida — 100% local, sense núvol ni APIs.',
+    });
+    expect(ggufbench.problem).toEqual({
+      en: 'Public benchmarks are trained on, and “how smart is it” is not the question a local rig answers. ggufbench asks which GGUF to run on your own machine: every model runs the same harness, every scoreboard row states the task set it really ran, and exclusions are recorded with a reason — never silent.',
+      es: 'Los benchmarks públicos se usan para entrenar, y “cuál es el modelo más listo” no es la pregunta que responde un equipo local. ggufbench pregunta qué GGUF ejecutar en tu propia máquina: cada modelo corre el mismo harness, cada fila del marcador declara el set de tareas que midió de verdad y las exclusiones quedan registradas con un motivo — nunca en silencio.',
+      ca: 'Els benchmarks públics serveixen per entrenar, i “quin model és més llest” no és la pregunta que respon un equip local. ggufbench pregunta quin GGUF executar a la teva pròpia màquina: cada model corre el mateix harness, cada fila del marcador declara el set de tasques que va mesurar de debò i les exclusions queden registrades amb un motiu — mai en silenci.',
+    });
+  });
+
+  it('ships exactly three highlights per locale with the design copy (R4)', () => {
+    expect(ggufbench.highlights).toEqual({
+      en: [
+        'Four dimensions under one identical harness: prompt speed, tool-calling, code generation and multi-step agent work — three runs per task (seeds 42/43/44) on the same 2× RTX 5080 rig, reported as mean ± stdev.',
+        'The current task set: 18 tool, 72 code and 72 agent tasks — versioned (v1 → v5) so every scoreboard row states the set it really ran; a single 32768-token reasoning budget and thinking modes measured separately.',
+        '100% local — no cloud, no APIs, no telemetry — and receipts included: every call leaves timings, tool calls and per-task traces for a live scoreboard, and 13 retired models stay as record only.',
+      ],
+      es: [
+        'Cuatro dimensiones bajo un mismo harness: velocidad de prompt, tool-calling, generación de código y trabajo agéntico multi-paso — tres ejecuciones por tarea (semillas 42/43/44) en el mismo equipo 2× RTX 5080, reportadas como media ± desviación.',
+        'El set de tareas actual: 18 tareas de herramientas, 72 de código y 72 de agente — versionado (v1 → v5) para que cada fila del marcador declare el set que midió de verdad; un único presupuesto de razonamiento de 32768 tokens y los modos de thinking medidos por separado.',
+        '100% local — sin nube, sin APIs, sin telemetría — y con recibos: cada llamada deja timings, llamadas a herramientas y trazas por tarea para un marcador en vivo, y 13 modelos retirados se quedan solo como registro.',
+      ],
+      ca: [
+        'Quatre dimensions sota un mateix harness: velocitat de prompt, tool-calling, generació de codi i treball agèntic multi-pas — tres execucions per tasca (llavors 42/43/44) al mateix equip 2× RTX 5080, reportades com a mitjana ± desviació.',
+        'El set de tasques actual: 18 tasques d’eines, 72 de codi i 72 d’agent — versionat (v1 → v5) perquè cada fila del marcador declari el set que va mesurar de debò; un únic pressupost de raonament de 32768 tokens i els modes de thinking mesurats per separat.',
+        '100% local — sense núvol, sense APIs, sense telemetria — i amb rebuts: cada crida deixa timings, crides a eines i traces per tasca per a un marcador en viu, i 13 models retirats es queden només com a registre.',
+      ],
+    });
+  });
+
+  it('keeps the prose inside the README numeral allowlist with an identical multiset (R24)', () => {
+    const ALLOWED = new Set([
+      '0.85', '1', '2', '3', '4', '4.7', '5', '13', '18', '35', '42', '43', '44', '72',
+      '100', '5080', '32768',
+    ]);
+    const tokens = (lang: Locale): string[] =>
+      prose(lang).flatMap((text) =>
+        [...text.matchAll(/\d+(?:[.,]\d+)?/g)].map((match) => match[0]),
+      );
+    expect(tokens('en').length).toBeGreaterThan(0);
+    for (const token of tokens('en')) {
+      expect(ALLOWED, `token ${token} not in the README allowlist`).toContain(token);
+    }
+    expect(tokens('es')).toEqual(tokens('en'));
+    expect(tokens('ca')).toEqual(tokens('en'));
+  });
+
+  it('carries no emoji and no uppercase SOTA claim in any locale (R24)', () => {
+    for (const lang of LOCALES) {
+      const text = prose(lang).join('\n');
+      expect(text, `ggufbench:${lang}`).not.toMatch(/\p{Extended_Pictographic}/u);
+      expect(text, `ggufbench:${lang}`).not.toMatch(/SOTA/);
+    }
+  });
+});
+
+describe('home counters after the 12th project (F24 R27)', () => {
+  it('counts 12 open repos in the hero chips, leaving the other three chips untouched', () => {
+    expect(HOME.metaChips.en).toEqual(['EST. 2017', 'BARCELONA', '12 OPEN REPOS', '1 ENGINEER']);
+    expect(HOME.metaChips.es).toEqual(['DESDE 2017', 'BARCELONA', '12 REPOS ABIERTOS', '1 INGENIERO']);
+    expect(HOME.metaChips.ca).toEqual(['DES DE 2017', 'BARCELONA', '12 REPOS OBERTS', '1 ENGINYER']);
+  });
+
+  it('states 3 of 12 in the featured heading, keeping the section number 03', () => {
+    expect(HOME.featuredHead.num).toBe('03');
+    expect(HOME.featuredHead.sub).toEqual({
+      en: '3 OF 12 — THE REST IS DOWNSTAIRS',
+      es: '3 DE 12 — EL RESTO ABAJO',
+      ca: '3 DE 12 — LA RESTA A BAIX',
+    });
+  });
+});
+
 describe('pages data', () => {
-  it('registers home, work, cv, the blog trio, contact, the 7 departments and the 11 project pages (R7, F16 R5)', () => {
+  it('registers home, work, cv, the blog trio, contact, the 7 departments and the 12 project pages (R7, F16 R5)', () => {
     const expected = [
       'home',
       'work',
@@ -408,7 +573,19 @@ describe('pages data', () => {
       ...PROJECTS.map((p) => `project-${p.slug}`),
     ];
     expect(Object.keys(PAGES).sort()).toEqual(expected.sort());
-    expect(Object.keys(PAGES)).toHaveLength(27);
+    expect(Object.keys(PAGES)).toHaveLength(28);
+  });
+
+  it('registers the ggufbench case page on the tooling floor (R18)', () => {
+    const page = PAGES['project-ggufbench'];
+    expect(page.route).toBe('projects/ggufbench.html');
+    expect(page.nav).toBe('departments');
+    expect(page.title).toEqual({
+      en: 'ggufbench — Tooling & Platform — Jordimp & Co.',
+      es: 'ggufbench — Herramientas y Plataforma — Jordimp & Co.',
+      ca: 'ggufbench — Eines i Plataforma — Jordimp & Co.',
+    });
+    expect(page.description).toEqual(project('ggufbench').summary);
   });
 
   it('gives every page a route and trilingual title and description', () => {
@@ -517,7 +694,7 @@ describe('operations notes (F0)', () => {
 });
 
 describe('curated floor copy', () => {
-  it('reports 2 research projects and 3 tooling projects', () => {
+  it('reports 2 research projects and 4 tooling projects', () => {
     for (const lang of LOCALES) {
       expect(RESEARCH_PAGE.stats[lang], lang).toHaveLength(3);
       expect(TOOLING_PAGE.stats[lang], lang).toHaveLength(3);
@@ -525,7 +702,23 @@ describe('curated floor copy', () => {
     const statsText = LOCALES.map((lang) => JSON.stringify(TOOLING_PAGE.stats[lang])).join(' ');
     expect(statsText).not.toMatch(/\b(?:assessment|prueba|proves)\b/i);
     expect(RESEARCH_PAGE.stats.en[0]).toEqual({ value: '2', label: 'PROJECTS ON THIS FLOOR' });
-    expect(TOOLING_PAGE.stats.en[0]).toEqual({ value: '3', label: 'PROJECTS ON THIS FLOOR' });
+    expect(TOOLING_PAGE.stats).toEqual({
+      en: [
+        { value: '4', label: 'PROJECTS ON THIS FLOOR' },
+        { value: '7', label: 'STACKS COVERED BY THE HARNESS' },
+        { value: '1', label: 'COMMAND INSTALLS THE HARNESS' },
+      ],
+      es: [
+        { value: '4', label: 'PROYECTOS EN ESTA PLANTA' },
+        { value: '7', label: 'STACKS CUBIERTOS POR EL HARNESS' },
+        { value: '1', label: 'COMANDO INSTALA EL HARNESS' },
+      ],
+      ca: [
+        { value: '4', label: 'PROJECTES EN AQUESTA PLANTA' },
+        { value: '7', label: 'STACKS COBERTS PEL HARNESS' },
+        { value: '1', label: 'COMANDA INSTAL·LA EL HARNESS' },
+      ],
+    });
   });
 
   it('names exactly the floor projects in each department description', () => {
@@ -542,7 +735,7 @@ describe('curated floor copy', () => {
         negative: ['Product Offers API'],
       },
       tooling: {
-        positive: ['harness', 'md-mermaid-pdf', 'mcp-transparent-png'],
+        positive: ['harness', 'ggufbench', 'md-mermaid-pdf', 'mcp-transparent-png'],
         negative: ['Rustcut', 'Spring Boot Casino'],
       },
     };
@@ -554,11 +747,27 @@ describe('curated floor copy', () => {
     }
   });
 
-  it('states 11 projects and the three tiers', () => {
-    const eleven: Record<(typeof LOCALES)[number], string> = { en: 'Eleven', es: 'Once', ca: 'Onze' };
+  it('states 12 projects and the three tiers', () => {
+    const twelve: Record<(typeof LOCALES)[number], string> = { en: 'Twelve', es: 'Doce', ca: 'Dotze' };
+    expect(WORK.head.sub).toEqual({
+      en: '12 PROJECTS · 3 TIERS · FILTER BY STACK',
+      es: '12 PROYECTOS · 3 NIVELES · FILTRA POR STACK',
+      ca: '12 PROJECTES · 3 NIVELLS · FILTRA PER STACK',
+    });
+    expect(WORK.intro).toEqual({
+      en: 'Twelve projects in three tiers: the thesis, the satellites around it, and an annex for roots, take-home assessments and size exercises. Filter by the stack you care about.',
+      es: 'Doce proyectos en tres niveles: la tesis, sus satélites y un anexo para raíces, pruebas técnicas y ejercicios de tamaño. Filtra por el stack que te interese.',
+      ca: 'Dotze projectes en tres nivells: la tesi, els seus satèl·lits i un annex per a arrels, proves tècniques i exercicis de mida. Filtra pel stack que et vagi bé.',
+    });
+    expect(PAGES.work.description).toEqual({
+      en: 'Twelve projects in three tiers — thesis, satellites and annex — across backend systems, event pipelines, applied AI and tooling. Filter by the stack you care about.',
+      es: 'Doce proyectos en tres niveles — tesis, satélites y anexo — entre sistemas backend, pipelines de eventos, IA aplicada y herramientas. Filtra por el stack que te interese.',
+      ca: 'Dotze projectes en tres nivells — tesi, satèl·lits i annex — entre sistemes backend, pipelines d’esdeveniments, IA aplicada i eines. Filtra pel stack que et vagi bé.',
+    });
     for (const lang of LOCALES) {
-      expect(WORK.head.sub[lang]).toContain('11');
-      expect(WORK.intro[lang]).toContain(eleven[lang]);
+      expect(WORK.head.sub[lang], lang).toContain('12');
+      expect(WORK.intro[lang], lang).toContain(twelve[lang]);
+      expect(PAGES.work.description[lang], lang).toContain(twelve[lang]);
     }
   });
 });

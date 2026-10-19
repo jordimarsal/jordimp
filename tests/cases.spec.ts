@@ -171,6 +171,33 @@ test.describe('case pages (T7)', () => {
     }
   });
 
+  test('pins the new satellite cohort edges around ggufbench (F24 R21)', async ({ page }) => {
+    for (const lang of LOCALES) {
+      await page.goto(caseRoute(lang, 'ggufbench'));
+      const pager = page.locator('nav.pager');
+      await expect(pager.locator('a.pager__link').first()).toHaveAttribute(
+        'href',
+        caseRoute(lang, 'mcp-transparent-png'),
+      );
+      await expect(pager.locator('a.pager__link--end')).toHaveAttribute(
+        'href',
+        caseRoute(lang, 'interview-simulator'),
+      );
+
+      await page.goto(caseRoute(lang, 'mcp-transparent-png'));
+      await expect(page.locator('nav.pager a.pager__link--end')).toHaveAttribute(
+        'href',
+        caseRoute(lang, 'ggufbench'),
+      );
+
+      await page.goto(caseRoute(lang, 'interview-simulator'));
+      await expect(page.locator('nav.pager a.pager__link').first()).toHaveAttribute(
+        'href',
+        caseRoute(lang, 'ggufbench'),
+      );
+    }
+  });
+
   test('shows field notes instead of metrics for projects without metrics', async ({ page }) => {
     for (const lang of LOCALES) {
       await page.goto(caseRoute(lang, 'bible-text-analysis'));

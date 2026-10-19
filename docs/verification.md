@@ -114,7 +114,7 @@ before a release task can close:
 | Gate | Command | What it proves |
 |---|---|---|
 | Unit + env | `./harness/init.sh` | Vitest suite green (incl. the WCAG contrast gate and data invariants) |
-| E2E | `npx astro build && npx astro preview` then `npx playwright test` | 65-page sweep (21 routes × 3 locales + splash + 404) with zero console errors + parity vs `tests/fixtures/parity.json` + behaviors |
+| E2E | `npx astro build && npx astro preview` then `npx playwright test` | 86-page sweep (28 routes × 3 locales + splash + 404) with zero console errors + parity vs `tests/fixtures/parity.json` + behaviors |
 | Content QA | `npm run qa:content` | Route census matches `src/data` exactly; trilingual titles/descriptions; no phone/address; external links live |
 | Link resolution | `npm run qa:links` | Every internal `href`/`src` in the built HTML resolves to an emitted file; external links live |
 | Parity oracle | `npm run qa:guard` | `dist/` matches the committed ADR-6 oracle (titles, copy, plates, flags). Same check the pre-push hook runs; `npm run test:e2e` covers it too |

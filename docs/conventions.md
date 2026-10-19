@@ -112,7 +112,7 @@ Follow the plan's file map (`docs/superpowers/plans/2026-09-16-portfolio-phase0-
 - **One behavior per test**; Arrange–Act–Assert; no inter-test coupling, no shared
   mutable state.
 - TS: Vitest for units; Playwright for e2e — `tests/smoke.spec.ts` is the contract:
-  65-page sweep (splash, 404, 63 locale routes) with zero console errors + parity
+  86-page sweep (splash, 404, 84 locale routes) with zero console errors + parity
   assertions against `tests/fixtures/parity.json`; behavior specs live in dedicated
   `tests/*.spec.ts` files (interactions, projects, cases, departments, cv, notfound,
   seo-head). Infrastructure contracts are pinned by tests too: the audit workflow

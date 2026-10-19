@@ -4,6 +4,14 @@ import type { Locale } from '../src/lib/i18n';
 
 const ROUTES = ['/en/projects/', '/es/projects/', '/ca/projects/'] as const;
 
+const UNIQUE_STACKS = new Set(PROJECTS.flatMap((p) => p.stack)).size;
+
+const FILTER_SUMMARY: Record<Locale, string> = {
+  en: `FILTER BY STACK (${UNIQUE_STACKS})`,
+  es: `FILTRA POR STACK (${UNIQUE_STACKS})`,
+  ca: `FILTRA PER STACK (${UNIQUE_STACKS})`,
+};
+
 const EXPECTED: Record<
   (typeof ROUTES)[number],
   {
@@ -24,10 +32,10 @@ const EXPECTED: Record<
     lang: 'en',
     title: 'Projects — Jordimp & Co.',
     crumbHome: 'Home',
-    sub: '11 PROJECTS · 3 TIERS · FILTER BY STACK',
-    summary: 'FILTER BY STACK (42)',
+    sub: '12 PROJECTS · 3 TIERS · FILTER BY STACK',
+    summary: FILTER_SUMMARY.en,
     all: 'All',
-    initialStatus: '11 PROJECTS ON SHOW',
+    initialStatus: '12 PROJECTS ON SHOW',
     oneStatus: '1 PROJECT ON SHOW',
     twoStatus: '2 PROJECTS ON SHOW',
     emptyStatus: 'NO PROJECTS MATCH THAT COMBINATION — LOOSEN A FILTER',
@@ -37,10 +45,10 @@ const EXPECTED: Record<
     lang: 'es',
     title: 'Proyectos — Jordimp & Co.',
     crumbHome: 'Inicio',
-    sub: '11 PROYECTOS · 3 NIVELES · FILTRA POR STACK',
-    summary: 'FILTRA POR STACK (42)',
+    sub: '12 PROYECTOS · 3 NIVELES · FILTRA POR STACK',
+    summary: FILTER_SUMMARY.es,
     all: 'Todos',
-    initialStatus: '11 PROYECTOS A LA VISTA',
+    initialStatus: '12 PROYECTOS A LA VISTA',
     oneStatus: '1 PROYECTO A LA VISTA',
     twoStatus: '2 PROYECTOS A LA VISTA',
     emptyStatus: 'NINGÚN PROYECTO COINCIDE CON ESA COMBINACIÓN — QUITA ALGÚN FILTRO',
@@ -50,18 +58,16 @@ const EXPECTED: Record<
     lang: 'ca',
     title: 'Projectes — Jordimp & Co.',
     crumbHome: 'Inici',
-    sub: '11 PROJECTES · 3 NIVELLS · FILTRA PER STACK',
-    summary: 'FILTRA PER STACK (42)',
+    sub: '12 PROJECTES · 3 NIVELLS · FILTRA PER STACK',
+    summary: FILTER_SUMMARY.ca,
     all: 'Tots',
-    initialStatus: '11 PROJECTES A LA VISTA',
+    initialStatus: '12 PROJECTES A LA VISTA',
     oneStatus: '1 PROJECTE A LA VISTA',
     twoStatus: '2 PROJECTES A LA VISTA',
     emptyStatus: 'CAP PROJECTE COINCIDEIX AMB AQUESTA COMBINACIÓ — TREU ALGUN FILTRE',
     github: 'Veure a GitHub',
   },
 };
-
-const UNIQUE_STACKS = new Set(PROJECTS.flatMap((p) => p.stack)).size;
 
 async function readBreadcrumbJsonLd(page: import('@playwright/test').Page): Promise<{
   itemListElement: Array<{ position: number; item: string; name: string }>;
@@ -148,14 +154,16 @@ test.describe('projects index page (T6)', () => {
       await expect(tiers.nth(0)).toHaveAttribute('data-tier', 'thesis');
       await expect(tiers.nth(1)).toHaveAttribute('data-tier', 'satellite');
       await expect(tiers.nth(2)).toHaveAttribute('data-tier', 'annex');
-      const counts = [3, 4, 4];
+      const counts = [3, 5, 4];
       for (let i = 0; i < 3; i++) {
         await expect(tiers.nth(i).locator('h2.tier-head')).not.toBeEmpty();
         await expect(tiers.nth(i).locator('article.card')).toHaveCount(counts[i]);
       }
+      await expect(tiers.nth(1).locator('article.card h3').last()).toHaveText('ggufbench');
 
       const cards = page.locator('section.cards--tier article.card');
       const ordered = TIER_ORDER.flatMap((tier) => tierProjects(tier));
+      expect(ordered).toHaveLength(12);
       await expect(cards).toHaveCount(ordered.length);
       for (let i = 0; i < ordered.length; i++) {
         await expect(cards.nth(i)).toHaveAttribute('data-stack', /.+/);

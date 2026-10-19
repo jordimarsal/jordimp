@@ -31,6 +31,7 @@ The workshop floor: a multi-agent SDD harness, CLIs that do one thing well, and 
 
 Projects:
   - Harness (2026): A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command. Its process also ships as six standalone skills (npx skills add jordimarsal/harness). Stack: Agents, SDD, CLI, Conventions. [repo](https://github.com/jordimarsal/harness)
+  - ggufbench (2026): An agentic benchmark for local GGUF models: prompt speed, tool-calling, code generation and multi-step agent work graded under one identical harness, with the raw receipts of every call — 100% local, no cloud, no APIs. Stack: Python, GGUF, llama.cpp, GitHub Actions. [repo](https://github.com/jordimarsal/ggufbench)
   - MD Mermaid PDF (2025 - 2026): CLI that renders Markdown with Mermaid diagrams straight to PDF, engineered with TDD, mypy strict and CI. Stack: Python, Markdown, Mermaid, GitHub Actions. [repo](https://github.com/jordimarsal/md-mermaid-pdf)
   - MCP Transparent PNG (2026): MCP (Model Context Protocol) server that makes PNG colors transparent (alpha channel) with rgb/auto/greenscreen modes. Stack: Python 3.13, MCP, Pillow, GitHub Actions. [repo](https://github.com/jordimarsal/mcp-transparent-png)
 
@@ -67,6 +68,7 @@ The desk takes three things: senior or staff backend roles, short spec-first eng
 - MD Mermaid PDF (2025 - 2026): CLI that renders Markdown with Mermaid diagrams straight to PDF, engineered with TDD, mypy strict and CI. [repo](https://github.com/jordimarsal/md-mermaid-pdf)
 - MCP Transparent PNG (2026): MCP (Model Context Protocol) server that makes PNG colors transparent (alpha channel) with rgb/auto/greenscreen modes. [repo](https://github.com/jordimarsal/mcp-transparent-png)
 - Spring Boot Casino (2020 - 2026): Technical assessment: a casino betting domain modeled in Spring Boot following a hexagonal architecture. [repo](https://github.com/jordimarsal/spring-boot-casino)
+- ggufbench (2026): An agentic benchmark for local GGUF models: prompt speed, tool-calling, code generation and multi-step agent work graded under one identical harness, with the raw receipts of every call — 100% local, no cloud, no APIs. [repo](https://github.com/jordimarsal/ggufbench)
 
 ## Career ledger (Operations, F0)
 
@@ -109,7 +111,7 @@ The desk takes three things: senior or staff backend roles, short spec-first eng
 - [Mezzanine department page](https://jordimp.net/en/departments/people/)
 - [F0 department page](https://jordimp.net/en/departments/operations/)
 - [Front Desk page](https://jordimp.net/en/departments/front-desk/)
-- [Case pages](https://jordimp.net/en/projects/<slug>/) — one case page per project (11), e.g. [CodebaseRAG](https://jordimp.net/en/projects/codebaserag/)
+- [Case pages](https://jordimp.net/en/projects/<slug>/) — one case page per project (12), e.g. [CodebaseRAG](https://jordimp.net/en/projects/codebaserag/)
 
 This site is static HTML, zero trackers, zero external dependencies beyond linked fonts.
 "

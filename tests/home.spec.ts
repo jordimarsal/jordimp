@@ -146,7 +146,7 @@ test.describe('home building page (T4)', () => {
       const lang = home.replace(/\//g, '');
       await expect(page.locator('#dept-panel-research .cards .card')).toHaveCount(2);
       await expect(page.locator('#dept-panel-telemetry .cards .card')).toHaveCount(2);
-      await expect(page.locator('#dept-panel-tooling .cards .card')).toHaveCount(3);
+      await expect(page.locator('#dept-panel-tooling .cards .card')).toHaveCount(4);
       await expect(page.locator('#dept-panel-people .prose li')).toHaveCount(4);
       await expect(page.locator('#dept-panel-operations .ledger__row')).toHaveCount(4);
       await expect(page.locator('#dept-panel-operations .dept-panel__cta .btn')).toHaveCount(2);

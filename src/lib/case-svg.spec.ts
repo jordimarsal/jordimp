@@ -9,9 +9,9 @@ describe('CASE_MOTIFS', () => {
 
   it('emits theme-aware cutout SVGs with the shared motif classes', () => {
     const all = Object.values(CASE_MOTIFS).join('\n');
-    expect(all.match(/class="cm-y"/g)).toHaveLength(18);
-    expect(all.match(/class="cm-ink"/g)).toHaveLength(30);
-    expect(all.match(/class="cm-line"/g)).toHaveLength(27);
+    expect(all.match(/class="cm-y"/g)).toHaveLength(19);
+    expect(all.match(/class="cm-ink"/g)).toHaveLength(34);
+    expect(all.match(/class="cm-line"/g)).toHaveLength(28);
     for (const motif of Object.values(CASE_MOTIFS)) {
       expect(motif).toMatch(/^<svg class="b-svg" viewBox="0 0 132 \d+" aria-hidden="true">/);
       expect(motif.endsWith('</svg>')).toBe(true);

@@ -128,9 +128,9 @@ export const HOME: HomeContent = {
     ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer: sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des del <b>2017</b>. Ara, dins d’un equip de plataforma telco. Entrada lliure: rols, repos, o un encàrrec curt amb spec primer.',
   },
   metaChips: {
-    en: ['EST. 2017', 'BARCELONA', '11 OPEN REPOS', '1 ENGINEER'],
-    es: ['DESDE 2017', 'BARCELONA', '11 REPOS ABIERTOS', '1 INGENIERO'],
-    ca: ['DES DE 2017', 'BARCELONA', '11 REPOS OBERTS', '1 ENGINYER'],
+    en: ['EST. 2017', 'BARCELONA', '12 OPEN REPOS', '1 ENGINEER'],
+    es: ['DESDE 2017', 'BARCELONA', '12 REPOS ABIERTOS', '1 INGENIERO'],
+    ca: ['DES DE 2017', 'BARCELONA', '12 REPOS OBERTS', '1 ENGINYER'],
   },
   floorGuide: {
     label: {
@@ -216,7 +216,7 @@ export const HOME: HomeContent = {
   featuredHead: {
     num: '03',
     title: { en: 'Featured work', es: 'Trabajo destacado', ca: 'Treball destacat' },
-    sub: { en: '3 OF 11 — THE REST IS DOWNSTAIRS', es: '3 DE 11 — EL RESTO ABAJO', ca: '3 DE 11 — LA RESTA A BAIX' },
+    sub: { en: '3 OF 12 — THE REST IS DOWNSTAIRS', es: '3 DE 12 — EL RESTO ABAJO', ca: '3 DE 12 — LA RESTA A BAIX' },
   },
   deptsHead: {
     num: '04',
@@ -360,7 +360,7 @@ export const DEPTS: Record<DeptKey, Dept> = {
       es: 'Herramientas pequeñas y planes por escrito: el trabajo se acuerda sobre el papel antes de la primera línea de código, así siempre sabes qué se construye y por qué.',
       ca: 'Eines petites i plans per escrit: la feina es posa d’acord sobre el paper abans de la primera línia de codi, així sempre saps què es construeix i per què.',
     },
-    projects: ['harness-standard', 'md-mermaid-pdf', 'mcp-transparent-png'],
+    projects: ['harness-standard', 'ggufbench', 'md-mermaid-pdf', 'mcp-transparent-png'],
     page: 'tooling',
   },
   inspections: {
@@ -952,6 +952,74 @@ export const PROJECTS: readonly Project[] = [
       metrics: [],
     },
   ),
+  P(
+    {
+      slug: 'ggufbench', name: 'ggufbench', year: '2026', featured: false,
+      tier: 'satellite', dept: 'tooling',
+      stack: ['Python', 'GGUF', 'llama.cpp', 'GitHub Actions'],
+      github: 'https://github.com/jordimarsal/ggufbench',
+    },
+    {
+      blurb: {
+        en: 'Agentic benchmark for local GGUF models — speed, tools, code, agent. One harness, receipts included.',
+        es: 'Benchmark agéntico para modelos GGUF locales — velocidad, herramientas, código, agente. Un harness, recibos incluidos.',
+        ca: 'Benchmark agèntic per a models GGUF locals — velocitat, eines, codi, agent. Un harness, rebuts inclosos.',
+      },
+      summary: {
+        en: 'An agentic benchmark for local GGUF models: prompt speed, tool-calling, code generation and multi-step agent work graded under one identical harness, with the raw receipts of every call — 100% local, no cloud, no APIs.',
+        es: 'Un benchmark agéntico para modelos GGUF locales: velocidad de prompt, tool-calling, generación de código y trabajo agéntico multi-paso, medidos bajo un mismo harness y con los recibos en bruto de cada llamada — 100% local, sin nube ni APIs.',
+        ca: 'Un benchmark agèntic per a models GGUF locals: velocitat de prompt, tool-calling, generació de codi i treball agèntic multi-pas, mesurats sota un mateix harness i amb els rebuts en brut de cada crida — 100% local, sense núvol ni APIs.',
+      },
+      problem: {
+        en: 'Public benchmarks are trained on, and “how smart is it” is not the question a local rig answers. ggufbench asks which GGUF to run on your own machine: every model runs the same harness, every scoreboard row states the task set it really ran, and exclusions are recorded with a reason — never silent.',
+        es: 'Los benchmarks públicos se usan para entrenar, y “cuál es el modelo más listo” no es la pregunta que responde un equipo local. ggufbench pregunta qué GGUF ejecutar en tu propia máquina: cada modelo corre el mismo harness, cada fila del marcador declara el set de tareas que midió de verdad y las exclusiones quedan registradas con un motivo — nunca en silencio.',
+        ca: 'Els benchmarks públics serveixen per entrenar, i “quin model és més llest” no és la pregunta que respon un equip local. ggufbench pregunta quin GGUF executar a la teva pròpia màquina: cada model corre el mateix harness, cada fila del marcador declara el set de tasques que va mesurar de debò i les exclusions queden registrades amb un motiu — mai en silenci.',
+      },
+      highlights: {
+        en: [
+          'Four dimensions under one identical harness: prompt speed, tool-calling, code generation and multi-step agent work — three runs per task (seeds 42/43/44) on the same 2× RTX 5080 rig, reported as mean ± stdev.',
+          'The current task set: 18 tool, 72 code and 72 agent tasks — versioned (v1 → v5) so every scoreboard row states the set it really ran; a single 32768-token reasoning budget and thinking modes measured separately.',
+          '100% local — no cloud, no APIs, no telemetry — and receipts included: every call leaves timings, tool calls and per-task traces for a live scoreboard, and 13 retired models stay as record only.',
+        ],
+        es: [
+          'Cuatro dimensiones bajo un mismo harness: velocidad de prompt, tool-calling, generación de código y trabajo agéntico multi-paso — tres ejecuciones por tarea (semillas 42/43/44) en el mismo equipo 2× RTX 5080, reportadas como media ± desviación.',
+          'El set de tareas actual: 18 tareas de herramientas, 72 de código y 72 de agente — versionado (v1 → v5) para que cada fila del marcador declare el set que midió de verdad; un único presupuesto de razonamiento de 32768 tokens y los modos de thinking medidos por separado.',
+          '100% local — sin nube, sin APIs, sin telemetría — y con recibos: cada llamada deja timings, llamadas a herramientas y trazas por tarea para un marcador en vivo, y 13 modelos retirados se quedan solo como registro.',
+        ],
+        ca: [
+          'Quatre dimensions sota un mateix harness: velocitat de prompt, tool-calling, generació de codi i treball agèntic multi-pas — tres execucions per tasca (llavors 42/43/44) al mateix equip 2× RTX 5080, reportades com a mitjana ± desviació.',
+          'El set de tasques actual: 18 tasques d’eines, 72 de codi i 72 d’agent — versionat (v1 → v5) perquè cada fila del marcador declari el set que va mesurar de debò; un únic pressupost de raonament de 32768 tokens i els modes de thinking mesurats per separat.',
+          '100% local — sense núvol, sense APIs, sense telemetria — i amb rebuts: cada crida deixa timings, crides a eines i traces per tasca per a un marcador en viu, i 13 models retirats es queden només com a registre.',
+        ],
+      },
+      metrics: [
+        {
+          value: '0.85',
+          label: {
+            en: 'best global score — minicpm-v-4.7-35b-a3b q4_k_m, thinking off',
+            es: 'mejor puntuación global — minicpm-v-4.7-35b-a3b q4_k_m, thinking off',
+            ca: 'millor puntuació global — minicpm-v-4.7-35b-a3b q4_k_m, thinking off',
+          },
+        },
+        {
+          value: '3',
+          label: {
+            en: 'runs per task — seeds 42/43/44',
+            es: 'ejecuciones por tarea — semillas 42/43/44',
+            ca: 'execucions per tasca — llavors 42/43/44',
+          },
+        },
+        {
+          value: '100%',
+          label: {
+            en: 'local — no cloud, no APIs',
+            es: 'local — sin nube ni APIs',
+            ca: 'local — sense núvol ni APIs',
+          },
+        },
+      ],
+    },
+  ),
 ];
 
 export const TIER_ORDER: readonly Tier[] = ['thesis', 'satellite', 'annex'];
@@ -1129,12 +1197,12 @@ export const WORK: WorkContent = {
   head: {
     num: 'P',
     title: { en: 'Projects', es: 'Proyectos', ca: 'Projectes' },
-    sub: { en: '11 PROJECTS · 3 TIERS · FILTER BY STACK', es: '11 PROYECTOS · 3 NIVELES · FILTRA POR STACK', ca: '11 PROJECTES · 3 NIVELLS · FILTRA PER STACK' },
+    sub: { en: '12 PROJECTS · 3 TIERS · FILTER BY STACK', es: '12 PROYECTOS · 3 NIVELES · FILTRA POR STACK', ca: '12 PROJECTES · 3 NIVELLS · FILTRA PER STACK' },
   },
   intro: {
-    en: 'Eleven projects in three tiers: the thesis, the satellites around it, and an annex for roots, take-home assessments and size exercises. Filter by the stack you care about.',
-    es: 'Once proyectos en tres niveles: la tesis, sus satélites y un anexo para raíces, pruebas técnicas y ejercicios de tamaño. Filtra por el stack que te interese.',
-    ca: 'Onze projectes en tres nivells: la tesi, els seus satèl·lits i un annex per a arrels, proves tècniques i exercicis de mida. Filtra pel stack que et vagi bé.',
+    en: 'Twelve projects in three tiers: the thesis, the satellites around it, and an annex for roots, take-home assessments and size exercises. Filter by the stack you care about.',
+    es: 'Doce proyectos en tres niveles: la tesis, sus satélites y un anexo para raíces, pruebas técnicas y ejercicios de tamaño. Filtra por el stack que te interese.',
+    ca: 'Dotze projectes en tres nivells: la tesi, els seus satèl·lits i un annex per a arrels, proves tècniques i exercicis de mida. Filtra pel stack que et vagi bé.',
   },
   filterAll: { en: 'All', es: 'Todos', ca: 'Tots' },
   filterSummary: { en: 'FILTER BY STACK ({n})', es: 'FILTRA POR STACK ({n})', ca: 'FILTRA PER STACK ({n})' },
@@ -1961,9 +2029,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'Projectes — Jordimp & Co.',
     },
     description: {
-      en: 'Eleven projects in three tiers — thesis, satellites and annex — across backend systems, event pipelines, applied AI and tooling. Filter by the stack you care about.',
-      es: 'Once proyectos en tres niveles — tesis, satélites y anexo — entre sistemas backend, pipelines de eventos, IA aplicada y herramientas. Filtra por el stack que te interese.',
-      ca: 'Onze projectes en tres nivells — tesi, satèl·lits i annex — entre sistemes backend, pipelines d’esdeveniments, IA aplicada i eines. Filtra pel stack que et vagi bé.',
+      en: 'Twelve projects in three tiers — thesis, satellites and annex — across backend systems, event pipelines, applied AI and tooling. Filter by the stack you care about.',
+      es: 'Doce proyectos en tres niveles — tesis, satélites y anexo — entre sistemas backend, pipelines de eventos, IA aplicada y herramientas. Filtra por el stack que te interese.',
+      ca: 'Dotze projectes en tres nivells — tesi, satèl·lits i annex — entre sistemes backend, pipelines d’esdeveniments, IA aplicada i eines. Filtra pel stack que et vagi bé.',
     },
   },
   cv: {
@@ -2052,9 +2120,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'F1 · Eines i Plataforma — Jordimp & Co.',
     },
     description: {
-      en: 'The workshop floor: harness, md-mermaid-pdf and mcp-transparent-png — deliberately small tools, production standards.',
-      es: 'El taller: harness, md-mermaid-pdf y mcp-transparent-png — herramientas deliberadamente pequeñas, estándares de producción.',
-      ca: 'El taller: harness, md-mermaid-pdf i mcp-transparent-png — eines deliberadament petites, estàndards de producció.',
+      en: 'The workshop floor: harness, ggufbench, md-mermaid-pdf and mcp-transparent-png — deliberately small tools, production standards.',
+      es: 'El taller: harness, ggufbench, md-mermaid-pdf y mcp-transparent-png — herramientas deliberadamente pequeñas, estándares de producción.',
+      ca: 'El taller: harness, ggufbench, md-mermaid-pdf i mcp-transparent-png — eines deliberadament petites, estàndards de producció.',
     },
   },
   operations: {
@@ -2416,17 +2484,17 @@ export const TELEMETRY_PAGE: TelemetryPageContent = {
 export const TOOLING_PAGE: ToolingPageContent = {
   stats: {
     en: [
-      { value: '3', label: 'PROJECTS ON THIS FLOOR' },
+      { value: '4', label: 'PROJECTS ON THIS FLOOR' },
       { value: '7', label: 'STACKS COVERED BY THE HARNESS' },
       { value: '1', label: 'COMMAND INSTALLS THE HARNESS' },
     ],
     es: [
-      { value: '3', label: 'PROYECTOS EN ESTA PLANTA' },
+      { value: '4', label: 'PROYECTOS EN ESTA PLANTA' },
       { value: '7', label: 'STACKS CUBIERTOS POR EL HARNESS' },
       { value: '1', label: 'COMANDO INSTALA EL HARNESS' },
     ],
     ca: [
-      { value: '3', label: 'PROJECTES EN AQUESTA PLANTA' },
+      { value: '4', label: 'PROJECTES EN AQUESTA PLANTA' },
       { value: '7', label: 'STACKS COBERTS PEL HARNESS' },
       { value: '1', label: 'COMANDA INSTAL·LA EL HARNESS' },
     ],

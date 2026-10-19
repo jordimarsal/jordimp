@@ -152,7 +152,7 @@ test.describe('department pages (T8)', () => {
     await expect(page.locator('section .dept-panel__cta a.btn')).toHaveAttribute('href', '/en/');
   });
 
-  test('renders the tooling floor with the workshop note and three bench cards', async ({ page }) => {
+  test('renders the tooling floor with the workshop note and four bench cards', async ({ page }) => {
     const key: DeptKey = 'tooling';
     const d = DEPTS[key];
     await page.goto(deptRoute('en', key));

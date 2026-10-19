@@ -113,13 +113,13 @@ async function styleOf(page: Page, selector: string, property: string): Promise<
     .evaluate((el, prop) => getComputedStyle(el).getPropertyValue(prop), property);
 }
 
-test.describe('83-page sweep (R27, F10 R16, F15 R22, F16 R31)', () => {
+test.describe('86-page sweep (R27, F10 R16, F15 R22, F16 R31)', () => {
   test('sweep: every built page answers with the expected status and zero console errors', async ({
     page,
   }) => {
     test.setTimeout(300_000);
-    expect(SWEEP_TARGETS).toHaveLength(83);
-    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(83);
+    expect(SWEEP_TARGETS).toHaveLength(86);
+    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(86);
     expect(Object.keys(parity.routes).sort()).toEqual(
       localeRoutes().sort()
     );
@@ -225,7 +225,7 @@ test.describe('golden parity vs the distilled build oracle (R27, ADR-6)', () => 
     test(`parity: every ${locale} page matches the oracle fixture`, async ({ page }) => {
       test.setTimeout(300_000);
       const routes = localeRoutes().filter((route) => route.startsWith(`/${locale}/`));
-      expect(routes).toHaveLength(27);
+      expect(routes).toHaveLength(28);
 
       for (const route of routes) {
         const expected = parity.routes[route];

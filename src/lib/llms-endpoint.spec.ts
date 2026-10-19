@@ -18,12 +18,13 @@ describe('llmsData() against src/data/content', () => {
     ]);
   });
 
-  it('exposes the curated members and keeps all 11 projects reachable', () => {
-    expect(data.projects).toHaveLength(11);
+  it('exposes the curated members and keeps all 12 projects reachable', () => {
+    expect(data.projects).toHaveLength(12);
     const projectSlugs = data.projects.map((p) => p.slug);
     const members = data.departments.flatMap((dept) => dept.projects).map((p) => p.slug);
-    expect(members).toHaveLength(7);
-    expect(new Set(members).size).toBe(7);
+    expect(members).toHaveLength(8);
+    expect(new Set(members).size).toBe(8);
+    expect(members).toContain('ggufbench');
     const annexes = ['bible-text-analysis', 'product-offers', 'rustcut', 'spring-boot-casino'];
     for (const annex of annexes) {
       expect(members).not.toContain(annex);
@@ -67,7 +68,7 @@ describe('GET-ready llms.txt content (canonical data)', () => {
     expect(text).toContain('- [Q Inspections](https://jordimp.net/en/departments/inspections/)');
     expect(text).toContain('- [B Front Desk](https://jordimp.net/en/departments/front-desk/)');
     expect(text).toContain(
-      '- [Project case pages](https://jordimp.net/en/projects/<slug>/) — one per project, 11 total',
+      '- [Project case pages](https://jordimp.net/en/projects/<slug>/) — one per project, 12 total',
     );
     expect(text).not.toContain('.html');
   });
@@ -94,11 +95,26 @@ describe('GET-ready llms.txt content (canonical data)', () => {
 describe('GET-ready llms-full.txt content (canonical data)', () => {
   const text = buildLlmsFullTxt(data);
 
-  it('lists one repo line per project — 11 total', () => {
+  it('lists one repo line per project — 12 total', () => {
     const repos = text.split('## All repos')[1].split('## Career ledger')[0].trim().split('\n');
-    expect(repos).toHaveLength(11);
+    expect(repos).toHaveLength(12);
     expect(repos[0]).toContain('- CodebaseRAG (2026): Hexagonal RAG over your own codebase');
+    expect(repos.at(-1)).toContain(
+      '- ggufbench (2026): An agentic benchmark for local GGUF models',
+    );
     expect(text).toContain('  - CodebaseRAG (2026): Hexagonal RAG over your own codebase, with a deterministic, eval-first core: ingest, query, and CI-gated retrieval evals. Stack: Python 3.13, FastAPI, pgvector, Qdrant, Ollama, Langfuse, mypy strict. [repo](https://github.com/jordimarsal/codebaserag)');
+  });
+
+  it('lists ggufbench second in the F1 Tooling & Platform block', () => {
+    const toolingBlock = text
+      .split('## F1 — Tooling & Platform')[1]
+      .split('## Q — Inspections')[0];
+    const projects = toolingBlock
+      .split('\n')
+      .filter((line) => line.startsWith('  - '));
+    expect(projects).toHaveLength(4);
+    expect(projects[1]).toContain('  - ggufbench (2026): An agentic benchmark for local GGUF models');
+    expect(projects[1]).toContain('[repo](https://github.com/jordimarsal/ggufbench)');
   });
 
   it('keeps the spike section structure', () => {

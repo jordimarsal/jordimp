@@ -96,6 +96,14 @@ export const CASE_MOTIFS: Record<string, string> = {
   <polygon class="cm-line" points="66,23 108,45 66,67 24,45"/>
   <polygon class="cm-y" points="66,10 108,32 66,54 24,32"/>
 </svg>`,
+  ggufbench: `<svg class="b-svg" viewBox="0 0 132 96" aria-hidden="true">
+  <line class="cm-line" x1="12" y1="82" x2="120" y2="82"/>
+  <rect class="cm-ink" x="20" y="56" width="16" height="26"/>
+  <rect class="cm-ink" x="44" y="42" width="16" height="40"/>
+  <rect class="cm-y" x="68" y="24" width="16" height="58"/>
+  <rect class="cm-ink" x="92" y="46" width="16" height="36"/>
+  <rect class="cm-ink" x="16" y="50" width="96" height="4"/>
+</svg>`,
 };
 
 export function caseMotif(slug: string): string {
