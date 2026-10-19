@@ -102,7 +102,7 @@ curl -s https://jordimp.net/en/ | grep -F 'google-site-verification'
    - **Expected:** `HTTP/2 200`.
 3. Coverage re-check (after Google has crawled, ≥ a few days later):
    **Sitemaps** → open the submitted entry → compare **Discovered pages**
-   against the 80-page site matrix (63 locale routes + roots; the route
+   against the 86-page site matrix (84 locale routes + roots; the route
    census lives in `npm run qa:content`). Expected: no unexpected exclusions;
    `Pages` → **Why pages aren't indexed** shows only intentional
    `noindex`-adjacent reasons (none expected on canonical routes).

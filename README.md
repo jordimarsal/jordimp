@@ -10,19 +10,20 @@ domain, auto TLS).
 
 ## Status
 
-**v0.3.0 — 23/24 planned features shipped** (F1–F23; F24 spec'd and queued,
+**24/24 planned features shipped** (F1–F24; latest release tag `v0.3.0` at 19/19,
 ledger in the git history): Astro scaffold + trilingual typed content, SEO /
 llms.txt / analytics, GitHub Pages deploy, QA gates (Playwright · Lighthouse
 CI · parity oracle), the **Jordimp & Co.** building redesign, blog, contact
-desk, the harness skills highlight, and the **ask-api concierge in
-production** — running its own fine-tuned 2B gen model (see Services).
+desk, the harness skills highlight, the **ask-api concierge in
+production** — running its own fine-tuned 2B gen model (see Services) — and
+**ggufbench** showcased on the tooling floor.
 
 ## CI/CD — QA-gated deploys
 
 Every push to `main` runs the QA pipeline in `.github/workflows/`; **deploys only
 happen if all three jobs pass** (`deploy.needs: qa`):
 
-- **e2e** — Playwright suite: 83-page sweep (splash, 404, 81 locale routes) with
+- **e2e** — Playwright suite: 86-page sweep (splash, 404, 84 locale routes) with
   zero console errors + golden parity fixtures (titles, copy, plates, flags),
   interaction/behavior specs, < 120 s
 - **content** — census + trilingual QA against `src/data`, no-phone scan,
