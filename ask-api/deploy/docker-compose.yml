@@ -31,6 +31,7 @@ services:
       - ${LLAMA_MODELS_DIR}:/models:ro
     environment:
       NVIDIA_VISIBLE_DEVICES: "1"
+      LLAMA_ARG_CHAT_TEMPLATE_KWARGS: '{"enable_thinking":false}'
     deploy:
       resources:
         reservations:

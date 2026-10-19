@@ -8,7 +8,7 @@ Operational guide for the production deployment at `https://api.jordimp.net`
 | Service | Image (digest-pinned) | Role |
 |---|---|---|
 | `ask-embed` | ghcr.io/ggml-org/llama.cpp server-cuda | nomic-embed-text-v1.5 Q4_K_M, embeddings (`:8080`, GPU 1) |
-| `ask-gen` | ghcr.io/ggml-org/llama.cpp server-cuda | Qwen3-4B-Instruct-2507 Q4_K_M, chat (`:8080`, GPU 1) |
+| `ask-gen` | ghcr.io/ggml-org/llama.cpp server-cuda | **porter-qwen3.5-2b-ft Q4_K_M** (LoRA fine-tune of Qwen/Qwen3.5-2B — see `../finetune/README.md`), chat (`:8080`, GPU 1, thinking disabled via `LLAMA_ARG_CHAT_TEMPLATE_KWARGS`) |
 | `ask-api` | built from `../Dockerfile` | FastAPI service; entrypoint waits → ingests → serves (`:8000`, host-only bind) |
 | `cloudflared` | cloudflare/cloudflared | outbound tunnel connector (token in `.env`), CGNAT-safe |
 
