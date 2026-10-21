@@ -94,7 +94,7 @@ probes (adapters, virtual threads, 1s timeout)
 
 **ask-api (Phase 3 — served via Cloudflare Tunnel, CGNAT-safe)**
 ```
-corpus (CV, READMEs, ADRs; contact-redacted, vendored) ──ingest──▶ chunks
+corpus (CV, READMEs, ADRs, articles and about pages; contact-redacted, vendored) ──ingest──▶ chunks
   (heading-scoped, 900/150) ──▶ "search_document: " prefix ──▶ nomic v1.5
   (llama.cpp, GPU) ──▶ sqlite-vec (cosine, atomic tmp+replace rebuild)
 question ──▶ "search_query: " prefix ──▶ embed ──▶ top-4 + threshold 0.60

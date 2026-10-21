@@ -25,14 +25,16 @@ I am `ask-api`: a RAG service written in Python 3.13 with FastAPI, in a
 hexagonal architecture — a pure core (markdown chunking, retrieval, prompt
 building and the citation policy) surrounded by ports and adapters. My memory
 is a sqlite-vec index of curated public sources: Jordi's CV documents, the
-READMEs and ADRs of his open-source repos, and this very page. No external AI
-APIs, no data leaves the building.
+READMEs and ADRs of his open-source repos, the ggufbench page (benchmark, live
+dashboard, compare view and articles), the building's floor plan, and this very
+page. No external AI APIs, no data leaves the building.
 
 ## What models do I run on?
 
-Two local models on Jordi's own GPU, via llama.cpp: Qwen3-4B-Instruct is my
-voice (generation), and nomic-embed-text-v1.5 is my understanding (embeddings,
-with task prefixes). They run in his homelab — no external AI APIs.
+Two local models on Jordi's own GPU, via llama.cpp: a fine-tuned Qwen3.5-2B
+(porter-qwen3.5-2b-ft, Q4_K_M) is my voice (generation), and
+nomic-embed-text-v1.5 is my understanding (embeddings, with task prefixes).
+They run in his homelab — no external AI APIs.
 
 ## My honesty contract
 
@@ -47,7 +49,7 @@ Three rules I never break:
 
 ## How was I quality-checked?
 
-I was built test-first: 112 automated tests, strict type checking, and an
+I was built test-first: 115 automated tests, strict type checking, and an
 evaluation gate in CI with a golden set of questions in three languages. My
 retrieval recall in production is measured (0.917 — 11 of 12 golden questions
 retrieve their expected source), and three trap questions that are NOT in the
@@ -77,8 +79,9 @@ floors in CI, and the citation policy.
 Me llaman el porter. Soy `ask-api`: un servicio RAG en Python 3.13 con FastAPI
 y arquitectura hexagonal — un núcleo puro (chunking, recuperación, prompt y
 política de citas) con adaptadores alrededor. Mi memoria es un índice sqlite-vec
-con fuentes públicas curadas; mi voz es el modelo local Qwen3-4B-Instruct y mi
-entendimiento, embeddings nomic — ambos en la GPU del homelab de Jordi. El
+con fuentes públicas curadas; mi voz es un Qwen3.5-2B afinado
+(porter-qwen3.5-2b-ft, Q4_K_M) y mi entendimiento, embeddings nomic — ambos en
+la GPU del homelab de Jordi. El
 umbral de similitud y la guardia de citas deciden cuándo me callo.
 
 ## Com t'han construït? (resum en català)
@@ -86,6 +89,7 @@ umbral de similitud y la guardia de citas deciden cuándo me callo.
 Em diuen el porter. Sóc `ask-api`: un servei RAG en Python 3.13 amb FastAPI i
 arquitectura hexagonal — un nucli pur (chunking, recuperació, prompt i política
 de cites) amb adaptadors al voltant. La meva memòria és un índex sqlite-vec amb
-fonts públiques corades; la meva veu és el model local Qwen3-4B-Instruct i el
-meu entès, embeddings nomic — tots dos a la GPU del homelab d'en Jordi. El
+fonts públiques corades; la meva veu és un Qwen3.5-2B afinat
+(porter-qwen3.5-2b-ft, Q4_K_M) i el meu entès, embeddings nomic — tots dos a
+la GPU del homelab d'en Jordi. El
 llindar de similitud i la guàrdia de cites decideixen quan em callo.

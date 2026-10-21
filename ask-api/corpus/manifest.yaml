@@ -28,11 +28,17 @@ sources:
     title: "Redis Toolkit — README"
   - path: files/repos/harness.md
     title: "Harness — README"
+  - path: files/repos/ggufbench.md
+    title: "ggufbench — README and scoreboard"
   - path: files/repos/interview-simulator.md
     title: "Interview Simulator — README"
   - path: files/repos/ask-api.md
     title: "ask-api — README"
+  - path: files/articles/which-local-model-for-coding-agents.md
+    title: "Article — Which local model should a coding agent run? (EN; ES and CA routes)"
   - path: files/about/porter.md
     title: "The Concierge — who I am and how I was built"
   - path: files/about/edifici.md
     title: "The Building — every floor, and the three that were never built"
+  - path: files/about/ggufbench.md
+    title: "ggufbench — the benchmark, the live dashboard, the compare view and the articles"

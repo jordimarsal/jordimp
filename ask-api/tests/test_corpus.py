@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 import yaml
 
@@ -119,3 +121,17 @@ def test_check_freshness_mismatch() -> None:
 def test_check_freshness_match() -> None:
     meta = make_meta("abc")
     assert check_freshness("abc", meta) == Ok(meta)
+
+
+def test_vendored_corpus_covers_ggufbench() -> None:
+    root = Path(__file__).resolve().parents[1]
+    files = read_sources(load_manifest(root / "corpus"))
+    by_path = {item.source.path: item.text for item in files}
+
+    assert "files/repos/ggufbench.md" in by_path
+    assert "files/articles/which-local-model-for-coding-agents.md" in by_path
+    page = by_path["files/about/ggufbench.md"]
+    assert "jordimarsal.github.io/ggufbench" in page
+    assert "compare.html" in page
+    assert "which-local-model-for-coding-agents" in page
+    assert "sixteen-models-one-gate" in page

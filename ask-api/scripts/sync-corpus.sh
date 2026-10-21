@@ -39,9 +39,16 @@ for adr in "$PROJECTS/kafka-adapter-telemetry/docs/adr/"*.md; do
 done
 copy "$PROJECTS/redis-toolkit/README.md"            repos/redis-toolkit.md
 copy "$PROJECTS/harness/README.md"                  repos/harness.md
+copy "$PROJECTS/ggufbench/README.md"                repos/ggufbench.md
 copy "$PROJECTS/interview-simulator/README.md"      repos/interview-simulator.md
 copy "$ASK_DIR/README.md"                           repos/ask-api.md
+# The long-form ggufbench article, canonical English source. The ES/CA versions
+# are routes of the same piece and are referenced (with their titles) by
+# corpus-src/ggufbench.md; keeping one copy avoids tripling every article chunk.
+copy "$PROJECTS/ggufbench/docs/writeups/which-local-model-for-coding-agents.md" \
+     articles/which-local-model-for-coding-agents.md
 mkdir -p "$DEST/about"
 copy "$ASK_DIR/corpus-src/porter.md"                  about/porter.md
 copy "$ASK_DIR/corpus-src/edifici.md"                 about/edifici.md
+copy "$ASK_DIR/corpus-src/ggufbench.md"               about/ggufbench.md
 echo "Corpus synced to corpus/files"

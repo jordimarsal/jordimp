@@ -54,9 +54,12 @@ question ──────► │ chunking · retrieval (threshold) · prompt �
 ## Corpus
 
 `corpus/manifest.yaml` is the single source of what the assistant may answer
-from: the three public CV documents, READMEs/ADRs of showcased repos, its own
-README and the concierge's self-description (~229 chunks at 900 chars / 150
-overlap, heading-scoped — and headings are part of the embedded text).
+from: the three public CV documents, READMEs/ADRs of showcased repos, the
+ggufbench README and its long-form article, the ggufbench page (benchmark,
+live dashboard, compare view and articles), its own README, the concierge's
+self-description and the building floor plan with its poetry (~297 chunks at
+900 chars / 150 overlap, heading-scoped — and headings are part of the
+embedded text).
 
 `scripts/sync-corpus.sh` re-vendors the files from the workspace **and redacts
 contact data** (email/phone → `[contact: jordimp.net]`). Private material
@@ -70,7 +73,7 @@ Local (deterministic, no GPU needed):
 uv sync
 ASK_EMBED_BACKEND=hash ASK_GEN_BACKEND=echo uv run ask-api ingest
 ASK_EMBED_BACKEND=hash ASK_GEN_BACKEND=echo uv run ask-api check
-uv run pytest            # 108 tests
+uv run pytest            # 115 tests
 ```
 
 With local models (llama-server on `:8080` embeddings, `:8081` generation):
@@ -98,16 +101,18 @@ must stay below the threshold (honest refusals). Run it:
 ASK_EMBED_BACKEND=hash ASK_GEN_BACKEND=echo uv run ask-api eval
 ```
 
-- hash mode (CI): floor `0.70`, measured baseline `0.75` — the deterministic
-  embedder is lexical, so this gate is for **regression detection**.
-- real mode (nomic): floor `floor_real` (`0.80`, calibrated at first real run)
-  — `scripts/eval.sh --real` runs the same gate against the GPU servers.
+- hash mode (CI): floor `0.70`, measured baseline `0.933` (28/30) — the
+  deterministic embedder is lexical, so this gate is for **regression
+  detection**; the two misses are stopword collisions, not missing content.
+- real mode (nomic): floor `floor_real` (`0.90`) — measured `1.000` (30/30)
+  after adding ggufbench; `scripts/eval.sh --real` runs the same gate against
+  the GPU servers.
 
 ## Spec & process
 
 Built with Spec Driven Development (harness): requirements R1–R28, design and
 tasks T1–T24 in `harness/specs/ask-api/` (local, gitignored by convention).
-Quality gates: `pytest` (108 tests), `ruff`, `black`, `mypy --strict`.
+Quality gates: `pytest` (115 tests), `ruff`, `black`, `mypy --strict`.
 
 ## Privacy
 

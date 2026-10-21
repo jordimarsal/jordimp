@@ -31,8 +31,8 @@ floor plate code.
   and Redis Toolkit.
 - **F1 — Tooling & Platform** (CA: Eines i Plataforma; ES: Herramientas y
   Plataforma). The workshop floor — a multi-agent SDD harness, CLIs that do
-  one thing well, tools kept deliberately small. Projects: Harness, MD +
-  Mermaid to PDF, and MCP Transparent PNG.
+  one thing well, tools kept deliberately small. Projects: Harness, ggufbench,
+  MD + Mermaid to PDF, and MCP Transparent PNG.
 - **Q — Inspections** (CA: Inspecció; ES: Inspección). The quality wall — the
   ITE certificate metaphor: Lighthouse gauges, test counters, bundle weight
   and dependency census, audited on a schedule, dated and signed, so nothing

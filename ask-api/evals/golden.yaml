@@ -106,6 +106,51 @@ questions:
     expect:
       - files/about/edifici.md
       - files/about/porter.md
+  # ggufbench (F24 corpus coverage — project, dashboard, compare, articles)
+  - q: "Which four dimensions does ggufbench measure: speed, tool-calling, code generation and agent work?"
+    lang: en
+    expect:
+      - files/repos/ggufbench.md
+      - files/about/ggufbench.md
+  - q: "Where is the live ggufbench dashboard and what does it show?"
+    lang: en
+    expect:
+      - files/about/ggufbench.md
+      - files/repos/ggufbench.md
+  - q: "How do I compare two models head-to-head in ggufbench?"
+    lang: en
+    expect:
+      - files/about/ggufbench.md
+      - files/repos/ggufbench.md
+  - q: "Which article explains which local model a coding agent should run?"
+    lang: en
+    expect:
+      - files/articles/which-local-model-for-coding-agents.md
+      - files/about/ggufbench.md
+  - q: "¿Dónde está el cuadro de mando en vivo de ggufbench?"
+    lang: es
+    expect:
+      - files/about/ggufbench.md
+      - files/repos/ggufbench.md
+  - q: "¿Qué mide ggufbench y cuántas tareas tiene el set actual?"
+    lang: es
+    expect:
+      - files/repos/ggufbench.md
+      - files/about/ggufbench.md
+  - q: "On és el tauler en viu de ggufbench i què hi puc veure?"
+    lang: ca
+    expect:
+      - files/about/ggufbench.md
+      - files/repos/ggufbench.md
+  - q: "Com comparo dos models cara a cara a ggufbench?"
+    lang: ca
+    expect:
+      - files/about/ggufbench.md
+      - files/repos/ggufbench.md
+  - q: "Quin article company explica com es va triar el model del porter?"
+    lang: ca
+    expect:
+      - files/about/ggufbench.md
 off_corpus:
   - q: "What is the capital of France?"
     lang: en
