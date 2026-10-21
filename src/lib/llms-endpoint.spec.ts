@@ -83,7 +83,7 @@ describe('GET-ready llms.txt content (canonical data)', () => {
   it('links the blog index and both posts from the key pages (R18)', () => {
     expect(text).toContain('- [Blog](https://jordimp.net/en/blog/)');
     expect(text).toContain(
-      '- [Blog: Which local model should a coding agent run? Six GGUFs and a Strata engine, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/)',
+      '- [Blog: Which local model should a coding agent run? Seven GGUFs and a Strata engine, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/)',
     );
     expect(text).toContain(
       '- [Blog: RAG without an eval gate is a demo.](https://jordimp.net/en/blog/rag-eval-gate/)',
@@ -135,7 +135,7 @@ describe('GET-ready llms-full.txt content (canonical data)', () => {
     const blog = text.split('## Blog')[1].split('## Pages')[0];
     expect(blog).toContain('- [Blog](https://jordimp.net/en/blog/)');
     expect(blog).toContain(
-      '- [Blog: Which local model should a coding agent run? Six GGUFs and a Strata engine, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/)',
+      '- [Blog: Which local model should a coding agent run? Seven GGUFs and a Strata engine, one harness, receipts](https://jordimp.net/en/blog/which-local-model-for-coding-agents/)',
     );
     expect(blog).toContain(
       '- [Blog: RAG without an eval gate is a demo.](https://jordimp.net/en/blog/rag-eval-gate/)',

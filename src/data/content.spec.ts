@@ -808,7 +808,7 @@ describe('blog posts data (F15)', () => {
 
   it('gives the ggufbench post trilingual metadata, the measured date and the repo about URL (R10, R14, R15)', () => {
     expect(gguf.date).toBe('2026-10-13');
-    expect(gguf.revision).toBe('REV B');
+    expect(gguf.revision).toBe('REV C');
     expect(gguf.about).toBe('https://github.com/jordimarsal/ggufbench');
     expect(essay.about).toBe('https://github.com/jordimarsal/codebaserag');
     for (const lang of LOCALES) {
@@ -1024,11 +1024,11 @@ describe('ggufbench post data (F15, fact boundary R13)', () => {
 
   it('pins the exact English h1 (R13)', () => {
     expect(gguf.title.en).toBe(
-      'Which local model should a coding agent run? Six GGUFs and a Strata engine, one harness, receipts',
+      'Which local model should a coding agent run? Seven GGUFs and a Strata engine, one harness, receipts',
     );
   });
 
-  it('carries the scoreboard as a typed table with the source header and the ten measured rows (R12)', () => {
+  it('carries the scoreboard as a typed table with the source header and the eleven measured rows (R12)', () => {
     const tables = gguf.sections.flatMap((section) => section.blocks).filter((block) => block.kind === 'table');
     expect(tables).toHaveLength(1);
     const table = tables[0];
@@ -1041,9 +1041,10 @@ describe('ggufbench post data (F15, fact boundary R13)', () => {
       ['qwen3.8-27b-ud-q3_k_xl', 'off', '100% ±0', '79% ±4', '90% ±1', '36ms', '0.82 ±1'],
       ['ornith-1.5-35b-a3b-apex-mtp-quality', 'off ★', '100% ±0', '75% ±2', '92% ±1', '32ms', '0.82 ±1'],
       ['qwen3.8-27b-heretic-q4_k_m', 'off ★', '100% ±0', '86% ±2', '92% ±2', '85ms', '0.81 ±1'],
+      ['qwen3.8-27b-neo-coder-max-mtp q4_k_s', 'off', '100% ±0', '79% ±2', '91% ±1', '46ms', '0.81 ±0'],
       ['qwen3.8-27b-ud-q3_k_xl', 'on', '94% ±0', '93% ±1 (1 excl.)', '96% ±1', '629ms', '0.80 ±0'],
       ['gemma-4-26b-a4b-it-ud-q5_k_xl', 'off ★', '89% ±0', '86% ±1', '87% ±2', '33ms', '0.80 ±0'],
-      ['strata-iq3_xxs (strata engine)', 'off ★', '91% ±6', '85% ±1', '92% ±1', '45ms', '0.80 ±1'],
+      ['strata-iq3_xxs (strata engine)', 'off ★', '91% ±3', '84% ±1', '91% ±2', '40ms', '0.80 ±1'],
       ['qwen3.8-27b-heretic-q4_k_m', 'on', '94% ±0', '90% ±2', '97% ±1', '1060ms', '0.80 ±0'],
     ]);
   });
@@ -1063,7 +1064,6 @@ describe('ggufbench post data (F15, fact boundary R13)', () => {
       '72 code tasks',
       '72 multi-step agent tasks',
       '32K output budget',
-      '2026-10-14/15',
       '1512 code runs',
       'OFF excludes 6 and ON excludes 101',
       '280–1060 ms',
@@ -1071,6 +1071,11 @@ describe('ggufbench post data (F15, fact boundary R13)', () => {
       '79% to 93%',
       '91% and 100%',
       '47% and 87%',
+      '0.920',
+      '0.923',
+      '48 tok/s',
+      '19.2 GB',
+      '31 tokens',
     ]) {
       expect(en, fact).toContain(fact);
     }
@@ -1085,6 +1090,8 @@ describe('ggufbench post data (F15, fact boundary R13)', () => {
 
   it('carries exactly the EN outbound URLs in the ES and CA bodies (R13)', () => {
     expect(outboundUrls('en')).toEqual([
+      'https://github.com/Helldez/BigMoeOnEdge',
+      'https://github.com/Helldez/BigMoeOnEdge/issues/334',
       'https://github.com/jordimarsal/ggufbench',
       'https://github.com/jordimarsal/ggufbench',
       'https://jordimarsal.github.io/ggufbench/',

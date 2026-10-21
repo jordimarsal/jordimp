@@ -1326,9 +1326,10 @@ const GGUF_SCOREBOARD = {
     ['qwen3.8-27b-ud-q3_k_xl', 'off', '100% ±0', '79% ±4', '90% ±1', '36ms', '0.82 ±1'],
     ['ornith-1.5-35b-a3b-apex-mtp-quality', 'off ★', '100% ±0', '75% ±2', '92% ±1', '32ms', '0.82 ±1'],
     ['qwen3.8-27b-heretic-q4_k_m', 'off ★', '100% ±0', '86% ±2', '92% ±2', '85ms', '0.81 ±1'],
+    ['qwen3.8-27b-neo-coder-max-mtp q4_k_s', 'off', '100% ±0', '79% ±2', '91% ±1', '46ms', '0.81 ±0'],
     ['qwen3.8-27b-ud-q3_k_xl', 'on', '94% ±0', '93% ±1 (1 excl.)', '96% ±1', '629ms', '0.80 ±0'],
     ['gemma-4-26b-a4b-it-ud-q5_k_xl', 'off ★', '89% ±0', '86% ±1', '87% ±2', '33ms', '0.80 ±0'],
-    ['strata-iq3_xxs (strata engine)', 'off ★', '91% ±6', '85% ±1', '92% ±1', '45ms', '0.80 ±1'],
+    ['strata-iq3_xxs (strata engine)', 'off ★', '91% ±3', '84% ±1', '91% ±2', '40ms', '0.80 ±1'],
     ['qwen3.8-27b-heretic-q4_k_m', 'on', '94% ±0', '90% ±2', '97% ±1', '1060ms', '0.80 ±0'],
   ],
 } as const;
@@ -1577,11 +1578,11 @@ export const POSTS: readonly PostContent[] = [
   {
     slug: 'which-local-model-for-coding-agents',
     date: '2026-10-13',
-    revision: 'REV B',
+    revision: 'REV C',
     dateLabel: { en: 'FILED', es: 'REGISTRADO', ca: 'REGISTRAT' },
     title: {
-      en: 'Which local model should a coding agent run? Six GGUFs and a Strata engine, one harness, receipts',
-      es: '¿Qué modelo local debería ejecutar un agente de código? Seis GGUFs y un motor Strata, un harness, recibos',
+      en: 'Which local model should a coding agent run? Seven GGUFs and a Strata engine, one harness, receipts',
+      es: '¿Qué modelo local debería ejecutar un agente de código? Siete GGUFs y un motor Strata, un harness, recibos',
       ca: 'Quin model local hauria d’executar un agent de codi? Sis GGUFs i un motor Strata, un harness, rebuts',
     },
     description: {
@@ -1590,9 +1591,9 @@ export const POSTS: readonly PostContent[] = [
       ca: 'Quin GGUF hauria de carregar un agent de codi? Sis models sota llama.cpp i un sota el motor Strata, un harness, quatre dimensions — eines, codi, agent i velocitat — mesurades en dues RTX 5080, amb els rebuts de cada crida.',
     },
     lead: {
-      en: 'One harness, same conditions, four dimensions, and the raw receipts of every call — this round, six GGUFs under llama.cpp plus one model under the Strata engine, each in both thinking modes.',
-      es: 'Un harness, las mismas condiciones, cuatro dimensiones y los recibos en bruto de cada llamada — esta ronda, seis GGUFs bajo llama.cpp y un modelo bajo el motor Strata, cada uno en los dos modos de thinking.',
-      ca: 'Un harness, les mateixes condicions, quatre dimensions i els rebuts en brut de cada crida — aquesta ronda, sis GGUFs sota llama.cpp i un model sota el motor Strata, cadascun en els dos modes de thinking.',
+      en: 'One harness, same conditions, four dimensions, and the raw receipts of every call — this round, seven GGUFs under llama.cpp plus one model under the Strata engine, each in both thinking modes.',
+      es: 'Un harness, las mismas condiciones, cuatro dimensiones y los recibos en bruto de cada llamada — esta ronda, siete GGUFs bajo llama.cpp y un modelo bajo el motor Strata, cada uno en los dos modos de thinking.',
+      ca: 'Un harness, les mateixes condicions, quatre dimensions i els rebuts en brut de cada crida — aquesta ronda, set GGUFs sota llama.cpp i un model sota el motor Strata, cadascun en els dos modes de thinking.',
     },
     sections: [
       {
@@ -1674,9 +1675,9 @@ export const POSTS: readonly PostContent[] = [
           {
             kind: 'paragraph',
             html: {
-              en: 'The current pool runs set v5: 18 tool tasks, 72 code tasks across four languages (32 easy, 20 hard, 20 expert), 72 multi-step agent tasks (13 of them multi-file projects) and a 32K output budget for code. The rows below were measured on the night of 2026-10-14/15. The top of the table:',
-              es: 'El pool actual ejecuta el conjunto v5: 18 tareas de herramientas, 72 de código en cuatro lenguajes (32 fáciles, 20 difíciles, 20 expertas), 72 tareas de agente multipaso (13 de ellas proyectos de varios archivos) y 32K de presupuesto de salida para el código. Las filas de abajo se midieron la noche del 2026-10-14/15. La parte alta de la tabla:',
-              ca: 'El pool actual executa el conjunt v5: 18 tasques d’eines, 72 de codi en quatre llenguatges (32 fàcils, 20 difícils, 20 expertes), 72 tasques d’agent multipas (13 de les quals projectes de diversos fitxers) i 32K de pressupost de sortida per al codi. Les files de sota es van mesurar la nit del 2026-10-14/15. La part alta de la taula:',
+              en: 'The current pool runs set v5: 18 tool tasks, 72 code tasks across four languages (32 easy, 20 hard, 20 expert), 72 multi-step agent tasks (13 of them multi-file projects) and a 32K output budget for code. The rows below are the current pool, task set v5, generated from the live scoreboard, so they are never a snapshot of a night that has passed.',
+              es: 'El pool actual ejecuta el conjunto v5: 18 tareas de herramientas, 72 de código en cuatro lenguajes (32 fáciles, 20 difíciles, 20 expertas), 72 tareas de agente multipaso (13 de ellas proyectos de varios archivos) y 32K de presupuesto de salida para el código. Las filas de abajo son el pool actual, conjunto v5, generadas desde el marcador en vivo, así que nunca son una foto de una noche que ya pasó.',
+              ca: 'El pool actual executa el conjunt v5: 18 tasques d’eines, 72 de codi en quatre llenguatges (32 fàcils, 20 difícils, 20 expertes), 72 tasques d’agent multipas (13 de les quals projectes de diversos fitxers) i 32K de pressupost de sortida per al codi. Les files de sota són el pool actual, conjunt v5, generades des del marcador viu, de manera que mai no són una foto d’una nit que ja ha passat.',
             },
           },
           { kind: 'table', head: [...GGUF_SCOREBOARD.head], rows: GGUF_SCOREBOARD.rows.map((row) => [...row]) },
@@ -1691,9 +1692,9 @@ export const POSTS: readonly PostContent[] = [
           {
             kind: 'paragraph',
             html: {
-              en: 'Three things stood out.',
-              es: 'Tres cosas destacaron.',
-              ca: 'Tres coses van destacar.',
+              en: 'Four things stood out.',
+              es: 'Cuatro cosas destacaron.',
+              ca: 'Quatre coses van destacar.',
             },
           },
           {
@@ -1729,9 +1730,9 @@ export const POSTS: readonly PostContent[] = [
           {
             kind: 'paragraph',
             html: {
-              en: 'Where it does buy something is the hard code tier: UD-Q3 climbs from 79% to 93% on code overall (92% hard, 91% expert), Ornith +10 points over its own OFF, strata +6, Heretic +4 — and Heretic’s agent loop reaches 97%, the fleet’s best. On the tasks that need it, thinking is worth ten times the wait; everywhere else it is a tax with no visible return.',
-              es: 'Donde sí compra algo es en el nivel difícil de código: el UD-Q3 sube del 79% al 93% en el código global (92% difícil, 91% experto), el Ornith +10 puntos sobre su propio off, el Strata +6, el Heretic +4 — y el bucle de agente del Heretic llega al 97%, el mejor de la flota. En las tareas que lo necesitan, el thinking vale diez veces la espera; en el resto, es un impuesto sin retorno visible.',
-              ca: 'On sí que compra alguna cosa és al nivell difícil de codi: l’UD-Q3 puja del 79% al 93% en el codi global (92% difícil, 91% expert), l’Ornith +10 punts sobre el seu propi off, l’Strata +6, l’Heretic +4 — i el bucle d’agent de l’Heretic arriba al 97%, el millor de la flota. A les tasques que ho necessiten, el thinking val deu vegades l’espera; a la resta, és un impost sense retorn visible.',
+              en: 'Where it does buy something is the hard code tier: UD-Q3 climbs from 79% to 93% on code overall (92% hard, 91% expert), Ornith +10 points over its own OFF, strata +7, Heretic +4 — and Heretic’s agent loop reaches 97%, the fleet’s best. On the tasks that need it, thinking is worth ten times the wait; everywhere else it is a tax with no visible return.',
+              es: 'Donde sí compra algo es en el nivel difícil de código: el UD-Q3 sube del 79% al 93% en el código global (92% difícil, 91% experto), el Ornith +10 puntos sobre su propio off, el Strata +7, el Heretic +4 — y el bucle de agente del Heretic llega al 97%, el mejor de la flota. En las tareas que lo necesitan, el thinking vale diez veces la espera; en el resto, es un impuesto sin retorno visible.',
+              ca: 'On sí que compra alguna cosa és al nivell difícil de codi: l’UD-Q3 puja del 79% al 93% en el codi global (92% difícil, 91% expert), l’Ornith +10 punts sobre el seu propi off, l’Strata +7, l’Heretic +4 — i el bucle d’agent de l’Heretic arriba al 97%, el millor de la flota. A les tasques que ho necessiten, el thinking val deu vegades l’espera; a la resta, és un impost sense retorn visible.',
             },
           },
           {
@@ -1749,6 +1750,35 @@ export const POSTS: readonly PostContent[] = [
               en: 'With thinking off the entire fleet lands between 91% and 100% on the easy tier, while hard and expert live between 47% and 87%. Those two levels are where the separation is — especially the expert ones, built from multi-bug debugging with strict output contracts (return the full corrected file, exact rounding, defensive copies). The scoreboard folds all three levels into one code column; the per-level breakdown it records (<code>by_level</code>) is where the arguments happen.',
               es: 'Con thinking off, toda la flota aterriza entre el 91% y el 100% en el nivel fácil, mientras que difícil y experto viven entre el 47% y el 87%. La separación está en esos dos niveles — sobre todo en las expertas, construidas con depuración de varios errores y contratos de salida estrictos (devolver el archivo completo corregido, redondeo exacto, copias defensivas). El marcador funde los tres niveles en una columna de código; el desglose por nivel que registra (<code>by_level</code>) es donde vive la discusión.',
               ca: 'Amb thinking off, tota la flota aterra entre el 91% i el 100% al nivell fàcil, mentre que difícil i expert viuen entre el 47% i el 87%. La separació és en aquests dos nivells — sobretot a les expertes, construïdes amb depuració de diversos errors i contractes de sortida estrictes (tornar el fitxer complet corregit, arrodoniment exacte, còpies defensives). El marcador fon els tres nivells en una columna de codi; el desglossament per nivell que registra (<code>by_level</code>) és on viu la discussió.',
+            },
+          },
+          {
+            kind: 'subheading',
+            anchor: 'the-engine',
+            text: { en: 'The engine was not the variable', es: 'El motor no fue la variable', ca: 'El motor no va ser la variable' },
+          },
+          {
+            kind: 'paragraph',
+            html: {
+              en: 'I ran the same harness against a different engine, the community MoE streaming engine <a href="https://github.com/Helldez/BigMoeOnEdge">BigMoeOnEdge</a>, to see whether the engine decides the score. It did not: 0.920 against 0.923 on the same 72 agent tasks, same model, same quant, at the same throughput (48 tok/s against 47). For a 27B on two 5080s, streaming experts from NVMe is not the bottleneck.',
+              es: 'Ejecuté el mismo harness contra otro motor, el motor de streaming MoE de la comunidad <a href="https://github.com/Helldez/BigMoeOnEdge">BigMoeOnEdge</a>, para ver si el motor decide la puntuación. No lo hizo: 0.920 contra 0.923 en las mismas 72 tareas de agente, mismo modelo, mismo quant, y el mismo caudal (48 tok/s contra 47). Para un 27B en dos 5080, leer los expertos desde NVMe no es el cuello de botella.',
+              ca: 'Vaig executar el mateix harness contra un altre motor, el motor de streaming MoE de la comunitat <a href="https://github.com/Helldez/BigMoeOnEdge">BigMoeOnEdge</a>, per veure si el motor decideix la puntuació. No ho va fer: 0.920 contra 0.923 en les mateixes 72 tasques d’agent, mateix model, mateix quant i el mateix cabal (48 tok/s contra 47). Per a un 27B en dues 5080, llegir els experts des del NVMe no és el coll d’ampolla.',
+            },
+          },
+          {
+            kind: 'paragraph',
+            html: {
+              en: 'Two conditions, so the comparison is honest. The engine ran at a 16K context, because a 32K-wide prefill graph wants a 19.2 GB compute buffer and does not fit a 16 GB card. And it has no knob for the KV cache type, so the KV was the engine’s default rather than the q8_0 the rows above pin. The seed is a session parameter there, so it was set per run and the session reloaded.',
+              es: 'Dos condiciones, para que la comparación sea honesta. El motor corrió a 16K de contexto, porque un graph de prefill de 32K quiere un buffer de cómputo de 19.2 GB y no cabe en una tarjeta de 16 GB. Y no tiene mando para el tipo de caché KV, así que el KV fue el del motor y no el q8_0 que fijan las filas de arriba. La seed es un parámetro de sesión allí, así que se fijaba por run y se recargaba la sesión.',
+              ca: 'Dues condicions, perquè la comparació sigui honesta. El motor va córrer a 16K de context, perquè un graph de prefill de 32K demana un buffer de còmput de 19.2 GB i no cap en una targeta de 16 GB. I no té mando per al tipus de KV, de manera que el KV va ser el del motor i no el q8_0 que fixen les files de dalt. La seed és un paràmetre de sessió allà, així que s’ha fixat per run i s’ha recarregat la sessió.',
+            },
+          },
+          {
+            kind: 'paragraph',
+            html: {
+              en: 'What it did surface is a bug in that engine’s router hook. A generated turn that its chat parser cannot turn into text or a tool call comes back as an empty assistant message: 31 tokens generated, the turn dropped, and the episode carries on with a hole in it. Twelve of those in the three runs, and two bash tasks flip from pass to fail because of it. llama.cpp recovers where the other one drops the turn, so the same model and the same prompts produce no empty reply there. Filed with a backtrace: <a href="https://github.com/Helldez/BigMoeOnEdge/issues/334">issue #334</a>.',
+              es: 'Lo que sí destapó fue un bug en el router hook de ese motor. Un turno generado que su parser de chat no sabe convertir en texto ni en tool call vuelve como un mensaje vacío: 31 tokens generados, el turno se pierde y el episodio sigue con un agujero. Doce de esos en los tres runs, y dos tareas de bash pasan a fallar por eso. llama.cpp se recupera donde el otro pierde el turno, así que el mismo modelo y los mismos prompts no producen ninguna respuesta vacía allí. Reportado con backtrace: <a href="https://github.com/Helldez/BigMoeOnEdge/issues/334">issue #334</a>.',
+              ca: 'El que sí que va destapar és un bug al router hook d’aquest motor. Un torn generat que el seu parser de xat no sap convertir ni en text ni en tool call torna com un missatge buit: 31 tokens generats, el torn es perd i l’episodi continua amb un forat. Dotze d’aquests en les tres passades, i dues tasques de bash passen a fallar per això. llama.cpp es recupera on l’altre deixa anar el torn, de manera que el mateix model i les mateixes indicacions no produeixen cap resposta buida allà. Reportat amb backtrace: <a href="https://github.com/Helldez/BigMoeOnEdge/issues/334">issue #334</a>.',
             },
           },
         ],
@@ -1784,9 +1814,9 @@ export const POSTS: readonly PostContent[] = [
           {
             kind: 'paragraph',
             html: {
-              en: 'Treat close rows as ties. Ten rows inside five hundredths of a point is not a ranking, it is a group. I choose inside it by latency and by how a model behaves when a call fails, not by the third decimal of a score.',
-              es: 'Trata las filas cercanas como empates. Diez filas dentro de cinco centésimas no son una clasificación, son un grupo. Elijo dentro de él por latencia y por cómo se comporta un modelo cuando falla una llamada, no por el tercer decimal de una puntuación.',
-              ca: 'Tracta les files properes com a empats. Deu files dins de cinc centèsimes no són una classificació, són un grup. Trio dins seu per latència i per com es comporta un model quan falla una crida, no pel tercer decimal d’una puntuació.',
+              en: 'Treat close rows as ties. Ten rows inside five hundredths of a point is not a ranking, it is a group. I choose inside it by latency and by how a model behaves when a call fails, not by the third decimal of a score. Do not look for the bottleneck in the engine first: the same harness against a different engine moved the score by three thousandths and the throughput by one token per second.',
+              es: 'Trata las filas cercanas como empates. Diez filas dentro de cinco centésimas no son una clasificación, son un grupo. Elijo dentro de él por latencia y por cómo se comporta un modelo cuando falla una llamada, no por el tercer decimal de una puntuación. No busques el cuello de botella en el motor primero: el mismo harness contra otro motor movió la puntuación tres milésimas y el caudal un token por segundo.puntuación.',
+              ca: 'Tracta les files properes com a empats. Deu files dins de cinc centèsimes no són una classificació, són un grup. Trio dins seu per latència i per com es comporta un model quan falla una crida, no pel tercer decimal d’una puntuació. No busquis el coll d’ampolla al motor primer: el mateix harness contra un altre motor va moure la puntuació tres milèsimes i el cabal un token per segon.',
             },
           },
         ],
@@ -1798,9 +1828,9 @@ export const POSTS: readonly PostContent[] = [
           {
             kind: 'paragraph',
             html: {
-              en: 'The tasks are written for this harness, the reference solutions never leave the machine, and the models under test are the consumer-GPU quants people actually run. Scores answer "which GGUF should I run for agentic work", not "how smart is this model". Two thinking-ON rows (gemma, strata) were measured under tighter tool-loop caps than the rest and are flagged in the report as owed a fair pass; the thirteen models retired along the way live in its Retired tab, record only. Full method in <code>docs/SPEC.md</code> of the repository.',
-              es: 'Las tareas están escritas para este harness, las soluciones de referencia no salen nunca de la máquina y los modelos bajo prueba son los quants de GPU de consumo que la gente ejecuta. Las puntuaciones responden a "qué GGUF debería ejecutar para trabajo agéntico", no a "cuán listo es este modelo". Dos filas thinking-on (gemma, strata) se midieron con límites de llamadas más estrechos que el resto y el informe las marca como pendientes de una pasada justa; los trece modelos retirados por el camino viven en su pestaña Retired, solo registro. Método completo en <code>docs/SPEC.md</code> del repositorio.',
-              ca: 'Les tasques estan escrites per a aquest harness, les solucions de referència no surten mai de la màquina i els models sota prova són els quants de GPU de consum que la gent executa. Les puntuacions responen a "quin GGUF hauria d’executar per a treball agentic", no a "com n’és de llest aquest model". Dues files thinking-on (gemma, strata) es van mesurar amb límits de cridades més estrets que la resta i l’informe les marca com a pendents d’una passada justa; els tretze models retirats pel camí viuen a la seva pestanya Retired, només registre. Mètode complet a <code>docs/SPEC.md</code> del repositori.',
+              en: 'The tasks are written for this harness, the reference solutions never leave the machine, and the models under test are the consumer-GPU quants people actually run. Scores answer "which GGUF should I run for agentic work", not "how smart is this model". Two thinking-ON rows (gemma, strata) were measured under tighter tool-loop caps than the rest and are flagged in the report as owed a fair pass; the thirteen models retired along the way live in its Retired tab, record only. The table above is generated from the live scoreboard, not typed in, and the engine comparison ran under the conditions stated in its section. Full method in <code>docs/SPEC.md</code> of the repository.',
+              es: 'Las tareas están escritas para este harness, las soluciones de referencia no salen nunca de la máquina y los modelos bajo prueba son los quants de GPU de consumo que la gente ejecuta. Las puntuaciones responden a "qué GGUF debería ejecutar para trabajo agéntico", no a "cuán listo es este modelo". Dos filas thinking-on (gemma, strata) se midieron con límites de llamadas más estrechos que el resto y el informe las marca como pendientes de una pasada justa; los trece modelos retirados por el camino viven en su pestaña Retired, solo registro. La tabla de arriba se genera desde el marcador en vivo, no se escribe a mano, y la comparación de motores corrió bajo las condiciones de su sección. Método completo en <code>docs/SPEC.md</code> del repositorio.',
+              ca: 'Les tasques estan escrites per a aquest harness, les solucions de referència no surten mai de la màquina i els models sota prova són els quants de GPU de consum que la gent executa. Les puntuacions responen a "quin GGUF hauria d’executar per a treball agentic", no a "com n’és de llest aquest model". Dues files thinking-on (gemma, strata) es van mesurar amb límits de cridades més estrets que la resta i l’informe les marca com a pendents d’una passada justa; els tretze models retirats pel camí viuen a la seva pestanya Retired, només registre. La taula de dalt es genera des del marcador viu, no s’escriu a mà, i la comparació de motors ha corregit sota les condicions de la seva secció. Mètode complet a <code>docs/SPEC.md</code> del repositori.',
             },
           },
           {
