@@ -1583,12 +1583,12 @@ export const POSTS: readonly PostContent[] = [
     title: {
       en: 'Which local model should a coding agent run? Seven GGUFs and a Strata engine, one harness, receipts',
       es: '¿Qué modelo local debería ejecutar un agente de código? Siete GGUFs y un motor Strata, un harness, recibos',
-      ca: 'Quin model local hauria d’executar un agent de codi? Sis GGUFs i un motor Strata, un harness, rebuts',
+      ca: 'Quin model local hauria d’executar un agent de codi? Set GGUFs i un motor Strata, un harness, rebuts',
     },
     description: {
-      en: 'Which GGUF should a coding agent load? Six models under llama.cpp plus one under the Strata engine, one harness, four dimensions — tools, code, agent and speed — measured on two RTX 5080s, with the receipts of every call.',
-      es: '¿Qué GGUF debería cargar un agente de código? Seis modelos bajo llama.cpp y uno bajo el motor Strata, un harness, cuatro dimensiones — herramientas, código, agente y velocidad — medidas en dos RTX 5080, con los recibos de cada llamada.',
-      ca: 'Quin GGUF hauria de carregar un agent de codi? Sis models sota llama.cpp i un sota el motor Strata, un harness, quatre dimensions — eines, codi, agent i velocitat — mesurades en dues RTX 5080, amb els rebuts de cada crida.',
+      en: 'Which GGUF should a coding agent load? Seven models under llama.cpp plus one under the Strata engine, one harness, four dimensions — tools, code, agent and speed — measured on two RTX 5080s, with the receipts of every call.',
+      es: '¿Qué GGUF debería cargar un agente de código? Siete modelos bajo llama.cpp y uno bajo el motor Strata, un harness, cuatro dimensiones — herramientas, código, agente y velocidad — medidas en dos RTX 5080, con los recibos de cada llamada.',
+      ca: 'Quin GGUF hauria de carregar un agent de codi? Set models sota llama.cpp i un sota el motor Strata, un harness, quatre dimensions — eines, codi, agent i velocitat — mesurades en dues RTX 5080, amb els rebuts de cada crida.',
     },
     lead: {
       en: 'One harness, same conditions, four dimensions, and the raw receipts of every call — this round, seven GGUFs under llama.cpp plus one model under the Strata engine, each in both thinking modes.',
@@ -1611,7 +1611,7 @@ export const POSTS: readonly PostContent[] = [
           {
             kind: 'paragraph',
             html: {
-              en: 'Public leaderboards measure something else. They are mostly trained on, they score single-shot answers, and they say nothing about whether a model can call a tool with well-formed arguments, survive a multi-call loop, read a folder, edit a file, and verify its own change. That is the work an agent does all day, so I stopped reading those tables for this decision and built <a href="https://github.com/jordimarsal/ggufbench">ggufbench</a>.',
+              en: 'Public leaderboards measure something else. Most of their tasks are in models’ training data, they score single-shot answers, and they say nothing about whether a model can call a tool with well-formed arguments, survive a multi-call loop, read a folder, edit a file, and verify its own change. That is the work an agent does all day, so I stopped reading those tables for this decision and built <a href="https://github.com/jordimarsal/ggufbench">ggufbench</a>.',
               es: 'Los leaderboards públicos miden otra cosa. En su mayoría, los modelos están entrenados sobre ellos, puntúan respuestas de un solo disparo y no dicen nada sobre si un modelo sabe llamar a una herramienta con argumentos bien formados, sobrevivir a un bucle de varias llamadas, leer una carpeta, editar un archivo y verificar su propio cambio. Esa es la faena que hace un agente todo el día, así que dejé de leer esas tablas para esta decisión y construí <a href="https://github.com/jordimarsal/ggufbench">ggufbench</a>.',
               ca: 'Els leaderboards públics mesuren una altra cosa. La majoria dels models hi estan entrenats, puntuen respostes d’un sol tret i no diuen res sobre si un model sap cridar una eina amb arguments ben formats, sobreviure a un bucle de diverses crides, llegir una carpeta, editar un fitxer i verificar el seu propi canvi. Aquesta és la feina que fa un agent tot el dia, així que vaig deixar de llegir aquestes taules per a aquesta decisió i vaig construir <a href="https://github.com/jordimarsal/ggufbench">ggufbench</a>.',
             },
@@ -1815,7 +1815,7 @@ export const POSTS: readonly PostContent[] = [
             kind: 'paragraph',
             html: {
               en: 'Treat close rows as ties. Ten rows inside five hundredths of a point is not a ranking, it is a group. I choose inside it by latency and by how a model behaves when a call fails, not by the third decimal of a score. Do not look for the bottleneck in the engine first: the same harness against a different engine moved the score by three thousandths and the throughput by one token per second.',
-              es: 'Trata las filas cercanas como empates. Diez filas dentro de cinco centésimas no son una clasificación, son un grupo. Elijo dentro de él por latencia y por cómo se comporta un modelo cuando falla una llamada, no por el tercer decimal de una puntuación. No busques el cuello de botella en el motor primero: el mismo harness contra otro motor movió la puntuación tres milésimas y el caudal un token por segundo.puntuación.',
+              es: 'Trata las filas cercanas como empates. Diez filas dentro de cinco centésimas no son una clasificación, son un grupo. Elijo dentro de él por latencia y por cómo se comporta un modelo cuando falla una llamada, no por el tercer decimal de una puntuación. No busques el cuello de botella en el motor primero: el mismo harness contra otro motor movió la puntuación tres milésimas y el caudal un token por segundo.',
               ca: 'Tracta les files properes com a empats. Deu files dins de cinc centèsimes no són una classificació, són un grup. Trio dins seu per latència i per com es comporta un model quan falla una crida, no pel tercer decimal d’una puntuació. No busquis el coll d’ampolla al motor primer: el mateix harness contra un altre motor va moure la puntuació tres milèsimes i el cabal un token per segon.',
             },
           },
