@@ -3,12 +3,10 @@ import time
 
 from fastapi.testclient import TestClient
 
-from ask_api.config import Settings
-from ask_api.ratelimit import ConcurrencyGate, TokenBucket
-from support import FakeEmbedder, FakeIndex, RecordingGenerator, make_chunk, make_scored
-
 from ask_api.api import Deps, HealthReporter, create_app
+from ask_api.ratelimit import ConcurrencyGate, TokenBucket
 from ask_api.service import AnswerService
+from support import FakeEmbedder, FakeIndex, RecordingGenerator, make_chunk, make_scored
 
 
 def _build(make_settings, **overrides):

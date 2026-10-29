@@ -1,8 +1,8 @@
 """FastAPI boundary: routes, problem+json errors, CORS allowlist, access logs."""
 
+import asyncio
 import logging
 import time
-import asyncio
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from pathlib import Path
@@ -235,7 +235,7 @@ def create_app(settings: Settings, deps: Deps | None = None) -> FastAPI:
                 asyncio.to_thread(resolved.service.answer, question, payload.lang),
                 timeout=settings.route_timeout_s,
             )
-        except asyncio.TimeoutError:
+        except TimeoutError:
             logger.warning("route timeout client=%s", key)
             return _problem(
                 504,
