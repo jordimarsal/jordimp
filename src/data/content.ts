@@ -237,7 +237,7 @@ export const HOME: HomeContent = {
     stand: {
       en: 'Ring the bell and ask anything about Jordi’s work. The concierge answers from the public CV and repos, citations on file — and what is not on record, he says so.',
       es: 'Toca el timbre y pregunta lo que quieras sobre el trabajo de Jordi. El conserje responde desde el CV público y los repos, con citas en el registro — y lo que no consta, lo dice.',
-      ca: 'Trona el timbre i pregunta el que vulguis sobre la feina d’en Jordi. El porter respon des del CV públic i els repos, amb cites a l’arxiu — i el que no consta, ho diu.',
+      ca: 'Truca el timbre i pregunta el que vulguis sobre la feina d’en Jordi. El porter respon des del CV públic i els repos, amb cites a l’arxiu — i el que no consta, ho diu.',
     },
     label: { en: 'Your question', es: 'Tu pregunta', ca: 'La teva pregunta' },
     placeholder: {
@@ -245,7 +245,7 @@ export const HOME: HomeContent = {
       es: 'p. ej. ¿Quién construyó el hub de telemetría de Kafka?',
       ca: 'p. ex. Qui va construir el hub de telemetria de Kafka?',
     },
-    bell: { en: 'RING THE BELL', es: 'TOCA EL TIMBRE', ca: 'TRONA EL TIMBRE' },
+    bell: { en: 'RING THE BELL', es: 'TOCA EL TIMBRE', ca: 'TRUCA EL TIMBRE' },
     thinking: {
       en: 'The concierge checks the ledger',
       es: 'El conserje consulta el registro',
@@ -254,7 +254,7 @@ export const HOME: HomeContent = {
     notCovered: {
       en: 'Not on record. The concierge only answers from the public CV and repos — ring again with something else.',
       es: 'No consta. El conserje solo responde desde el CV público y los repos — vuelve a tocar el timbre con otra cosa.',
-      ca: 'No consta. El porter només respon des del CV públic i els repos — torna a trona el timbre amb una altra cosa.',
+      ca: 'No consta. El porter només respon des del CV públic i els repos — torna a trucar el timbre amb una altra cosa.',
     },
     error: {
       en: 'The concierge is not at the desk right now — try again in a moment.',
@@ -1569,7 +1569,7 @@ export const POSTS: readonly PostContent[] = [
             'El modelo afinado está en <a href="https://huggingface.co/jordimarsal/Qwen3.5-2B-porter-GGUF" target="_blank" rel="noopener noreferrer">Hugging Face</a>, con el dataset y el pipeline. Los scripts de entrenamiento y merge viven en el <a href="https://github.com/jordimarsal/jordimp/tree/main/ask-api/finetune" target="_blank" rel="noopener noreferrer">directorio ask-api/finetune</a> del repo jordimp, al lado de la puerta de evals que tuvieron que pasar. Y el conserje está abajo, junto a la puerta — toca el timbre y pregúntale lo que quieras. Ahora sabes cómo se eligió su cerebro.',
           ],
           ca: [
-            'El model afinat és a <a href="https://huggingface.co/jordimarsal/Qwen3.5-2B-porter-GGUF" target="_blank" rel="noopener noreferrer">Hugging Face</a>, amb el dataset i el pipeline. Els scripts d’entrenament i merge viuen al <a href="https://github.com/jordimarsal/jordimp/tree/main/ask-api/finetune" target="_blank" rel="noopener noreferrer">directori ask-api/finetune</a> del repo jordimp, al costat de la porta d’evals que van haver de passar. I el porter és a baix, vora la porta — trona el timbre i pregunta-li el que vulguis. Ara ja saps com es va triar el seu cervell.',
+            'El model afinat és a <a href="https://huggingface.co/jordimarsal/Qwen3.5-2B-porter-GGUF" target="_blank" rel="noopener noreferrer">Hugging Face</a>, amb el dataset i el pipeline. Els scripts d’entrenament i merge viuen al <a href="https://github.com/jordimarsal/jordimp/tree/main/ask-api/finetune" target="_blank" rel="noopener noreferrer">directori ask-api/finetune</a> del repo jordimp, al costat de la porta d’evals que van haver de passar. I el porter és a baix, vora la porta — truca el timbre i pregunta-li el que vulguis. Ara ja saps com es va triar el seu cervell.',
           ],
         }),
       },
