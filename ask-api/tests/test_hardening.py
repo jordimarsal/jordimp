@@ -32,9 +32,7 @@ def _build(make_settings, **overrides):
 
 def test_r1_cf_connecting_ip_keys_bucket(make_settings) -> None:
     client, *_ = _build(make_settings, rate_burst=1, rate_per_min=1)
-    first = client.post(
-        "/api/ask", json={"question": "q"}, headers={"CF-Connecting-IP": "1.2.3.4"}
-    )
+    first = client.post("/api/ask", json={"question": "q"}, headers={"CF-Connecting-IP": "1.2.3.4"})
     second = client.post(
         "/api/ask", json={"question": "q"}, headers={"CF-Connecting-IP": "5.6.7.8"}
     )
@@ -44,9 +42,7 @@ def test_r1_cf_connecting_ip_keys_bucket(make_settings) -> None:
 
 def test_r1_cf_connecting_ip_same_ip_limited(make_settings) -> None:
     client, *_ = _build(make_settings, rate_burst=1, rate_per_min=1)
-    first = client.post(
-        "/api/ask", json={"question": "q"}, headers={"CF-Connecting-IP": "1.2.3.4"}
-    )
+    first = client.post("/api/ask", json={"question": "q"}, headers={"CF-Connecting-IP": "1.2.3.4"})
     second = client.post(
         "/api/ask", json={"question": "q"}, headers={"CF-Connecting-IP": "1.2.3.4"}
     )
