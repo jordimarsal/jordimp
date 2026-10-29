@@ -95,7 +95,21 @@ the new token into `.env` → `docker compose up -d cloudflared`.
 - `restart: unless-stopped` everywhere: after a host reboot the whole stack
   comes back on its own (docker enabled at boot)
 
-## Known trade-offs
+## Security hardening (edge)
+
+Recommended Cloudflare settings for `api.jordimp.net`:
+
+- **Rate limiting rule**: limit `/api/ask` to 10 requests per 10 seconds per IP
+  (action: block with 429). This is the first line of defence; the in-app
+  token bucket (6/min, burst 3) is the second.
+- **Turnstile**: optional. Enable only if anonymous traffic exceeds the
+  in-app limits. Insert the Turnstile widget token check at the edge or as
+  a pre-flight to `/api/ask`; the app already accepts requests without an
+  `Origin` header (non-browser clients), so keep the integration additive.
+- **Trusted IP**: the app prefers `CF-Connecting-IP` for client identity;
+  do not strip it at the tunnel. The fallback to `X-Forwarded-For` is only
+  used when `CF-Connecting-IP` is absent.
+
 
 - The 4B generator writes mostly-clean Catalan with occasional Spanish lexical
   leakage — accepted for this model size.

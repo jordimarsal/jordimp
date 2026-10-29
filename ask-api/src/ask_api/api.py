@@ -2,6 +2,7 @@
 
 import logging
 import time
+import asyncio
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from pathlib import Path
@@ -198,7 +199,10 @@ def create_app(settings: Settings, deps: Deps | None = None) -> FastAPI:
         return resolved.health.report()
 
     @app.post("/api/ask")
-    def ask(payload: AskRequest, request: Request) -> JSONResponse:
+    async def ask(payload: AskRequest, request: Request) -> JSONResponse:
+        origin = request.headers.get("origin")
+        if origin is not None and origin not in settings.cors_origin_list:
+            return _problem(403, "Forbidden", "origin is not allowed")
         question = payload.question.strip()
         if not question:
             return _problem(422, "Invalid request", "question must not be blank")
@@ -210,6 +214,7 @@ def create_app(settings: Settings, deps: Deps | None = None) -> FastAPI:
             )
         key = _client_key(request)
         if not resolved.limiter.allow(key):
+            logger.warning("rate limit exceeded client=%s", key)
             return _problem(
                 429,
                 "Too many requests",
@@ -217,6 +222,7 @@ def create_app(settings: Settings, deps: Deps | None = None) -> FastAPI:
                 retry_after_s=max(1, resolved.limiter.retry_after(key)),
             )
         if not resolved.gate.try_acquire():
+            logger.warning("concurrency gate rejected client=%s", key)
             return _problem(
                 429,
                 "Too many requests",
@@ -225,7 +231,18 @@ def create_app(settings: Settings, deps: Deps | None = None) -> FastAPI:
             )
         started = time.perf_counter()
         try:
-            outcome = resolved.service.answer(question, payload.lang)
+            outcome = await asyncio.wait_for(
+                asyncio.to_thread(resolved.service.answer, question, payload.lang),
+                timeout=settings.route_timeout_s,
+            )
+        except asyncio.TimeoutError:
+            logger.warning("route timeout client=%s", key)
+            return _problem(
+                504,
+                "Gateway timeout",
+                "request exceeded the time limit",
+                retry_after_s=_BUSY_RETRY_AFTER_S,
+            )
         finally:
             resolved.gate.release()
         route_ms = int((time.perf_counter() - started) * 1000)
@@ -263,6 +280,9 @@ def create_app(settings: Settings, deps: Deps | None = None) -> FastAPI:
 
 
 def _client_key(request: Request) -> str:
+    cf = request.headers.get("cf-connecting-ip")
+    if cf:
+        return cf.strip()
     forwarded = request.headers.get("x-forwarded-for")
     if forwarded:
         return forwarded.split(",")[0].strip()

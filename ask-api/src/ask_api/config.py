@@ -42,6 +42,9 @@ class Settings(BaseSettings):
     rate_burst: int = 3
     max_concurrency: int = 2
 
+    route_timeout_s: float = 45.0
+    trusted_proxy_cidrs: str = ""
+
     cors_origins: str = "https://jordimp.net,https://www.jordimp.net"
     log_level: str = "INFO"
 
