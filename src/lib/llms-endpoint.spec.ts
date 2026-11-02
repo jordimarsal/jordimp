@@ -18,8 +18,8 @@ describe('llmsData() against src/data/content', () => {
     ]);
   });
 
-  it('exposes the curated members and keeps all 12 projects reachable', () => {
-    expect(data.projects).toHaveLength(12);
+  it('exposes the curated members and keeps all 13 projects reachable', () => {
+    expect(data.projects).toHaveLength(13);
     const projectSlugs = data.projects.map((p) => p.slug);
     const members = data.departments.flatMap((dept) => dept.projects).map((p) => p.slug);
     expect(members).toHaveLength(8);
@@ -68,7 +68,7 @@ describe('GET-ready llms.txt content (canonical data)', () => {
     expect(text).toContain('- [Q Inspections](https://jordimp.net/en/departments/inspections/)');
     expect(text).toContain('- [B Front Desk](https://jordimp.net/en/departments/front-desk/)');
     expect(text).toContain(
-      '- [Project case pages](https://jordimp.net/en/projects/<slug>/) — one per project, 12 total',
+      '- [Project case pages](https://jordimp.net/en/projects/<slug>/) — one per project, 13 total',
     );
     expect(text).not.toContain('.html');
   });
@@ -95,12 +95,12 @@ describe('GET-ready llms.txt content (canonical data)', () => {
 describe('GET-ready llms-full.txt content (canonical data)', () => {
   const text = buildLlmsFullTxt(data);
 
-  it('lists one repo line per project — 12 total', () => {
+  it('lists one repo line per project — 13 total (R28, R30)', () => {
     const repos = text.split('## All repos')[1].split('## Career ledger')[0].trim().split('\n');
-    expect(repos).toHaveLength(12);
+    expect(repos).toHaveLength(13);
     expect(repos[0]).toContain('- CodebaseRAG (2026): Hexagonal RAG over your own codebase');
     expect(repos.at(-1)).toContain(
-      '- ggufbench (2026): An agentic benchmark for local GGUF models',
+      '- buildwright (2026): buildwright is the model-routing runtime of the stack',
     );
     expect(text).toContain('  - CodebaseRAG (2026): Hexagonal RAG over your own codebase, with a deterministic, eval-first core: ingest, query, and CI-gated retrieval evals. Stack: Python 3.13, FastAPI, pgvector, Qdrant, Ollama, Langfuse, mypy strict. [repo](https://github.com/jordimarsal/codebaserag)');
   });

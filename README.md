@@ -16,7 +16,7 @@ llms.txt / analytics, GitHub Pages deploy, QA gates (Playwright · Lighthouse
 CI · parity oracle), the **Jordimp & Co.** building redesign, blog, contact
 desk, the harness skills highlight, the **ask-api concierge in
 production** — running its own fine-tuned 2B gen model (see Services) — and
-**ggufbench** showcased on the tooling floor.
+**ggufbench** and **buildwright** showcased on the tooling floor.
 
 ## CI/CD — QA-gated deploys
 

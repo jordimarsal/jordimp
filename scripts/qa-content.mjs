@@ -20,6 +20,12 @@ const CONTACT_PATTERNS = [...PHONE_PATTERNS, ...ADDRESS_PATTERNS];
 
 const LEGACY_EMAIL_PATTERNS = [{ name: 'legacy-gmail', pattern: /gmail\.com/i }];
 
+const README = new URL('../README.md', import.meta.url).pathname;
+const README_STATUS = {
+  name: 'readme-status',
+  pattern: /^\*\*ggufbench\*\* and \*\*buildwright\*\* showcased on the tooling floor\.$/m,
+};
+
 const SRC = new URL('../src', import.meta.url).pathname;
 const TESTS = new URL('../tests', import.meta.url).pathname;
 
@@ -111,6 +117,15 @@ function scanForbiddenStrings(files, patterns) {
   return violations;
 }
 
+function readmeStatus() {
+  const violations = [];
+  const text = readFileSync(README, 'utf8');
+  if (!README_STATUS.pattern.test(text)) {
+    violations.push('README.md Status sentence does not showcase ggufbench and buildwright on the tooling floor');
+  }
+  return violations;
+}
+
 function selfTest() {
   const fixtures = [
     { name: 'phone detector', flagged: 'call me at 609 940 649 today', clean: 'no digits here, just 12345 and 12 34' },
@@ -123,12 +138,22 @@ function selfTest() {
     const ignores = CONTACT_PATTERNS.every(({ pattern }) => !pattern.test(clean));
     if (!ignores) problems.push(`${name} flagged the benign fixture "${clean}"`);
   }
+  const readmeFixtures = [
+    { good: '**ggufbench** and **buildwright** showcased on the tooling floor.' },
+    { good: 'Status line above.\n**ggufbench** and **buildwright** showcased on the tooling floor.' },
+  ];
+  for (const { good } of readmeFixtures) {
+    if (!README_STATUS.pattern.test(good)) problems.push('readme-status did not accept the expected sentence');
+  }
+  for (const bad of ['**ggufbench** showcased on the tooling floor.', '**buildwright** and **ggufbench** showcased on the tooling floor.']) {
+    if (README_STATUS.pattern.test(bad)) problems.push(`readme-status accepted the stale sentence "${bad}"`);
+  }
   if (problems.length > 0) {
     console.error('self-test FAILED:');
     for (const problem of problems) console.error(`  - ${problem}`);
     process.exit(1);
   }
-  console.log('self-test OK: contact detectors flag phone/address fixtures and ignore benign text');
+  console.log('self-test OK: contact detectors flag phone/address fixtures, ignore benign text, and the readme-status gate accepts only the current sentence');
 }
 
 function census(files, routes) {
@@ -217,6 +242,9 @@ async function main() {
     ...scanForPatterns(files, LEGACY_EMAIL_PATTERNS, 'legacy-email'),
   );
   console.log(`legacy-email scan: clean (${sourceFiles.length} source/test files + visible text of ${files.length} HTML files)`);
+
+  problems.push(...readmeStatus());
+  console.log('readme status: ggufbench and buildwright showcased on the tooling floor');
 
   const urls = extractOffHostUrls(files);
   console.log(`live links: checking ${urls.length} off-host URLs from dist HTML:`);

@@ -104,6 +104,20 @@ export const CASE_MOTIFS: Record<string, string> = {
   <rect class="cm-ink" x="92" y="46" width="16" height="36"/>
   <rect class="cm-ink" x="16" y="50" width="96" height="4"/>
 </svg>`,
+  buildwright: `<svg class="b-svg" viewBox="0 0 132 96" aria-hidden="true">
+  <circle class="cm-ink" cx="24" cy="18" r="4"/>
+  <circle class="cm-ink" cx="66" cy="18" r="4"/>
+  <circle class="cm-ink" cx="108" cy="18" r="4"/>
+  <line class="cm-line" x1="24" y1="22" x2="24" y2="38"/>
+  <line class="cm-line" x1="66" y1="22" x2="66" y2="38"/>
+  <line class="cm-line" x1="108" y1="22" x2="108" y2="38"/>
+  <rect class="cm-y" x="10" y="38" width="112" height="24"/>
+  <rect class="cm-ink" x="20" y="46" width="18" height="8"/>
+  <rect class="cm-ink" x="57" y="46" width="18" height="8"/>
+  <rect class="cm-ink" x="94" y="46" width="18" height="8"/>
+  <line class="cm-line" x1="38" y1="50" x2="57" y2="50"/>
+  <line class="cm-line" x1="75" y1="50" x2="94" y2="50"/>
+</svg>`,
 };
 
 export function caseMotif(slug: string): string {

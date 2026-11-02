@@ -37,7 +37,7 @@ import {
 import { SITE as CONFIG_SITE } from '../config';
 import type { DeptKey, Locale, Tier } from './types';
 
-const PROJECT_COUNT = 12;
+const PROJECT_COUNT = 13;
 const FEATURED_COUNT = 3;
 const DEPT_COUNT = 7;
 const EXPERIENCE_COUNT = 4;
@@ -106,7 +106,7 @@ describe('departments data', () => {
     expect(DEPTS.tooling.projects).toEqual([
       'harness-standard',
       'ggufbench',
-      'md-mermaid-pdf',
+      'buildwright',
       'mcp-transparent-png',
     ]);
   });
@@ -369,7 +369,7 @@ const TIER_MAP: Record<string, Tier> = {
   codebaserag: 'thesis', 'kafka-adapter-telemetry': 'thesis', 'harness-standard': 'thesis',
   'redis-toolkit': 'satellite', 'interview-simulator': 'satellite',
   'md-mermaid-pdf': 'satellite', 'mcp-transparent-png': 'satellite',
-  ggufbench: 'satellite',
+  ggufbench: 'satellite', buildwright: 'satellite',
   'bible-text-analysis': 'annex', 'product-offers': 'annex',
   'spring-boot-casino': 'annex', rustcut: 'annex',
 };
@@ -383,10 +383,10 @@ describe('project tiers', () => {
     expect(tierProjects('thesis').map((p) => p.slug)).toEqual([...FEATURED]);
   });
 
-  it('partitions the 12 projects 3 / 5 / 4 in tier order', () => {
+  it('partitions the 13 projects 3 / 6 / 4 in tier order', () => {
     expect(TIER_ORDER).toEqual(['thesis', 'satellite', 'annex']);
-    expect(TIER_ORDER.map((t) => tierProjects(t).length)).toEqual([3, 5, 4]);
-    expect(tierProjects('satellite').at(-1)?.slug).toBe('ggufbench');
+    expect(TIER_ORDER.map((t) => tierProjects(t).length)).toEqual([3, 6, 4]);
+    expect(tierProjects('satellite').at(-1)?.slug).toBe('buildwright');
     expect(TIER_LABELS).toEqual({
       thesis: { en: 'Thesis', es: 'Tesis', ca: 'Tesi' },
       satellite: { en: 'Satellites', es: 'Satélites', ca: 'Satèl·lits' },
@@ -414,6 +414,7 @@ describe('ggufbench entry (F24)', () => {
       'mcp-transparent-png',
       'spring-boot-casino',
       'ggufbench',
+      'buildwright',
     ]);
   });
 
@@ -540,25 +541,208 @@ describe('ggufbench copy (F24)', () => {
   });
 });
 
-describe('home counters after the 12th project (F24 R27)', () => {
-  it('counts 12 open repos in the hero chips, leaving the other three chips untouched', () => {
-    expect(HOME.metaChips.en).toEqual(['EST. 2017', 'BARCELONA', '12 OPEN REPOS', '1 ENGINEER']);
-    expect(HOME.metaChips.es).toEqual(['DESDE 2017', 'BARCELONA', '12 REPOS ABIERTOS', '1 INGENIERO']);
-    expect(HOME.metaChips.ca).toEqual(['DES DE 2017', 'BARCELONA', '12 REPOS OBERTS', '1 ENGINYER']);
+describe('buildwright entry (project_buildwright)', () => {
+  it('appends buildwright as the 13th project, right after ggufbench (R1)', () => {
+    const slugs = PROJECTS.map((p) => p.slug);
+    expect(slugs.at(-1)).toBe('buildwright');
+    expect(slugs[slugs.length - 2]).toBe('ggufbench');
   });
 
-  it('states 3 of 12 in the featured heading, keeping the section number 03', () => {
+  it('seeds buildwright with the fixed repo metadata (R2)', () => {
+    const p = project('buildwright');
+    expect(p.name).toBe('buildwright');
+    expect(p.year).toBe('2026');
+    expect(p.featured).toBe(false);
+    expect(p.tier).toBe('satellite');
+    expect(p.dept).toBe('tooling');
+    expect(p.github).toBe('https://github.com/jordimarsal/buildwright');
+  });
+
+  it('ships the five-item buildwright stack (R3)', () => {
+    expect(project('buildwright').stack).toEqual([
+      'Python',
+      'LangGraph',
+      'PydanticAI',
+      'LiteLLM',
+      'Langfuse',
+    ]);
+  });
+
+  it('defines non-empty trilingual blurb, summary, problem, highlights and metrics (R4)', () => {
+    const p = project('buildwright');
+    for (const lang of LOCALES) {
+      expect(p.blurb[lang].trim(), `blurb.${lang}`).not.toBe('');
+      expect(p.summary[lang].trim(), `summary.${lang}`).not.toBe('');
+      expect(p.problem[lang].trim(), `problem.${lang}`).not.toBe('');
+      expect(p.highlights[lang].length, `highlights.${lang}`).toBeGreaterThanOrEqual(3);
+      for (const highlight of p.highlights[lang]) {
+        expect(highlight.trim(), `highlight.${lang}`).not.toBe('');
+      }
+      expect(p.metrics.length, `metrics.${lang}`).toBeGreaterThanOrEqual(3);
+      for (const metric of p.metrics) {
+        expect(metric.label[lang].trim(), `metric.${lang}`).not.toBe('');
+      }
+    }
+  });
+
+  it('carries exactly three README metrics with trilingual labels (R16, R17, R18)', () => {
+    expect(project('buildwright').metrics).toEqual([
+      {
+        value: '3',
+        label: {
+          en: 'pipeline steps — plan · execute · review',
+          es: 'pasos del pipeline — plan · execute · review',
+          ca: 'passos del pipeline — plan · execute · review',
+        },
+      },
+      {
+        value: '0',
+        label: {
+          en: 'pipeline lines to switch a model',
+          es: 'líneas de pipeline para cambiar de modelo',
+          ca: 'línies de pipeline per canviar de model',
+        },
+      },
+      {
+        value: '5',
+        label: {
+          en: 'lines to add a model to models.yaml',
+          es: 'líneas para añadir un modelo a models.yaml',
+          ca: 'línies per afegir un model a models.yaml',
+        },
+      },
+    ]);
+  });
+
+  it('defines no outcome so buildwright stays a satellite case', () => {
+    expect(project('buildwright').outcome).toBeUndefined();
+  });
+});
+
+describe('buildwright copy (project_buildwright)', () => {
+  const buildwright = project('buildwright');
+
+  const prose = (lang: Locale): string[] => [
+    buildwright.blurb[lang],
+    buildwright.summary[lang],
+    buildwright.problem[lang],
+    ...buildwright.highlights[lang],
+    ...buildwright.metrics.map((metric) => metric.label[lang]),
+  ];
+
+  it('pins the exact trilingual copy brief verbatim (R42)', () => {
+    expect(buildwright.blurb).toEqual({
+      en: 'The craftsman who builds per the spec — one model per agent, routed by role: mechanical steps stay on the local model, decisions take the remote one. One runtime, configuration instead of code.',
+      es: 'El artesano que construye según la spec — un modelo por agente, asignado por rol: los pasos mecánicos van al modelo local, las decisiones al remoto. Un solo runtime, configuración en lugar de código.',
+      ca: 'L’artesà que construeix segons la spec — un model per agent, assignat per rol: els passos mecànics van al model local, les decisions al remot. Un sol runtime, configuració en lloc de codi.',
+    });
+    expect(buildwright.summary).toEqual({
+      en: 'buildwright is the model-routing runtime of the stack: LangGraph orders the steps, PydanticAI runs each step, LiteLLM serves the model and Langfuse traces it. Every node’s role — plan, execute, review — resolves its model from BW_ROLE_* against models.yaml, so routing stays configuration instead of code, and the harness closes the run at the spec gate and the completion gate.',
+      es: 'buildwright es el runtime de enrutamiento de modelos de la pila: LangGraph ordena los pasos, PydanticAI ejecuta cada paso, LiteLLM sirve el modelo y Langfuse lo traza. El rol de cada nodo — plan, execute, review — resuelve su modelo desde BW_ROLE_* contra models.yaml, así el enrutamiento sigue siendo configuración y no código, y el harness cierra la ejecución en el spec gate y el completion gate.',
+      ca: 'buildwright és el runtime d’encaminament de models de la pila: LangGraph ordena els passos, PydanticAI executa cada pas, LiteLLM serveix el model i Langfuse el traça. El rol de cada node — plan, execute, review — resol el seu model des de BW_ROLE_* contra models.yaml, així l’encaminament continua sent configuració i no codi, i el harness tanca l’execució al spec gate i al completion gate.',
+    });
+    expect(buildwright.problem).toEqual({
+      en: 'An agent pipeline usually runs every step on a single model: the boring mechanical steps spend the same tokens as the decisions that matter, and switching that choice means editing the pipeline. buildwright keeps it in configuration — mechanical steps on the local model, decisions on the remote one — so the pipeline does not change when a model changes.',
+      es: 'Un pipeline de agentes suele ejecutar todos los pasos con un mismo modelo: los pasos mecánicos y aburridos consumen los mismos tokens que las decisiones que importan, y cambiar esa elección obliga a tocar el código. buildwright lo deja en configuración — los pasos mecánicos van al modelo local, las decisiones al remoto —, así el pipeline no cambia cuando cambia un modelo.',
+      ca: 'Un pipeline d’agents sol executar tots els passos amb un mateix model: els passos mecànics i avorrids consumeixen els mateixos tokens que les decisions que importen, i canviar aquesta elecció obliga a tocar el codi. buildwright ho deixa en configuració — els passos mecànics van al model local, les decisions al remot —, així el pipeline no canvia quan canvia un model.',
+    });
+    expect(buildwright.highlights).toEqual({
+      en: [
+        'LangGraph orders the steps, PydanticAI runs each step, LiteLLM serves the model and Langfuse traces it — one job per piece, no piece doing another’s work.',
+        'Plan, execute, review — 3 steps of the pipeline: plan and review run on the local model, execute runs on the remote one, and each node’s role resolves against models.yaml from BW_ROLE_* in Settings.',
+        'The role to model mapping is configuration, not code: switching models touches 0 lines of pipeline, and adding a model to models.yaml is adding 5 lines — and the run still closes at the spec gate and the completion gate.',
+      ],
+      es: [
+        'LangGraph ordena los pasos, PydanticAI ejecuta cada paso, LiteLLM sirve el modelo y Langfuse lo traza — un trabajo por pieza, ninguna pieza haciendo la de otra.',
+        'Plan, execute, review — 3 pasos del pipeline: plan y review corren sobre el modelo local, execute corre sobre el remoto, y el rol de cada nodo se resuelve contra models.yaml desde BW_ROLE_* en Settings.',
+        'El mapa de rol a modelo es configuración, no código: cambiar de modelo toca 0 líneas de pipeline, y añadir un modelo a models.yaml es añadir 5 líneas — y la ejecución sigue cerrando en el spec gate y el completion gate.',
+      ],
+      ca: [
+        'LangGraph ordena els passos, PydanticAI executa cada pas, LiteLLM serveix el model i Langfuse el traça — una feina per peça, cap peça fent la d’una altra.',
+        'Plan, execute, review — 3 passos del pipeline: plan i review corren sobre el model local, execute corre sobre el remot, i el rol de cada node es resol contra models.yaml des de BW_ROLE_* a Settings.',
+        'El mapa de rol a model és configuració, no codi: canviar de model toca 0 línies de pipeline, i afegir un model a models.yaml és afegir 5 línies — i l’execució continua tancant al spec gate i al completion gate.',
+      ],
+    });
+  });
+
+  it('names models.yaml, the role mapping and the local/remote split in every locale (R10, R11)', () => {
+    for (const lang of LOCALES) {
+      const text = prose(lang).join('\n');
+      expect(text, `models.yaml:${lang}`).toContain('models.yaml');
+      expect(text.toLowerCase(), `role:${lang}`).toMatch(/role|rol/);
+      expect(text, `local:${lang}`).toMatch(/local/i);
+      expect(text, `remote:${lang}`).toMatch(/remote|remoto|remot/i);
+    }
+  });
+
+  it('mentions the harness spec gate and completion gate in every locale (R13)', () => {
+    for (const lang of LOCALES) {
+      expect(prose(lang).join('\n'), `gates:${lang}`).toContain('spec gate');
+      expect(prose(lang).join('\n'), `gates:${lang}`).toContain('completion gate');
+    }
+  });
+
+  it('never borrows harness-standard phrasing in any locale (R12)', () => {
+    for (const lang of LOCALES) {
+      const text = prose(lang).join('\n');
+      expect(text, `Leader:${lang}`).not.toContain('Leader');
+      expect(text, `Spec Author:${lang}`).not.toContain('Spec Author');
+      expect(text, `installed into any project:${lang}`).not.toContain('installed into any project');
+    }
+  });
+
+  it('keeps the harness-standard entry untouched (R14)', () => {
+    const harness = project('harness-standard');
+    expect(harness.summary).toEqual({
+      en: 'A standardized multi-agent harness for Claude Code and OpenCode: Spec-Driven Development roles (Leader, Spec Author, Implementer, Reviewer) installed into any project with a single command. Its process also ships as six standalone skills (npx skills add jordimarsal/harness).',
+      es: 'Un harness multi-agente estandarizado para Claude Code y OpenCode: roles de Spec-Driven Development (Leader, Spec Author, Implementer, Reviewer) instalados en cualquier proyecto con un solo comando. Su proceso también se distribuye como seis skills independientes (npx skills add jordimarsal/harness).',
+      ca: 'Un harness multi-agent estandarditzat per a Claude Code i OpenCode: rols de Spec-Driven Development (Leader, Spec Author, Implementer, Reviewer) instal·lats a qualsevol projecte amb una sola comanda. El seu procés també es distribueix com a sis skills independents (npx skills add jordimarsal/harness).',
+    });
+    expect(harness.metrics.map((metric) => metric.value)).toEqual(['7', '1 cmd', '6']);
+  });
+
+  it('keeps the numerals inside the README allowlist with an identical multiset (R15)', () => {
+    const ALLOWED = new Set(['0', '3', '5']);
+    const tokens = (lang: Locale): string[] =>
+      prose(lang).flatMap((text) =>
+        [...text.matchAll(/\d+(?:[.,]\d+)?/g)].map((match) => match[0]),
+      );
+    expect(tokens('en').length).toBeGreaterThan(0);
+    for (const token of tokens('en')) {
+      expect(ALLOWED, `token ${token} not in the README allowlist`).toContain(token);
+    }
+    expect(tokens('es')).toEqual(tokens('en'));
+    expect(tokens('ca')).toEqual(tokens('en'));
+  });
+
+  it('carries no emoji and no uppercase SOTA claim in any locale', () => {
+    for (const lang of LOCALES) {
+      const text = prose(lang).join('\n');
+      expect(text, `buildwright:${lang}`).not.toMatch(/\p{Extended_Pictographic}/u);
+      expect(text, `buildwright:${lang}`).not.toMatch(/SOTA/);
+    }
+  });
+});
+
+describe('home counters after the 13th project (project_buildwright)', () => {
+  it('counts 13 open repos in the hero chips, leaving the other three chips untouched', () => {
+    expect(HOME.metaChips.en).toEqual(['EST. 2017', 'BARCELONA', '13 OPEN REPOS', '1 ENGINEER']);
+    expect(HOME.metaChips.es).toEqual(['DESDE 2017', 'BARCELONA', '13 REPOS ABIERTOS', '1 INGENIERO']);
+    expect(HOME.metaChips.ca).toEqual(['DES DE 2017', 'BARCELONA', '13 REPOS OBERTS', '1 ENGINYER']);
+  });
+
+  it('states 3 of 13 in the featured heading, keeping the section number 03', () => {
     expect(HOME.featuredHead.num).toBe('03');
     expect(HOME.featuredHead.sub).toEqual({
-      en: '3 OF 12 — THE REST IS DOWNSTAIRS',
-      es: '3 DE 12 — EL RESTO ABAJO',
-      ca: '3 DE 12 — LA RESTA A BAIX',
+      en: '3 OF 13 — THE REST IS DOWNSTAIRS',
+      es: '3 DE 13 — EL RESTO ABAJO',
+      ca: '3 DE 13 — LA RESTA A BAIX',
     });
   });
 });
 
 describe('pages data', () => {
-  it('registers home, work, cv, the blog trio, contact, the 7 departments and the 12 project pages (R7, F16 R5)', () => {
+  it('registers home, work, cv, the blog trio, contact, the 7 departments and the 13 project pages (R7, F16 R5, R27)', () => {
     const expected = [
       'home',
       'work',
@@ -573,7 +757,7 @@ describe('pages data', () => {
       ...PROJECTS.map((p) => `project-${p.slug}`),
     ];
     expect(Object.keys(PAGES).sort()).toEqual(expected.sort());
-    expect(Object.keys(PAGES)).toHaveLength(28);
+    expect(Object.keys(PAGES)).toHaveLength(29);
   });
 
   it('registers the ggufbench case page on the tooling floor (R18)', () => {
@@ -735,8 +919,8 @@ describe('curated floor copy', () => {
         negative: ['Product Offers API'],
       },
       tooling: {
-        positive: ['harness', 'ggufbench', 'md-mermaid-pdf', 'mcp-transparent-png'],
-        negative: ['Rustcut', 'Spring Boot Casino'],
+        positive: ['harness', 'ggufbench', 'buildwright', 'mcp-transparent-png'],
+        negative: ['md-mermaid-pdf', 'Rustcut', 'Spring Boot Casino'],
       },
     };
     for (const [key, { positive, negative }] of Object.entries(expected)) {
@@ -747,27 +931,27 @@ describe('curated floor copy', () => {
     }
   });
 
-  it('states 12 projects and the three tiers', () => {
-    const twelve: Record<(typeof LOCALES)[number], string> = { en: 'Twelve', es: 'Doce', ca: 'Dotze' };
+  it('states 13 projects and the three tiers (R24, R25, R26)', () => {
+    const thirteen: Record<(typeof LOCALES)[number], string> = { en: 'Thirteen', es: 'Trece', ca: 'Tretze' };
     expect(WORK.head.sub).toEqual({
-      en: '12 PROJECTS · 3 TIERS · FILTER BY STACK',
-      es: '12 PROYECTOS · 3 NIVELES · FILTRA POR STACK',
-      ca: '12 PROJECTES · 3 NIVELLS · FILTRA PER STACK',
+      en: '13 PROJECTS · 3 TIERS · FILTER BY STACK',
+      es: '13 PROYECTOS · 3 NIVELES · FILTRA POR STACK',
+      ca: '13 PROJECTES · 3 NIVELLS · FILTRA PER STACK',
     });
     expect(WORK.intro).toEqual({
-      en: 'Twelve projects in three tiers: the thesis, the satellites around it, and an annex for roots, take-home assessments and size exercises. Filter by the stack you care about.',
-      es: 'Doce proyectos en tres niveles: la tesis, sus satélites y un anexo para raíces, pruebas técnicas y ejercicios de tamaño. Filtra por el stack que te interese.',
-      ca: 'Dotze projectes en tres nivells: la tesi, els seus satèl·lits i un annex per a arrels, proves tècniques i exercicis de mida. Filtra pel stack que et vagi bé.',
+      en: 'Thirteen projects in three tiers: the thesis, the satellites around it, and an annex for roots, take-home assessments and size exercises. Filter by the stack you care about.',
+      es: 'Trece proyectos en tres niveles: la tesis, sus satélites y un anexo para raíces, pruebas técnicas y ejercicios de tamaño. Filtra por el stack que te interese.',
+      ca: 'Tretze projectes en tres nivells: la tesi, els seus satèl·lits i un annex per a arrels, proves tècniques i exercicis de mida. Filtra pel stack que et vagi bé.',
     });
     expect(PAGES.work.description).toEqual({
-      en: 'Twelve projects in three tiers — thesis, satellites and annex — across backend systems, event pipelines, applied AI and tooling. Filter by the stack you care about.',
-      es: 'Doce proyectos en tres niveles — tesis, satélites y anexo — entre sistemas backend, pipelines de eventos, IA aplicada y herramientas. Filtra por el stack que te interese.',
-      ca: 'Dotze projectes en tres nivells — tesi, satèl·lits i annex — entre sistemes backend, pipelines d’esdeveniments, IA aplicada i eines. Filtra pel stack que et vagi bé.',
+      en: 'Thirteen projects in three tiers — thesis, satellites and annex — across backend systems, event pipelines, applied AI and tooling. Filter by the stack you care about.',
+      es: 'Trece proyectos en tres niveles — tesis, satélites y anexo — entre sistemas backend, pipelines de eventos, IA aplicada y herramientas. Filtra por el stack que te interese.',
+      ca: 'Tretze projectes en tres nivells — tesi, satèl·lits i annex — entre sistemes backend, pipelines d’esdeveniments, IA aplicada i eines. Filtra pel stack que et vagi bé.',
     });
     for (const lang of LOCALES) {
-      expect(WORK.head.sub[lang], lang).toContain('12');
-      expect(WORK.intro[lang], lang).toContain(twelve[lang]);
-      expect(PAGES.work.description[lang], lang).toContain(twelve[lang]);
+      expect(WORK.head.sub[lang], lang).toContain('13');
+      expect(WORK.intro[lang], lang).toContain(thirteen[lang]);
+      expect(PAGES.work.description[lang], lang).toContain(thirteen[lang]);
     }
   });
 });

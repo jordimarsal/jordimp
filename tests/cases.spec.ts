@@ -171,7 +171,7 @@ test.describe('case pages (T7)', () => {
     }
   });
 
-  test('pins the new satellite cohort edges around ggufbench (F24 R21)', async ({ page }) => {
+  test('pins the new satellite cohort edges around buildwright (project_buildwright R36)', async ({ page }) => {
     for (const lang of LOCALES) {
       await page.goto(caseRoute(lang, 'ggufbench'));
       const pager = page.locator('nav.pager');
@@ -180,6 +180,16 @@ test.describe('case pages (T7)', () => {
         caseRoute(lang, 'mcp-transparent-png'),
       );
       await expect(pager.locator('a.pager__link--end')).toHaveAttribute(
+        'href',
+        caseRoute(lang, 'buildwright'),
+      );
+
+      await page.goto(caseRoute(lang, 'buildwright'));
+      await expect(page.locator('nav.pager a.pager__link').first()).toHaveAttribute(
+        'href',
+        caseRoute(lang, 'ggufbench'),
+      );
+      await expect(page.locator('nav.pager a.pager__link--end')).toHaveAttribute(
         'href',
         caseRoute(lang, 'interview-simulator'),
       );
@@ -193,7 +203,7 @@ test.describe('case pages (T7)', () => {
       await page.goto(caseRoute(lang, 'interview-simulator'));
       await expect(page.locator('nav.pager a.pager__link').first()).toHaveAttribute(
         'href',
-        caseRoute(lang, 'ggufbench'),
+        caseRoute(lang, 'buildwright'),
       );
     }
   });

@@ -128,9 +128,9 @@ export const HOME: HomeContent = {
     ca: 'Jordimp & Co. és el nom de feina d’un sol enginyer: sistemes backend, pipelines d’esdeveniments i IA aplicada, dissenyats, construïts i auditats pel mateix parell de mans des del <b>2017</b>. Ara, dins d’un equip de plataforma telco. Entrada lliure: rols, repos, o un encàrrec curt amb spec primer.',
   },
   metaChips: {
-    en: ['EST. 2017', 'BARCELONA', '12 OPEN REPOS', '1 ENGINEER'],
-    es: ['DESDE 2017', 'BARCELONA', '12 REPOS ABIERTOS', '1 INGENIERO'],
-    ca: ['DES DE 2017', 'BARCELONA', '12 REPOS OBERTS', '1 ENGINYER'],
+    en: ['EST. 2017', 'BARCELONA', '13 OPEN REPOS', '1 ENGINEER'],
+    es: ['DESDE 2017', 'BARCELONA', '13 REPOS ABIERTOS', '1 INGENIERO'],
+    ca: ['DES DE 2017', 'BARCELONA', '13 REPOS OBERTS', '1 ENGINYER'],
   },
   floorGuide: {
     label: {
@@ -216,7 +216,7 @@ export const HOME: HomeContent = {
   featuredHead: {
     num: '03',
     title: { en: 'Featured work', es: 'Trabajo destacado', ca: 'Treball destacat' },
-    sub: { en: '3 OF 12 — THE REST IS DOWNSTAIRS', es: '3 DE 12 — EL RESTO ABAJO', ca: '3 DE 12 — LA RESTA A BAIX' },
+    sub: { en: '3 OF 13 — THE REST IS DOWNSTAIRS', es: '3 DE 13 — EL RESTO ABAJO', ca: '3 DE 13 — LA RESTA A BAIX' },
   },
   deptsHead: {
     num: '04',
@@ -360,7 +360,7 @@ export const DEPTS: Record<DeptKey, Dept> = {
       es: 'Herramientas pequeñas y planes por escrito: el trabajo se acuerda sobre el papel antes de la primera línea de código, así siempre sabes qué se construye y por qué.',
       ca: 'Eines petites i plans per escrit: la feina es posa d’acord sobre el paper abans de la primera línia de codi, així sempre saps què es construeix i per què.',
     },
-    projects: ['harness-standard', 'ggufbench', 'md-mermaid-pdf', 'mcp-transparent-png'],
+    projects: ['harness-standard', 'ggufbench', 'buildwright', 'mcp-transparent-png'],
     page: 'tooling',
   },
   inspections: {
@@ -1020,6 +1020,74 @@ export const PROJECTS: readonly Project[] = [
       ],
     },
   ),
+  P(
+    {
+      slug: 'buildwright', name: 'buildwright', year: '2026', featured: false,
+      tier: 'satellite', dept: 'tooling',
+      stack: ['Python', 'LangGraph', 'PydanticAI', 'LiteLLM', 'Langfuse'],
+      github: 'https://github.com/jordimarsal/buildwright',
+    },
+    {
+      blurb: {
+        en: 'The craftsman who builds per the spec — one model per agent, routed by role: mechanical steps stay on the local model, decisions take the remote one. One runtime, configuration instead of code.',
+        es: 'El artesano que construye según la spec — un modelo por agente, asignado por rol: los pasos mecánicos van al modelo local, las decisiones al remoto. Un solo runtime, configuración en lugar de código.',
+        ca: 'L’artesà que construeix segons la spec — un model per agent, assignat per rol: els passos mecànics van al model local, les decisions al remot. Un sol runtime, configuració en lloc de codi.',
+      },
+      summary: {
+        en: 'buildwright is the model-routing runtime of the stack: LangGraph orders the steps, PydanticAI runs each step, LiteLLM serves the model and Langfuse traces it. Every node’s role — plan, execute, review — resolves its model from BW_ROLE_* against models.yaml, so routing stays configuration instead of code, and the harness closes the run at the spec gate and the completion gate.',
+        es: 'buildwright es el runtime de enrutamiento de modelos de la pila: LangGraph ordena los pasos, PydanticAI ejecuta cada paso, LiteLLM sirve el modelo y Langfuse lo traza. El rol de cada nodo — plan, execute, review — resuelve su modelo desde BW_ROLE_* contra models.yaml, así el enrutamiento sigue siendo configuración y no código, y el harness cierra la ejecución en el spec gate y el completion gate.',
+        ca: 'buildwright és el runtime d’encaminament de models de la pila: LangGraph ordena els passos, PydanticAI executa cada pas, LiteLLM serveix el model i Langfuse el traça. El rol de cada node — plan, execute, review — resol el seu model des de BW_ROLE_* contra models.yaml, així l’encaminament continua sent configuració i no codi, i el harness tanca l’execució al spec gate i al completion gate.',
+      },
+      problem: {
+        en: 'An agent pipeline usually runs every step on a single model: the boring mechanical steps spend the same tokens as the decisions that matter, and switching that choice means editing the pipeline. buildwright keeps it in configuration — mechanical steps on the local model, decisions on the remote one — so the pipeline does not change when a model changes.',
+        es: 'Un pipeline de agentes suele ejecutar todos los pasos con un mismo modelo: los pasos mecánicos y aburridos consumen los mismos tokens que las decisiones que importan, y cambiar esa elección obliga a tocar el código. buildwright lo deja en configuración — los pasos mecánicos van al modelo local, las decisiones al remoto —, así el pipeline no cambia cuando cambia un modelo.',
+        ca: 'Un pipeline d’agents sol executar tots els passos amb un mateix model: els passos mecànics i avorrids consumeixen els mateixos tokens que les decisions que importen, i canviar aquesta elecció obliga a tocar el codi. buildwright ho deixa en configuració — els passos mecànics van al model local, les decisions al remot —, així el pipeline no canvia quan canvia un model.',
+      },
+      highlights: {
+        en: [
+          'LangGraph orders the steps, PydanticAI runs each step, LiteLLM serves the model and Langfuse traces it — one job per piece, no piece doing another’s work.',
+          'Plan, execute, review — 3 steps of the pipeline: plan and review run on the local model, execute runs on the remote one, and each node’s role resolves against models.yaml from BW_ROLE_* in Settings.',
+          'The role to model mapping is configuration, not code: switching models touches 0 lines of pipeline, and adding a model to models.yaml is adding 5 lines — and the run still closes at the spec gate and the completion gate.',
+        ],
+        es: [
+          'LangGraph ordena los pasos, PydanticAI ejecuta cada paso, LiteLLM sirve el modelo y Langfuse lo traza — un trabajo por pieza, ninguna pieza haciendo la de otra.',
+          'Plan, execute, review — 3 pasos del pipeline: plan y review corren sobre el modelo local, execute corre sobre el remoto, y el rol de cada nodo se resuelve contra models.yaml desde BW_ROLE_* en Settings.',
+          'El mapa de rol a modelo es configuración, no código: cambiar de modelo toca 0 líneas de pipeline, y añadir un modelo a models.yaml es añadir 5 líneas — y la ejecución sigue cerrando en el spec gate y el completion gate.',
+        ],
+        ca: [
+          'LangGraph ordena els passos, PydanticAI executa cada pas, LiteLLM serveix el model i Langfuse el traça — una feina per peça, cap peça fent la d’una altra.',
+          'Plan, execute, review — 3 passos del pipeline: plan i review corren sobre el model local, execute corre sobre el remot, i el rol de cada node es resol contra models.yaml des de BW_ROLE_* a Settings.',
+          'El mapa de rol a model és configuració, no codi: canviar de model toca 0 línies de pipeline, i afegir un model a models.yaml és afegir 5 línies — i l’execució continua tancant al spec gate i al completion gate.',
+        ],
+      },
+      metrics: [
+        {
+          value: '3',
+          label: {
+            en: 'pipeline steps — plan · execute · review',
+            es: 'pasos del pipeline — plan · execute · review',
+            ca: 'passos del pipeline — plan · execute · review',
+          },
+        },
+        {
+          value: '0',
+          label: {
+            en: 'pipeline lines to switch a model',
+            es: 'líneas de pipeline para cambiar de modelo',
+            ca: 'línies de pipeline per canviar de model',
+          },
+        },
+        {
+          value: '5',
+          label: {
+            en: 'lines to add a model to models.yaml',
+            es: 'líneas para añadir un modelo a models.yaml',
+            ca: 'línies per afegir un model a models.yaml',
+          },
+        },
+      ],
+    },
+  ),
 ];
 
 export const TIER_ORDER: readonly Tier[] = ['thesis', 'satellite', 'annex'];
@@ -1197,12 +1265,12 @@ export const WORK: WorkContent = {
   head: {
     num: 'P',
     title: { en: 'Projects', es: 'Proyectos', ca: 'Projectes' },
-    sub: { en: '12 PROJECTS · 3 TIERS · FILTER BY STACK', es: '12 PROYECTOS · 3 NIVELES · FILTRA POR STACK', ca: '12 PROJECTES · 3 NIVELLS · FILTRA PER STACK' },
+    sub: { en: '13 PROJECTS · 3 TIERS · FILTER BY STACK', es: '13 PROYECTOS · 3 NIVELES · FILTRA POR STACK', ca: '13 PROJECTES · 3 NIVELLS · FILTRA PER STACK' },
   },
   intro: {
-    en: 'Twelve projects in three tiers: the thesis, the satellites around it, and an annex for roots, take-home assessments and size exercises. Filter by the stack you care about.',
-    es: 'Doce proyectos en tres niveles: la tesis, sus satélites y un anexo para raíces, pruebas técnicas y ejercicios de tamaño. Filtra por el stack que te interese.',
-    ca: 'Dotze projectes en tres nivells: la tesi, els seus satèl·lits i un annex per a arrels, proves tècniques i exercicis de mida. Filtra pel stack que et vagi bé.',
+    en: 'Thirteen projects in three tiers: the thesis, the satellites around it, and an annex for roots, take-home assessments and size exercises. Filter by the stack you care about.',
+    es: 'Trece proyectos en tres niveles: la tesis, sus satélites y un anexo para raíces, pruebas técnicas y ejercicios de tamaño. Filtra por el stack que te interese.',
+    ca: 'Tretze projectes en tres nivells: la tesi, els seus satèl·lits i un annex per a arrels, proves tècniques i exercicis de mida. Filtra pel stack que et vagi bé.',
   },
   filterAll: { en: 'All', es: 'Todos', ca: 'Tots' },
   filterSummary: { en: 'FILTER BY STACK ({n})', es: 'FILTRA POR STACK ({n})', ca: 'FILTRA PER STACK ({n})' },
@@ -2059,9 +2127,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'Projectes — Jordimp & Co.',
     },
     description: {
-      en: 'Twelve projects in three tiers — thesis, satellites and annex — across backend systems, event pipelines, applied AI and tooling. Filter by the stack you care about.',
-      es: 'Doce proyectos en tres niveles — tesis, satélites y anexo — entre sistemas backend, pipelines de eventos, IA aplicada y herramientas. Filtra por el stack que te interese.',
-      ca: 'Dotze projectes en tres nivells — tesi, satèl·lits i annex — entre sistemes backend, pipelines d’esdeveniments, IA aplicada i eines. Filtra pel stack que et vagi bé.',
+      en: 'Thirteen projects in three tiers — thesis, satellites and annex — across backend systems, event pipelines, applied AI and tooling. Filter by the stack you care about.',
+      es: 'Trece proyectos en tres niveles — tesis, satélites y anexo — entre sistemas backend, pipelines de eventos, IA aplicada y herramientas. Filtra por el stack que te interese.',
+      ca: 'Tretze projectes en tres nivells — tesi, satèl·lits i annex — entre sistemes backend, pipelines d’esdeveniments, IA aplicada i eines. Filtra pel stack que et vagi bé.',
     },
   },
   cv: {
@@ -2150,9 +2218,9 @@ export const PAGES: Record<string, PageMeta> = {
       ca: 'F1 · Eines i Plataforma — Jordimp & Co.',
     },
     description: {
-      en: 'The workshop floor: harness, ggufbench, md-mermaid-pdf and mcp-transparent-png — deliberately small tools, production standards.',
-      es: 'El taller: harness, ggufbench, md-mermaid-pdf y mcp-transparent-png — herramientas deliberadamente pequeñas, estándares de producción.',
-      ca: 'El taller: harness, ggufbench, md-mermaid-pdf i mcp-transparent-png — eines deliberadament petites, estàndards de producció.',
+      en: 'The workshop floor: harness, ggufbench, buildwright and mcp-transparent-png — deliberately small tools, production standards.',
+      es: 'El taller: harness, ggufbench, buildwright y mcp-transparent-png — herramientas deliberadamente pequeñas, estándares de producción.',
+      ca: 'El taller: harness, ggufbench, buildwright i mcp-transparent-png — eines deliberadament petites, estàndards de producció.',
     },
   },
   operations: {
