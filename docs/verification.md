@@ -81,6 +81,54 @@ value. At minimum, verify the return type and at least one expected property.
 No feature may be marked as `done` unless `harness/init.sh` completes successfully. This is
 the final gate. If `harness/init.sh` fails for any reason, the feature remains `in_progress`.
 
+### Trusting a subagent's "done" claim
+
+A chat reply is not evidence. After **every** implementer batch, verify on disk before
+dispatching the next one:
+
+- the batch's tasks are marked `[x]` in `harness/specs/<name>/tasks.md`;
+- the files it claims to have created really exist and are not empty shells;
+- you run the gates yourself: `uv run ruff check .`, `uv run black --check .`,
+  `uv run mypy`, `uv run pytest tests`.
+
+A reply `done … -> <file>` whose file does not exist has actually happened (twice):
+re-dispatch the same batch opened with `Nothing was written: <missing paths>. Create
+<first file> now.`
+
+### Reading the test count
+
+`pyproject.toml` sets `addopts = "-q"`, so adding your own `-q` yields `-qq`, which
+**hides the summary line** — you get only dots and no total. Always run:
+
+```
+uv run pytest tests        # last line: "486 passed, 1 warning in 4.09s"
+```
+
+and read `N passed`. A row of dots with no `F`/`E` is a pass, not a summary.
+`tests/unit/tooling/test_quality_gates.py::test_R1_quality_gates_pass` fails whenever
+`ruff` does, so a lint error also surfaces as a failed test.
+
+---
+
+## Security Audit Checklist
+
+Read `"audit_level"` from `harness/feature_list.json` (`basic` → confirm each item
+manually and record the confirmation in the review file). This project is a
+single-user localhost app with **security explicitly out of scope** (no auth, no
+users) — the checklist below is therefore minimal and static-analysis oriented:
+
+- [ ] No secrets, API keys, tokens or credentials committed (search for common key
+      patterns; provider configuration lives outside the repo).
+- [ ] No authentication/authorization/session code was added (out of scope by
+      `docs/architecture.md` — its presence would be a spec deviation, not a feature).
+- [ ] The API binds to localhost only; no deployment/hosting configuration was added.
+- [ ] SQLite access uses parameterized queries everywhere (no string-built SQL).
+- [ ] Scraped/API payloads are parsed into typed values only — never executed,
+      never rendered as raw HTML without escaping.
+- [ ] No `eval`/`exec`/`pickle` of external input anywhere under `src/` or `web/src`.
+- [ ] Dependencies come from the official registries via `uv`/`npm` lockfiles; no
+      vendored binaries, no `curl | sh` in scripts.
+
 ---
 
 ## Final Verification
@@ -103,104 +151,3 @@ fix the issue before requesting the completion gate review.
 
 This check is not optional. It is not a suggestion. It is the final, non-negotiable
 proof that the system is in a working state.
-
----
-
-## Project QA Gates (front)
-
-Beyond the levels above, the front site has these concrete gates. All must pass
-before a release task can close:
-
-| Gate | Command | What it proves |
-|---|---|---|
-| Unit + env | `./harness/init.sh` | Vitest suite green (incl. the WCAG contrast gate and data invariants) |
-| E2E | `npx astro build && npx astro preview` then `npx playwright test` | 86-page sweep (28 routes × 3 locales + splash + 404) with zero console errors + parity vs `tests/fixtures/parity.json` + behaviors |
-| Content QA | `npm run qa:content` | Route census matches `src/data` exactly; trilingual titles/descriptions; no phone/address; external links live |
-| Link resolution | `npm run qa:links` | Every internal `href`/`src` in the built HTML resolves to an emitted file; external links live |
-| Parity oracle | `npm run qa:guard` | `dist/` matches the committed ADR-6 oracle (titles, copy, plates, flags). Same check the pre-push hook runs; `npm run test:e2e` covers it too |
-| Lighthouse | `npm run qa:lighthouse` | Category gates in `lighthouserc.json` on the six audited URLs (three locale homes + three inspections pages) |
-
-Content QA scripts derive their route matrix from `src/data/content.ts` — never
-duplicate route lists inside a script or test.
-
-Weekly self-audit (F10): `.github/workflows/quality.yml` (weekly cron + manual
-dispatch, no push trigger — the JSON commit rides the normal deploy) runs the full
-pipeline and commits `src/data/quality.json` via `scripts/collect-quality.mjs`. The
-commit step is a no-op (exit 0, run stays green) when neither `src/data/quality.json`
-nor `tests/fixtures/parity.json` drifted — an empty week must not fail the audit. To
-verify locally: run the pipeline steps (build, vitest, playwright, `qa:lighthouse`)
-then `node scripts/collect-quality.mjs` — it exits non-zero with a named message and
-writes nothing if any source report is missing. The committed JSON is schema-validated
-by `parseQuality` on every vitest run; the verdict thresholds mirrored in
-`src/lib/quality.ts` are JSON-parsed from the real `lighthouserc.json` in the spec, so
-gate and verdict cannot drift apart.
-
-Lighthouse note: manual Lighthouse 13 runs against the live site also report the
-`agentic-browsing` category (audit `llms-txt`, green since F8); the CI gate
-(`lighthouserc.json`) keeps asserting the four classic categories with unchanged
-thresholds. The remaining known findings in the full live report are GitHub Pages
-platform limitations (cache `max-age=600`, no custom HSTS/CSP/COOP headers, no
-HTTP/3) and browser-extension noise from the testing environment — not site
-defects.
-
-<!-- harness:module:security-audit:start -->
-## Security Audit Checklist (security-audit module)
-
-> Appended by the harness `security-audit` module. The reviewer applies this
-> checklist manually at `audit_level: basic`, and runs
-> `bash harness/tools/audit-security.sh` at `standard` and above. Findings are
-> recorded in the feature's progress entry with severity (HIGH/MEDIUM/LOW),
-> description, and resolution or explicit waiver.
-
-### A01 Broken Access Control
-- [ ] Sensitive endpoints and operations require authentication.
-- [ ] Role/permission checks enforced server-side, not only in the UI.
-
-### A02 Cryptographic Failures
-- [ ] No hardcoded secrets; credentials come from environment or a secrets manager.
-- [ ] Cryptographic randomness from the stack's secure source (`secrets`, `crypto`).
-- [ ] Sensitive data encrypted at rest and in transit where required.
-
-### A03 Injection
-- [ ] SQL via parameterized queries only — never string concatenation.
-- [ ] No `shell=True` or unsanitized shell interpolation; file paths validated against traversal.
-- [ ] HTML/JSON output escaped (XSS) when data reaches a UI.
-
-### A04 Insecure Design
-- [ ] External input validated (type, range, format, length) at the boundary.
-- [ ] Rate limiting and retry-with-backoff considered for public endpoints.
-
-### A05 Security Misconfiguration
-- [ ] No debug mode, verbose stack traces, or default credentials in production config.
-- [ ] Error messages generic externally; internal detail logged securely, without PII.
-
-### API security headers (when serving HTTP)
-
-```
-X-Content-Type-Options: nosniff
-X-Frame-Options: DENY
-Content-Security-Policy: default-src 'self'
-Strict-Transport-Security: max-age=31536000; includeSubDomains
-Permissions-Policy: <deny unused browser capabilities>
-Referrer-Policy: no-referrer
-Cache-Control: no-store          # only for sensitive responses
-```
-
-(Deprecated `X-XSS-Protection` is intentionally not listed.)
-
-### Automated scanning (audit_level standard and above)
-
-Run `bash harness/tools/audit-security.sh` from the project root. The script uses
-the stack's tools when installed and degrades to this checklist otherwise — it
-must never be a blocker by itself; HIGH findings it reports reject the approval.
-
-### Report format (in the review file)
-
-```markdown
-## Security Audit
-- Method: manual checklist | audit-security.sh
-- Findings:
-  - [HIGH/MEDIUM/LOW] <description> — <resolution or waiver>
-- Result: PASS | REJECTED (HIGH findings unresolved)
-```
-<!-- harness:module:security-audit:end -->

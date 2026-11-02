@@ -64,6 +64,24 @@ No automated tooling may bypass these gates. The reviewer leaves a written appro
 record in the feature directory (e.g., a commit message or comment referencing the
 feature name and gate).
 
+### The hybrid variant
+
+A `--hybrid` install keeps this exact gate structure while changing only who
+executes: one in-session agent plays spec-author, implementer and reviewer
+sequentially, following each agent definition as a script. The compensating
+controls are mandatory, not optional:
+
+- **Evidence logs** — every batch's gate output is saved to
+  `harness/logs/<feature>/batch-<n>.log`; a task is only `[x]` with its log in
+  place.
+- **Objective traceability** — `harness/tools/check-traceability.py` output is
+  saved in the feature directory before requesting the Completion Gate.
+- **Escalation** — features over ~12 tasks, critical-file changes, repeated
+  stalls, or subjective verification all switch back to the full dispatch flow.
+
+The trade-off is stated in the workflow section of the entry file: hybrid
+trades independent-context review for velocity.
+
 ---
 
 ## EARS Notation Reference
@@ -167,8 +185,14 @@ The task list breaks the design into discrete, ordered implementation steps. For
 Rules:
 
 - Each task is a single discrete step that can be completed and verified independently.
+- **Size for batches**: the implementer receives 2–4 consecutive tasks per dispatch.
+  One task = one coherent change **plus** the tests that verify it, and every 2–4
+  consecutive tasks must form a batch that lands with green gates on its own. Split
+  any task that would create more than ~400 lines or span unrelated layers — a batch
+  that cannot finish in one session is a batch that stalls.
 - `depends_on` lists the task IDs that must be completed first. Use `(none)` for tasks
-  with no dependencies.
+  with no dependencies. Keep chains shallow: batch n+1 must be startable from the
+  files batch n leaves behind.
 - `refs` lists the requirement IDs (R\<n\>) that this task contributes to satisfying.
   Every R\<n\> must be referenced by at least one task.
 
