@@ -15,6 +15,7 @@ const STATIC_ROUTES = [
   'blog/which-local-model-for-coding-agents',
   'blog/rag-eval-gate',
   'blog/sixteen-models-one-gate',
+  'blog/which-local-model-round-2-llama-cpp-0-9',
 ];
 const PROJECT_SLUGS = PROJECTS.map((p) => p.slug);
 const DEPT_SLUGS = FLOOR_ORDER.map((key) =>
@@ -113,13 +114,13 @@ async function styleOf(page: Page, selector: string, property: string): Promise<
     .evaluate((el, prop) => getComputedStyle(el).getPropertyValue(prop), property);
 }
 
-test.describe('89-page sweep (R27, F10 R16, F15 R22, F16 R31)', () => {
+test.describe('92-page sweep (R27, F10 R16, F15 R22, F16 R31)', () => {
   test('sweep: every built page answers with the expected status and zero console errors', async ({
     page,
   }) => {
     test.setTimeout(300_000);
-    expect(SWEEP_TARGETS).toHaveLength(89);
-    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(89);
+    expect(SWEEP_TARGETS).toHaveLength(92);
+    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(92);
     expect(Object.keys(parity.routes).sort()).toEqual(
       localeRoutes().sort()
     );
@@ -225,7 +226,7 @@ test.describe('golden parity vs the distilled build oracle (R27, ADR-6)', () => 
     test(`parity: every ${locale} page matches the oracle fixture`, async ({ page }) => {
       test.setTimeout(300_000);
       const routes = localeRoutes().filter((route) => route.startsWith(`/${locale}/`));
-      expect(routes).toHaveLength(29);
+      expect(routes).toHaveLength(30);
 
       for (const route of routes) {
         const expected = parity.routes[route];
