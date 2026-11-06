@@ -1402,7 +1402,331 @@ const GGUF_SCOREBOARD = {
   ],
 } as const;
 
+// Round 2 (2026-11-06): same fleet re-measured on llama.cpp 0.9.0-dev+b1c902f
+// (Strata engine 0.1.57), single-run pass, ON rows at fair caps 1024/8192.
+const GGUF_SCOREBOARD_R2 = {
+  head: ['model', 'think', 'tools', 'code', 'agent', 'speed', 'global', 'was'],
+  rows: [
+    ['minicpm-v-4.7-35b-a3b q4_k_m', 'on', '100%', '84% (10 excl.)', '92%', '23ms', '0.87', '0.85'],
+    ['qwen36-35b-distill-mxfp4_moe', 'off', '100%', '71%', '93%', '16ms', '0.87', '0.84'],
+    ['minicpm-v-4.7-35b-a3b q4_k_m', 'off', '100%', '80% (2 excl.)', '90%', '21ms', '0.86', '0.85'],
+    ['qwen3.8-27b-ud-q3_k_xl', 'off', '100%', '81%', '94%', '36ms', '0.83', '0.82'],
+    ['ornith-1.5-35b-a3b-apex-mtp-quality', 'off', '100%', '74%', '91%', '26ms', '0.82', '0.82'],
+    ['qwen3.8-27b-heretic-q4_k_m', 'on', '100%', '97% (7 excl.)', '97%', '1053ms', '0.84', '0.80'],
+    ['qwen3.8-27b-ud-q3_k_xl', 'on', '100%', '90% (3 excl.)', '96%', '686ms', '0.81', '0.80'],
+    ['ornith-1.5-35b-a3b-apex-mtp-quality', 'on', '94%', '87% (1 excl.)', '96%', '412ms', '0.79', '0.77'],
+    ['strata-iq3_xxs (strata engine 0.1.57)', 'on', '94%', '87% (4 excl.)', '94%', '398ms', '0.78', '0.70'],
+    ['gemma-4-26b-a4b-it-ud-q5_k_xl', 'on', '94%', '79%', '89%', '690ms', '0.75', '0.74'],
+    ['qwen36-35b-distill-mxfp4_moe', 'on', '94%', '74% (4 excl.)', '89%', '244ms', '0.73', '0.72'],
+    ['gemma-4-26b-a4b-it-ud-q5_k_xl', 'off', '89%', '83%', '89%', '32ms', '0.80', '0.80'],
+    ['strata-iq3_xxs (strata engine 0.1.57)', 'off', '89%', '83%', '90%', '36ms', '0.80', '0.80'],
+    ['qwen3.8-27b-heretic-q4_k_m', 'off', '100%', '81%', '93%', '66ms', '0.80', '0.81'],
+  ],
+} as const;
+
+// Context receipts for the same rows: in_tokens per call (tools, code) and
+// tokens per agent session (average / median over 72 sessions per row).
+const RECEIPTS_R2 = {
+  head: ['model', 'think', 'tools in/call', 'code in/call', 'agent session avg', 'agent session median'],
+  rows: [
+    ['qwen36-35b-distill-mxfp4_moe', 'off', '305 / 294', '187 / 115', '4,839', '3,789'],
+    ['minicpm-v-4.7-35b-a3b q4_k_m', 'off', '305 / 294', '187 / 115', '4,502', '3,643'],
+    ['qwen3.8-27b-ud-q3_k_xl', 'off', '305 / 294', '187 / 115', '5,150', '3,913'],
+    ['ornith-1.5-35b-a3b-apex-mtp-quality', 'off', '305 / 294', '187 / 115', '5,155', '4,120'],
+    ['qwen3.8-27b-heretic-q4_k_m', 'off', '305 / 294', '187 / 115', '5,404', '3,817'],
+    ['gemma-4-26b-a4b-it-ud-q5_k_xl', 'off', '104 / 86', '190 / 116', '4,412', '3,048'],
+    ['strata-iq3_xxs (strata engine 0.1.57)', 'off', '289 / 281', '187 / 115', '4,663', '3,512'],
+    ['qwen36-35b-distill-mxfp4_moe', 'on', '303 / 292', '185 / 113', '6,086', '4,200'],
+    ['minicpm-v-4.7-35b-a3b q4_k_m', 'on', '303 / 292', '185 / 113', '6,186', '4,465'],
+    ['qwen3.8-27b-ud-q3_k_xl', 'on', '341 / 330', '223 / 151', '9,057', '6,130'],
+    ['ornith-1.5-35b-a3b-apex-mtp-quality', 'on', '303 / 292', '185 / 113', '10,758', '6,353'],
+    ['strata-iq3_xxs (strata engine 0.1.57)', 'on', '326 / 317', '223 / 151', '10,101', '6,058'],
+    ['qwen3.8-27b-heretic-q4_k_m', 'on', '341 / 330', '223 / 151', '8,500', '4,710'],
+    ['gemma-4-26b-a4b-it-ud-q5_k_xl', 'on', '102 / 84', '188 / 114', '11,060', '7,740'],
+  ],
+} as const;
+
 export const POSTS: readonly PostContent[] = [
+  {
+    slug: 'which-local-model-round-2-llama-cpp-0-9',
+    date: '2026-11-06',
+    revision: 'REV A',
+    dateLabel: { en: 'FILED', es: 'REGISTRADO', ca: 'REGISTRAT' },
+    title: {
+      en: 'Which local model should a coding agent run? Round 2: llama.cpp 0.9',
+      es: '¿Qué modelo local debería ejecutar un agente de código? Ronda 2: llama.cpp 0.9',
+      ca: 'Quin model local hauria d’executar un agent de codi? Ronda 2: llama.cpp 0.9',
+    },
+    description: {
+      en: 'Round 2 of the local-model benchmark — the same harness re-measures seven GGUFs and a Strata engine on llama.cpp 0.9, where ON now wins, the +0.08 nobody predicted, how much context each model burns per task, and the caps mistake that faked an agent collapse.',
+      es: 'Ronda 2 del benchmark de modelos locales — el mismo harness vuelve a medir siete GGUFs y un motor Strata sobre llama.cpp 0.9, donde ON ahora gana, el +0.08 que nadie predecía, cuánto contexto quema cada modelo por tarea y el error de caps que fingió un colapso de agente.',
+      ca: 'Ronda 2 del benchmark de models locals — el mateix harness torna a mesurar set GGUFs i un motor Strata sobre llama.cpp 0.9, on ON ara guanya, el +0.08 que ningú preveia, quant context crema cada model per tasca i l’error de caps que va fingir un col·lapse d’agent.',
+    },
+    lead: {
+      en: 'One month after the first round: the same harness re-measures the fleet on llama.cpp 0.9.0 and Strata 0.1.57, expecting the ranking to survive. It did not — and the receipts caught the reason.',
+      es: 'Un mes después de la primera ronda: el mismo harness vuelve a medir la flota sobre llama.cpp 0.9.0 y Strata 0.1.57, esperando que el ranking sobreviviera. No sobrevivió — y los recibos cazaron el motivo.',
+      ca: 'Un mes després de la primera ronda: el mateix harness torna a mesurar la flota sobre llama.cpp 0.9.0 i Strata 0.1.57, esperant que el rànquing sobrevisqués. No hi va sobreviure — i els rebuts van caçar el motiu.',
+    },
+    about: 'https://github.com/jordimarsal/ggufbench',
+    sections: [
+      {
+        anchor: 'then-and-now',
+        heading: {
+          en: 'The fleet, then and now',
+          es: 'La flota, entonces y ahora',
+          ca: 'La flota, llavors i ara',
+        },
+        blocks: [
+          {
+            kind: 'table',
+            head: [...GGUF_SCOREBOARD_R2.head],
+            rows: GGUF_SCOREBOARD_R2.rows.map((row) => [...row]),
+          },
+          ...paragraphBlocks({
+            en: [
+              'ON rows ran with generation caps 1024/8192 and OFF rows with the fleet defaults 128/512; the gap between those two is the first finding. Single-run pass, seed 42: every number here is one measurement where October’s were the mean of three, and the ± columns return with the 3-seed pass. The <code>turbofcfusion-neo-coder</code> row is record only — its quant is no longer on disk.',
+            ],
+            es: [
+              'Las filas ON corrieron con caps de generación 1024/8192 y las OFF con los defaults de la flota 128/512; la distancia entre esos dos es el primer hallazgo. Pasada de una sola tirada, semilla 42: cada número aquí es una medición donde las de octubre eran la media de tres, y las columnas ± vuelven con la pasada de 3 semillas. La fila <code>turbofcfusion-neo-coder</code> queda como registro — su quant ya no está en disco.',
+            ],
+            ca: [
+              'Les files ON van córrer amb caps de generació 1024/8192 i les OFF amb els defaults de la flota 128/512; la distància entre tots dos és el primer descobriment. Passada d’una sola tirada, llavor 42: cada número aquí és una mesura on les d’octubre eren la mitjana de tres, i les columnes ± tornen amb la passada de 3 llavors. La fila <code>turbofcfusion-neo-coder</code> queda com a registre — el seu quant ja no és al disc.',
+            ],
+          }),
+        ],
+      },
+      {
+        anchor: 'caps',
+        heading: {
+          en: 'The mistake worth your time: caps',
+          es: 'El error que merece tu tiempo: los caps',
+          ca: 'L’error que et mereixes: els caps',
+        },
+        blocks: paragraphBlocks({
+          en: [
+            'The first thing I re-measured collapsed. Agent scores fell to 58% and 64% where October said 96% and 97%, with the models answering empty in turn one. The receipts said why: the thinking chain burned the entire 512-token turn budget before any tool call, and the episode carried on with a hole in it. The October fleet ran ON rows at 1024/8192; this pass first ran them at the harness defaults of 128/512.',
+            'Nothing about the models had degraded; the harness conditions had. Re-run at the fair caps, the collapse inverted — UD-Q3 back to 96% agent, Heretic to 97% — and ON went from a tax to a win almost everywhere. If you benchmark agentic models, take this away: a thinking model measured with direct-answer caps measures the harness, not the model. The failure mode (empty replies, one turn, no error) looks exactly like a model regression unless the receipts record it. Mine did; that is the only reason this paragraph exists.',
+          ],
+          es: [
+            'Lo primero que volví a medir se colapsó. Las puntuaciones de agente cayeron al 58% y 64% donde octubre decía 96% y 97%, con los modelos respondiendo vacío en el primer turno. Los recibos dijeron por qué: la cadena de thinking quemó todo el presupuesto de turno de 512 tokens antes de ninguna tool call, y el episodio siguió con un agujero dentro. La flota de octubre corrió las filas ON a 1024/8192; esta pasada las corrió primero con los defaults del harness, 128/512.',
+            'Nada en los modelos se había degradado; las condiciones del harness sí. Devuelta a correr con los caps justos, el colapso se invirtió — UD-Q3 de vuelta al 96% de agente, Heretic al 97% — y ON pasó de ser un impuesto a ser una victoria en casi todas partes. Si mides modelos agénticos, llévate esto: un modelo thinking medido con caps de respuesta directa mide el harness, no el modelo. El modo de fallo (respuestas vacías, un turno, sin error) se parece exactamente a una regresión del modelo a menos que los recibos lo registren. Los míos lo hicieron; por eso existe este párrafo.',
+          ],
+          ca: [
+            'La primera cosa que vaig tornar a mesurar es va ensorrar. Les puntuacions d’agent van caure al 58% i 64% on octubre deia 96% i 97%, amb els models responent buit al primer torn. Els rebuts van dir per què: la cadena de thinking va cremar tot el pressupost de torn de 512 tokens abans de cap tool call, i l’episodi va seguir amb un forat dins. La flota d’octubre va córrer les files ON a 1024/8192; aquesta passada les va córrer primer amb els defaults del harness, 128/512.',
+            'Res en els models s’havia degradat; les condicions del harness sí. Tornada a córrer amb els caps justos, l’ensorrament es va invertir — UD-Q3 de tornada al 96% d’agent, Heretic al 97% — i ON va passar de ser un impost a ser una victòria a gairebé tot arreu. Si mides models agèntics, endús-te això: un model thinking mesurat amb caps de resposta directa mesura el harness, no el model. El mode de fallada (respostes buides, un torn, sense error) s’assembla exactament a una regressió del model tret que els rebuts ho registrin. Els meus ho van fer; per això existeix aquest paràgraf.',
+          ],
+        }),
+      },
+      {
+        anchor: 'what-moved',
+        heading: {
+          en: 'What moved with the engine',
+          es: 'Lo que se movió con el motor',
+          ca: 'Què s’ha mogut amb el motor',
+        },
+        blocks: [
+          ...paragraphBlocks({
+            en: ['Four things stood out.'],
+            es: ['Cuatro cosas destacaron.'],
+            ca: ['Quatre coses van destacar.'],
+          }),
+          {
+            kind: 'subheading',
+            anchor: 'thinking',
+            text: {
+              en: 'Thinking stopped being only a hard-code tool',
+              es: 'El thinking dejó de ser solo una herramienta de código difícil',
+              ca: 'El thinking va deixar de ser només una eina de codi difícil',
+            },
+          },
+          ...paragraphBlocks({
+            en: [
+              'In October, ON bought quality only on the hard tier. This time ON improved six of seven models. Heretic-on posts the fleet’s best code and agent, 97% on both, and MiniCPM-on ties the top of the board at 0.87 while keeping its 23ms turns — still the only model whose thinking is free.',
+            ],
+            es: [
+              'En octubre, ON compraba calidad solo en el nivel difícil. Esta vez ON mejoró a seis de siete modelos. Heretic-on publica el mejor código y agente de la flota, 97% en ambos, y MiniCPM-on empata la cima de la tabla en 0.87 manteniendo sus turnos de 23ms — sigue siendo el único modelo cuyo thinking es gratis.',
+            ],
+            ca: [
+              'A l’octubre, ON comprava qualitat només al nivell difícil. Aquesta vegada ON va millorar sis de set models. Heretic-on publica el millor codi i agent de la flota, 97% en tots dos, i MiniCPM-on empatava el cap de la taula a 0.87 mantenint els seus torns de 23ms — continua sent l’únic model el thinking del qual és gratis.',
+            ],
+          }),
+          {
+            kind: 'subheading',
+            anchor: 'strata',
+            text: {
+              en: 'Strata gained the most',
+              es: 'Strata se llevó la mayor ganancia',
+              ca: 'Strata es va endur la guanyada més gran',
+            },
+          },
+          ...paragraphBlocks({
+            en: [
+              '0.70 to 0.78 on engine 0.1.57 with the fair caps; tools went 78 to 94% and agent 77 to 94%. The OFF row stayed at 0.80, so the engine work landed specifically in thinking mode.',
+            ],
+            es: [
+              'De 0.70 a 0.78 con el motor 0.1.57 y los caps justos; tools pasó de 78 a 94% y agente de 77 a 94%. Su fila OFF se quedó en 0.80, así que el trabajo del motor aterrizó específicamente en modo thinking.',
+            ],
+            ca: [
+              'De 0.70 a 0.78 amb el motor 0.1.57 i els caps justos; tools va passar de 78 a 94% i agent de 77 a 94%. La seva fila OFF es va quedar a 0.80, així que la feina del motor va aterrar específicament en mode thinking.',
+            ],
+          }),
+          {
+            kind: 'subheading',
+            anchor: 'off-stable',
+            text: {
+              en: 'OFF stayed put except tools',
+              es: 'OFF se quedó en su sitio, salvo tools',
+              ca: 'OFF es va quedar al seu lloc, tret de tools',
+            },
+          },
+          ...paragraphBlocks({
+            en: [
+              'llama.cpp 0.9 kept every OFF global within ±0.03 of October, and most rows moved less than the run-to-run spread. The movement sat in tool calling: qwen36 went 94 to 100% with turns at 16ms, while Heretic trades five points of code for a 19ms faster turn.',
+            ],
+            es: [
+              'llama.cpp 0.9 mantuvo cada global de OFF dentro de ±0.03 de octubre, y la mayoría de las filas se movieron menos que la dispersión entre tiradas. El movimiento estuvo en el tool calling: qwen36 pasó de 94 a 100% con turnos a 16ms, mientras Heretic cambia cinco puntos de código por un turno 19ms más rápido.',
+            ],
+            ca: [
+              'llama.cpp 0.9 va mantenir cada global de OFF dins de ±0.03 d’octubre, i la majoria de files es van moure menys que la dispersió entre tirades. El moviment va estar al tool calling: qwen36 va passar de 94 a 100% amb torns a 16ms, mentre Heretic canvia cinc punts de codi per un torn 19ms més ràpid.',
+            ],
+          }),
+          {
+            kind: 'subheading',
+            anchor: 'tie-modes',
+            text: {
+              en: 'The top is now a tie between modes',
+              es: 'La cima ahora es un empate entre modos',
+              ca: 'El cap ara és un empat entre modes',
+            },
+          },
+          ...paragraphBlocks({
+            en: [
+              'October’s ties were between OFF rows. This time MiniCPM-on 0.87 equals qwen36-off 0.87, so the pick is by use: qwen36-off for 16ms turns, MiniCPM-on for 84% code with receipts.',
+            ],
+            es: [
+              'Los empates de octubre eran entre filas OFF. Esta vez MiniCPM-on 0.87 iguala a qwen36-off 0.87, así que la elección es por uso: qwen36-off para turnos de 16ms, MiniCPM-on para 84% de código con recibos.',
+            ],
+            ca: [
+              'Els empats d’octubre eren entre files OFF. Aquesta vegada MiniCPM-on 0.87 iguala qwen36-off 0.87, així que l’elecció és per ús: qwen36-off per torns de 16ms, MiniCPM-on per 84% de codi amb rebuts.',
+            ],
+          }),
+        ],
+      },
+      {
+        anchor: 'receipts',
+        heading: {
+          en: 'How much context does a model burn to pass?',
+          es: '¿Cuánto contexto quema un modelo para pasar?',
+          ca: 'Quant context crema un model per aprovar?',
+        },
+        blocks: [
+          ...paragraphBlocks({
+            en: [
+              'The question a reader left on the first round: the agent loop re-sends the whole conversation every turn, so two models with the same pass rate can cost very differently in sent tokens. Until now the harness counted what the model emitted (<code>out_tokens</code>) and not what it read. This round every row carries context receipts — <code>in_tokens</code> per call for tools and code, tokens per agent session summed over the episode’s turns, average and median across the fleet’s 72 sessions.',
+            ],
+            es: [
+              'La pregunta que dejó un lector en la primera ronda: el bucle de agente reenvía toda la conversación en cada turno, así que dos modelos con el mismo porcentaje de acierto pueden costar muy diferente en tokens enviados. Hasta ahora el harness contaba lo que el modelo emitía (<code>out_tokens</code>) y no lo que leía. Esta ronda cada fila lleva recibos de contexto — <code>in_tokens</code> por llamada para tools y código, tokens por sesión de agente sumados sobre los turnos del episodio, media y mediana sobre las 72 sesiones de la flota.',
+            ],
+            ca: [
+              'La pregunta que va deixar un lector a la primera ronda: el bucle d’agent reenvia tota la conversa a cada torn, de manera que dos models amb el mateix percentatge d’encert poden costar molt diferent en tokens enviats. Fins ara el harness comptava el que el model emetia (<code>out_tokens</code>) i no el que llegia. Aquesta ronda cada fila porta rebuts de context — <code>in_tokens</code> per crida per a tools i codi, tokens per sessió d’agent sumats sobre els torns de l’episodi, mitjana i mediana sobre les 72 sessions de la flota.',
+            ],
+          }),
+          {
+            kind: 'table',
+            head: [...RECEIPTS_R2.head],
+            rows: RECEIPTS_R2.rows.map((row) => [...row]),
+          },
+          ...paragraphBlocks({
+            en: ['Three things the receipts say.'],
+            es: ['Tres cosas que dicen los recibos.'],
+            ca: ['Tres coses que diuen els rebuts.'],
+          }),
+          {
+            kind: 'subheading',
+            anchor: 'flat',
+            text: {
+              en: 'Per-call burn is flat',
+              es: 'La quemadura por llamada es plana',
+              ca: 'La crema per crida és plana',
+            },
+          },
+          ...paragraphBlocks({
+            en: [
+              'Roughly 290-340 tokens in per tool call and 185-220 per code call everywhere, because those prompts are the same tasks. All the variance lives in the agent loop, where the conversation grows.',
+            ],
+            es: [
+              'Cerca de 290-340 tokens de entrada por tool call y 185-220 por llamada de código en todas partes, porque esos prompts son las mismas tareas. Toda la varianza vive en el bucle de agente, donde la conversación crece.',
+            ],
+            ca: [
+              'Cap a 290-340 tokens d’entrada per tool call i 185-220 per crida de codi a tot arreu, perquè aquells prompts són les mateixes tasques. Tota la variància viu al bucle d’agent, on la conversa creix.',
+            ],
+          }),
+          {
+            kind: 'subheading',
+            anchor: 'context-tax',
+            text: {
+              en: 'Thinking is a context tax too',
+              es: 'El thinking también es un impuesto de contexto',
+              ca: 'El thinking també és un impost de context',
+            },
+          },
+          ...paragraphBlocks({
+            en: [
+              'Same model, same tasks, ON against OFF: +26% session tokens on qwen36, +57% on Heretic, +76% on UD-Q3, +117% on Strata, +151% on gemma. The latency table already showed one cost of thinking; the receipts show the second.',
+            ],
+            es: [
+              'Mismo modelo, mismas tareas, ON contra OFF: +26% de tokens de sesión en qwen36, +57% en Heretic, +76% en UD-Q3, +117% en Strata, +151% en gemma. La tabla de latencias ya mostró un coste del thinking; los recibos muestran el segundo.',
+            ],
+            ca: [
+              'Mateix model, mateixes tasques, ON contra OFF: +26% de tokens de sessió en qwen36, +57% en Heretic, +76% en UD-Q3, +117% en Strata, +151% en gemma. La taula de latències ja va mostrar un cost del thinking; els rebuts mostren el segon.',
+            ],
+          }),
+          {
+            kind: 'subheading',
+            anchor: 'per-token',
+            text: {
+              en: 'Quality per burned token is its own ranking',
+              es: 'La calidad por token quemado es su propio ranking',
+              ca: 'La qualitat per token cremat és el seu propi rànquing',
+            },
+          },
+          ...paragraphBlocks({
+            en: [
+              'qwen36-off delivers the joint-top 0.87 at 4.8K tokens per session, and MiniCPM-on the same 0.87 at 6.2K — the cheap thinker. At the other end, gemma-on burns the most context in the fleet (11.1K average, 7.7K median) for 0.75, and Strata-on pays 10.1K for 0.78. The engine work bought its points expensively.',
+            ],
+            es: [
+              'qwen36-off entrega el empate en la cima, 0.87, con 4.8K de tokens por sesión, y MiniCPM-on el mismo 0.87 con 6.2K — el pensador barato. En el otro extremo, gemma-on quema el máximo de contexto de la flota (11.1K de media, 7.7K mediana) para 0.75, y Strata-on paga 10.1K por 0.78. El trabajo del motor compró sus puntos caros.',
+            ],
+            ca: [
+              'qwen36-off entrega l’empat al cap, 0.87, amb 4.8K de tokens per sessió, i MiniCPM-on el mateix 0.87 amb 6.2K — el pensador barat. A l’altre extrem, gemma-on crema el màxim de context de la flota (11.1K de mitjana, 7.7K mediana) per 0.75, i Strata-on paga 10.1K per 0.78. La feina del motor va comprar els seus punts cars.',
+            ],
+          }),
+        ],
+      },
+      {
+        anchor: 'advice',
+        heading: {
+          en: 'What I would tell you to do',
+          es: 'Lo que te diría que hicieras',
+          ca: 'Què et diria que fessis',
+        },
+        blocks: paragraphBlocks({
+          en: [
+            'Same as last time, with one amendment. Measure on your own hardware, read the exclusions, treat close rows as ties, and when a score moves, check the caps before you believe the model. An engine upgrade does not change what a model knows; it changes how the plumbing counts. The fleet still has no single winner: tools and cheap turns belong to qwen36-off, code and agent now belong to Heretic-on, speed-agnostic quality to MiniCPM, and long-form dispatch to Strata, which just closed most of the gap its first round left open.',
+            'Scoreboard and live report: <a href="https://jordimarsal.github.io/ggufbench/">jordimarsal.github.io/ggufbench</a>. Code, tasks and receipts: <a href="https://github.com/jordimarsal/ggufbench">github.com/jordimarsal/ggufbench</a>. The first round, for context: <a href="/en/blog/which-local-model-for-coding-agents/">which local model for coding agents</a>.',
+          ],
+          es: [
+            'Igual que la última vez, con una enmienda. Mide en tu propio hardware, lee las exclusiones, trata las filas cercanas como empates, y cuando una puntuación se mueva, revisa los caps antes de creerle al modelo. Una actualización de motor no cambia lo que un modelo sabe; cambia cómo cuenta la fontanería. La flota sigue sin tener un único ganador: tools y turnos baratos son de qwen36-off, código y agente ahora son de Heretic-on, la calidad agnóstica de velocidad es de MiniCPM, y el despacho de formato largo es de Strata, que acaba de cerrar casi todo el hueco que su primera ronda dejó abierto.',
+            'Marcador e informe en vivo: <a href="https://jordimarsal.github.io/ggufbench/">jordimarsal.github.io/ggufbench</a>. Código, tareas y recibos: <a href="https://github.com/jordimarsal/ggufbench">github.com/jordimarsal/ggufbench</a>. La primera ronda, para contexto: <a href="/es/blog/which-local-model-for-coding-agents/">qué modelo local debería ejecutar un agente de código</a>.',
+          ],
+          ca: [
+            'Igual que l’altre cop, amb una esmena. Mesura al teu propi maquinari, llegeix les exclusions, tracta les files properes com a empats, i quan una puntuació es mogui, revisa els caps abans de creure’t el model. Una actualització de motor no canvia el que un model sap; canvia com compta la fontaneria. La flota segueix sense tenir un únic guanyador: tools i torns barats són de qwen36-off, codi i agent ara són de Heretic-on, la qualitat agnòstica de velocitat és de MiniCPM, i el despatx de format llarg és de Strata, que acaba de tancar gairebé tot el forat que la seva primera ronda va deixar obert.',
+            'Marcador i informe en directe: <a href="https://jordimarsal.github.io/ggufbench/">jordimarsal.github.io/ggufbench</a>. Codi, tasques i rebuts: <a href="https://github.com/jordimarsal/ggufbench">github.com/jordimarsal/ggufbench</a>. La primera ronda, per context: <a href="/ca/blog/which-local-model-for-coding-agents/">quin model local hauria d’executar un agent de codi</a>.',
+          ],
+        }),
+      },
+    ],
+  },
   {
     slug: 'sixteen-models-one-gate',
     date: '2026-10-19',
@@ -2161,6 +2485,12 @@ export const PAGES: Record<string, PageMeta> = {
     nav: 'blog',
     title: withBrand(post('which-local-model-for-coding-agents').title),
     description: post('which-local-model-for-coding-agents').description,
+  },
+  'post-ggufbench-round2': {
+    route: 'blog/which-local-model-round-2-llama-cpp-0-9.html',
+    nav: 'blog',
+    title: withBrand(post('which-local-model-round-2-llama-cpp-0-9').title),
+    description: post('which-local-model-round-2-llama-cpp-0-9').description,
   },
   'post-porter-brain': {
     route: 'blog/sixteen-models-one-gate.html',

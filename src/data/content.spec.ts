@@ -970,8 +970,9 @@ describe('blog posts data (F15)', () => {
   const essay = post('rag-eval-gate');
   const gguf = post('which-local-model-for-coding-agents');
 
-  it('ships exactly three posts ordered by publication date descending (R9)', () => {
+  it('ships exactly four posts ordered by publication date descending (R9)', () => {
     expect(POSTS.map((entry) => entry.slug)).toEqual([
+      'which-local-model-round-2-llama-cpp-0-9',
       'sixteen-models-one-gate',
       'which-local-model-for-coding-agents',
       'rag-eval-gate',
