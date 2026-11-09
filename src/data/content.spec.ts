@@ -742,13 +742,14 @@ describe('home counters after the 13th project (project_buildwright)', () => {
 });
 
 describe('pages data', () => {
-  it('registers home, work, cv, the blog trio, contact, the 7 departments and the 13 project pages (R7, F16 R5, R27)', () => {
+  it('registers home, work, cv, the blog quartet, contact, the 7 departments and the 13 project pages (R7, F16 R5, R27)', () => {
     const expected = [
       'home',
       'work',
       'cv',
       'blog',
       'post-ggufbench',
+      'post-ggufbench-round2',
       'post-porter-brain',
       'article-rag-eval-gate',
       'article-rag-eval-gate-redirect',
@@ -757,7 +758,7 @@ describe('pages data', () => {
       ...PROJECTS.map((p) => `project-${p.slug}`),
     ];
     expect(Object.keys(PAGES).sort()).toEqual(expected.sort());
-    expect(Object.keys(PAGES)).toHaveLength(29);
+    expect(Object.keys(PAGES)).toHaveLength(30);
   });
 
   it('registers the ggufbench case page on the tooling floor (R18)', () => {
