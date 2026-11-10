@@ -10,6 +10,8 @@ from ask_api.result import CitationMissing, Err, Ok, Result
 
 _MARKER_RE = re.compile(r"\[(\d{1,3})\]")
 _INLINE_SPACES_RE = re.compile(r"[ \t]{2,}")
+
+
 def _collapse_orphan_punct(text: str) -> str:
     """Col·lapsa espais/tabulacions abans de puntuació (equivalent lineal al regex)."""
     for punct in ".,;:!?":

@@ -30,9 +30,7 @@ from ask_api.result import Ok
 
 LANGS = ["en", "es", "ca"]
 
-QUESTION_SYS = (
-    "You create evaluation datasets. Output ONLY a JSON object, no other text."
-)
+QUESTION_SYS = "You create evaluation datasets. Output ONLY a JSON object, no other text."
 
 
 def teacher_call(base_url: str, system: str, user: str, max_tokens: int) -> str:
@@ -77,10 +75,7 @@ def main() -> None:
     rng = random.Random(42)
 
     golden = yaml.safe_load(args.golden.read_text(encoding="utf-8"))
-    banned = {
-        norm(str(item["q"]))
-        for item in golden["questions"] + golden.get("off_corpus", [])
-    }
+    banned = {norm(str(item["q"])) for item in golden["questions"] + golden.get("off_corpus", [])}
 
     rows: list[dict] = []
     seen_questions: set[str] = set()
@@ -90,9 +85,7 @@ def main() -> None:
         return index.search(vec, settings.top_k)
 
     with tempfile.TemporaryDirectory() as tmp:
-        vectors = embedder.embed(
-            [f"{settings.embed_doc_prefix}{c.embed_text()}" for c in chunks]
-        )
+        vectors = embedder.embed([f"{settings.embed_doc_prefix}{c.embed_text()}" for c in chunks])
         index = SqliteVecIndex(Path(tmp) / "gen.sqlite", settings.embed_dim)
         index.rebuild(
             chunks,
@@ -117,10 +110,12 @@ def main() -> None:
             out_path.parent.mkdir(parents=True, exist_ok=True)
             out_file = out_path.open("a", encoding="utf-8")
             # 1) teacher invents a question in `lang`
-            picked = rng.sample(sources, 2) if kind == "compound" else [rng.choice(sources)]  # NOSONAR: dataset sampling, no security use
+            if kind == "compound":  # noqa: SIM108 — el NOSONAR per crida exigeix linies curtes
+                picked = [rng.sample(sources, 2)]  # NOSONAR: sampling de dataset
+            else:
+                picked = [rng.choice(sources)]  # NOSONAR: sampling de dataset
             glimpse = "\n\n".join(
-                f"- {s}: " + next(c.text[:350] for c in chunks if c.source == s)
-                for s in picked
+                f"- {s}: " + next(c.text[:350] for c in chunks if c.source == s) for s in picked
             )
             if kind == "refusal":
                 task = (
@@ -146,7 +141,7 @@ def main() -> None:
                 '{{"question": "..."}}',
                 120,
             )
-            m = re.search(r'\{.*\}', raw, re.S)
+            m = re.search(r"\{.*\}", raw, re.S)
             if not m:
                 continue
             try:
