@@ -12,7 +12,7 @@ import { existsSync } from 'node:fs';
 
 const HOOKS_DIR = '.githooks';
 // S4036: resolve git against a fixed PATH instead of inheriting the environment's.
-const GIT_ENV = { PATH: '/usr/local/bin:/usr/bin:/bin' };
+const GIT_ENV = { PATH: '/usr/bin:/bin' };
 const QUIET = { stdio: 'ignore', env: GIT_ENV };
 
 if (!existsSync(HOOKS_DIR)) {

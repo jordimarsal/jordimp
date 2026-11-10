@@ -43,7 +43,7 @@ class HashEmbedder:
             sign = 1.0 if digest[8] % 2 == 0 else -1.0
             vector[index] += sign
         norm = math.sqrt(sum(value * value for value in vector))
-        if norm == 0.0:
+        if norm <= 0.0:
             return vector
         return [value / norm for value in vector]
 

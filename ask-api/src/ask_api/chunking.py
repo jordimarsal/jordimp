@@ -1,10 +1,7 @@
 """Markdown-aware chunker: heading-scoped windows with bounded size and overlap."""
 
 import hashlib
-import re
 from dataclasses import dataclass
-
-_HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*#*\s*$")
 
 
 @dataclass(frozen=True)
@@ -64,14 +61,15 @@ def _split_sections(text: str) -> list[tuple[str, str]]:
             sections.append((heading, joined))
 
     for line in text.splitlines():
-        match = _HEADING_RE.match(line)
-        if match:
+        stripped = line.strip()
+        level = len(stripped) - len(stripped.lstrip("#"))
+        if 1 <= level <= 6 and stripped[level : level + 1] in (" ", "\t"):
             flush()
             body = []
-            level = len(match.group(1))
             while stack and stack[-1][0] >= level:
                 stack.pop()
-            stack.append((level, match.group(2).strip()))
+            title = stripped[level:].strip().rstrip("#").rstrip()
+            stack.append((level, title))
             heading = " › ".join(name for _, name in stack)
         else:
             body.append(line)

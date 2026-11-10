@@ -117,7 +117,7 @@ def main() -> None:
             out_path.parent.mkdir(parents=True, exist_ok=True)
             out_file = out_path.open("a", encoding="utf-8")
             # 1) teacher invents a question in `lang`
-            picked = rng.sample(sources, 2) if kind == "compound" else [rng.choice(sources)]
+            picked = rng.sample(sources, 2) if kind == "compound" else [rng.choice(sources)]  # NOSONAR: dataset sampling, no security use
             glimpse = "\n\n".join(
                 f"- {s}: " + next(c.text[:350] for c in chunks if c.source == s)
                 for s in picked

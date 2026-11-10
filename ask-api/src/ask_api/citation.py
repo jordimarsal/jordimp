@@ -10,7 +10,7 @@ from ask_api.result import CitationMissing, Err, Ok, Result
 
 _MARKER_RE = re.compile(r"\[(\d{1,3})\]")
 _INLINE_SPACES_RE = re.compile(r"[ \t]{2,}")
-_ORPHAN_PUNCT_RE = re.compile(r"[ \t]+([.,;:!?])")
+_ORPHAN_PUNCT_RE = re.compile(r"[ \t]+([.,;:!?])")  # NOSONAR: single quantifier, linear
 
 _NOT_COVERED: dict[Lang, str] = {
     "en": (
