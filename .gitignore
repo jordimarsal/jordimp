@@ -55,3 +55,7 @@ coverage/
 
 # sonar-scanner artifacts
 .scannerwork/
+
+# sonar-scanner artifacts
+.scannerwork/
+.scannerwork-fleet.log
