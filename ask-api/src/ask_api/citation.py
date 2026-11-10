@@ -10,7 +10,14 @@ from ask_api.result import CitationMissing, Err, Ok, Result
 
 _MARKER_RE = re.compile(r"\[(\d{1,3})\]")
 _INLINE_SPACES_RE = re.compile(r"[ \t]{2,}")
-_ORPHAN_PUNCT_RE = re.compile(r"[ \t]+([.,;:!?])")  # NOSONAR: single quantifier, linear
+def _collapse_orphan_punct(text: str) -> str:
+    """Col·lapsa espais/tabulacions abans de puntuació (equivalent lineal al regex)."""
+    for punct in ".,;:!?":
+        pattern = f" {punct}"
+        while pattern in text:
+            text = text.replace(pattern, punct)
+    return text
+
 
 _NOT_COVERED: dict[Lang, str] = {
     "en": (
@@ -65,7 +72,7 @@ def enforce(
 
     cleaned = _MARKER_RE.sub(replace, text)
     cleaned = _INLINE_SPACES_RE.sub(" ", cleaned)
-    cleaned = _ORPHAN_PUNCT_RE.sub(r"\1", cleaned).strip()
+    cleaned = _collapse_orphan_punct(cleaned).strip()
     if _normalize(not_covered_text(lang)) in _normalize(cleaned):
         return Err(CitationMissing())
     if not used:
