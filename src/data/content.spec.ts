@@ -77,7 +77,7 @@ describe('projects data', () => {
 describe('departments data', () => {
   it('exposes exactly the seven floor keys in the fixed floor order', () => {
     expect(FLOOR_ORDER).toHaveLength(DEPT_COUNT);
-    expect(Object.keys(DEPTS).sort()).toEqual([...FLOOR_ORDER].sort());
+    expect(Object.keys(DEPTS).sort((a, b) => a.localeCompare(b, "en"))).toEqual([...FLOOR_ORDER].sort((a, b) => a.localeCompare(b, "en")));
   });
 
   it('pins the fixed floor order itself, inspections between tooling and people', () => {
@@ -112,7 +112,7 @@ describe('departments data', () => {
   });
 
   it('covers all seven departments in FLOOR_LABELS with trilingual labels', () => {
-    expect(Object.keys(FLOOR_LABELS).sort()).toEqual([...FLOOR_ORDER].sort());
+    expect(Object.keys(FLOOR_LABELS).sort((a, b) => a.localeCompare(b, "en"))).toEqual([...FLOOR_ORDER].sort((a, b) => a.localeCompare(b, "en")));
     for (const key of FLOOR_ORDER) {
       for (const lang of LOCALES) {
         expect(FLOOR_LABELS[key][lang].trim(), `${key}:${lang}`).not.toBe('');
@@ -757,7 +757,7 @@ describe('pages data', () => {
       ...FLOOR_ORDER,
       ...PROJECTS.map((p) => `project-${p.slug}`),
     ];
-    expect(Object.keys(PAGES).sort()).toEqual(expected.sort());
+    expect(Object.keys(PAGES).sort((a, b) => a.localeCompare(b, "en"))).toEqual(expected.sort((a, b) => a.localeCompare(b, "en")));
     expect(Object.keys(PAGES)).toHaveLength(30);
   });
 
@@ -979,7 +979,7 @@ describe('blog posts data (F15)', () => {
       'rag-eval-gate',
     ]);
     expect(POSTS.map((entry) => entry.date)).toEqual(
-      [...POSTS.map((entry) => entry.date)].sort().reverse(),
+      [...POSTS.map((entry) => entry.date)].sort((a, b) => a.localeCompare(b, "en")).reverse(),
     );
   });
 
@@ -1095,7 +1095,7 @@ describe('project outcome copy (F16 R23, R24)', () => {
 
   it('defines an outcome on exactly the three thesis projects (R23)', () => {
     const withOutcome = PROJECTS.filter((p) => p.outcome !== undefined).map((p) => p.slug);
-    expect([...withOutcome].sort()).toEqual([...THESIS_SLUGS].sort());
+    expect([...withOutcome].sort((a, b) => a.localeCompare(b, "en"))).toEqual([...THESIS_SLUGS].sort((a, b) => a.localeCompare(b, "en")));
   });
 
   it('keeps every outcome trilingual and non-empty (R23)', () => {
@@ -1122,7 +1122,7 @@ describe('project outcome copy (F16 R23, R24)', () => {
     for (const lang of LOCALES) {
       expect(ownNumerals('kafka-adapter-telemetry', lang)).toContain('90');
       expect(ownNumerals('kafka-adapter-telemetry', lang)).toContain('4');
-      expect(numerals(project('kafka-adapter-telemetry').outcome?.[lang] ?? '').sort()).toEqual(
+      expect(numerals(project('kafka-adapter-telemetry').outcome?.[lang] ?? '').sort((a, b) => a.localeCompare(b, "en"))).toEqual(
         ['4', '90'],
       );
     }
@@ -1206,7 +1206,7 @@ describe('ggufbench post data (F15, fact boundary R13)', () => {
     [...text.matchAll(/\d+(?:\.\d+)?/g)].map((match) => match[0]);
 
   const outboundUrls = (lang: 'en' | 'es' | 'ca'): readonly string[] =>
-    [...proseOf(lang).matchAll(/https?:\/\/[^\s<"']+/g)].map((match) => match[0]).sort();
+    [...proseOf(lang).matchAll(/https?:\/\/[^\s<"']+/g)].map((match) => match[0]).sort((a, b) => a.localeCompare(b, "en"));
 
   it('pins the exact English h1 (R13)', () => {
     expect(gguf.title.en).toBe(

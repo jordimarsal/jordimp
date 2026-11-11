@@ -4,7 +4,7 @@ import { CASE_MOTIFS, caseMotif } from './case-svg';
 
 describe('CASE_MOTIFS', () => {
   it('covers every project slug exactly', () => {
-    expect(Object.keys(CASE_MOTIFS).sort()).toEqual(PROJECTS.map((p) => p.slug).sort());
+    expect(Object.keys(CASE_MOTIFS).sort((a, b) => a.localeCompare(b, "en"))).toEqual(PROJECTS.map((p) => p.slug).sort((a, b) => a.localeCompare(b, "en")));
   });
 
   it('emits theme-aware cutout SVGs with the shared motif classes', () => {

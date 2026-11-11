@@ -309,12 +309,12 @@ describe('quality.yml workflow contract (R13)', () => {
     expect(text).toContain('schedule:');
     expect(text).toContain('cron:');
     expect(text).toContain('workflow_dispatch:');
-    expect(text).not.toMatch(/^\s*push:/m);
-    expect(text).not.toMatch(/^\s*pull_request:/m);
+    expect(text).not.toMatch(/^[ \t]*push:/m);
+    expect(text).not.toMatch(/^[ \t]*pull_request:/m);
   });
 
   it('declares minimal contents: write permissions', () => {
-    expect(workflow()).toMatch(/permissions:\s*\n\s*contents:\s*write/);
+    expect(workflow()).toMatch(/permissions:[ \t]*\n[ \t]*contents:[ \t]*write/);
   });
 
   it('pins every action by its full 40-hex commit SHA', () => {

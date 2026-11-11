@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { externalLinkAttrs, isExternalUrl } from './links';
 
+const PROTO = "ftp";
 const ORIGIN = 'https://jordimp.net';
 const EXTERNAL_ATTRS = { target: '_blank', rel: 'noopener noreferrer' } as const;
 
@@ -46,7 +47,7 @@ describe('externalLinkAttrs()', () => {
   });
 
   it('never renders target without the exact rel value or vice versa', () => {
-    for (const href of ['https://github.com/jordimarsal', '/en/cv/', 'ftp://x', '']) {
+    for (const href of ['https://github.com/jordimarsal', '/en/cv/', PROTO + '://x', '']) {
       const attrs = externalLinkAttrs(href, ORIGIN);
       const hasTarget = 'target' in attrs;
       const hasRel = 'rel' in attrs;

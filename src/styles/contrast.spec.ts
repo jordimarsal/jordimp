@@ -46,7 +46,7 @@ function tokenBlock(selector: RegExp): Tokens {
     throw new Error(`site.css: token block not found for ${selector}`);
   }
   const tokens: Tokens = {};
-  for (const match of block.matchAll(/--([\w-]+):\s*([^;]+);/g)) {
+  for (const match of block.matchAll(/--([\w-]+):(?>\s*)([^;]+);/g)) {
     const name = match[1];
     const value = match[2];
     if (name !== undefined && value !== undefined) {
