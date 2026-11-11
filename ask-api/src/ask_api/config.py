@@ -30,6 +30,11 @@ class Settings(BaseSettings):
     gen_url: str = "http://localhost:8081"
     gen_model: str = "portfolio-mini"
     gen_timeout_s: float = 30.0
+    # Failover: when set, a second OpenAI-compatible backend (ex. Ollama on
+    # :11434) serves whenever the primary is unreachable — same wire format.
+    fallback_url: str | None = None
+    fallback_model: str = "deepseek-r1"
+    fallback_timeout_s: float = 30.0
 
     threshold: float = 0.55
     top_k: int = 6  # calibrated: compound questions (two topics, several sources) need the room

@@ -4,7 +4,7 @@ import hashlib
 import math
 import re
 import unicodedata
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from itertools import pairwise
 
 from ask_api.ports import Prompt
@@ -54,3 +54,6 @@ class EchoGenerator:
     def generate(self, prompt: Prompt) -> str:
         question_line = prompt.user.splitlines()[-1]
         return f"[1] Deterministic echo: {question_line[:80]}"
+
+    def stream(self, prompt: Prompt) -> Iterator[str]:
+        yield self.generate(prompt)

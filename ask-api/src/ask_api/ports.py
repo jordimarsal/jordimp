@@ -30,7 +30,9 @@ class Generator(Protocol):
 
 
 class StreamingGenerator(Protocol):
-    """A generator that streams answer deltas instead of one blocking string."""
+    """A generator that can also stream answer deltas."""
+
+    def generate(self, prompt: Prompt) -> str: ...
 
     def stream(self, prompt: Prompt) -> Iterator[str]: ...
 
