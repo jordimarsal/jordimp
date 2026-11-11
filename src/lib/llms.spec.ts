@@ -248,14 +248,14 @@ describe('link invariants (both builders)', () => {
 
   it('leaves no https:// URL outside a Markdown link', () => {
     for (const [name, build] of builders) {
-      const stripped = build(base).replace(/\[(?>[^\]]*)\]\((?>[^)]*)\)/g, '');
+      const stripped = build(base).replace(/\([^)]*\)/g, '()').replace(/\[[^\]]*\]/g, '[]');
       expect(stripped, name).not.toContain('https://');
     }
   });
 
   it('never uses a URL as a link label', () => {
     for (const [name, build] of builders) {
-      const labels = [...build(base).matchAll(/\[(?>[^\]]*)\]\((?>[^)]*)\)/g)].map((match) => match[1]);
+      const labels = [...build(base).matchAll(/\[([^\]]*)\]/g)].map((match) => match[1]);
       for (const label of labels) {
         expect(label, name).not.toMatch(/https?:\/\//);
       }
