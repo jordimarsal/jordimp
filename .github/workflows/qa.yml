@@ -19,7 +19,31 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      # 2026-11-11: el runner va perdre el DNS a *.ubuntu.com durant ~6 min
+      # ("Temporary failure resolving 'security.ubuntu.com'") i l'apt de
+      # playwright install --with-deps va morir amb exit 100 -> el job esgoniava
+      # ABANS de fer cap test. No és un error del codi: és xarxa del runner.
+      # Ara: apt amb reintents i IPv4, i el mateix pas de playwright reintentat.
+      - name: Prepara apt (reintents + IPv4)
+        run: |
+          for i in 1 2 3; do
+            if sudo apt-get -o Acquire::Retries=5 -o Acquire::ForceIPv4=true update; then
+              break
+            fi
+            echo "::warning::apt-get update fallit (intent $i/3); reintent en 30s"
+            sleep 30
+          done
+      - name: Instal·la Chromium (reintents)
+        run: |
+          for i in 1 2 3; do
+            if npx playwright install --with-deps chromium; then
+              exit 0
+            fi
+            echo "::warning::playwright install fallit (intent $i/3); reintent en 30s"
+            sleep 30
+          done
+          echo "::error::no s'ha pogut instal·lar Chromium"
+          exit 1
       - run: npm run test:e2e
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: failure()
@@ -27,6 +51,7 @@ jobs:
           name: playwright-artifacts
           path: test-results/
           retention-days: 7
+          if-no-files-found: ignore
   lighthouse:
     runs-on: ubuntu-latest
     steps:
