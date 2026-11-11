@@ -1,18 +1,19 @@
 """FastAPI boundary: routes, problem+json errors, CORS allowlist, access logs."""
 
 import asyncio
+import json
 import logging
 import time
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Iterator
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import httpx
 from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -23,7 +24,7 @@ from ask_api.citation import not_covered_text
 from ask_api.config import Lang, Settings
 from ask_api.ratelimit import ConcurrencyGate, TokenBucket
 from ask_api.result import Err, UpstreamError
-from ask_api.service import AnswerService
+from ask_api.service import Answer, AnswerService
 
 logger = logging.getLogger("ask_api")
 access_logger = logging.getLogger("ask_api.access")
@@ -276,7 +277,105 @@ def create_app(settings: Settings, deps: Deps | None = None) -> FastAPI:
             },
         )
 
+    @app.post("/api/ask/stream")
+    async def ask_stream(payload: AskRequest, request: Request) -> Response:
+        """SSE twin of `/api/ask`: deltas first, the validated body last.
+
+        The citation guard runs on the accumulated text before the terminal
+        event, so mid-stream deltas are progress, never authority. The last
+        data event mirrors the blocking response shape exactly, followed by
+        the `data: [DONE]` sentinel.
+        """
+        origin = request.headers.get("origin")
+        if origin is not None and origin not in settings.cors_origin_list:
+            return _problem(403, "Forbidden", "origin is not allowed")
+        question = payload.question.strip()
+        if not question:
+            return _problem(422, "Invalid request", "question must not be blank")
+        if len(question) > settings.max_question_chars:
+            return _problem(
+                422,
+                "Invalid request",
+                f"question exceeds {settings.max_question_chars} characters",
+            )
+        key = _client_key(request)
+        if not resolved.limiter.allow(key):
+            logger.warning("rate limit exceeded client=%s", key)
+            return _problem(
+                429,
+                "Too many requests",
+                "rate limit exceeded",
+                retry_after_s=max(1, resolved.limiter.retry_after(key)),
+            )
+        if not resolved.gate.try_acquire():
+            logger.warning("concurrency gate rejected client=%s", key)
+            return _problem(
+                429,
+                "Too many requests",
+                "server is busy, retry shortly",
+                retry_after_s=_BUSY_RETRY_AFTER_S,
+            )
+        started = time.perf_counter()
+
+        def events() -> Iterator[str]:
+            try:
+                for event in resolved.service.answer_stream(question, payload.lang):
+                    body = _stream_body(event, payload.lang, started)
+                    yield f"data: {json.dumps(body, ensure_ascii=False)}\n\n"
+            except UpstreamError:
+                logger.warning("upstream failure during stream client=%s", key)
+                body = {
+                    "type": "error",
+                    "answer": not_covered_text(payload.lang),
+                    "citations": [],
+                    "lang": payload.lang,
+                    "covered": False,
+                }
+                yield f"data: {json.dumps(body, ensure_ascii=False)}\n\n"
+            finally:
+                resolved.gate.release()
+            yield "data: [DONE]\n\n"
+
+        return StreamingResponse(events(), media_type="text/event-stream")
+
     return app
+
+
+def _stream_body(event: dict[str, object], lang: Lang, started: float) -> dict[str, Any]:
+    """Map one service event to its SSE payload.
+
+    Delta events carry raw progress; the terminal body mirrors the blocking
+    `/api/ask` response shape exactly, so clients reuse one parser.
+    """
+    kind = event.get("type")
+    if kind == "delta":
+        return {"type": "delta", "text": str(event.get("text", ""))}
+    if kind == "refused":
+        return {
+            "answer": not_covered_text(lang),
+            "citations": [],
+            "lang": lang,
+            "covered": False,
+        }
+    if kind == "error":
+        return {
+            "type": "error",
+            "answer": not_covered_text(lang),
+            "citations": [],
+            "lang": lang,
+            "covered": False,
+        }
+    answer = cast(Answer, event.get("answer"))
+    latency = int((time.perf_counter() - started) * 1000)
+    return {
+        "answer": answer.text,
+        "citations": [
+            {"source": c.source, "title": c.title, "heading": c.heading} for c in answer.citations
+        ],
+        "lang": lang,
+        "covered": answer.covered,
+        "latency_ms": latency,
+    }
 
 
 def _client_key(request: Request) -> str:

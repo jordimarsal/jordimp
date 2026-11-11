@@ -1,6 +1,7 @@
 """llama.cpp HTTP adapters (OpenAI-compatible endpoints)."""
 
-from collections.abc import Sequence
+import json
+from collections.abc import Iterator, Sequence
 
 import httpx
 
@@ -102,3 +103,47 @@ class LlamaCppGenerator:
         if not isinstance(content, str) or not content.strip():
             raise UpstreamError("generator")
         return content
+
+    def stream(self, prompt: Prompt) -> Iterator[str]:
+        """Stream answer deltas from `llama-server /v1/chat/completions` (SSE).
+
+        Yields each non-empty content delta as it arrives; the `[DONE]`
+        terminator ends the iterator. Any transport or payload failure raises
+        `UpstreamError` — before the first delta or mid-stream, and callers
+        decide how to surface already-emitted partial text.
+        """
+        payload: dict[str, object] = {
+            "model": self._model,
+            "messages": [
+                {"role": "system", "content": prompt.system},
+                {"role": "user", "content": prompt.user},
+            ],
+            "temperature": 0,
+            "max_tokens": self._max_tokens,
+            "stream": True,
+        }
+        emitted = False
+        try:
+            with self._client.stream(
+                "POST",
+                f"{self._base_url}/v1/chat/completions",
+                json=payload,
+                timeout=self._timeout_s,
+            ) as response:
+                response.raise_for_status()
+                for line in response.iter_lines():
+                    if not line.startswith("data: "):
+                        continue
+                    data = line[len("data: ") :].strip()
+                    if data == "[DONE]":
+                        break
+                    item = json.loads(data)
+                    delta = item["choices"][0]["delta"].get("content")
+                    if not isinstance(delta, str) or not delta:
+                        continue
+                    emitted = True
+                    yield delta
+        except (httpx.HTTPError, KeyError, IndexError, TypeError, ValueError) as exc:
+            raise UpstreamError("generator") from exc
+        if not emitted:
+            raise UpstreamError("generator: empty stream")

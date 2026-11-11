@@ -1,7 +1,7 @@
 """AnswerService: embed → retrieve → threshold → prompt → generate → cite."""
 
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 
 from ask_api.citation import Citation, enforce
@@ -62,6 +62,49 @@ class AnswerService:
                 latency_ms=self._elapsed_ms(started),
             )
         )
+
+    def answer_stream(self, question: str, lang: Lang) -> Iterator[dict[str, object]]:
+        """Stream deltas as they are generated; the final event is validated.
+
+        The citation guard runs once over the accumulated text, exactly like
+        the blocking path: mid-stream deltas are raw model output by
+        construction, and only the terminal event carries the authoritative
+        answer. Fails honestly (`refused`/`error` events) instead of
+        streaming unvalidated claims. Requires a generator that supports
+        `stream`; the blocking `generate` path stays the fallback.
+        """
+        started = self._clock()
+        stream_fn = getattr(self._generator, "stream", None)
+        if stream_fn is None:
+            yield {"type": "error", "reason": "streaming-unsupported"}
+            return
+        vector = self._embedder.embed([f"{self._query_prefix}{question}"])[0]
+        chunks = self._index.search(vector, self._top_k)
+        if is_below_threshold(chunks, self._threshold):
+            yield {
+                "type": "refused",
+                "top_score": top_score(chunks),
+                "threshold": self._threshold,
+            }
+            return
+        parts: list[str] = []
+        for delta in stream_fn(build_prompt(question, lang, chunks)):
+            parts.append(delta)
+            yield {"type": "delta", "text": delta}
+        outcome = enforce("".join(parts), chunks, lang)
+        if isinstance(outcome, Err):
+            yield {"type": "error", "reason": type(outcome.error).__name__}
+            return
+        text, citations = outcome.value
+        yield {
+            "type": "done",
+            "answer": Answer(
+                text=text,
+                citations=citations,
+                covered=True,
+                latency_ms=self._elapsed_ms(started),
+            ),
+        }
 
     def _elapsed_ms(self, started: float) -> int:
         return int((self._clock() - started) * 1000)

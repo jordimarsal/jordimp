@@ -12,6 +12,60 @@ def client_with(handler) -> httpx.Client:  # type: ignore[no-untyped-def]
     return httpx.Client(transport=httpx.MockTransport(handler))
 
 
+def test_generator_streams_deltas_and_stops_at_done() -> None:
+    sse_body = (
+        'data: {"choices": [{"delta": {"content": "Hello"}}]}\n\n'
+        'data: {"choices": [{"delta": {"content": " world"}}]}\n\n'
+        "data: [DONE]\n\n"
+    )
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, content=sse_body.encode("utf-8"))
+
+    generator = LlamaCppGenerator(
+        base_url="http://models.test",
+        model="portfolio-mini",
+        max_tokens=32,
+        timeout_s=5.0,
+        client=client_with(handler),
+    )
+    assert list(generator.stream(Prompt(system="s", user="u"))) == ["Hello", " world"]
+
+
+def test_generator_stream_requests_streaming_and_raises_on_empty() -> None:
+    seen: dict[str, object] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["body"] = json.loads(request.content)
+        return httpx.Response(200, content=b"data: [DONE]\n\n")
+
+    generator = LlamaCppGenerator(
+        base_url="http://models.test",
+        model="portfolio-mini",
+        max_tokens=32,
+        timeout_s=5.0,
+        client=client_with(handler),
+    )
+    with pytest.raises(UpstreamError):
+        list(generator.stream(Prompt(system="s", user="u")))
+    assert seen["body"]["stream"] is True
+
+
+def test_generator_stream_raises_upstream_on_http_error() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(500)
+
+    generator = LlamaCppGenerator(
+        base_url="http://models.test",
+        model="portfolio-mini",
+        max_tokens=32,
+        timeout_s=5.0,
+        client=client_with(handler),
+    )
+    with pytest.raises(UpstreamError):
+        list(generator.stream(Prompt(system="s", user="u")))
+
+
 def test_embedder_posts_model_and_returns_vectors() -> None:
     seen = {}
 

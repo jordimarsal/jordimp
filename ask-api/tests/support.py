@@ -1,6 +1,6 @@
 """Shared test doubles and builders (not a test module)."""
 
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 
 from ask_api.chunking import Chunk
 from ask_api.ports import Prompt, ScoredChunk
@@ -69,6 +69,18 @@ class RecordingGenerator:
         if self._error is not None:
             raise self._error
         return self._reply
+
+
+class StreamingRecordingGenerator(RecordingGenerator):
+    """RecordingGenerator twin that streams the reply as word deltas."""
+
+    def stream(self, prompt: Prompt) -> Iterator[str]:
+        self.calls += 1
+        self.prompts.append(prompt)
+        if self._error is not None:
+            raise self._error
+        for word in self._reply.split(" "):
+            yield word + " "
 
 
 class FakeClock:

@@ -1,6 +1,6 @@
 """Ports (Protocols) for the hexagonal boundary + shared read models."""
 
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -27,6 +27,12 @@ class Embedder(Protocol):
 
 class Generator(Protocol):
     def generate(self, prompt: Prompt) -> str: ...
+
+
+class StreamingGenerator(Protocol):
+    """A generator that streams answer deltas instead of one blocking string."""
+
+    def stream(self, prompt: Prompt) -> Iterator[str]: ...
 
 
 class VectorIndex(Protocol):
