@@ -4,6 +4,9 @@ app:
   rate-limit-requests-per-minute: 60
   refresh-interval-ms: 30000
   cors-allowed-origins: "https://jordimp.net,http://localhost:4321"
+  pool-top-n: 10
+  # Note: ~ is not expanded by Spring. Use absolute path or let Compose handle it via /data/pool/pool.jsonl
+  pool-path: "~/ia/llama/ggufbench/results/models/pool.jsonl"
 llama:
   base-url: "http://localhost:8999"
 strata:

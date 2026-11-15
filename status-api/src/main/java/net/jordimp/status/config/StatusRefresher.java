@@ -1,5 +1,6 @@
 package net.jordimp.status.config;
 
+import net.jordimp.status.core.FleetService;
 import net.jordimp.status.core.StatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,14 +14,18 @@ public class StatusRefresher {
     private static final Logger log = LoggerFactory.getLogger(StatusRefresher.class);
 
     private final StatusService service;
+    private final FleetService fleetService;
 
-    public StatusRefresher(StatusService service) {
+    public StatusRefresher(StatusService service, FleetService fleetService) {
         this.service = service;
+        this.fleetService = fleetService;
     }
 
     @Scheduled(fixedDelayString = "${app.refresh-interval-ms:30000}")
     public void refresh() {
         service.refresh();
         log.debug("engine status refreshed");
+        fleetService.refreshIfChanged();
+        log.debug("fleet status refreshed");
     }
 }

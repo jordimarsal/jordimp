@@ -8,7 +8,9 @@ public record AppProperties(
     int probeTimeoutMs,
     int sseHeartbeatSeconds,
     int rateLimitRequestsPerMinute,
-    List<String> corsAllowedOrigins
+    List<String> corsAllowedOrigins,
+    int poolTopN,
+    String poolPath
 ) {
     /**
      * T8: Compact constructor for startup validation.
@@ -25,6 +27,12 @@ public record AppProperties(
         }
         if (corsAllowedOrigins == null) {
             throw new IllegalArgumentException("app.cors-allowed-origins cannot be null");
+        }
+        if (poolTopN <= 0) {
+            throw new IllegalArgumentException("app.pool-top-n must be > 0");
+        }
+        if (poolPath == null || poolPath.isBlank()) {
+            throw new IllegalArgumentException("app.pool-path cannot be blank");
         }
     }
 }

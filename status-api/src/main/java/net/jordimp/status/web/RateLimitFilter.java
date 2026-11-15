@@ -10,11 +10,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
-/**
- * Token bucket rate limiter per IP.
- */
 public class RateLimitFilter extends OncePerRequestFilter {
     
     private record Bucket(double tokens, long lastRefillTimestamp) {}
@@ -28,10 +24,11 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        // getRequestURI (not getServletPath): MockMvc requests have an empty
-        // servletPath, which silently skipped the filter in tests.
         String path = request.getRequestURI();
-        return !(path.equals("/api/status") || path.equals("/api/status/stream") || path.equals("/api/health"));
+        return !(path.equals("/api/status") || 
+                 path.equals("/api/status/stream") || 
+                 path.equals("/api/health") ||
+                 path.equals("/api/fleet")); // T26.2: Added /api/fleet to protected set
     }
 
     @Override
@@ -54,11 +51,10 @@ public class RateLimitFilter extends OncePerRequestFilter {
     private synchronized boolean tryAcquire(String ip) {
         long now = System.currentTimeMillis();
         double refillRatePerMs = (double) config.rateLimitRequestsPerMinute() / 60_000.0;
-        double capacity = config.rateLimitRequestsPerMinute(); // Simplified: capacity = RPM
+        double capacity = config.rateLimitRequestsPerMinute();
 
         Bucket bucket = buckets.computeIfAbsent(ip, k -> new Bucket(capacity, now));
         
-        // Refill
         long elapsed = now - bucket.lastRefillTimestamp();
         double newTokens = Math.min(capacity, bucket.tokens() + (elapsed * refillRatePerMs));
         
@@ -66,8 +62,6 @@ public class RateLimitFilter extends OncePerRequestFilter {
             buckets.put(ip, new Bucket(newTokens - 1.0, now));
             return true;
         } else {
-            // Update timestamp to last refill attempt even if failed? No, keep old timestamp to accumulate correctly.
-            // Actually, we update the tokens so next time we have the accumulated amount.
             buckets.put(ip, new Bucket(newTokens, now));
             return false;
         }
@@ -76,7 +70,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
     private void sendProblemJson(HttpServletResponse response) throws IOException {
         response.setStatus(429);
         response.setContentType("application/problem+json");
-        response.setHeader("Retry-After", "60"); // Simplification for T5
+        response.setHeader("Retry-After", "60");
         response.getWriter().write("""
             {
               "type": "https://api.jordimp.net/probs/rate-limit-exceeded",
