@@ -57,6 +57,11 @@ public class StatusService {
         subscribers.add(listener);
     }
 
+    /** Removes a listener registered with {@link #subscribe(Consumer)}. */
+    public synchronized void unsubscribe(Consumer<StatusSnapshot> listener) {
+        subscribers.remove(listener);
+    }
+
     private void notifySubscribers(StatusSnapshot snapshot) {
         for (var subscriber : subscribers) {
             try {

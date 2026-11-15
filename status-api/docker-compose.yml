@@ -1,0 +1,8 @@
+services:
+  status-api:
+    build: .
+    ports:
+      - "127.0.0.1:8081:8081"
+    restart: unless-stopped
+    # NOTE: The public route is configured in the Cloudflare dashboard (token-managed tunnel),
+    # routing api.jordimp.net/status* -> localhost:8081. This is NOT managed here.
