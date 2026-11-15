@@ -1,0 +1,34 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import FleetPanel from '../../components/site/FleetPanel.astro';
+import { LOCALES, type Locale } from '../../lib/i18n';
+import { PAGES } from '../../data/content';
+import { dirRoute, srcPath } from '../../lib/paths';
+
+export async function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+type Props = { lang: Locale };
+const { lang } = Astro.props;
+
+const page = PAGES['fleet'];
+const target = dirRoute(page.route);
+---
+<SiteLayout
+  lang={lang}
+  title={page.title[lang]}
+  description={page.description[lang]}
+  path={target}
+  navKey={page.nav}
+>
+  <main class="wrap" id="main">
+    <section aria-labelledby="fleet-heading">
+      <h1 id="fleet-heading" class="section-title">{page.title[lang]}</h1>
+      <p class="lead">{page.description[lang]}</p>
+      <div class="fleet-container">
+        <FleetPanel lang={lang} />
+      </div>
+    </section>
+  </main>
+</SiteLayout>

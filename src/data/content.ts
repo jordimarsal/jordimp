@@ -495,6 +495,7 @@ interface ProjectSeed {
   readonly stack: readonly string[];
   readonly github: string;
   readonly qualityUrl?: string;
+  readonly liveUrl?: string;
 }
 
 const P = (seed: ProjectSeed, l10n: ProjectL10n): Project => ({ ...seed, ...l10n });
@@ -958,6 +959,7 @@ export const PROJECTS: readonly Project[] = [
       tier: 'satellite', dept: 'tooling',
       stack: ['Python', 'GGUF', 'llama.cpp', 'GitHub Actions'],
       github: 'https://github.com/jordimarsal/ggufbench',
+      liveUrl: 'fleet',
     },
     {
       blurb: {
@@ -2606,6 +2608,19 @@ export const PAGES: Record<string, PageMeta> = {
       en: 'The quality wall: Lighthouse gauges, test counters, bundle size and dependency census from the last audit — the building’s ITE certificate, refreshed weekly.',
       es: 'El muro de calidad: indicadores Lighthouse, contadores de tests, peso del bundle y censo de dependencias de la última auditoría — el certificado ITE del edificio, renovado cada semana.',
       ca: 'El mur de qualitat: indicadors Lighthouse, comptadors de tests, pes del bundle i cens de dependències de l’última auditoria — el certificat ITE de l’edifici, renovat cada setmana.',
+    },
+  },  fleet: {
+    route: 'fleet.html',
+    nav: 'work',
+    title: {
+      en: 'Fleet Status — Jordimp & Co.',
+      es: 'Estado de la Flota — Jordimp & Co.',
+      ca: 'Estat de la Flota — Jordimp & Co.',
+    },
+    description: {
+      en: 'Live telemetry and performance scoreboard for the homelab inference engines.',
+      es: 'Telemetría en vivo y tabla de puntuaciones para los motores de inferencia del homelab.',
+      ca: 'Telemetria en viu i taula de puntuacions per als motors d\'inferència del homelab.',
     },
   },
 };

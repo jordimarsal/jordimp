@@ -104,6 +104,8 @@ export interface Project extends ProjectL10n {
   readonly github: string;
   /** Published quality-report page (optional; only for projects that gate on Sonar). */
   readonly qualityUrl?: string;
+  /** Live homelab panel route key (optional; renders a "live" link on the card). */
+  readonly liveUrl?: string;
 }
 
 export interface ExperienceEntry {

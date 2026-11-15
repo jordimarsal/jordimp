@@ -1,0 +1,93 @@
+---
+import type { Locale } from '../../lib/i18n';
+import { FLEET } from '../../data/fleet';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const t = FLEET.panel;
+---
+
+<div 
+  class="fleet-panel terminal" 
+  data-fleet-endpoint="https://api.jordimp.net/api/fleet"
+>
+  <p class="kicker">{t.kicker[lang]}</p>
+
+  <!-- Status Block -->
+  <section class="terminal__block" aria-labelledby="status-head">
+    <h2 id="status-head" class="terminal__header">{t.statusHeader[lang]}</h2>
+    <div class="terminal__body status-lines" aria-live="polite">
+      <p class="connecting">{t.connecting[lang]}</p>
+      <p class="fallback hidden" aria-hidden="true">{t.offlineFallback[lang]}</p>
+    </div>
+  </section>
+
+  <!-- Scoreboard Block -->
+  <section class="terminal__block" aria-labelledby="score-head">
+    <h2 id="score-head" class="terminal__header">{t.scoreboardHeader[lang]}</h2>
+    <div class="terminal__body scoreboard-wrap">
+      <table class="scoreboard">
+        <thead>
+          <tr>
+            <th>{t.columns.en.model}</th>
+            <th>{t.columns.en.global}</th>
+            <th>{t.columns.en.tps}</th>
+            <th>{t.columns.en.updated}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Populated by fleet.ts -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Watch Block -->
+  <section class="terminal__block" aria-labelledby="watch-head">
+    <h2 id="watch-head" class="terminal__header">{t.watchHeader[lang]}</h2>
+    <div class="terminal__body watch-line">
+      <span class="watch-ts"></span>
+      <span class="cursor" aria-hidden="true"></span>
+    </div>
+  </section>
+</div>
+
+<style>
+  .fleet-panel {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    background: #0a0a0a;
+    color: #d4d4d4;
+    padding: 1.5rem;
+    border-radius: 4px;
+    border: 1px solid #333;
+    overflow-x: auto;
+  }
+  .kicker { color: #666; margin-bottom: 1rem; font-size: 0.875rem; }
+  .terminal__block { margin-bottom: 2rem; }
+  .terminal__header {
+    font-size: 0.9rem;
+    color: #888;
+    margin: 0 0 0.5rem 0;
+    border-bottom: 1px solid #222;
+    padding-bottom: 0.25rem;
+  }
+  .terminal__body { font-size: 0.875rem; line-height: 1.5; }
+  .status-lines { min-height: 3em; }
+  .status-line { display: block; margin: 0.25rem 0; }
+  .scoreboard { width: 100%; border-collapse: collapse; text-align: left; }
+  .scoreboard th { color: #666; font-weight: normal; padding: 0.5rem; border-bottom: 1px solid #222; }
+  .scoreboard td { padding: 0.5rem; border-bottom: 1px solid #1a1a1a; }
+  .hidden { display: none; }
+  .fallback { color: #f44; }
+  .connecting { color: #aaa; font-style: italic; }
+  .watch-line { display: flex; align-items: center; gap: 0.5rem; }
+  .cursor {
+    width: 8px; height: 15px; background: #fff;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+</style>
+
+<script src="../../scripts/fleet.ts"></script>
