@@ -66,7 +66,8 @@ public class StatusService {
         for (var subscriber : subscribers) {
             try {
                 subscriber.accept(snapshot);
-            } catch (Exception e) {
+            } catch (RuntimeException e) {
+                // a faulty listener must not break the notification loop
                 log.error("Error notifying subscriber", e);
             }
         }
