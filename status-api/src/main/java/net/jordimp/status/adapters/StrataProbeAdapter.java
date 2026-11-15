@@ -16,7 +16,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
-public class StrataProbeAdapter {
+public class StrataProbeAdapter implements ProbeAdapter {
     private static final Logger log = LoggerFactory.getLogger(StrataProbeAdapter.class);
     private static final JsonMapper mapper = JsonMapper.builder().build();
     private final String baseUrl;
@@ -37,6 +37,7 @@ public class StrataProbeAdapter {
                 .build();
     }
 
+    @Override
     public Result<EngineStatus, ProbeError> probe() {
         try {
             String pgrepOutput = executePgrep("[s]erve/server\\.py");

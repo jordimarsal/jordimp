@@ -1,6 +1,14 @@
-probe:
-  timeout-ms: 1000
+app:
+  probe-timeout-ms: 1000
+  sse-heartbeat-seconds: 15
+  rate-limit-requests-per-minute: 60
+  refresh-interval-ms: 30000
+  cors-allowed-origins: "https://jordimp.net,http://localhost:4321"
 llama:
   base-url: "http://localhost:8999"
 strata:
   base-url: "http://localhost:8080"
+spring:
+  threads:
+    virtual:
+      enabled: true

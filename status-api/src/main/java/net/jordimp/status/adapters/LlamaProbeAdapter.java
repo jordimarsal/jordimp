@@ -16,7 +16,7 @@ import java.time.Duration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LlamaProbeAdapter {
+public class LlamaProbeAdapter implements ProbeAdapter {
     private static final Logger log = LoggerFactory.getLogger(LlamaProbeAdapter.class);
     private final String baseUrl;
     private final Duration timeout;
@@ -36,6 +36,7 @@ public class LlamaProbeAdapter {
                 .build();
     }
 
+    @Override
     public Result<EngineStatus, ProbeError> probe() {
         try {
             String pgrepOutput = executePgrep("[l]lama-server");
@@ -60,7 +61,6 @@ public class LlamaProbeAdapter {
             var propsRes = httpClient.send(propsReq, HttpResponse.BodyHandlers.ofString());
             if (propsRes.statusCode() != 200) return Result.err(new ProbeError.ProbeParseError("Props check failed: " + propsRes.statusCode()));
 
-            // build is "unknown" because llama.cpp does not expose its build id over HTTP via /health, /props, or /metrics.
             return Result.ok(EngineStatus.llama(parsed.alias(), parsed.slots(), parsed.ctxPerSlot(), parsed.build()));
 
         } catch (HttpTimeoutException | SocketTimeoutException e) {
