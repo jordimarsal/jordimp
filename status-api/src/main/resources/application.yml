@@ -1,0 +1,6 @@
+probe:
+  timeout-ms: 1000
+llama:
+  base-url: "http://localhost:8999"
+strata:
+  base-url: "http://localhost:8080"
