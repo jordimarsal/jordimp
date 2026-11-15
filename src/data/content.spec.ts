@@ -754,11 +754,12 @@ describe('pages data', () => {
       'article-rag-eval-gate',
       'article-rag-eval-gate-redirect',
       'contact',
+      'fleet',
       ...FLOOR_ORDER,
       ...PROJECTS.map((p) => `project-${p.slug}`),
     ];
     expect(Object.keys(PAGES).sort((a, b) => a.localeCompare(b, "en"))).toEqual(expected.sort((a, b) => a.localeCompare(b, "en")));
-    expect(Object.keys(PAGES)).toHaveLength(30);
+    expect(Object.keys(PAGES)).toHaveLength(31);
   });
 
   it('registers the ggufbench case page on the tooling floor (R18)', () => {

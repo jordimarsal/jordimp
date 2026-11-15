@@ -10,6 +10,7 @@ const STATIC_ROUTES = [
   'cv',
   'projects',
   'contact',
+  'fleet',
   'writing/rag-eval-gate',
   'blog',
   'blog/which-local-model-for-coding-agents',
@@ -114,13 +115,13 @@ async function styleOf(page: Page, selector: string, property: string): Promise<
     .evaluate((el, prop) => getComputedStyle(el).getPropertyValue(prop), property);
 }
 
-test.describe('92-page sweep (R27, F10 R16, F15 R22, F16 R31)', () => {
+test.describe('95-page sweep (R27, F10 R16, F15 R22, F16 R31, F26 R4/R5)', () => {
   test('sweep: every built page answers with the expected status and zero console errors', async ({
     page,
   }) => {
     test.setTimeout(300_000);
-    expect(SWEEP_TARGETS).toHaveLength(92);
-    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(92);
+    expect(SWEEP_TARGETS).toHaveLength(95);
+    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(95);
     expect(Object.keys(parity.routes).sort()).toEqual(
       localeRoutes().sort()
     );
@@ -166,6 +167,17 @@ test.describe('92-page sweep (R27, F10 R16, F15 R22, F16 R31)', () => {
             .filter((message) => message !== DOCUMENT_404_ERROR)
             .map((message) => `${target.url}: ${message}`)
         );
+      } else if (target.url.includes('/fleet/')) {
+        // R5: the live panel is EXPECTED to be offline in CI — the EventSource
+        // to the homelab API fails by design and the page must degrade to the
+        // fallback. Chromium does not log the failed EventSource as a console
+        // error, but a resource-level error would also be connectivity noise:
+        // on fleet targets we drop resource-load errors wholesale (every static
+        // asset on these pages is same-origin and served by the preview server).
+        const others = errors.filter(
+          (message) => !/Failed to load resource|EventSource/i.test(message)
+        );
+        problems.push(...others.map((message) => `${target.url}: ${message}`));
       } else {
         problems.push(...errors.map((message) => `${target.url}: ${message}`));
       }
@@ -226,7 +238,7 @@ test.describe('golden parity vs the distilled build oracle (R27, ADR-6)', () => 
     test(`parity: every ${locale} page matches the oracle fixture`, async ({ page }) => {
       test.setTimeout(300_000);
       const routes = localeRoutes().filter((route) => route.startsWith(`/${locale}/`));
-      expect(routes).toHaveLength(30);
+      expect(routes).toHaveLength(31);
 
       for (const route of routes) {
         const expected = parity.routes[route];

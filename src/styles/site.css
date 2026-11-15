@@ -1237,7 +1237,8 @@ html[data-night='1'] .win {
   opacity: 0.8;
 }
 
-.case {
+.case,
+.fleet-live {
   align-self: flex-start;
   display: inline-flex;
   align-items: center;
@@ -1255,14 +1256,16 @@ html[data-night='1'] .win {
   transition: transform 0.15s, box-shadow 0.15s, background 0.15s, color 0.15s;
 }
 
-.case:hover {
+.case:hover,
+.fleet-live:hover {
   background: var(--chip-bg);
   color: var(--chip-fg);
   transform: translate(-2px, -2px);
   box-shadow: 5px 5px 0 var(--shc);
 }
 
-.case:active {
+.case:active,
+.fleet-live:active {
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 var(--shc);
 }

@@ -1,6 +1,7 @@
 services:
   status-api:
     build: .
+    container_name: status-api
     ports:
       - "127.0.0.1:8081:8081"
     environment:
@@ -8,6 +9,14 @@ services:
       APP_POOL_PATH: /data/pool/pool.jsonl
     volumes:
       - ~/ia/llama/ggufbench/results/models:/data/pool:ro
+    networks:
+      - default
+      - tunnel
     restart: unless-stopped
-    # NOTE: The public route is configured in the Cloudflare dashboard (token-managed tunnel),
-    # routing api.jordimp.net/status* -> localhost:8081. This is NOT managed here.
+    # NOTE: The public route is configured in the Cloudflare dashboard (token-managed
+    # tunnel): public hostname api.jordimp.net, path /status* -> service
+    # http://status-api:8081 (this container joins ask-api_default for it).
+networks:
+  tunnel:
+    external: true
+    name: ask-api_default

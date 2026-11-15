@@ -2,7 +2,7 @@
 import type { Locale } from '../../lib/i18n';
 import { DEPTS, UI } from '../../data/content';
 import { FLEET } from '../../data/fleet';
-import { srcPath, dirRoute } from '../../lib/paths';
+import { srcPath } from '../../lib/paths';
 import type { Project } from '../../data/types';
 
 export interface Props {
@@ -31,7 +31,7 @@ const dept = DEPTS[p.dept];
   )}
   <p class="stack-line">{p.stack.join(' · ')}</p>
   {p.liveUrl && (
-    <a class="case" href={srcPath(lang, dirRoute('/fleet.html'))} aria-label={`${p.name} — live`}>
+    <a class="fleet-live" href={srcPath(lang, 'fleet/')} aria-label={`${p.name} — live`}>
       {FLEET.cardLive[lang]} <span aria-hidden="true">&#9679;</span>
     </a>
   )}
