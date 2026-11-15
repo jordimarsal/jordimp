@@ -40,3 +40,17 @@ To expose this service publicly at `api.jordimp.net/status`:
 
 ## Testing
 Container health is verified via the `/api/health` endpoint. Note that container tests require a running Docker daemon.
+
+## Scoreboard data (F26)
+
+The pool file is mounted read-only into the container and the app reads it
+through `APP_POOL_PATH=/data/pool/pool.jsonl` (set in docker-compose.yml):
+
+```
+~/ia/llama/ggufbench/results/models -> /data/pool (ro)
+```
+
+`FleetService` re-reads when the file's mtime changes; `global` is computed per
+SPEC §5 (tools·0.30 + code·0.30 + agent·0.25 + speed·0.15, speed normalized
+against the pool max, unmeasured = 0). Rows without `ts` show the file mtime —
+never a fabricated date.
