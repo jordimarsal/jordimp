@@ -742,7 +742,7 @@ describe('home counters after the 13th project (project_buildwright)', () => {
 });
 
 describe('pages data', () => {
-  it('registers home, work, cv, the blog quartet, contact, the 7 departments and the 13 project pages (R7, F16 R5, R27)', () => {
+  it('registers home, work, cv, the blog quintet, contact, the 7 departments and the 13 project pages (R7, F16 R5, R27)', () => {
     const expected = [
       'home',
       'work',
@@ -751,6 +751,7 @@ describe('pages data', () => {
       'post-ggufbench',
       'post-ggufbench-round2',
       'post-porter-brain',
+      'post-winner-curse',
       'article-rag-eval-gate',
       'article-rag-eval-gate-redirect',
       'contact',
@@ -759,7 +760,7 @@ describe('pages data', () => {
       ...PROJECTS.map((p) => `project-${p.slug}`),
     ];
     expect(Object.keys(PAGES).sort((a, b) => a.localeCompare(b, "en"))).toEqual(expected.sort((a, b) => a.localeCompare(b, "en")));
-    expect(Object.keys(PAGES)).toHaveLength(31);
+    expect(Object.keys(PAGES)).toHaveLength(32);
   });
 
   it('registers the ggufbench case page on the tooling floor (R18)', () => {
@@ -971,9 +972,11 @@ describe('people page org roles (R23)', () => {
 describe('blog posts data (F15)', () => {
   const essay = post('rag-eval-gate');
   const gguf = post('which-local-model-for-coding-agents');
+  const curse = post('winner-curse-local-llm-review');
 
-  it('ships exactly four posts ordered by publication date descending (R9)', () => {
+  it('ships exactly five posts ordered by publication date descending (R9)', () => {
     expect(POSTS.map((entry) => entry.slug)).toEqual([
+      'winner-curse-local-llm-review',
       'which-local-model-round-2-llama-cpp-0-9',
       'sixteen-models-one-gate',
       'which-local-model-for-coding-agents',
@@ -1283,6 +1286,95 @@ describe('ggufbench post data (F15, fact boundary R13)', () => {
       'https://github.com/jordimarsal/ggufbench',
       'https://jordimarsal.github.io/ggufbench/',
     ]);
+    expect(outboundUrls('es')).toEqual(outboundUrls('en'));
+    expect(outboundUrls('ca')).toEqual(outboundUrls('en'));
+  });
+});
+
+describe('winner curse post data (blog, 2026-11-23)', () => {
+  const curse = post('winner-curse-local-llm-review');
+
+  const proseOf = (lang: 'en' | 'es' | 'ca'): string =>
+    [
+      curse.lead[lang],
+      ...curse.sections.flatMap((section) =>
+        section.blocks.map((block) =>
+          block.kind === 'paragraph' ? block.html[lang] : block.kind === 'list' ? block.items[lang].join(' ') : '',
+        ),
+      ),
+    ].join('\n');
+
+  const numerals = (text: string): string[] =>
+    [...text.matchAll(/\d+(?:\.\d+)?/g)].map((match) => match[0]);
+
+  const outboundUrls = (lang: 'en' | 'es' | 'ca'): readonly string[] =>
+    [...proseOf(lang).matchAll(/https?:\/\/[^\s<"']+/g)].map((match) => match[0]).sort((a, b) => a.localeCompare(b, "en"));
+
+  it('pins the exact English title and the seven section anchors', () => {
+    expect(curse.title.en).toBe(
+      'Our reviewer benchmark crowned a winner. The winner’s curse came for it by afternoon.',
+    );
+    expect(curse.sections.map((section) => section.anchor)).toEqual([
+      'why-ranking',
+      'why-paused',
+      'simulation',
+      'the-check',
+      'instead',
+      'lessons',
+      'reproduce',
+    ]);
+  });
+
+  it('keeps the English body between 850 and 1050 words', () => {
+    const words = [
+      curse.lead.en,
+      ...curse.sections.flatMap((section) =>
+        section.blocks.map((block) =>
+          block.kind === 'paragraph' ? block.html.en : block.kind === 'list' ? block.items.en.join(' ') : '',
+        ),
+      ),
+    ]
+      .join(' ')
+      .split(/\s+/)
+      .filter(Boolean);
+    expect(words.length).toBeGreaterThanOrEqual(850);
+    expect(words.length).toBeLessThanOrEqual(1050);
+  });
+
+  it('ships exactly three tables with the measured rows', () => {
+    const tables = curse.sections.flatMap((section) => section.blocks).filter((block) => block.kind === 'table');
+    expect(tables).toHaveLength(3);
+    const [wave1, sim, final] = tables as Extract<
+      (typeof tables)[number],
+      { kind: 'table' }
+    >[];
+    expect(wave1.head).toEqual(['model', 'found', 'recall']);
+    expect(wave1.rows[0]).toEqual(['minicpm', '5/9', '0.56']);
+    expect(wave1.rows.at(-1)).toEqual(['qwen4b', '0/9', '0.00']);
+    expect(sim.head).toEqual(['10 identical models, n=9 defects', 'value']);
+    expect(sim.rows[0]).toEqual(['expected score of the observed “leader”', '0.51']);
+    expect(final.head).toEqual(['model', 'wave 1 (n=9)', 'final (n=33)']);
+    expect(final.rows[0]).toEqual(['minicpm', '0.56', '0.27']);
+    expect(final.rows.at(-1)).toEqual(['qwen4b', '0.00', '0.12']);
+  });
+
+  it('carries the committed curse facts and frames them honestly', () => {
+    const en = proseOf('en');
+    for (const fact of ['0.56', '0.167', '0.51', 'McNemar', 'winner’s curse']) {
+      expect(en, fact).toContain(fact);
+    }
+    expect(curse.date).toBe('2026-11-23');
+    expect(curse.revision).toBe('REV A');
+    expect(curse.about).toBe('https://github.com/jordimarsal/fleet-eval');
+  });
+
+  it('carries exactly the EN numeric multiset in the ES and CA bodies', () => {
+    expect(numerals(proseOf('es'))).toEqual(numerals(proseOf('en')));
+    expect(numerals(proseOf('ca'))).toEqual(numerals(proseOf('en')));
+  });
+
+  it('carries exactly the EN outbound URLs in the ES and CA bodies', () => {
+    expect(outboundUrls('en')).toEqual(['https://github.com/jordimarsal/fleet-eval']);
     expect(outboundUrls('es')).toEqual(outboundUrls('en'));
     expect(outboundUrls('ca')).toEqual(outboundUrls('en'));
   });

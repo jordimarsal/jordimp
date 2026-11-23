@@ -1450,6 +1450,282 @@ const RECEIPTS_R2 = {
 
 export const POSTS: readonly PostContent[] = [
   {
+    slug: 'winner-curse-local-llm-review',
+    date: '2026-11-23',
+  revision: 'REV A',
+  dateLabel: { en: 'FILED', es: 'REGISTRADO', ca: 'REGISTRAT' },
+  title: {
+    en: 'Our reviewer benchmark crowned a winner. The winner’s curse came for it by afternoon.',
+    es: 'Nuestro benchmark de revisores coronó a un ganador. La maldición del ganador llegó por la tarde.',
+    ca: 'El nostre benchmark de revisors va coronar un guanyador. La maledicció del guanyador va arribar a la tarda.',
+  },
+  description: {
+    en: 'A 9-defect battery crowned minicpm as the best reviewer in our local LLM fleet (0.56). Expanding to 33 real defects with the same grading dropped it to 0.27 — and an exact simulation had said so in advance: the expected max of ten identical models was 0.51.',
+    es: 'Una batería de 9 defectos coronó a minicpm como el mejor revisor de nuestra flota local de LLM (0.56). Ampliar a 33 defectos reales con el mismo grading lo dejó en 0.27 — y una simulación exacta lo había anticipado: el máximo esperado de diez modelos idénticos era 0.51.',
+    ca: 'Una bateria de 9 defectes va coronar minicpm com el millor revisor de la nostra flota local de LLM (0.56). Ampliar a 33 defectes reals amb el mateix grading el va deixar en 0.27 — i una simulació exacta ho havia anticipat: el màxim esperat de deu models idèntics era 0.51.',
+  },
+  lead: {
+    en: 'This morning a 9-defect battery named the best code reviewer in our local fleet. By this afternoon, the same grading over 33 defects had taken the crown back. The gap between the two is the winner’s curse, and it is computable.',
+    es: 'Esta mañana una batería de 9 defectos nombró al mejor revisor de código de nuestra flota local. Para la tarde, el mismo grading sobre 33 defectos le había quitado la corona. La distancia entre ambos es la maldición del ganador, y es calculable.',
+    ca: 'Aquest matí una bateria de 9 defectes va nombrar el millor revisor de codi de la nostra flota local. Cap a la tarda, el mateix grading sobre 33 defectes li havia tret la corona. La distància entre tots dos és la maledicció del guanyador, i és calculable.',
+  },
+  relatedBody: {
+    en: 'The repo behind this post: harvesting, grading, the full corpus and every raw answer, public.',
+    es: 'El repo detrás de esta entrada: cosecha, grading, el corpus completo y todas las respuestas en crudo, público.',
+    ca: 'El repo darrere d’aquesta entrada: collita, grading, el corpus complet i totes les respostes en cru, públic.',
+  },
+  readLabel: { en: 'READ THE DATA', es: 'LEE LOS DATOS', ca: 'LLEGEIX LES DADES' },
+  about: 'https://github.com/jordimarsal/fleet-eval',
+  sections: [
+    {
+      anchor: 'why-ranking',
+      heading: {
+        en: 'Why we were ranking reviewers at all',
+        es: 'Por qué clasificábamos revisores',
+        ca: 'Per què classificàvem revisors',
+      },
+      blocks: [
+        ...paragraphBlocks({
+          en: [
+            'We run a fleet of ten local models on two RTX 5080s: nine served by llama.cpp and one dedicated engine (Strata, 125B). The goal is role routing. If one model is measurably better at planning, implementing or reviewing code, it should get that role instead of every session defaulting to the same daily model.',
+            'For the reviewer role we needed a ranking, so we built a battery with defects harvested from our own git history. For every fix commit in our repositories, the pre-state of the changed code is a real defect, and the fix defines what a competent review must catch. Each model sees the defective code as a proposed pull request and answers with a numbered list: correctness bugs, security issues, resource leaks. Grading is mechanical, no judge model: the regex patterns come from the remedy — tokens the fix adds that do not exist in the buggy code — so the models never saw the answer key.',
+            'The first wave covered 9 defects:',
+          ],
+          es: [
+            'Tenemos una flota de diez modelos locales en dos RTX 5080: nueve servidos por llama.cpp y un motor dedicado (Strata, 125B). El objetivo es el routing por rol. Si un modelo es mediblemente mejor planificando, implementando o revisando código, debería recibir ese rol en vez de que cada sesión use el mismo modelo diario.',
+            'Para el rol de revisor necesitábamos un ranking, así que construimos una batería con defectos cosechados de nuestro propio historial git. Para cada commit fix de nuestros repositorios, el estado previo del código cambiado es un defecto real, y el fix define lo que una revisión competente debe detectar. Cada modelo ve el código defectuoso como un pull request propuesto y responde con una lista numerada: bugs de corrección, problemas de seguridad, fugas de recursos. El grading es mecánico, sin modelo juez: los patrones regex vienen del remedio — tokens que el fix añade y que no existen en el código con errores — así que los modelos nunca vieron la clave de respuestas.',
+            'La primera ola cubrió 9 defectos:',
+          ],
+          ca: [
+            'Tenim una flota de deu models locals a dues RTX 5080: nou servits per llama.cpp i un motor dedicat (Strata, 125B). L’objectiu és el routing per rol. Si un model és mediblement millor planificant, implementant o revisant codi, hauria de rebre aquell rol en lloc de que cada sessió usi el mateix model diari.',
+            'Per al rol de revisor necessitàvem un rànquing, així que vam construir una bateria amb defectes collits del nostre propi historial git. Per cada commit fix dels nostres repositoris, l’estat previ del codi canviat és un defecte real, i el fix defineix què ha de detectar una revisió competent. Cada model veu el codi defectuós com un pull request proposat i respon amb una llista numerada: bugs de correcció, problemes de seguretat, fuites de recursos. El grading és mecànic, sense model jutge: els patrons regex venen del remei — tokens que el fix afegeix i que no existeixen al codi amb errors — així que els models mai van veure la clau de respostes.',
+            'La primera onada va cobrir 9 defectes:',
+          ],
+        }),
+        {
+          kind: 'table',
+          head: ['model', 'found', 'recall'],
+          rows: [
+            ['minicpm', '5/9', '0.56'],
+            ['Strata', '3/9', '0.33'],
+            ['inkling2', '3/9', '0.33'],
+            ['Huihui', '2/9', '0.22'],
+            ['SC117', '2/9', '0.22'],
+            ['qwen38', '2/9', '0.22'],
+            ['gemma4', '1/9', '0.11'],
+            ['qwen36', '0/9', '0.00'],
+            ['qwen4b', '0/9', '0.00'],
+          ],
+        },
+        ...paragraphBlocks({
+          en: [
+            'A clear leader, two models at zero, a plausible middle. The obvious move was to write “reviewer: minicpm” into the routing config and move on.',
+          ],
+          es: [
+            'Un líder claro, dos modelos a cero, un medio plausible. El movimiento obvio era escribir «reviewer: minicpm» en la config de routing y seguir adelante.',
+          ],
+          ca: [
+            'Un líder clar, dos models a zero, un mig plausible. El moviment obvi era escriure «reviewer: minicpm» a la config de routing i seguir endavant.',
+          ],
+        }),
+      ],
+    },
+    {
+      anchor: 'why-paused',
+      heading: {
+        en: 'Why we paused instead',
+        es: 'Por qué nos detuvimos',
+        ca: 'Per què ens vam aturar',
+      },
+      blocks: paragraphBlocks({
+        en: [
+          'The first reason to pause is sample size, and it is the boring one. At a true recall near 0.3, a Wilson 95% confidence interval on 9 samples spans about ±32 points. The whole spread in that table fits inside a single confidence interval of any cell in it.',
+          'The second reason is the one worth writing down. The question we answered was not “is minicpm a good reviewer?” It was “which of ten models scored highest today?” When you take the maximum of ten noisy measurements, the max is dominated by whichever draw happened to be lucky. The winner of a small contest is selected partly for its luck, so its observed score overstates its true skill. Statisticians call it the winner’s curse. It shows up in auctions and clinical trials, and leaderboards run on the same mechanism.',
+        ],
+        es: [
+          'La primera razón para detenerse es el tamaño de muestra, y es la aburrida. Con un recall real cercano a 0.3, un intervalo de confianza de Wilson al 95% sobre 9 muestras abarca unos ±32 puntos. Toda la dispersión de esa tabla cabe dentro de un único intervalo de confianza de cualquier celda.',
+          'La segunda razón es la que merece quedar escrita. La pregunta que respondimos no fue «¿es minicpm un buen revisor?». Fue «¿cuál de diez modelos puntuó más alto hoy?». Cuando tomas el máximo de diez mediciones ruidosas, el max está dominado por la tirada que tuvo la suerte. Al ganador de un concurso pequeño lo selecciona en parte su suerte, así que su puntaje observado sobreestima su habilidad real. Los estadísticos lo llaman la maldición del ganador. Aparece en subastas y ensayos clínicos, y los leaderboards funcionan con el mismo mecanismo.',
+        ],
+        ca: [
+          'La primera raó per aturar-se és la mida de mostra, i és la avorrida. Amb un recall real a prop de 0.3, un interval de confiança de Wilson al 95% sobre 9 mostres abasta uns ±32 punts. Tota la dispersió d’aquella taula cap dins d’un únic interval de confiança de qualsevol cel·la.',
+          'La segona raó és la que val la pena deixar escrita. La pregunta que vam respondre no era «minicpm és un bon revisor?». Era «quin de deu models ha puntuat més alt avui?». Quan pren el màxim de deu mesures sorolloses, el max el domina la tirada que va tenir sort. Al guanyador d’un concurs petit el selecciona en part la seva sort, de manera que la seva puntuació observada sobreestima la seva habilitat real. Els estadístics ho diuen la maledicció del guanyador. Apareix a subhastes i assajos clínics, i els leaderboards funcionen amb el mateix mecanisme.',
+        ],
+      }),
+    },
+    {
+      anchor: 'simulation',
+      heading: {
+        en: 'The calculation that should have stopped us',
+        es: 'El cálculo que debería habernos detenido',
+        ca: 'El càlcul que ens hauria d’haver aturat',
+      },
+      blocks: [
+        ...paragraphBlocks({
+          en: [
+            'If all ten models were exactly identical — same true recall, differing only in sampling luck across 9 defects — what would the observed results look like? Each model’s score is a binomial draw, so the max and min of ten independent draws have closed-form distributions. Set the true recall to 0.27, close to what the fleet later showed it had:',
+          ],
+          es: [
+            'Si los diez modelos fueran exactamente idénticos — mismo recall real, diferenciándose solo en la suerte del muestreo a lo largo de 9 defectos —, ¿cómo se verían los resultados observados? La puntuación de cada modelo es una tirada binomial, así que el max y el min de diez tiradas independientes tienen distribuciones cerradas. Fija el recall real en 0.27, cercano a lo que la flota después demostró tener:',
+          ],
+          ca: [
+            'Si els deu models foren exactament idèntics — mateix recall real, diferint només en la sort del mostreig al llarg de 9 defectes —, com es veurien els resultats observats? La puntuació de cada model és una tirada binomial, així que el max i el min de deu tirades independents tenen distribucions tancades. Fixa el recall real en 0.27, a prop del que la flota després va demostrar tenir:',
+          ],
+        }),
+        {
+          kind: 'table',
+          head: ['10 identical models, n=9 defects', 'value'],
+          rows: [
+            ['expected score of the observed “leader”', '0.51'],
+            ['P(some model posts 5/9 = 0.56 or better)', '50%'],
+            ['P(some model posts 0/9)', '45%'],
+          ],
+        },
+        ...paragraphBlocks({
+          en: [
+            'If every model had identical skill, the expected top score would be 0.51. We observed 0.56. Half the times you run this experiment, some model walks away with a headline of 0.56 or better; 45% of the time, some model walks away with a zero. Both ends of our real table, the champion at the top and the two zeros at the bottom, are exactly what an all-equal fleet produces. The ranking was indistinguishable from noise, and the part we found most convincing — the clear leader and the clear losers — was the part selection noise manufactures most reliably.',
+          ],
+          es: [
+            'Si todos los modelos tuvieran la misma habilidad, la puntuación máxima esperada sería 0.51. Observamos 0.56. La mitad de las veces que ejecutas este experimento, algún modelo se va con un titular de 0.56 o mejor; el 45% de las veces, algún modelo se va con un cero. Los dos extremos de nuestra tabla real, el campeón arriba y los dos ceros abajo, son exactamente lo que produce una flota igualada. El ranking era indistinguible del ruido, y la parte que nos resultó más convincente — el líder claro y los perdedores claros — era la parte que el ruido de selección fabrica con más fiabilidad.',
+          ],
+          ca: [
+            'Si tots els models haguessin tingut la mateixa habilitat, la puntuació màxima esperada seria 0.51. Vam observar 0.56. La meitat de les vegades que executes aquest experiment, algun model se’n va amb un titular de 0.56 o millor; el 45% de les vegades, algun model se’n va amb un zero. Els dos extrems de la nostra taula real, el campió a dalt i els dos zeros a baix, són exactament el que produeix una flota igualada. El rànquing era indistinguible del soroll, i la part que ens va resultar més convincent — el líder clar i els perdedors clars — era la part que el soroll de selecció fabrica més fiablement.',
+          ],
+        }),
+      ],
+    },
+    {
+      anchor: 'the-check',
+      heading: {
+        en: 'The check we could actually run',
+        es: 'La comprobación que sí podíamos correr',
+        ca: 'La comprovació que sí podíem córrer',
+      },
+      blocks: [
+        ...paragraphBlocks({
+          en: [
+            'A calculation is only an argument, so we expanded the corpus with 24 more defects from the same pipeline — 33 in total — and re-ran all ten models. Same prompt format, same grading key. Since every model answered every defect, the right comparison is paired (McNemar), which is far more sensitive than comparing two loose percentages.',
+          ],
+          es: [
+            'Un cálculo es solo un argumento, así que ampliamos el corpus con 24 defectos más del mismo pipeline — 33 en total — y volvimos a ejecutar los diez modelos. Mismo formato de prompt, misma clave de grading. Como cada modelo respondió cada defecto, la comparación correcta es emparejada (McNemar), mucho más sensible que comparar dos porcentajes sueltos.',
+          ],
+          ca: [
+            'Un càlcul és només un argument, així que vam ampliar el corpus amb 24 defectes més del mateix pipeline — 33 en total — i vam tornar a executar els deu models. Mateix format de prompt, mateixa clau de grading. Com que cada model va respondre cada defecte, la comparació correcta és aparellada (McNemar), molt més sensible que comparar dos percentatges solts.',
+          ],
+        }),
+        {
+          kind: 'table',
+          head: ['model', 'wave 1 (n=9)', 'final (n=33)'],
+          rows: [
+            ['minicpm', '0.56', '0.27'],
+            ['inkling2', '0.33', '0.33'],
+            ['Strata', '0.33', '0.27'],
+            ['Huihui', '0.22', '0.24'],
+            ['SC117', '0.22', '0.24'],
+            ['inkling2unc', '—', '0.24'],
+            ['qwen38', '0.22', '0.21'],
+            ['gemma4', '0.11', '0.18'],
+            ['qwen36', '0.00', '0.18'],
+            ['qwen4b', '0.00', '0.12'],
+          ],
+        },
+        ...paragraphBlocks({
+          en: [
+            'Everything collapsed into one band. No model finds more than a third of real defects; none is below 0.12. McNemar found no significant difference between any pair — the smallest p-value, 0.18, belongs to the gap between the leader and the third model from the bottom.',
+            'And the number that closes the case: minicpm kept 5 of its 9 finds on the original defects. Those were real skill, and they stay in the data. On the 24 new defects it found 4. Fresh material, same grading: 0.167, below the fleet average it was supposed to be leading.',
+          ],
+          es: [
+            'Todo colapsó en una sola banda. Ningún modelo encuentra más de un tercio de los defectos reales; ninguno queda por debajo de 0.12. McNemar no encontró diferencia significativa entre ningún par — el p-value más pequeño, 0.18, corresponde a la distancia entre el líder y el tercero desde abajo.',
+            'Y el número que cierra el caso: minicpm conservó 5 de sus 9 aciertos en los defectos originales. Eso era habilidad real, y queda en los datos. En los 24 defectos nuevos encontró 4. Material fresco, mismo grading: 0.167, por debajo de la media de la flota que se suponía que lideraba.',
+          ],
+          ca: [
+            'Tot va col·lapsar en una sola banda. Cap model troba més d’un terç dels defectes reals; cap no queda per sota de 0.12. McNemar no va trobar diferència significativa entre cap parell — el p-value més petit, 0.18, correspon a la distància entre el líder i el tercer des de baix.',
+            'I el número que tanca el cas: minicpm va conservar 5 dels seus 9 encerts en els defectes originals. Allò era habilitat real, i queda a les dades. En els 24 defectes nous en va trobar 4. Material fresc, mateix grading: 0.167, per sota de la mitjana de la flota que se suposava que liderava.',
+          ],
+        }),
+      ],
+    },
+    {
+      anchor: 'instead',
+      heading: {
+        en: 'What we do instead of crowning',
+        es: 'Qué hacemos en lugar de coronar',
+        ca: 'Què fem en lloc de coronar',
+      },
+      blocks: paragraphBlocks({
+        en: [
+          'No routing for reviewers, for now. The top band is interchangeable, so the config names Strata as the reference — also the strongest on a synthetic review battery, where these same models score far higher, which is its own post — and the rest of the band stays available. Routing survives only where the signal survived: implementation quality, where one model is measurably ahead, and per-language worker selection.',
+          'The battery stays open. The corpus grows as the repositories grow, and every new defect tightens the band around whatever true differences exist. If a real difference of useful size appears, McNemar will catch it.',
+        ],
+        es: [
+          'Sin routing para revisores, por ahora. La banda alta es intercambiable, así que la config nombra a Strata como referencia — también el más fuerte en una batería de revisión sintética, donde estos mismos modelos puntúan mucho más alto, que es otra entrada — y el resto de la banda queda disponible. El routing sobrevive solo donde sobrevivió la señal: calidad de implementación, donde un modelo va mediblemente adelante, y la selección de workers por idioma.',
+          'La batería queda abierta. El corpus crece conforme crecen los repositorios, y cada defecto nuevo estrecha la banda alrededor de las diferencias reales que existan. Si aparece una diferencia real de tamaño útil, McNemar la detectará.',
+        ],
+        ca: [
+          'Sense routing per a revisors, de moment. La banda alta és intercanviable, així que la config anomena Strata com a referència — també el més fort en una bateria de revisió sintètica, on aquests mateixos models puntuuen molt més alt, que és una altra entrada — i la resta de la banda queda disponible. El routing sobreviu només on la senyal va sobreviure: qualitat d’implementació, on un model va mediblement al davant, i la selecció de workers per idioma.',
+          'La bateria queda oberta. El corpus creix a mesura que creixen els repositoris, i cada defecte nou estreny la banda al voltant de les diferències reals que existeixin. Si apareix una diferència real de mida útil, McNemar la detectarà.',
+        ],
+      }),
+    },
+    {
+      anchor: 'lessons',
+      heading: {
+        en: 'Lessons, stated so we can reuse them',
+        es: 'Lecciones, enunciadas para reutilizarlas',
+        ca: 'Lliçons, enunciades per reutilitzar-les',
+      },
+      blocks: [
+        ...paragraphBlocks({
+          en: ['Four rules come out of one afternoon of watching a crown evaporate:'],
+          es: ['Cuatro reglas salen de una tarde viendo evaporarse una corona:'],
+          ca: ['Quatre regles surten d’una tarda veient evaporar-se una corona:'],
+        }),
+        {
+          kind: 'list',
+          items: {
+            en: [
+              'Expand before you crown. A battery that cannot tell the top from the bottom cannot crown anyone. If expanding is cheap, do it first; if it is expensive, the ranking was never actionable.',
+              'The max of N draws measures luck. Any selection over many noisy candidates — models, prompts, agents, hyperparameters — inherits the curse. The check is cheap: compute E[max] under the equal-skill hypothesis. If your observed winner sits at or below it, you have no winner.',
+              'Paired beats loose. When every candidate answers the same items, McNemar on the discordant pairs is the test; comparing two loose percentages wastes information.',
+              'Publish the null. This post documents a ranking that died. The cost was an afternoon of harvesting and an evening of compute. The alternative was months of quietly routing review work to a mediocre reviewer.',
+            ],
+            es: [
+              'Amplía antes de coronar. Una batería que no distingue arriba de abajo no puede coronar a nadie. Si ampliar es barato, hazlo primero; si es caro, el ranking nunca fue accionable.',
+              'El máximo de N tiradas mide suerte. Cualquier selección sobre muchos candidatos ruidosos — modelos, prompts, agentes, hiperparámetros — hereda la maldición. El chequeo es barato: calcula E[max] bajo la hipótesis de habilidad igualada. Si tu ganador observado queda en o por debajo de él, no tienes ganador.',
+              'Emparejado gana al suelto. Cuando cada candidato responde los mismos ítems, McNemar sobre los pares discordantes es el test; comparar dos porcentajes sueltos desperdicia información.',
+              'Publica el nulo. Esta entrada documenta un ranking que murió. El coste fue una tarde de cosecha y una noche de cómputo. La alternativa eran meses enroutando en silencio el trabajo de revisión a un revisor mediocre.',
+            ],
+            ca: [
+              'Amplia abans de coronar. Una bateria que no distingeixi dalt de baix no pot coronar ningú. Si ampliar és barat, fes-ho primer; si és car, el rànquing mai va ser accionable.',
+              'El màxim de N tirades mesura sort. Qualsevol selecció sobre molts candidats sorollosos — models, prompts, agents, hiperparàmetres — hereta la maledicció. El xec és barat: calcula E[max] sota la hipòtesi d’habilitat igualada. Si el teu guanyador observat queda a o per sota d’ell, no tens guanyador.',
+              'Aparellat guanya el solt. Quan cada candidat respon els mateixos ítems, McNemar sobre els parells discordants és el test; comparar dos percentatges solts malbarata informació.',
+              'Publica el nul. Aquesta entrada documenta un rànquing que va morir. El cost va ser una tarda de collita i un vespre de còmput. L’alternativa eren mesos enrutant en silenci la feina de revisió a un revisor mediocre.',
+            ],
+          },
+        },
+      ],
+    },
+    {
+      anchor: 'reproduce',
+      heading: {
+        en: 'Reproduce it',
+        es: 'Reprodúcelo',
+        ca: 'Reprodueix-ho',
+      },
+      blocks: paragraphBlocks({
+        en: [
+          'Everything is public in the fleet-eval repository: the harvesting and curation scripts, the 33-defect corpus with its grading patterns, every model’s raw answers, and docs/winner_curse_sim.py, which prints the max/min statistics above. The fleet runs on llama.cpp on two RTX 5080s; no cloud APIs were involved at any point. Reproduce it from https://github.com/jordimarsal/fleet-eval',
+        ],
+        es: [
+          'Todo es público en el repositorio fleet-eval: los scripts de cosecha y curación, el corpus de 33 defectos con sus patrones de grading, todas las respuestas en crudo de cada modelo, y docs/winner_curse_sim.py, que imprime las estadísticas de max/min de arriba. La flota corre en llama.cpp sobre dos RTX 5080; ninguna API de nube intervino en ningún momento. Reprodúcelo desde https://github.com/jordimarsal/fleet-eval',
+        ],
+        ca: [
+          'Tot és públic al repositori fleet-eval: els scripts de collita i curació, el corpus de 33 defectes amb els seus patrons de grading, totes les respostes en cru de cada model, i docs/winner_curse_sim.py, que imprimeix les estadístiques de max/min de sobre. La flota corre en llama.cpp sobre dues RTX 5080; cap API de núvol va intervenir en cap moment. Reprodueix-ho des de https://github.com/jordimarsal/fleet-eval',
+        ],
+      }),
+    },
+  ],
+  },
+  {
     slug: 'which-local-model-round-2-llama-cpp-0-9',
     date: '2026-11-06',
     revision: 'REV A',
@@ -2499,6 +2775,12 @@ export const PAGES: Record<string, PageMeta> = {
     nav: 'blog',
     title: withBrand(post('sixteen-models-one-gate').title),
     description: post('sixteen-models-one-gate').description,
+  },
+  'post-winner-curse': {
+    route: 'blog/winner-curse-local-llm-review.html',
+    nav: 'blog',
+    title: withBrand(post('winner-curse-local-llm-review').title),
+    description: post('winner-curse-local-llm-review').description,
   },
   'article-rag-eval-gate': {
     route: 'blog/rag-eval-gate.html',

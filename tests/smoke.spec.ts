@@ -13,6 +13,7 @@ const STATIC_ROUTES = [
   'fleet',
   'writing/rag-eval-gate',
   'blog',
+  'blog/winner-curse-local-llm-review',
   'blog/which-local-model-for-coding-agents',
   'blog/rag-eval-gate',
   'blog/sixteen-models-one-gate',
