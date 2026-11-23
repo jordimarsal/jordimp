@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-16T11:22:01.662Z",
-  "commit": "66d7d820f381d71a6e545293420d6ec9f80383de",
+  "generatedAt": "2026-11-23T12:45:10.615Z",
+  "commit": "b097f7396529d8b5d53d0da888106ec0a6104d7c",
   "lighthouse": {
     "performance": 1,
     "accessibility": 0.96,
@@ -82,6 +82,15 @@
     },
     {
       "date": "2026-11-16",
+      "scores": {
+        "performance": 1,
+        "accessibility": 0.96,
+        "bestPractices": 1,
+        "seo": 1
+      }
+    },
+    {
+      "date": "2026-11-23",
       "scores": {
         "performance": 1,
         "accessibility": 0.96,
