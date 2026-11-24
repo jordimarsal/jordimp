@@ -74,5 +74,6 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: node scripts/qa-content.mjs --self-test
+      - run: npm run qa:links:test
       - run: npm run qa:content
       - run: npm run qa:links

@@ -45,6 +45,10 @@ async function checkUrl(url) {
   for (let attempt = 1; attempt <= ATTEMPTS; attempt += 1) {
     try {
       const response = await fetch(url, { method: 'GET', headers: { 'User-Agent': USER_AGENT }, redirect: 'follow' });
+      // 429 means "rate-limited", not "broken": shared CI IPs get throttled by
+      // bot-protected sites (LinkedIn). Don't retry — it won't clear in 2s —
+      // and let callers log a skip rather than block a deploy.
+      if (response.status === 429) return { url, ok: false, status: 429, rateLimited: true };
       if (response.status < 400) return { url, ok: true, status: response.status };
       if (attempt === ATTEMPTS) return { url, ok: false, status: response.status };
     } catch {

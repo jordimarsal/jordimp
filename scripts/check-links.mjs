@@ -83,6 +83,10 @@ async function main() {
   console.log(`checking ${urls.length} off-host URLs from dist HTML:`);
   for (const url of urls) {
     const result = await checkUrl(url);
+    if (result.rateLimited) {
+      console.log(`  SKIP ${result.status} rate-limited ${url}`);
+      continue;
+    }
     console.log(`  ${result.ok ? 'OK ' : 'FAIL'} ${result.status} ${url}`);
     if (!result.ok) problems.push(`external link unreachable (${result.status}): ${url}`);
   }

@@ -35,6 +35,9 @@ interface RouteFixture {
 }
 
 interface ParityFixture {
+  _meta: {
+    counts: { localeRoutes: number; pages: number };
+  };
   splash: {
     title: string;
     description: string;
@@ -54,6 +57,11 @@ interface ParityFixture {
 const parity = JSON.parse(
   readFileSync(new URL('./fixtures/parity.json', import.meta.url), 'utf8')
 ) as ParityFixture;
+
+// The distilled oracle is the independent source of truth for page counts:
+// adding a route must not mean remembering to update hand-copied numbers here.
+const EXPECTED_PAGES = parity._meta.counts.pages;
+const EXPECTED_ROUTES_PER_LOCALE = parity._meta.counts.localeRoutes / LOCALES.length;
 
 function localeRoutes(): string[] {
   const paths = [
@@ -116,13 +124,13 @@ async function styleOf(page: Page, selector: string, property: string): Promise<
     .evaluate((el, prop) => getComputedStyle(el).getPropertyValue(prop), property);
 }
 
-test.describe('95-page sweep (R27, F10 R16, F15 R22, F16 R31, F26 R4/R5)', () => {
+test.describe(`${EXPECTED_PAGES}-page sweep (R27, F10 R16, F15 R22, F16 R31, F26 R4/R5)`, () => {
   test('sweep: every built page answers with the expected status and zero console errors', async ({
     page,
   }) => {
     test.setTimeout(300_000);
-    expect(SWEEP_TARGETS).toHaveLength(95);
-    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(95);
+    expect(SWEEP_TARGETS).toHaveLength(EXPECTED_PAGES);
+    expect(new Set(SWEEP_TARGETS.map((t) => t.url)).size).toBe(EXPECTED_PAGES);
     expect(Object.keys(parity.routes).sort()).toEqual(
       localeRoutes().sort()
     );
@@ -239,7 +247,7 @@ test.describe('golden parity vs the distilled build oracle (R27, ADR-6)', () => 
     test(`parity: every ${locale} page matches the oracle fixture`, async ({ page }) => {
       test.setTimeout(300_000);
       const routes = localeRoutes().filter((route) => route.startsWith(`/${locale}/`));
-      expect(routes).toHaveLength(31);
+      expect(routes).toHaveLength(EXPECTED_ROUTES_PER_LOCALE);
 
       for (const route of routes) {
         const expected = parity.routes[route];

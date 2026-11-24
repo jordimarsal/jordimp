@@ -20,6 +20,7 @@
     "qa:lighthouse": "lhci autorun --config=lighthouserc.json",
     "qa:content": "node scripts/qa-content.mjs",
     "qa:links": "node scripts/check-links.mjs",
+    "qa:links:test": "node --test scripts/lib/offhost-links.test.mjs",
     "distill:parity": "node scripts/distill-parity.mjs"
   },
   "dependencies": {
