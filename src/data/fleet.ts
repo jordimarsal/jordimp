@@ -1,4 +1,18 @@
-import { type L10n, type Locale } from '../lib/i18n';
+import type { Locale } from '../lib/i18n';
+import type { L10n } from './types';
+
+type FleetColumns = { model: string; global: string; tps: string; updated: string };
+
+interface FleetPanelData {
+  kicker: L10n<string>;
+  statusHeader: L10n<string>;
+  scoreboardHeader: L10n<string>;
+  watchHeader: L10n<string>;
+  columns: L10n<FleetColumns>;
+  offlineFallback: L10n<string>;
+  connecting: L10n<string>;
+  liveBadge: L10n<string>;
+}
 
 export const FLEET = {
   panel: {
@@ -42,10 +56,10 @@ export const FLEET = {
       es: 'EN VIVO',
       ca: 'EN VIU',
     }
-  } as L10n<any>, // Using any for nested structure flexibility in this specific data file
+  },
   cardLive: {
     en: 'Live Status',
     es: 'Estado en Vivo',
     ca: 'Estat en Viu',
   } as L10n<string>
-};
+} satisfies { panel: FleetPanelData; cardLive: L10n<string> };
