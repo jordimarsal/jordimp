@@ -75,12 +75,15 @@ async function streamAnswer(
         const event = JSON.parse(payload) as StreamEvent;
         if (event.type === 'delta' && typeof event.text === 'string') {
           handlers.onDelta(event.text);
-        } else if (event.type === 'done') {
-          handlers.onDone(event);
-        } else if (event.type === 'refused') {
-          handlers.onRefused(event.top_score);
         } else if (event.type === 'error') {
           handlers.onError(event);
+        } else if (event.type === 'refused') {
+          handlers.onRefused(event.top_score);
+        } else if (typeof event.answer === 'string') {
+          // The terminal SSE event mirrors /api/ask: no `type`, and it is the
+          // citation-guarded answer that replaces the streamed raw deltas.
+          if (event.covered === false) handlers.onRefused(event.top_score);
+          else handlers.onDone(event);
         }
       }
       boundary = buffer.indexOf('\n\n');

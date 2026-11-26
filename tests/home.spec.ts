@@ -508,14 +508,20 @@ test.describe('porter — the concierge', () => {
     latency_ms: 200,
   };
 
-  test('rings the bell and renders a cited answer', async ({ page }) => {
-    await page.route('**/api/ask', (route) =>
-      route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify(mockAnswer),
-      }),
+  // The concierge posts to /api/ask/stream: deltas first, then the same body
+  // as /api/ask, then the [DONE] sentinel (ADR: final event is authoritative).
+  const sse = (events: unknown[]): string =>
+    [...events.map((event) => `data: ${JSON.stringify(event)}\n\n`), 'data: [DONE]\n\n'].join('');
+  const stubStream = (page: Page, events: unknown[]): Promise<void> =>
+    page.route('**/api/ask/stream', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/event-stream', body: sse(events) }),
     );
+
+  test('rings the bell and renders a cited answer', async ({ page }) => {
+    await stubStream(page, [
+      { type: 'delta', text: 'Jordi has 9+ years of experience' },
+      mockAnswer,
+    ]);
     await page.goto('/en/');
     await page.locator('.porter__input').fill('How many years of experience does Jordi have?');
     await page.locator('.porter__bell').click();
@@ -526,13 +532,9 @@ test.describe('porter — the concierge', () => {
   });
 
   test('shows the not-on-record notice when covered is false', async ({ page }) => {
-    await page.route('**/api/ask', (route) =>
-      route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ ...mockAnswer, answer: 'Eso no consta.', covered: false, citations: [] }),
-      }),
-    );
+    await stubStream(page, [
+      { ...mockAnswer, answer: 'Eso no consta.', covered: false, citations: [] },
+    ]);
     await page.goto('/es/');
     await page.locator('.porter__input').fill('¿Cuál es el café de Jordi?');
     await page.locator('.porter__bell').click();
@@ -541,7 +543,7 @@ test.describe('porter — the concierge', () => {
   });
 
   test('shows the porter-unavailable notice when the API fails', async ({ page }) => {
-    await page.route('**/api/ask', (route) => route.abort('connectionrefused'));
+    await page.route('**/api/ask/stream', (route) => route.abort('connectionrefused'));
     await page.goto('/ca/');
     await page.locator('.porter__input').fill('Què és CodebaseRAG?');
     await page.locator('.porter__bell').click();
@@ -559,12 +561,12 @@ test.describe('porter — the concierge', () => {
 
   test('sends the page locale and the typed question', async ({ page }) => {
     const requests: { question?: string; lang?: string }[] = [];
-    await page.route('**/api/ask', async (route) => {
+    await page.route('**/api/ask/stream', async (route) => {
       requests.push(JSON.parse(route.request().postData() || '{}'));
       await route.fulfill({
         status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify(mockAnswer),
+        contentType: 'text/event-stream',
+        body: sse([mockAnswer]),
       });
     });
     await page.goto('/es/');
