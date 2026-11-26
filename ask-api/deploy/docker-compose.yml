@@ -25,20 +25,13 @@ services:
     image: ghcr.io/ggml-org/llama.cpp:server-cuda@sha256:b4e561932a1dd460ec2f9d2875ad0d9535cbfd3d2d6a48bdb3c9d50804088bff
     command: >
       -m /models/${GEN_MODEL_FILE}
-      --ctx-size 4096 --n-gpu-layers 99
+      --ctx-size 4096
       --host 0.0.0.0 --port 8080
     volumes:
       - ${LLAMA_MODELS_DIR}:/models:ro
     environment:
-      NVIDIA_VISIBLE_DEVICES: "1"
+      NVIDIA_VISIBLE_DEVICES: "void"
       LLAMA_ARG_CHAT_TEMPLATE_KWARGS: '{"enable_thinking":false}'
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              device_ids: ["1"]
-              capabilities: [gpu]
     restart: unless-stopped
 
   ask-api:
